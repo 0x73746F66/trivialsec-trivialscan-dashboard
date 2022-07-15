@@ -1,0 +1,5 @@
+semgrep
+boto3
+pre-commit
+checkov
+detect-secrets
