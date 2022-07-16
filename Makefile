@@ -26,7 +26,10 @@ clean: ## Cleanup tmp files
 	@rm -f **/*.zip **/*.tar **/*.tgz **/*.gz
 
 output:
-	@echo -e $(bold)$(primary)trivialscan_arn$(clear) = $(shell terraform -chdir=plans output cloudfront_trivialscan_dashboard)
+	@echo -e $(bold)$(primary)cloudfront dashboard$(clear) $(shell terraform -chdir=plans output cloudfront_trivialscan_dashboard)
+	@echo -e $(bold)$(primary)dashboard bucket$(clear) $(shell terraform -chdir=plans output trivialscan_dashboard_bucket)
+	@echo -e $(bold)$(primary)archive bucket$(clear) $(shell terraform -chdir=plans output trivialscan_archive_bucket)
+	@echo -e $(bold)$(primary)store bucket$(clear) $(shell terraform -chdir=plans output trivialscan_store_bucket)
 
 tfinstall:
 	curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
@@ -35,8 +38,11 @@ tfinstall:
 	sudo apt-get install -y terraform
 	terraform -chdir=plans -install-autocomplete || true
 
-init:  ## Runs tf init tf
+init:  ## Runs tf init
 	terraform -chdir=plans init -reconfigure -upgrade=true
+
+refresh:  ## Runs tf refresh
+	terraform -chdir=plans refresh
 
 plan:  ## Runs tf validate and tf plan
 	terraform -chdir=plans validate
