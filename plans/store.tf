@@ -99,9 +99,10 @@ resource "aws_s3_bucket_replication_configuration" "trivialscan_store_replicatio
 
   rule {
     id = "trivialscan-store-archive-replication"
-    prefix = "scans/"
     status = "Enabled"
-
+    filter {
+      prefix = "scans/"
+    }
     destination {
       bucket        = aws_s3_bucket.trivialscan_archive_bucket.arn
       storage_class = "ONEZONE_IA"
@@ -205,4 +206,12 @@ resource "aws_iam_role" "trivialscan_store_replication_role" {
 resource "aws_iam_role_policy_attachment" "trivialscan_store_replication" {
   role       = aws_iam_role.trivialscan_store_replication_role.name
   policy_arn = aws_iam_policy.trivialscan_store_replication_policy.arn
+}
+
+output "trivialscan_archive_bucket" {
+  value = aws_s3_bucket.trivialscan_archive_bucket.id
+}
+
+output "trivialscan_store_bucket" {
+  value = aws_s3_bucket.trivialscan_store_bucket.id
 }
