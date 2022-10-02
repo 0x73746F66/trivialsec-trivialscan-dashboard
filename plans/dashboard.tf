@@ -47,9 +47,12 @@ resource "aws_cloudfront_origin_access_identity" "trivialscan_dashboard" {
 }
 
 resource "aws_cloudfront_distribution" "trivialscan_dashboard" {
+  depends_on = [
+    aws_s3_bucket.trivialscan_dashboard
+  ]
   wait_for_deployment = false
   origin {
-    domain_name         = "${var.bucket_prefix}.s3.${local.aws_default_region}.amazonaws.com"
+    domain_name         = aws_s3_bucket.trivialscan_dashboard.bucket_regional_domain_name
     origin_id           = "${aws_s3_bucket.trivialscan_dashboard.id}_s3_origin"
     connection_timeout  = 2
     connection_attempts = 3
@@ -61,6 +64,7 @@ resource "aws_cloudfront_distribution" "trivialscan_dashboard" {
   enabled             = true
   is_ipv6_enabled     = true
   default_root_object = "index.html"
+  aliases = ["scanner.${local.apex_domain}"]
 
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
@@ -107,9 +111,43 @@ resource "aws_cloudfront_distribution" "trivialscan_dashboard" {
 
   custom_error_response {
     error_code         = 404
-    response_code      = 404
-    response_page_path = "/404.html"
+    response_code      = 200
+    response_page_path = "/index.html"
   }
+}
+
+resource "aws_route53_record" "assets_a" {
+    zone_id = local.hosted_zone
+    name    = "scanner.${local.apex_domain}"
+    type    = "A"
+
+    alias {
+        name                   = aws_cloudfront_distribution.trivialscan_dashboard.domain_name
+        zone_id                = aws_cloudfront_distribution.trivialscan_dashboard.hosted_zone_id
+        evaluate_target_health = false
+    }
+}
+
+resource "aws_route53_record" "assets_aaaa" {
+    zone_id = local.hosted_zone
+    name    = "scanner.${local.apex_domain}"
+    type    = "AAAA"
+
+    alias {
+        name                   = aws_cloudfront_distribution.trivialscan_dashboard.domain_name
+        zone_id                = aws_cloudfront_distribution.trivialscan_dashboard.hosted_zone_id
+        evaluate_target_health = false
+    }
+}
+
+resource "aws_s3_object" "dist" {
+  for_each = fileset("${abspath(path.module)}/../dist", "**/*")
+
+  bucket = aws_s3_bucket.trivialscan_dashboard.id
+  key    = each.value
+  source = "${abspath(path.module)}/../dist/${each.value}"
+  content_type = lookup(tomap(local.mime_types), element(split(".", each.key), length(split(".", each.key)) - 1))
+  etag   = filemd5("${abspath(path.module)}/../dist/${each.value}")
 }
 
 output "cloudfront_trivialscan_dashboard" {

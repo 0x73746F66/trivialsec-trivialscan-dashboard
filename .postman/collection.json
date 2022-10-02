@@ -1,0 +1,275 @@
+{
+	"info": {
+		"_postman_id": "7076850b-50fd-49ed-86c4-61c9479f0341",
+		"name": "trivialscan dashboard api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3425353"
+	},
+	"item": [
+		{
+			"name": "register/{client_name}",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Trivialscan-Account",
+						"value": "{{ACCOUNT_NAME}}",
+						"type": "default"
+					},
+					{
+						"key": "X-Trivialscan-Version",
+						"value": "{{CLI_VERSION}}",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"operating_system\": \"Linux\",\n    \"operating_system_release\": \"5.15.60-1-MANJARO\",\n    \"operating_system_version\": \"#1 SMP PREEMPT Thu Aug 11 13:14:05 UTC 2022\",\n    \"architecture\": \"x86_64\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/register/{{CLIENT_NAME}}",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"register",
+						"{{CLIENT_NAME}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "echo test",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Trivialscan-Account",
+						"value": "{{ACCOUNT_NAME}}",
+						"type": "default"
+					},
+					{
+						"key": "X-Trivialscan-Version",
+						"value": "{{CLI_VERSION}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{API_URL}}/check-token",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"check-token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get reports",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Trivialscan-Account",
+						"value": "{{ACCOUNT_NAME}}",
+						"type": "default"
+					},
+					{
+						"key": "X-Trivialscan-Version",
+						"value": "{{CLI_VERSION}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{API_URL}}/reports",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"reports"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get host public data",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Trivialscan-Account",
+						"value": "{{ACCOUNT_NAME}}",
+						"type": "default"
+					},
+					{
+						"key": "X-Trivialscan-Version",
+						"value": "{{CLI_VERSION}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{API_URL}}/host/jupiterbroadcasting.com",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"host",
+						"jupiterbroadcasting.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get certificate public data",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Trivialscan-Account",
+						"value": "{{ACCOUNT_NAME}}",
+						"type": "default"
+					},
+					{
+						"key": "X-Trivialscan-Version",
+						"value": "{{CLI_VERSION}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{API_URL}}/certificate/091e8ea1b256a312962af6c140c0fbf079a407b3",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"certificate",
+						"091e8ea1b256a312962af6c140c0fbf079a407b3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get report summary",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Trivialscan-Account",
+						"value": "{{ACCOUNT_NAME}}",
+						"type": "default"
+					},
+					{
+						"key": "X-Trivialscan-Version",
+						"value": "{{CLI_VERSION}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{API_URL}}/summary/{{REPORT_HASH}}",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"summary",
+						"{{REPORT_HASH}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get report results",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Trivialscan-Account",
+						"value": "{{ACCOUNT_NAME}}",
+						"type": "default"
+					},
+					{
+						"key": "X-Trivialscan-Version",
+						"value": "{{CLI_VERSION}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{API_URL}}/report/{{REPORT_HASH}}",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"report",
+						"{{REPORT_HASH}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"const moment = require('moment')",
+					"const url = require('url')",
+					"const time = moment().utc()",
+					"const EOL = \"\\n\"",
+					"const pathParts = pm.environment.values.substitute(pm.request.url, null, false)",
+					"const pathurl = `${pathParts.host}/${pathParts.path.join(\"/\")}?${pathParts.query}`",
+					"const hostname = url.parse(pathurl).hostname",
+					"const pathname = url.parse(pathurl).pathname",
+					"const port = url.parse(pathurl).port || 443",
+					"const ts = time.unix()",
+					"const id = pm.environment.get(\"CLIENT_NAME\")",
+					"",
+					"let canonical_string = request.method.toUpperCase() + EOL + hostname + EOL + port + EOL + pathname + EOL + ts",
+					"if(pm.request.body.raw){",
+					"    canonical_string += EOL + btoa(pm.request.body.raw)",
+					"}",
+					"console.log(canonical_string)",
+					"// https://cryptojs.gitbook.io/docs/",
+					"const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, pm.environment.get(\"TOKEN\"))",
+					"hash.update(canonical_string)",
+					"const mac = hash.finalize()",
+					"const header = `HMAC id=\"${id}\", mac=\"${mac}\", ts=\"${ts}\"`",
+					"console.log(header)",
+					"pm.request.headers.add({key: \"Authorization\", value: header})",
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

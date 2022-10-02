@@ -28,10 +28,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "trivialscan_store_lifecycle" {
     noncurrent_version_expiration {
       noncurrent_days = 7
     }
-    noncurrent_version_transition {
-      noncurrent_days = 1
-      storage_class   = "STANDARD_IA"
-    }
   }
 }
 
@@ -44,7 +40,9 @@ resource "aws_s3_bucket_versioning" "trivialscan_store_versioning" {
 
 resource "aws_s3_bucket_replication_configuration" "trivialscan_store_replication_configuration" {
   # Must have bucket versioning enabled first
-  depends_on = [aws_s3_bucket_versioning.trivialscan_store_versioning]
+  depends_on = [
+    aws_s3_bucket_versioning.trivialscan_archive_versioning,
+  ]
 
   role   = aws_iam_role.trivialscan_store_replication_role.arn
   bucket = aws_s3_bucket.trivialscan_store_bucket.id
@@ -53,43 +51,16 @@ resource "aws_s3_bucket_replication_configuration" "trivialscan_store_replicatio
     id = "trivialscan-store-archive-replication"
     status = "Enabled"
     filter {
-      prefix = "scans/"
+      prefix = "Prod"
+    }
+    delete_marker_replication {
+      status = "Enabled"
     }
     destination {
       bucket        = aws_s3_bucket.trivialscan_archive_bucket.arn
-      storage_class = "ONEZONE_IA"
+      storage_class = "STANDARD_IA"
     }
   }
-}
-
-data "aws_iam_policy_document" "trivialscan_store_s3_policy" {
-  statement {
-    actions   = ["s3:GetObject"]
-    resources = ["arn:aws:s3:::${var.bucket_prefix}-store/*"]
-    principals {
-      type = "AWS"
-      identifiers = [
-        "arn:aws:iam::${local.aws_master_account_id}:role/trivialscan-*"
-      ]
-    }
-  }
-
-  statement {
-    actions   = ["s3:ListBucket"]
-    resources = ["arn:aws:s3:::${var.bucket_prefix}-store"]
-
-    principals {
-      type = "AWS"
-      identifiers = [
-        "arn:aws:iam::${local.aws_master_account_id}:role/trivialscan-*"
-      ]
-    }
-  }
-}
-
-resource "aws_s3_bucket_policy" "trivialscan_store_oai" {
-  bucket = aws_s3_bucket.trivialscan_store_bucket.id
-  policy = data.aws_iam_policy_document.trivialscan_store_s3_policy.json
 }
 
 resource "aws_s3_bucket_public_access_block" "trivialscan_store_resource_public_access_block" {
@@ -101,7 +72,7 @@ resource "aws_s3_bucket_public_access_block" "trivialscan_store_resource_public_
 }
 
 
-data "aws_iam_policy_document" "trivialscan_store_replication_policy" {
+data "aws_iam_policy_document" "trivialscan_store_policy" {
   statement {
     actions = [
       "s3:GetReplicationConfiguration",
@@ -137,7 +108,7 @@ data "aws_iam_policy_document" "trivialscan_store_replication_policy" {
 
 resource "aws_iam_policy" "trivialscan_store_replication_policy" {
   name   = "trivialscan-store-archive-replication"
-  policy = data.aws_iam_policy_document.trivialscan_store_replication_policy.json
+  policy = data.aws_iam_policy_document.trivialscan_store_policy.json
 }
 
 data "aws_iam_policy_document" "assumerole_policy" {

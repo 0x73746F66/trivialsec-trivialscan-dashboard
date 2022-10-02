@@ -61,3 +61,12 @@ destroy:  ## tf destroy -auto-approve
 test-local:  ## Prettier test outputs
 	pre-commit run --all-files
 	semgrep -q --strict --timeout=0 --config=p/terraform
+
+run-local:  ## npm run dev
+	npm run dev
+
+run-build:  ## npm run build
+	npm run build
+
+lint:  ## npm run lint
+	npm run lint

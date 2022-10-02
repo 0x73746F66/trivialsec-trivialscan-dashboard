@@ -40,6 +40,25 @@ resource "aws_s3_bucket_public_access_block" "archive_resource_public_access_blo
   block_public_policy     = true
 }
 
+resource "aws_s3_bucket_versioning" "trivialscan_archive_versioning" {
+  bucket = aws_s3_bucket.trivialscan_archive_bucket.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "trivialscan_archive_lifecycle" {
+  bucket = aws_s3_bucket.trivialscan_archive_bucket.id
+
+  rule {
+    id = "archive_noncurrent_version_expiration"
+    status = "Enabled"
+    noncurrent_version_expiration {
+      noncurrent_days = 7
+    }
+  }
+}
+
 output "trivialscan_archive_bucket" {
   value = aws_s3_bucket.trivialscan_archive_bucket.id
 }
