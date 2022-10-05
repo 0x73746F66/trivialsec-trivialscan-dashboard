@@ -18,8 +18,12 @@ import MainHeading from "./components/MainHeading.vue";
       <MainHeading text="Trivial Security" />
       <nav>
         <RouterLink to="/">Home</RouterLink>
+        <RouterLink to="/results">Reports</RouterLink>
         <RouterLink v-if="$route.params.report_id" :to="{name: 'summary', params: {report_id: $route.params.report_id}}">Summary</RouterLink>
         <RouterLink v-if="$route.params.report_id" :to="{name: 'detail', params: {report_id: $route.params.report_id}}">Full Report</RouterLink>
+        <RouterLink to="/login">Login</RouterLink>
+        <RouterLink to="/register">Register</RouterLink>
+        <RouterLink to="/logout">Logout</RouterLink>
       </nav>
     </div>
   </header>

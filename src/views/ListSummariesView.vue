@@ -39,7 +39,7 @@ export default {
       const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, window.dev_secrets.api_token)
       hash.update(canonical_string)
       const mac = hash.finalize()
-      const header = `HMAC id="${window.dev_secrets.client_name}", mac="${mac}", ts="${ts}"`
+      const header = `HMAC id="dashboard", mac="${mac}", ts="${ts}"`
       console.log(header)
 
       fetch(req_url, {
@@ -51,7 +51,7 @@ export default {
       })
         .then(response => response.text())
         .then(result => {
-          this.reports = result
+          this.reports = JSON.parse(result)
           this.loading = false
         })
         .catch(error => {
@@ -67,11 +67,14 @@ export default {
   <main>
     <div class="summary">
       <div v-if="loading" class="loading">Loading...</div>
-
+      {{ $log(reports) }}
       <div v-if="error" class="error">{{ error }}</div>
-      <br />
 
-      <ReportListItem :reports="reports" />
+      <ul>
+        <li v-for="report in reports">
+          <ReportListItem v-bind="report" />
+        </li>
+      </ul>
   </div>
   </main>
 </template>

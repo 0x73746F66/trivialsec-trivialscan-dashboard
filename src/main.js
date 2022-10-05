@@ -1,17 +1,16 @@
-import { createApp } from "vue";
-import App from "./App.vue";
-import router from "./router";
+import { createApp } from "vue"
+import App from "./App.vue"
+import router from "./router"
 
-import "./assets/main.css";
+import "./assets/main.css"
 
 //TODO: retreive from auth
 window.dev_secrets = {
     account_name: "trivialsec-test",
-    client_name: "jager",
     api_token: import.meta.env.VITE_API_TOKEN,
 }
 
-const app = createApp(App);
-app.config.globalProperties.$log = console.log;
-app.use(router);
-app.mount("#app");
+const app = createApp(App)
+app.config.globalProperties.$log = console.log
+app.use(router)
+app.mount("#app")

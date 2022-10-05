@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import LoginView from "../views/LoginView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,6 +11,22 @@ const router = createRouter({
       component: HomeView,
     },
     {
+      path: "/login",
+      name: "login",
+      // TODO with email address POST /login/magic_link
+      // sends email with magic link to login
+      component: LoginView,
+    },
+    {
+      path: "/login/:magic_link",
+      name: "magic_link",
+      beforeEnter: () => {
+        // TODO call GET /login/magic_link
+        // TODO response includes api_key that must be stored for HMAC
+        window.location.href = "/"
+      },
+    },
+    {
       path: "/logout",
       name: "logout",
       meta: {
@@ -17,8 +34,13 @@ const router = createRouter({
       },
       beforeEnter: () => {
         // TODO actually log out
-        window.location.href = "https://www.trivialsec.com";
+        window.location.href = "https://www.trivialsec.com"
       },
+    },
+    {
+      path: "/register",
+      name: "register",
+      component: () => import("../views/RegisterView.vue"),
     },
     {
       path: "/results",
@@ -45,6 +67,13 @@ const router = createRouter({
     {
       path: "/hostname/:hostname",
       name: "hostname",
+      redirect: to => {
+        return { name: "hostname_port", params: { hostname: to.params.hostname, port: 443 } }
+      },
+    },
+    {
+      path: "/hostname/:hostname/:port",
+      name: "hostname_port",
       component: () => import("../views/HostnameView.vue"),
     },
     {
@@ -55,4 +84,15 @@ const router = createRouter({
   ],
 });
 
+router.beforeEach(async (to) => {
+    // redirect to login page if not logged in and trying to access a restricted page
+    const publicPages = ['/login'];
+    const authRequired = !publicPages.includes(to.path);
+    // const auth = useAuthStore();
+
+    // if (authRequired && !auth.user) {
+    //     auth.returnUrl = to.fullPath;
+    //     return '/login';
+    // }
+});
 export default router;

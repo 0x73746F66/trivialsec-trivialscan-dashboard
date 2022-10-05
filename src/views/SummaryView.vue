@@ -1,4 +1,6 @@
 <script setup>
+import moment from 'moment'
+import CryptoJS from 'crypto-js'
 import ReportSummary from "@/components/ReportSummary.vue";
 </script>
 
@@ -10,7 +12,7 @@ export default {
       error: null,
       report: {},
       api_url: import.meta.env.VITE_API_URL,
-    };
+    }
   },
   created() {
     // watch the params of the route to fetch the data again
@@ -29,20 +31,33 @@ export default {
   methods: {
     fetchData() {
       this.loading = true
-      // replace `getPost` with your data fetching util / API wrapper
-      // const response = await fetch("https://api.npms.io/v2/search?q=vue");
-      // state.test = await response.json();
-      // const parsedData = JSON.parse(JsonData);
-      // this.songs = parsedData.Songs
+      const req_url = `${this.api_url}/summary/${this.$route.params.report_id}`
+      const ts = moment().utc().unix()
+      const url = new URL(req_url)
+      const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
+      console.log(canonical_string)
+      const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, window.dev_secrets.api_token)
+      hash.update(canonical_string)
+      const mac = hash.finalize()
+      const header = `HMAC id="dashboard", mac="${mac}", ts="${ts}"`
+      console.log(header)
 
-      // getPost(this.$route.params.id, (err, post) => {
-      //     this.loading = false
-      //     if (err) {
-      //     this.error = err.toString()
-      //     } else {
-      //     this.post = post
-      //     }
-      // })
+      fetch(req_url, {
+        headers: {
+          "Authorization": header,
+          "X-Trivialscan-Account": window.dev_secrets.account_name,
+        },
+        method: 'GET'
+      })
+        .then(response => response.text())
+        .then(result => {
+          this.report =JSON.parse(result)
+          this.loading = false
+        })
+        .catch(error => {
+          this.error = error
+          this.loading = false
+        })
     }
   }
 }
@@ -52,13 +67,10 @@ export default {
   <main>
     <div class="summary">
       <div v-if="loading" class="loading">Loading...</div>
-
+      {{ $log(report) }}
       <div v-if="error" class="error">{{ error }}</div>
 
-      param {{ $route.params.report_id }}
-      <br />
-
-      <ReportSummary :report="report" />
+      <ReportSummary v-bind="report" />
   </div>
   </main>
 </template>
