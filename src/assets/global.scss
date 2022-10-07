@@ -1,6 +1,10 @@
 @import "./variables";
 @import "./fonts";
+@import "./forms";
 
+@import "../node_modules/bootstrap/scss/mixins";
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
 
 @each $name, $spacer in $spacers {
     .margin-#{$name} {
@@ -17,6 +21,21 @@
     }
     .margin-top-#{$name} {
         margin-top: $spacer;
+    }
+    .padding-#{$name} {
+        padding: $spacer;
+    }
+    .padding-right-#{$name} {
+        padding-right: $spacer;
+    }
+    .padding-left-#{$name} {
+        padding-left: $spacer;
+    }
+    .padding-bottom-#{$name} {
+        padding-bottom: $spacer;
+    }
+    .padding-top-#{$name} {
+        padding-top: $spacer;
     }
 }
 
@@ -55,7 +74,7 @@
         border-color: $color;
     }
     .font-color-#{$name} {
-        background: $color;
+        color: $color;
     }
     .btn-fill-#{$name}-sm {
         background: $color;
@@ -67,14 +86,53 @@
         padding: padding("sm") padding("md");
         border-radius: radius("sm");
     }
+    .btn-fill-#{$name}-full {
+        background: $color;
+        padding: padding("md");
+        border-radius: radius("sm");
+        width: 100%;
+    }
+    .btn-outline {
+        border-radius: radius("sm");
+        background: none;
+        transition: 0.2s linear;
+        &:hover {
+            color: color("light");
+           
+        }
+    }
     .btn-outline-#{$name}-sm {
         border: 2px solid $color;
         padding: padding("xs") padding("sm");
-        border-radius: radius("sm");
+        @extend .btn-outline;
+        &:hover {
+            background: $color;
+        }
     }
     .btn-outline-#{$name} {
         border: 2px solid $color;
         padding: padding("sm") padding("md");
-        border-radius: radius("sm");
+        @extend .btn-outline;
+        &:hover {
+            background: $color;
+        }
     }
+    .btn-outline-#{$name}-full {
+        border: 2px solid $color;
+        padding: padding("md");
+        width: 100%;
+        @extend .btn-outline;
+        &:hover {
+            background: $color;
+        }
+    }
+}
+
+// Global Rules
+body {
+    background-color: color("dark") !important;
+}
+
+.debug-later  {
+    border: 2px solid red;
 }

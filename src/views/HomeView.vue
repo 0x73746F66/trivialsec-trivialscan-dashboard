@@ -1,21 +1,174 @@
-<script setup>
-
-</script>
-
 <template>
+  
+  <div class="hero-container">
+    <Hero :class="{ 'hero-scrolled': heroScrolled }"/>
+  </div>
+  
+  <div class="container basic-feature-container padding-bottom-md padding-top-md">
+    <div class="row">
+        <BasicFeature 
+          v-for="basicFeature in basicFeatures" 
+          :key="basicFeature.id" 
+          :feature='basicFeature'
+        />
+    </div>
+  </div>
+  
+  <div class="container pricing-container" ref="pricingContainer">
+    <div class="debug-later">      
+      <!-- 
+        -Needs some refractoring
+        -Tables are hardly responsive / Implement a better solution  
+      -->
+      <PricingComponent />
+    </div>
+  </div>
+
+  <div class="container padding-bottom-md padding-top-md">
+    <div class="login-register-section d-flex flex-lg-row flex-column align-items-center justify-content-start">
+      <LoginForm />
+      <div class="text-xxl font-color-light margin-sm login-register-sep">OR</div>
+      <RegisterForm />
+    </div>
+  </div>
 
 </template>
 
-<style scoped>
-main {
-  max-width: 1280px;
-  margin: 0 auto;
-}
+<script>
+  import Hero from "../components/layout/Hero.vue";
+  import LoginForm from "../components/forms/LoginForm.vue";
+  import RegisterForm from "../components/forms/RegisterForm.vue";
+  import BasicFeature from "../components/general/BasicFeature.vue"
+  import PricingComponent from "../components/general/PricingComponent.vue"
 
-@media (min-width: 1024px) {
-  main {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+  export default {
+    components: {
+      Hero, 
+      LoginForm, 
+      RegisterForm, 
+      BasicFeature, 
+      PricingComponent
+    },
+    data(){
+      return {
+        heroScrolled: false,
+        basicFeatures: [
+          {
+            id: 1,
+            icon: "/src/assets/icons/notification-light.svg",
+            header: "Patch Alert",
+            description: "Never miss a patch, kick off patch automation or inform your team"
+          },
+          {
+            id: 2,
+            icon: "/src/assets/icons/scan-2-light.svg",
+            header: "Passive scan",
+            description: "Deep DNS analysis, real TLS validation, vast subdomain sources, public responding ports, web libraries, vast 3rd party API integrations for enriched results"
+          },
+          {
+            id: 3,
+            icon: "/src/assets/icons/scan-1-light.svg",
+            header: "Active scan",
+            description: "Protected by an ownership validation; a passive scan but validates all findings"
+          },
+          {
+            id: 4,
+            icon: "/src/assets/icons/lightning-light.svg",
+            header: "Trivial Attacks",
+            description: "We automate many novel yet trivial attack vectors, and perform evaluations using standard tooling so you don't have to"
+          },
+          {
+            id: 5,
+            icon: "/src/assets/icons/int-light.svg",
+            header: "Threat Intelligence",
+            description: "Let's be clear, this is something 'you do' not something you buy, we know this, so our module helps you find the signals you need from a vast source of OSINT and vendor data - and curate blocklists that can be downloaded or sent to your network defence systems"
+          },
+          {
+            id: 6,
+            icon: "/src/assets/icons/feed-light.svg",
+            header: "Feeds",
+            description: "There is a lot of written form security information published every hour relevant to your organisation. Our Research & Advisory feed is a curated source for analysts and CISO's for your RSS viewer"
+          },
+          {
+            id: 7,
+            icon: "/src/assets/icons/integration-light.svg",
+            header: "Firehose",
+            description: "We promote automation using Webhooks for real-time integration into your existing systems"
+          },
+          {
+            id: 8,
+            icon: "/src/assets/icons/cli-light.svg",
+            header: "CLI",
+            description: "Enables automation via DevOps pipelines"
+          },
+          {
+            id: 9,
+            icon: "/src/assets/icons/globe-light.svg",
+            header: "Recon",
+            description: "We have a vast database of the public internet, compiled from the authoritative list of every registered domain using zone files (and not IP address probing)"
+          },
+          {
+            id: 10,
+            icon: "/src/assets/icons/fish-light.svg",
+            header: "Phish Alert",
+            description: "Know when sites are copied or domains with similarities for a phishing attacks are registered We adhere to the concept of interoperability. You control your data, and we enable you with a growing list of supported open standard data exchange formats"
+          },
+          {
+            id: 11,
+            icon: "/src/assets/icons/tune-light.svg",
+            header: "On-prem / Self-hosting",
+            description: "While Trivial Security was created to make accessible many features typically out of reach to most organisations, our solutions equally benefit large enterprise with data sovereignty and complete control needs also"
+          },
+        ]
+      }
+    },
+    created () {
+      window.addEventListener('scroll', this.handleScroll);
+    },
+    destroyed () {
+      window.removeEventListener('scroll', this.handleScroll);
+    },
+    methods: {
+      handleScroll() {
+        if(window.scrollY > 10) {
+          this.heroScrolled = true;
+        } else {
+          this.heroScrolled = false;
+        }
+      }
+    }
   }
-}
+</script>
+
+
+<style scoped lang='scss'>
+  .hero-container {
+    height: calc(100vh - 80px);
+  }
+  .login-register {
+    &-section {
+      position: relative;
+    }
+    &-sep {
+      background: color("dark");
+      padding: padding("sm");
+
+      &:before {
+        content: "";
+        z-index: -1;
+        background: color("light");
+        top: 25px;
+        left: 50%;
+        bottom: 25px;
+        width: 1px;
+        position: absolute;
+        @media (max-width: $breakpoint-lg) {
+          left: 0;
+          top: 43%;
+          width: 100%;
+          height: 1px;
+        }
+      }
+    }
+  }
 </style>

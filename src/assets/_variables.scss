@@ -43,6 +43,12 @@ $font-sizes: (
     "header-xl": 96px,
 );
 
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+$breakpoint-xxl: 1400px;
+
 @function color($color) {
     @return map.get($colors, $color);
 }
@@ -53,4 +59,8 @@ $font-sizes: (
 
 @function radius($ray) {
     @return map.get($radius, $ray);
+}
+
+@function spacers($space) {
+    @return map.get($spacers, $space);
 }
