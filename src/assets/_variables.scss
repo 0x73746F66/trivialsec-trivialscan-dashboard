@@ -42,3 +42,15 @@ $font-sizes: (
     "header-lg": 60px,
     "header-xl": 96px,
 );
+
+@function color($color) {
+    @return map.get($colors, $color);
+}
+
+@function padding($padding) {
+    @return map.get($spacers, $padding);
+}
+
+@function radius($ray) {
+    @return map.get($radius, $ray);
+}

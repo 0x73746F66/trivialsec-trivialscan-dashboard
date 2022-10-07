@@ -17,7 +17,7 @@ import MainHeading from "./components/MainHeading.vue";
     <div class="wrapper">
       <MainHeading text="Trivial Security" />
       <nav>
-        <RouterLink to="/" class="font-base-sb">Home</RouterLink>
+        <RouterLink to="/" class="font-base-sb btn-outline-primary-small">Home</RouterLink>
         <RouterLink to="/results">Reports</RouterLink>
         <RouterLink v-if="$route.params.report_id" :to="{name: 'summary', params: {report_id: $route.params.report_id}}">Summary</RouterLink>
         <RouterLink v-if="$route.params.report_id" :to="{name: 'detail', params: {report_id: $route.params.report_id}}">Full Report</RouterLink>

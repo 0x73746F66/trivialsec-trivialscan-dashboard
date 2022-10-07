@@ -1,6 +1,7 @@
 @import "./variables";
 @import "./fonts";
 
+
 @each $name, $spacer in $spacers {
     .margin-#{$name} {
         margin: $spacer;
@@ -55,5 +56,25 @@
     }
     .font-color-#{$name} {
         background: $color;
+    }
+    .btn-fill-#{$name}-sm {
+        background: $color;
+        padding: padding("xs") padding("sm");
+        border-radius: radius("sm");
+    }
+    .btn-fill-#{$name} {
+        background: $color;
+        padding: padding("sm") padding("md");
+        border-radius: radius("sm");
+    }
+    .btn-outline-#{$name}-sm {
+        border: 2px solid $color;
+        padding: padding("xs") padding("sm");
+        border-radius: radius("sm");
+    }
+    .btn-outline-#{$name} {
+        border: 2px solid $color;
+        padding: padding("sm") padding("md");
+        border-radius: radius("sm");
     }
 }
