@@ -17,7 +17,7 @@ import MainHeading from "./components/MainHeading.vue";
     <div class="wrapper">
       <MainHeading text="Trivial Security" />
       <nav>
-        <RouterLink to="/">Home</RouterLink>
+        <RouterLink to="/" class="font-base-sb btn-outline-primary-small">Home</RouterLink>
         <RouterLink to="/results">Reports</RouterLink>
         <RouterLink v-if="$route.params.report_id" :to="{name: 'summary', params: {report_id: $route.params.report_id}}">Summary</RouterLink>
         <RouterLink v-if="$route.params.report_id" :to="{name: 'detail', params: {report_id: $route.params.report_id}}">Full Report</RouterLink>
@@ -31,7 +31,7 @@ import MainHeading from "./components/MainHeading.vue";
   <RouterView />
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 header {
   line-height: 1;
   width: 100%;
@@ -48,7 +48,7 @@ nav {
 }
 
 nav a.router-link-exact-active {
-  color: var(--color-text);
+  color: white;
 }
 
 nav a.router-link-exact-active:hover {

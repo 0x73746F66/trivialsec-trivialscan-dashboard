@@ -1,0 +1,80 @@
+@import "./variables";
+@import "./fonts";
+
+
+@each $name, $spacer in $spacers {
+    .margin-#{$name} {
+        margin: $spacer;
+    }
+    .margin-right-#{$name} {
+        margin-right: $spacer;
+    }
+    .margin-left-#{$name} {
+        margin-left: $spacer;
+    }
+    .margin-bottom-#{$name} {
+        margin-bottom: $spacer;
+    }
+    .margin-top-#{$name} {
+        margin-top: $spacer;
+    }
+}
+
+@each $name, $radius in $radius {
+    .border-radius-#{$name} {
+        border-radius: $radius;
+    }
+}
+
+@each $name, $size in $font-sizes {
+    .font-#{$name} {
+        font-size: $size;
+        font-weight: 300;
+        font-family: Montserrat, sans-serif;
+    }
+    
+    .font-#{$name}-sb {
+        font-size: $size;
+        font-weight: 500;
+        font-family: Montserrat-semi-bold, sans-serif;
+
+    }
+
+    .font-#{$name}-b {
+        font-size: $size;
+        font-weight: 800;
+        font-family: Montserrat-bold, sans-serif;
+    }
+}
+
+@each $name, $color in $colors {
+    .bg-#{$name} {
+        background: $color;
+    }
+    .border-color-#{$name} {
+        border-color: $color;
+    }
+    .font-color-#{$name} {
+        background: $color;
+    }
+    .btn-fill-#{$name}-sm {
+        background: $color;
+        padding: padding("xs") padding("sm");
+        border-radius: radius("sm");
+    }
+    .btn-fill-#{$name} {
+        background: $color;
+        padding: padding("sm") padding("md");
+        border-radius: radius("sm");
+    }
+    .btn-outline-#{$name}-sm {
+        border: 2px solid $color;
+        padding: padding("xs") padding("sm");
+        border-radius: radius("sm");
+    }
+    .btn-outline-#{$name} {
+        border: 2px solid $color;
+        padding: padding("sm") padding("md");
+        border-radius: radius("sm");
+    }
+}

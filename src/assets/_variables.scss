@@ -1,0 +1,56 @@
+@use "sass:map";
+
+$colors: (
+    "primary": rgba(26, 187, 156, 1),
+    "warning": rgba(241, 202, 103, 1),
+    "danger": rgba(244, 94, 94, 1),
+    "dark": rgba(43, 37, 37, 1),
+    "dark-20": rgba(0, 0, 0, 0.2),
+    "dark-40": rgba(0, 0, 0, 0.4),
+    "dark-60": rgba(0, 0, 0, 0.6),
+    "light": rgba(240, 240, 240, 1),
+    "light-20": rgba(240, 240, 240, 0.2),
+    "light-40": rgba(240, 240, 240, 0.4),
+    "light-60": rgba(240, 240, 240, 0.6)
+);
+
+$spacers: (
+    "xs": 10px,
+    "sm": 15px,
+    "md": 20px,
+    "lg": 25px,
+    "xl": 50px,
+    "xxl": 100px,
+);
+
+$radius: (
+    "sm": 10px,
+    "md": 20px,
+    "lg": 40px,
+    "xl": 50px
+);
+
+$font-sizes: (
+    "xs": 12px,
+    "sm": 13.5px,
+    "base": 16px,
+    "lg": 18.5px,
+    "xl": 20px,
+    "xxl": 24px,
+    "xxxl": 29.5px,
+    "header": 36px,
+    "header-lg": 60px,
+    "header-xl": 96px,
+);
+
+@function color($color) {
+    @return map.get($colors, $color);
+}
+
+@function padding($padding) {
+    @return map.get($spacers, $padding);
+}
+
+@function radius($ray) {
+    @return map.get($radius, $ray);
+}
