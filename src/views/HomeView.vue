@@ -1,24 +1,24 @@
 <template>
-  
+
   <div class="hero-container">
     <Hero :class="{ 'hero-scrolled': heroScrolled }"/>
   </div>
-  
+
   <div class="container basic-feature-container padding-bottom-md padding-top-md">
     <div class="row">
-        <BasicFeature 
-          v-for="basicFeature in basicFeatures" 
-          :key="basicFeature.id" 
+        <BasicFeature
+          v-for="basicFeature in basicFeatures"
+          :key="basicFeature.id"
           :feature='basicFeature'
         />
     </div>
   </div>
-  
+
   <div class="container pricing-container d-none d-lg-block" ref="pricingContainer">
-    <div class="debug-later">      
-      <!-- 
+    <div class="debug-later">
+      <!--
         -Needs some refractoring
-        -Tables are hardly responsive / Implement a better solution  
+        -Tables are hardly responsive / Implement a better solution
       -->
       <PricingComponent />
     </div>
@@ -43,10 +43,10 @@
 
   export default {
     components: {
-      Hero, 
-      LoginForm, 
-      RegisterForm, 
-      BasicFeature, 
+      Hero,
+      LoginForm,
+      RegisterForm,
+      BasicFeature,
       PricingComponent
     },
     data(){
@@ -118,6 +118,12 @@
             icon: "/src/assets/icons/tune-light.svg",
             header: "On-prem / Self-hosting",
             description: "While Trivial Security was created to make accessible many features typically out of reach to most organisations, our solutions equally benefit large enterprise with data sovereignty and complete control needs also"
+          },
+          {
+            id: 12,
+            icon: "/src/assets/icons/tune-light.svg",
+            header: "Interoperability",
+            description: "We adhere to open standards. You control your data, and we enable you with a growing list of supported data exchange formats so you can access and control your data at all times"
           },
         ]
       }

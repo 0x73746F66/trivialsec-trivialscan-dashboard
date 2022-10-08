@@ -36,7 +36,7 @@ export default {
       const url = new URL(req_url)
       const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
       console.log(canonical_string)
-      const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, window.dev_secrets.api_token)
+      const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
       hash.update(canonical_string)
       const mac = hash.finalize()
       const header = `HMAC id="dashboard", mac="${mac}", ts="${ts}"`
@@ -45,7 +45,7 @@ export default {
       fetch(req_url, {
         headers: {
           "Authorization": header,
-          "X-Trivialscan-Account": window.dev_secrets.account_name,
+          "X-Trivialscan-Account": localStorage.getItem('/account/name'),
         },
         method: 'GET'
       })

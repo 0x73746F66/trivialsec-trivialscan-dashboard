@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import LoginView from "../views/LoginView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,20 +10,26 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: "/login",
-      name: "login",
-      // TODO with email address POST /login/magic_link
-      // sends email with magic link to login
-      component: LoginView,
-    },
-    {
       path: "/login/:magic_link",
       name: "magic_link",
-      beforeEnter: () => {
-        // TODO call GET /login/magic_link
-        // TODO response includes api_key that must be stored for HMAC
-        window.location.href = "/"
-      },
+      beforeEnter: to => {
+        fetch(`${import.meta.env.VITE_API_URL}/magic-link/${to.params.magic_link}`)
+        .then(response => response.json())
+        .then(member => {
+          console.log('member')
+          console.log(member)
+          //TODO: save member to vue3 store backed by localStorage
+          localStorage.setItem('/account/name', member?.account?.name)
+          localStorage.setItem('/session/key', member?.account?.api_key)
+          //TODO: redirect to activities page when created
+          window.location.href = '/results'
+        })
+        .catch(errors => {
+          console.log('errors')
+          console.log(errors)
+
+        })
+      }
     },
     {
       path: "/logout",
@@ -36,11 +41,6 @@ const router = createRouter({
         // TODO actually log out
         window.location.href = "https://www.trivialsec.com"
       },
-    },
-    {
-      path: "/register",
-      name: "register",
-      component: () => import("../views/RegisterView.vue"),
     },
     {
       path: "/results",
