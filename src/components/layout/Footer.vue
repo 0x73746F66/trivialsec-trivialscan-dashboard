@@ -28,13 +28,8 @@
                         <RouterLink to="/logout" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Logout</RouterLink>
                     </div>
                     <div class="d-flex flex-column">
-                        <span class="font-lg-sb font-color-light margin-bottom-md">Contact</span>
-                        <!-- 
-                            -Ask Chris if we can share an e-mail address/phone number here
-                            -If not change these links to a CTA to the support page
-                        -->
-                        <a href="mailto:somereadas@dasda.com" class="debug-later margin-bottom-xs font-sm font-color-light-60 text-decoration-none">asdasdas@dasda.com</a>
-                        <a href="tel:+13413412312" class="debug-later margin-bottom-xs font-sm font-color-light-60 text-decoration-none">:+13413412312</a>
+                        <span class="font-lg-sb font-color-light margin-bottom-md">Need Support?</span>
+                        <RouterLink to="/" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Support Page</RouterLink>
                     </div>
                 </div>
             </div>

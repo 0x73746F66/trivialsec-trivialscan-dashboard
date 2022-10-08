@@ -1,15 +1,15 @@
 .custom-field {
+    @extend .padding-bottom-lg;
     display: block;
     position: relative;
-    @extend .padding-bottom-lg;
     width: 100%;
 
     label {
+        @extend .font-base-sb;
         position: absolute;
         left: spacers("sm");
         top: spacers("xs");
         color: color("dark");
-        @extend .font-base-sb;
         background: color("light");
         padding: 0 spacers('xs');
     }

@@ -14,7 +14,7 @@ export default {
         alt: String,
         class: String,
         width: String,
-        Height: String,
+        height: String,
     }
 }
 </script>

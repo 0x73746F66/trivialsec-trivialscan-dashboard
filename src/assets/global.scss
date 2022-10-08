@@ -102,26 +102,26 @@
         }
     }
     .btn-outline-#{$name}-sm {
+        @extend .btn-outline;
         border: 2px solid $color;
         padding: padding("xs") padding("sm");
-        @extend .btn-outline;
         &:hover {
             background: $color;
         }
     }
     .btn-outline-#{$name} {
+        @extend .btn-outline;
         border: 2px solid $color;
         padding: padding("sm") padding("md");
-        @extend .btn-outline;
         &:hover {
             background: $color;
         }
     }
     .btn-outline-#{$name}-full {
+        @extend .btn-outline;
         border: 2px solid $color;
         padding: padding("md");
         width: 100%;
-        @extend .btn-outline;
         &:hover {
             background: $color;
         }
