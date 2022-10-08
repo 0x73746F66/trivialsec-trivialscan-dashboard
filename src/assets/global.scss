@@ -133,6 +133,24 @@ body {
     background-color: color("dark") !important;
 }
 
+.padding {
+    &-bottom-none{
+        padding-bottom: none;
+    }
+    &-top-none{
+        padding-top: none;
+    }
+    &-left-none{
+        padding-left: none;
+    }
+    &-right-none{
+        padding-right: none;
+    }
+    &-none {
+        padding: none;
+    }
+}
+
 .debug-later  {
     border: 2px solid red;
 }

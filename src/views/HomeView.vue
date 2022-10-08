@@ -14,8 +14,8 @@
     </div>
   </div>
 
-  <div class="container pricing-container d-none d-lg-block" ref="pricingContainer">
-    <div class="debug-later">
+  <div class="container-fluid padding-top-xl padding-bottom-md bg-dark-20 pricing-container" ref="pricingContainer">
+    <div class="container">
       <!--
         -Needs some refractoring
         -Tables are hardly responsive / Implement a better solution
