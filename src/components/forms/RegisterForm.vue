@@ -65,7 +65,7 @@
     }
 </script>
 <style lang="scss">
-    @import "../../assets/forms";
+    @import "@/assets/forms";
 
     .register-form {
         display: flex;

@@ -1,16 +1,16 @@
 <template>
-    <div 
+    <div
         class="hero"
     >
         <div class="d-flex flex-column align-items-center hero-icon">
-            <IconTrivialSecurity 
+            <IconTrivialSecurity
                 width="150"
                 class="margin-bottom-md"
             />
             <h1 class="font-header-xl-b text-center font-color-primary">Trivial Security</h1>
         </div>
-        <img 
-            src="../../assets/media/hero-pexels.jpg" 
+        <img
+            src="@/assets/media/hero-pexels.jpg"
             alt="Code on a black screen"
             class="hero-img"
         >
@@ -21,7 +21,7 @@
     import IconTrivialSecurity from '../icons/IconTrivialSecurity.vue';
 
     export default {
-        components: { IconTrivialSecurity }        
+        components: { IconTrivialSecurity }
     }
 </script>
 
@@ -58,7 +58,7 @@
                     width: calc(1320px - 30px);
                 }
             }
-    
+
         }
     }
 </style>

@@ -58,7 +58,7 @@
     }
 </script>
 <style lang="scss">
-    @import "../../assets/forms";
+    @import "@/assets/forms";
 
     .login-form {
         display: flex;

@@ -5,9 +5,9 @@
                 <td></td>
                 <td></td>
                 <td class="pricing-recommended font-color-primary justify-content-center d-flex align-items-center">
-                    <img 
-                        class="pricing-icon margin-right-xs" 
-                        src="../../assets/icons/star-light.svg" 
+                    <img
+                        class="pricing-icon margin-right-xs"
+                        src="@/assets/icons/star-light.svg"
                         alt="Star"
                     >
                     Recommended
@@ -21,7 +21,7 @@
                 <th>Package 2</th>
                 <th>Package 3</th>
             </tr>
-        
+
             <tr>
                 <td>Task 1</td>
                 <td><checkIcon class="pricing-checkmark"/></td>
