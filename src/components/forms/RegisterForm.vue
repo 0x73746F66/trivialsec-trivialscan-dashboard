@@ -1,17 +1,49 @@
+<script setup>
+    const api_url = import.meta.env.VITE_API_URL
+    const register = (event) => {
+        const display = event.target.querySelector('[name="display"]').value
+        const primary_email = event.target.querySelector('[name="primary_email"]').value
+        const payload = JSON.stringify({ display, primary_email, name: '' })
+        const req_url = `${api_url}/account/register`
+    
+        fetch(req_url, {
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8'
+            },
+            method: 'POST',
+            body: payload
+        })
+        .then(response => response.text())
+        .then(result => {
+            const account = JSON.parse(result)
+            console.log('account')
+            console.log(account)
+    
+        })
+        .catch(errors => {
+            console.log('errors')
+            console.log(errors)
+    
+        })
+    }
+</script>
+
 <template>
-    <form class="register-form">
+    <form class="register-form" @submit.prevent="register">
         <h3 class="text-xl font-color-light margin-bottom-md">Register</h3>
         <TextInput 
             placeholder=""
             id="registerUsername"
             label="Username"
             :required="true"
+            name="display"
         />
         <EmaiInput 
             placeholder="Email Field" 
             id="id-name-1" 
             label="Email 2" 
             :required="true"
+            name="primary_email"
         />
         <Button 
             class="btn-outline-primary-full font-xl-sb font-color-primary"

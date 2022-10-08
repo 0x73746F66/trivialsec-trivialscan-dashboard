@@ -1,5 +1,5 @@
 <template>
-    <div class="col-6 col-lg-4 padding-sm">
+    <div class="col-12 col-sm-6 col-lg-4 padding-sm">
         <div class="basic-feature h-100 w-100 text-center padding-lg">
             <img class="basic-feature-icon" :src="feature.icon"/>
             <h3 class="font-xl-sb font-color-light margin-bottom-sm margin-top-lg">{{feature.header}}</h3>

@@ -1,11 +1,13 @@
 <template>
-    <div class="hero">
+    <div 
+        class="hero"
+    >
         <div class="d-flex flex-column align-items-center hero-icon">
             <IconTrivialSecurity 
                 width="150"
                 class="margin-bottom-md"
             />
-            <h1 class="font-header-xl-b font-color-primary">Trivial Security</h1>
+            <h1 class="font-header-xl-b text-center font-color-primary">Trivial Security</h1>
         </div>
         <img 
             src="../../assets/media/hero-pexels.jpg" 
@@ -43,11 +45,18 @@
             object-fit: cover;
             transition: 0.2s linear;
             opacity: 0.4;
+            @media (max-width: $breakpoint-lg) {
+                height: 100%;
+            }
         }
         &-scrolled {
             .hero-img {
-                width: calc(1140px - 30px);
-                height: 90%;
+                @media (min-width: $breakpoint-lg)  {
+                    width: calc(1140px - 30px);
+                }
+                @media (min-width: $breakpoint-xxl) {
+                    width: calc(1320px - 30px);
+                }
             }
     
         }

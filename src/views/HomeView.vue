@@ -14,7 +14,7 @@
     </div>
   </div>
   
-  <div class="container pricing-container" ref="pricingContainer">
+  <div class="container pricing-container d-none d-lg-block" ref="pricingContainer">
     <div class="debug-later">      
       <!-- 
         -Needs some refractoring
