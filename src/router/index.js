@@ -34,12 +34,11 @@ const router = createRouter({
     {
       path: "/logout",
       name: "logout",
-      meta: {
-        title: "Redirect to trivialsec.com",
-      },
       beforeEnter: () => {
-        // TODO actually log out
-        window.location.href = "https://www.trivialsec.com"
+        //TODO: use vue3 store backed by localStorage
+        localStorage.setItem('/account/name', "")
+        localStorage.setItem('/session/key', "")
+        window.location.href = "/"
       },
     },
     {

@@ -6,34 +6,34 @@
                     <div class="d-flex justify-content-between">
                         <div class="d-flex align-items-center">
                             <IconTrivialSecurity
-                                alt="Trivial Security" 
-                                class="margin-right-lg" 
-                                width="50" 
-                                height="" 
+                                alt="Trivial Security"
+                                class="margin-right-lg"
+                                width="50"
+                                height=""
                             />
                             <span class="d-none d-lg-block font-xxl-b font-color-primary">Trivial Security</span>
                         </div>
 
-                        <button 
-                            class="navbar-toggler navbar-dark d-lg-none" 
-                            type="button" 
+                        <button
+                            class="navbar-toggler navbar-dark d-lg-none"
+                            type="button"
                             @click='toggleNavbar'
                         >
                             <span class="navbar-toggler-icon"></span>
                         </button>
                     </div>
 
-                    <div 
-                        class="d-flex flex-column flex-lg-row align-items-center nav-transition nav-content" 
+                    <div
+                        class="d-flex flex-column flex-lg-row align-items-center nav-transition nav-content"
                         :class="{'nav-hidden' : navbarHidden}"
                     >
                         <RouterLink to="/" class="router-link font-base font-color-light text-decoration-none margin-right-md">Home</RouterLink>
-                        <RouterLink to="/results" class="router-link font-base font-color-light text-decoration-none margin-right-md">Reports</RouterLink>
+                        <RouterLink v-if="logged_in" to="/results" class="router-link font-base font-color-light text-decoration-none margin-right-md">Reports</RouterLink>
                         <RouterLink v-if="$route.params.report_id" :to="{name: 'summary', params: {report_id: $route.params.report_id}}" class="router-link font-base font-color-light text-decoration-none margin-right-md">Summary</RouterLink>
                         <RouterLink v-if="$route.params.report_id" :to="{name: 'detail', params: {report_id: $route.params.report_id}}" class="router-link font-base font-color-light text-decoration-none margin-right-md">Full Report</RouterLink>
-                        <RouterLink to="/login" class="router-link font-base font-color-light text-decoration-none margin-right-md">Login</RouterLink>
-                        <RouterLink to="/register" class="router-link font-base font-color-light text-decoration-none margin-right-md">Register</RouterLink>
-                        <RouterLink to="/logout" class="router-link font-base font-color-light text-decoration-none margin-right-md">Logout</RouterLink>
+                        <RouterLink v-if="!logged_in" to="/login" class="router-link font-base font-color-light text-decoration-none margin-right-md">Login</RouterLink>
+                        <RouterLink v-if="!logged_in" to="/register" class="router-link font-base font-color-light text-decoration-none margin-right-md">Register</RouterLink>
+                        <RouterLink v-if="logged_in" to="/logout" class="router-link font-base font-color-light text-decoration-none margin-right-md">Logout</RouterLink>
                     </div>
                 </div>
             </div>
@@ -47,12 +47,19 @@
         components: { IconTrivialSecurity },
         data() {
             return {
-                navbarHidden: true
+                navbarHidden: true,
+                logged_in: false,
+                member_name: null,
             }
+        },
+        created() {
+            //TODO: use vue3 store backed by localStorage
+            this.member_name = localStorage.getItem('/account/name')
+            this.logged_in = !!localStorage.getItem('/session/key')
         },
         methods: {
             toggleNavbar() {
-                this.navbarHidden = !this.navbarHidden; 
+                this.navbarHidden = !this.navbarHidden;
             }
         }
     }
@@ -71,7 +78,7 @@
                 margin-bottom: spacers("xs");
             }
         }
-        
+
         .router-link-active {
             @extend .font-color-primary;
             @extend .font-base-b;
@@ -83,7 +90,7 @@
 
         &-content {
         }
-        
+
         &-hidden {
             @media (max-width: $breakpoint-lg) {
                 height: 0px;
