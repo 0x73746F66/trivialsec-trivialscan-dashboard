@@ -9,11 +9,8 @@
                         width="50" 
                         height=""
                     />
-                    <div class="social-footer margin-top-md padding-md debug-later ">
-                        <!-- 
-                            -Ask Chris if there's social media links we can insert here
-                            -If not delete this div.  
-                        -->
+                    <div class="social-footer margin-top-md padding-md">
+                  
                     </div>
                 </div>
                 <div class="col-12 col-lg-10 d-flex flex-lg-row flex-column justify-content-end">

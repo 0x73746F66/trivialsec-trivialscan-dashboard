@@ -61,7 +61,11 @@
     .nav {
         @extend .bg-dark-40;
         @extend .padding-md;
-        
+        position: fixed;
+        width: 100%;
+        z-index: 10;
+        background: #1a1616;
+
         .router-link {
             @media (max-width: $breakpoint-lg) {
                 margin-bottom: spacers("xs");

@@ -20,11 +20,8 @@
             <template v-slot:col-3>
                 <div class="d-flex flex-column">
                     <span class="is-recommended">
-                        <img
-                            class="pricing-icon margin-right-xs"
-                            src="@/assets/icons/star-light.svg"
-                            alt="Star"
-                        > Recommended
+                        <IconStarPrimary color="F0F0F0" class="pricing-icon margin-right-xs"/>
+                        Recommended
                     </span>
                     <h3 class="font-xl-b padding-top-lg padding-bottom-sm font-color-light">Package 2</h3>
                     <span class="font-base font-color-light">

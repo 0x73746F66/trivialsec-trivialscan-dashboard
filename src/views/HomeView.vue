@@ -5,7 +5,7 @@
   </div>
 
   <div class="container basic-feature-container padding-bottom-md padding-top-md">
-    <div class="row">
+    <div class="row padding-top-lg padding-bottom-lg">
         <BasicFeature
           v-for="basicFeature in basicFeatures"
           :key="basicFeature.id"

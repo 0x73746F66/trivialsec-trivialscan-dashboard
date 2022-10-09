@@ -2,15 +2,19 @@
     <div
         class="hero"
     >
-        <div class="d-flex flex-column align-items-center hero-icon">
+        <div class="d-flex flex-column align-items-center hero-icon padding-right-xl padding-left-xl w-100">
             <IconTrivialSecurity
                 width="150"
                 class="margin-bottom-md"
             />
-            <h1 class="font-header-xl-b text-center font-color-primary">Trivial Security</h1>
+            <h1 class="font-header-lg-b text-center font-color-primary margin-bottom-sm">Trivial Security</h1>
+            <div class="font-color-light text-center margin-bottom-md">
+                <h2 class="font-xl-b">Stay informed of your threat surface. We track bad actors so you don't have to.</h2>
+                <h3 class="font-lg">Free service to identify the basic threats attackers use, raising the Cybersecurity poverty line.</h3>
+            </div>
         </div>
         <img
-            src="@/assets/media/hero-pexels.jpg"
+            src="@/assets/media/hero.png"
             alt="Code on a black screen"
             class="hero-img"
         >
@@ -44,7 +48,7 @@
             max-height: 100%;
             object-fit: cover;
             transition: 0.2s linear;
-            opacity: 0.4;
+            filter: brightness(0.5);
             @media (max-width: $breakpoint-lg) {
                 height: 100%;
             }
