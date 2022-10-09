@@ -31,7 +31,7 @@
 <template>
     <form class="register-form" @submit.prevent="register">
         <TextInput
-            placeholder="Username"
+            placeholder="ACME Corp."
             id="registerUsername"
             label="Username"
             :required="true"
@@ -59,7 +59,7 @@
     }
 </script>
 <style lang="scss">
-    @import "@/assets/forms";
+@import "@/assets/forms";
 
     .register-form {
         display: flex;

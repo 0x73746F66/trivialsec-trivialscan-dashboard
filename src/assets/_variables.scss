@@ -2,6 +2,15 @@
 
 $colors: (
     "primary": rgba(26, 187, 156, 1),
+    "primary-20": rgba(26, 187, 156, 0.2),
+    "primary-40": rgba(26, 187, 156, 0.4),
+    "primary-60": rgba(26, 187, 156, 0.6),
+    "primary-80": rgba(26, 187, 156, 0.8),
+    "secondary": rgba(42, 63, 84, 1),
+    "secondary-20": rgba(42, 63, 84, 0.2),
+    "secondary-40": rgba(42, 63, 84, 0.4),
+    "secondary-60": rgba(42, 63, 84, 0.6),
+    "secondary-80": rgba(42, 63, 84, 0.8),
     "warning": rgba(241, 202, 103, 1),
     "danger": rgba(244, 94, 94, 1),
     "dark": rgba(43, 37, 37, 1),
@@ -11,10 +20,15 @@ $colors: (
     "light": rgba(240, 240, 240, 1),
     "light-20": rgba(240, 240, 240, 0.2),
     "light-40": rgba(240, 240, 240, 0.4),
-    "light-60": rgba(240, 240, 240, 0.6)
+    "light-60": rgba(240, 240, 240, 0.6),
+    "lighter": rgb(248, 248, 248),
+    "lighter-20": rgba(248, 248, 248, 0.2),
+    "lighter-40": rgba(248, 248, 248, 0.4),
+    "lighter-60": rgba(248, 248, 248, 0.6)
 );
 
 $spacers: (
+    "xxs": 5px,
     "xs": 10px,
     "sm": 15px,
     "md": 20px,

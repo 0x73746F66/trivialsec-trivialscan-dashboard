@@ -1,5 +1,5 @@
 <template>
-    <div class="col-12 col-sm-6 col-lg-4 padding-sm margin-bottom-md" 
+    <div class="col-12 col-sm-6 col-lg-4 padding-sm margin-bottom-md"
         @mouseover="showLink = true"
         @mouseleave="showLink = false"
         >
@@ -9,9 +9,9 @@
                 <h3 class="font-xl-sb font-color-light margin-bottom-sm margin-top-lg">{{feature.header}}</h3>
                 <span class="font-base font-color-light">{{feature.description}}</span>
             </div>
-            <a 
+            <a
                 href="#"
-                class="text-decoration-none font-color-light basic-feature-read-more-link w-100 padding-sm" 
+                class="text-decoration-none font-color-light basic-feature-read-more-link w-100 padding-sm"
                 :class="{ 'hidden': !showLink }"
             >
                 Read More
@@ -39,7 +39,7 @@ export default {
 }
 </script>
 <style lang="scss">
-    .basic-feature {
+.basic-feature {
         border-radius: radius("sm");
         background: color("dark-40");
         color: color("light");
@@ -56,7 +56,7 @@ export default {
             width: 100px;
         }
         &-read-more-link {
-            background: color("primary");
+            background: color("secondary");
             border-radius: 0 0 radius("sm") radius("sm");
             display: flex;
             align-items: center;
