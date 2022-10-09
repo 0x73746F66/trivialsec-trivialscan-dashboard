@@ -38,8 +38,9 @@
     import IconTrivialSecurity from '../icons/IconTrivialSecurity.vue';
 
     export default {
-        components: { IconTrivialSecurity }        
+        components: { IconTrivialSecurity }
     }
+    
 </script>
 <style lang="scss">
     .footer {

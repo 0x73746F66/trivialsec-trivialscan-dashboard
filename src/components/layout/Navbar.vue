@@ -1,5 +1,5 @@
 <template>
-    <div class="nav">
+    <div class="nav" :class="{'nav-animate-hidden' : isNavbarHidden}">
         <div class="container">
             <div class="row">
                 <div class="col-12 d-flex flex-lg-row flex-column justify-content-between">
@@ -46,6 +46,9 @@
 
     export default {
         components: { IconTrivialSecurity },
+        props: {
+            isNavbarHidden: Boolean
+        },
         data() {
             return {
                 navbarHidden: true,
@@ -71,10 +74,39 @@
     .nav {
         @extend .bg-dark-40;
         @extend .padding-md;
-        position: fixed;
         width: 100%;
         z-index: 10;
         background: #1a1616;
+        position: fixed;
+        transition: 0.2s linear;
+        animation: showNavbar 0.5s forwards;
+        
+
+        &-animate-hidden {
+            animation: hideNavbar 1s forwards;
+        }
+        
+        @keyframes hideNavbar {
+            0% {
+                top: 0;
+            }
+            99% {
+                top: -300%;
+            }
+            100% {
+                position: absolute;
+                top: 0;
+            }
+        }
+
+        @keyframes showNavbar {
+            0% {
+                top: -300%;
+            }
+            100% {
+                top: 0;
+            }
+        }
 
         .router-link {
             @media (max-width: $breakpoint-lg) {

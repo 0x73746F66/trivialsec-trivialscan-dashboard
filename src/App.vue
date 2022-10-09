@@ -1,11 +1,11 @@
 <template>
   <header>
-    <Navbar />
+    <Navbar :isNavbarHidden='isNavbarHidden' />
   </header>
 
   <RouterView />
 
-  <Footer />
+  <Footer ref="footer" />
 </template>
 
 <script>
@@ -15,6 +15,26 @@
   import Navbar from "./components/layout/Navbar.vue"
   export default {
     components: {Footer, Navbar},
+    data() {
+      return {
+        isNavbarHidden: false
+      }
+    },
+    created () {
+      window.addEventListener('scroll', this.unFixNavbar)
+    },
+    destroyed () {
+      window.removeEventListener('scroll', this.unFixNavbar)
+    },
+    methods: {
+      unFixNavbar() {
+        if(window.innerHeight + window.scrollY >= document.body.offsetHeight - this.$refs.footer.$el.clientHeight) {
+            this.isNavbarHidden = true
+        } else {
+          this.isNavbarHidden = false
+        }
+      }
+    }
   }
 </script>
 
