@@ -30,9 +30,8 @@
 
 <template>
     <form class="register-form" @submit.prevent="register">
-        <h3 class="text-xl font-color-light margin-bottom-md">Sign Up</h3>
         <TextInput
-            placeholder=""
+            placeholder="Username"
             id="registerUsername"
             label="Username"
             :required="true"
@@ -57,11 +56,6 @@
 
     export default {
         components: {TextInput, EmaiInput, Button},
-        methods: {
-            submit() {
-
-            }
-        }
     }
 </script>
 <style lang="scss">
@@ -71,9 +65,7 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        background: color("dark-20");
         border-radius: radius("sm");
-        padding: padding('lg');
         width: 100%;
     }
 </style>

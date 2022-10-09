@@ -30,10 +30,6 @@
         class="login-form"
         @submit.prevent="login"
     >
-        <h3 class="text-xl font-color-light margin-bottom-md">
-            Login
-        </h3>
-
         <EmaiInput
             placeholder="Send an email with login link"
             id="id-email-1"
@@ -64,9 +60,7 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        background: color("dark-20");
         border-radius: radius("sm");
-        padding: padding('lg');
         width: 100%;
     }
 </style>

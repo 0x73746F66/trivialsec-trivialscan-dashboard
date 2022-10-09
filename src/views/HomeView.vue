@@ -16,19 +16,47 @@
 
   <div class="container-fluid padding-top-xl padding-bottom-md bg-dark-20 pricing-container" ref="pricingContainer">
     <div class="container">
-      <!--
-        -Needs some refractoring
-        -Tables are hardly responsive / Implement a better solution
-      -->
       <PricingComponent />
     </div>
   </div>
 
   <div class="container padding-bottom-md padding-top-md">
     <div class="login-register-section d-flex flex-lg-row flex-column align-items-center justify-content-start">
-      <LoginForm />
+      <div class="d-flex flex-column col w-100">
+        <Dropdown
+          id="loginDropdown"
+          target="collapseLogin"
+          parent="login-register-section"
+          :defaultShow=false
+          :defaultCollapsed=true
+        > 
+          <template v-slot:header>
+              <h3 class="text-xl font-color-light mb-0">Login</h3>
+          </template>
+          <template v-slot:content>
+            <LoginForm />
+          </template>
+        </Dropdown>
+      </div>
       <div class="text-xxl font-color-light margin-sm login-register-sep">OR</div>
-      <RegisterForm />
+      <div class="d-flex flex-column col w-100">
+        <Dropdown
+          id="RegisterDropdown"
+          target="collapseRegister"
+          parent="login-register-section"
+          :defaultShow=false
+          :defaultCollapsed=true
+        > 
+          <template v-slot:header>
+            <h3 class="text-xl font-color-light mb-0">Sign Up</h3>
+          </template>
+          <template v-slot:content>
+            <RegisterForm />
+          </template>
+        </Dropdown>
+      </div>
+
+
     </div>
   </div>
 
@@ -51,6 +79,7 @@ import IconCliLight from "@/components/icons/IconCliLight.vue"
 import IconGlobeLight from "@/components/icons/IconGlobeLight.vue"
 import IconFishLight from "@/components/icons/IconFishLight.vue"
 import IconTuneLight from "@/components/icons/IconTuneLight.vue"
+import Dropdown from "@/components/general/dropdown.vue"
 
 export default {
   components: {
@@ -58,7 +87,8 @@ export default {
     LoginForm,
     RegisterForm,
     BasicFeature,
-    PricingComponent
+    PricingComponent,
+    Dropdown
   },
   data(){
     return {
@@ -169,21 +199,16 @@ export default {
     &-sep {
       background: color("dark");
       padding: padding("sm");
-
-      &:before {
-        content: "";
-        z-index: -1;
-        background: color("light");
-        top: 25px;
-        left: 50%;
-        bottom: 25px;
-        width: 1px;
-        position: absolute;
-        @media (max-width: $breakpoint-lg) {
-          left: 0;
-          top: 43%;
-          width: 100%;
-          height: 1px;
+      @media (min-width: $breakpoint-lg) {
+        &:before {
+          content: "";
+          z-index: -1;
+          background: color("light");
+          top: 25px;
+          left: 50%;
+          bottom: 25px;
+          width: 1px;
+          position: absolute;
         }
       }
     }

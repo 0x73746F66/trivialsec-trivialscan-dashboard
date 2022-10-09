@@ -7,11 +7,10 @@
     label {
         @extend .font-base-sb;
         position: absolute;
-        left: spacers("sm");
         top: spacers("xs");
-        color: color("dark");
-        background: color("light");
+        color: color("light");
         padding: 0 spacers('xs');
+        text-shadow: 1px 1px color("dark");
     }
 
     input, textarea {

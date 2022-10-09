@@ -19,8 +19,8 @@
             </template>
             <template v-slot:col-3>
                 <div class="d-flex flex-column">
-                    <span class="is-recommended">
-                        <IconStarPrimary color="F0F0F0" class="pricing-icon margin-right-xs"/>
+                    <span class="is-recommended font-base">
+                        <IconStarPrimary color="1abb9c" class="pricing-icon margin-right-xs"/>
                         Recommended
                     </span>
                     <h3 class="font-xl-b padding-top-lg padding-bottom-sm font-color-light">Package 2</h3>
@@ -120,24 +120,27 @@
             <template v-slot:col-1>
             </template>
             <template v-slot:col-2>
-                <div class="text-center pricing-label w-100">
-                    <span class="font-xl">
+                <div class="d-flex flex-column text-center pricing-label w-100">
+                    <span class="font-xl margin-bottom-sm">
                         Starting at <span class="font-xl-b font-color-primary">$200.00</span>
                     </span>
+                    <a href="#" class="btn-outline-primary font-color-primary text-decoration-none">Get Started</a>
                 </div>
             </template>
             <template v-slot:col-3>
-                <div class="text-center pricing-label w-100 pricing-label-is-recommended">
-                    <span class="font-xl">
-                        Starting at <span class="font-xl-b font-color-light">$200.00</span>
+                <div class="d-flex flex-column text-center pricing-label w-100">
+                    <span class="font-xl margin-bottom-sm">
+                        Starting at <span class="font-xl-b font-color-primary">$200.00</span>
                     </span>
+                    <a href="#" class="btn-outline-primary font-color-primary text-decoration-none">Get Started</a>
                 </div>
             </template>
             <template v-slot:col-4>
-                <div class="text-center pricing-label w-100">
-                    <span class="font-xl">
+                <div class="d-flex flex-column text-center pricing-label w-100">
+                    <span class="font-xl margin-bottom-sm">
                         Starting at <span class="font-xl-b font-color-primary">$200.00</span>
                     </span>
+                    <a href="#" class="btn-outline-primary font-color-primary text-decoration-none">Get Started</a>
                 </div>
             </template>
         </PricingComponentRow>
@@ -236,17 +239,14 @@
             }
         }
         .is-recommended {
-            @extend .font-color-light;
-            @extend .bg-primary;
+            @extend .font-color-primary;
             position: absolute;
-            top: -50px;
+            top: -25px;
             left: 0;
             right: 0;
             display: flex;
-            padding: spacers('sm') 0;
             align-items: center;
-            justify-content: center;
-            border-radius: radius("sm") radius("sm") 0 0;
+            justify-content: flex-start;
         }
         &-checkmark {
             height: 50px;
