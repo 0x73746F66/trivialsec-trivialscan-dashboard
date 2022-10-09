@@ -14,49 +14,52 @@
     </div>
   </div>
 
-  <div class="container-fluid padding-top-xl padding-bottom-md bg-dark-20 pricing-container" ref="pricingContainer">
+  <div 
+    class="container-fluid padding-top-xl padding-bottom-md bg-dark-20 pricing-container px-0" 
+    ref="pricingContainer"
+  >
     <div class="container">
       <PricingComponent />
     </div>
   </div>
 
-  <div class="container padding-bottom-lg padding-top-lg">
+  <div class="container padding-bottom-xl padding-top-xl">
     <div class="login-register-section d-flex flex-lg-row flex-column align-items-center justify-content-start">
-      <div class="d-flex flex-column col w-100 padding-bottom-lg padding-top-lg">
-        <Dropdown
-          id="loginDropdown"
-          target="collapseLogin"
-          parent="login-register-section"
-          :defaultShow=false
-          :defaultCollapsed=true
-        >
-          <template v-slot:header>
-              <h3 class="text-xl font-color-light mb-0">Login</h3>
-          </template>
-          <template v-slot:content>
-            <LoginForm />
-          </template>
-        </Dropdown>
-      </div>
-      <div class="text-xxl font-color-light margin-sm login-register-sep">OR</div>
-      <div class="d-flex flex-column col w-100 padding-bottom-lg padding-top-lg">
-        <Dropdown
-          id="RegisterDropdown"
-          target="collapseRegister"
-          parent="login-register-section"
-          :defaultShow=false
-          :defaultCollapsed=true
-        >
-          <template v-slot:header>
-            <h3 class="text-xl font-color-light mb-0">Sign Up</h3>
-          </template>
-          <template v-slot:content>
-            <RegisterForm />
-          </template>
-        </Dropdown>
-      </div>
+      <Modal id="loginModal" label="modal-login-header">
+        <template v-slot:button="buttonProps">
+          <button 
+            v-bind="buttonProps" 
+            class="btn-fill-primary-full font-xl font-color-light border-0"
+          > 
+            Login 
+          </button>
+        </template>
+        <template v-slot:modalTitle>
+          <h5 class="font-xl-b font-color-light">Login</h5>
+        </template>
+        <template v-slot:modalContent>
+          <LoginForm />
+        </template>
+      </Modal>
 
+      <span class="font-base-sb font-color-light margin-md">OR</span>
 
+      <Modal id="registerModal" label="modal-register-header">
+        <template v-slot:button="buttonProps">
+          <button 
+            v-bind="buttonProps" 
+            class="btn-fill-primary-full font-xl font-color-light border-0"
+          > 
+            Register 
+          </button>
+        </template>
+        <template v-slot:modalTitle>
+          <h5 class="font-xl-b font-color-light">Register</h5>
+        </template>
+        <template v-slot:modalContent>
+          <RegisterForm />
+        </template>
+      </Modal>
     </div>
   </div>
 
@@ -80,6 +83,7 @@ import IconGlobeLight from "@/components/icons/IconGlobeLight.vue"
 import IconFishLight from "@/components/icons/IconFishLight.vue"
 import IconTuneLight from "@/components/icons/IconTuneLight.vue"
 import Dropdown from "@/components/general/Dropdown.vue"
+import Modal from "@/components/general/Modal.vue"
 
 export default {
   components: {
@@ -88,7 +92,8 @@ export default {
     RegisterForm,
     BasicFeature,
     PricingComponent,
-    Dropdown
+    Dropdown,
+    Modal
   },
   data(){
     return {
