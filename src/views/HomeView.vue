@@ -29,7 +29,7 @@
           parent="login-register-section"
           :defaultShow=false
           :defaultCollapsed=true
-        > 
+        >
           <template v-slot:header>
               <h3 class="text-xl font-color-light mb-0">Login</h3>
           </template>
@@ -46,7 +46,7 @@
           parent="login-register-section"
           :defaultShow=false
           :defaultCollapsed=true
-        > 
+        >
           <template v-slot:header>
             <h3 class="text-xl font-color-light mb-0">Sign Up</h3>
           </template>
@@ -79,7 +79,7 @@ import IconCliLight from "@/components/icons/IconCliLight.vue"
 import IconGlobeLight from "@/components/icons/IconGlobeLight.vue"
 import IconFishLight from "@/components/icons/IconFishLight.vue"
 import IconTuneLight from "@/components/icons/IconTuneLight.vue"
-import Dropdown from "@/components/general/dropdown.vue"
+import Dropdown from "@/components/general/Dropdown.vue"
 
 export default {
   components: {
