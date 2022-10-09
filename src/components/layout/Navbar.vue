@@ -34,7 +34,7 @@
                         <RouterLink v-if="!logged_in" to="/login" class="router-link font-base font-color-light text-decoration-none margin-right-md">Login</RouterLink>
                         <RouterLink v-if="!logged_in" to="/register" class="router-link font-base font-color-light text-decoration-none margin-right-md">Register</RouterLink>
                         <RouterLink v-if="logged_in" to="/logout" class="router-link font-base font-color-light text-decoration-none margin-right-md">Logout</RouterLink>
-                        <div class="font-color-secondary">{{account_name}}<br>{{member_email}}</div>
+                        <RouterLink v-if="logged_in" to="/profile" class="router-link font-base font-color-light text-decoration-none margin-right-md">{{account_name}}<br>{{member_email}}</RouterLink>
                     </div>
                 </div>
             </div>
