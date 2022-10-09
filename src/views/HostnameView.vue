@@ -38,7 +38,7 @@ export default {
         const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
         hash.update(canonical_string)
         const mac = hash.finalize()
-        const header = `HMAC id="dashboard", mac="${mac}", ts="${ts}"`
+        const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
         console.log(header)
 
         fetch(req_url, {

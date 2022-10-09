@@ -34,6 +34,7 @@
                         <RouterLink v-if="!logged_in" to="/login" class="router-link font-base font-color-light text-decoration-none margin-right-md">Login</RouterLink>
                         <RouterLink v-if="!logged_in" to="/register" class="router-link font-base font-color-light text-decoration-none margin-right-md">Register</RouterLink>
                         <RouterLink v-if="logged_in" to="/logout" class="router-link font-base font-color-light text-decoration-none margin-right-md">Logout</RouterLink>
+                        <div class="font-color-secondary">{{account_name}}<br>{{member_email}}</div>
                     </div>
                 </div>
             </div>
@@ -49,12 +50,14 @@
             return {
                 navbarHidden: true,
                 logged_in: false,
-                member_name: null,
+                account_name: null,
+                member_email: null,
             }
         },
         created() {
             //TODO: use vue3 store backed by localStorage
-            this.member_name = localStorage.getItem('/account/name')
+            this.account_name = localStorage.getItem('/account/name')
+            this.member_email = localStorage.getItem('/member/email')
             this.logged_in = !!localStorage.getItem('/session/key')
         },
         methods: {

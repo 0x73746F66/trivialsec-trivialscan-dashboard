@@ -20,7 +20,8 @@ const router = createRouter({
           console.log(member)
           //TODO: save member to vue3 store backed by localStorage
           localStorage.setItem('/account/name', member?.account?.name)
-          localStorage.setItem('/session/key', member?.account?.api_key)
+          localStorage.setItem('/member/email', member?.email)
+          localStorage.setItem('/session/key', member?.access_token)
           //TODO: redirect to activities page when created
           window.location.href = '/results'
         })
@@ -37,6 +38,7 @@ const router = createRouter({
       beforeEnter: () => {
         //TODO: use vue3 store backed by localStorage
         localStorage.setItem('/account/name', "")
+        localStorage.setItem('/member/email', "")
         localStorage.setItem('/session/key', "")
         window.location.href = "/"
       },
