@@ -20,9 +20,9 @@
     </div>
   </div>
 
-  <div class="container padding-bottom-md padding-top-md">
+  <div class="container padding-bottom-lg padding-top-lg">
     <div class="login-register-section d-flex flex-lg-row flex-column align-items-center justify-content-start">
-      <div class="d-flex flex-column col w-100">
+      <div class="d-flex flex-column col w-100 padding-bottom-lg padding-top-lg">
         <Dropdown
           id="loginDropdown"
           target="collapseLogin"
@@ -39,7 +39,7 @@
         </Dropdown>
       </div>
       <div class="text-xxl font-color-light margin-sm login-register-sep">OR</div>
-      <div class="d-flex flex-column col w-100">
+      <div class="d-flex flex-column col w-100 padding-bottom-lg padding-top-lg">
         <Dropdown
           id="RegisterDropdown"
           target="collapseRegister"
