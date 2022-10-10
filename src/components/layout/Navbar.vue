@@ -78,6 +78,7 @@
             display: block;
             width: 100%;
             height: 75px;
+            height: calc(36px + (spacers("sm") * 2));
         }
     }
     .nav {
