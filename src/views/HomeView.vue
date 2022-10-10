@@ -20,6 +20,10 @@
   >
     <div class="container">
       <PricingComponent />
+      <span class="margin-top-sm d-block font-sm font-color-light">* Software or Libraries as provided in supported formats with CVE.</span>
+      <span class="d-block font-sm font-color-light">** Depends on customer provided software, advises how many patches behind your installed versions are.</span>
+      <span class="d-block font-sm font-color-light">^ Customers unique identifiers appear in malware or intelligence reported as a threat actor</span>
+      <span class="d-block font-sm font-color-light">^^ Customers industry or market is showing signs of increased malware or threat actor activity</span>
     </div>
   </div>
 

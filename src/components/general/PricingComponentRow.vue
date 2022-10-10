@@ -12,6 +12,9 @@
         <div class="col position-relative d-flex align-items-center">
             <slot name="col-4"></slot>        
         </div>
+        <div class="col position-relative d-flex align-items-center">
+            <slot name="col-5"></slot>        
+        </div>
     </div>
 </template>
 

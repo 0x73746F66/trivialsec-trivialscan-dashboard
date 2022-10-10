@@ -9,8 +9,6 @@
 </template>
 
 <script>
-  import { RouterLink, RouterView } from "vue-router";
-  import MainHeading from "./components/MainHeading.vue";
   import Footer from "./components/layout/Footer.vue"
   import Navbar from "./components/layout/Navbar.vue"
   export default {

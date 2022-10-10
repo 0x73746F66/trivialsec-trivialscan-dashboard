@@ -151,6 +151,14 @@ body {
     }
 }
 
+.border {
+    &-bottom {
+        &-primary {
+            border-bottom: 1px solid color("primary");
+        }
+    }
+}
+
 .debug-later  {
     border: 2px solid red;
 }

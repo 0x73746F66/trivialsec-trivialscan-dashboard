@@ -1,150 +1,454 @@
 <template>
     <div class="container border-radius-sm pricing d-none d-lg-block">
-        <PricingComponentRow class="padding-sm font-color-light pricing-table">
+        <PricingComponentRow class="padding-sm font-color-light pricing-table border-bottom-primary">
             <template v-slot:col-1>
                 <div class="d-flex flex-column">
                     <h3 class="font-xl-b padding-top-lg padding-bottom-sm font-color-light">Services</h3>
-                    <span class="font-base font-color-light">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, laudantium deleniti! 
-                    </span>
                 </div>
             </template>
             <template v-slot:col-2>
-                <div class="d-flex flex-column">
-                    <h3 class="font-xl-b padding-top-lg padding-bottom-sm font-color-light">Package 1</h3>
-                    <span class="font-base font-color-light">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, laudantium deleniti!
-                    </span>
-                </div>
             </template>
             <template v-slot:col-3>
-                <div class="d-flex flex-column">
-                    <span class="is-recommended font-base">
+                <div class="d-flex flex-column w-100">
+                    <h3 class="font-xl-b padding-top-lg padding-bottom-sm font-color-light text-center">Community Edition (CE)</h3>
+                </div>
+            </template>
+            <template v-slot:col-4>
+                <div class="d-flex flex-column w-100">
+                    <!-- <span class="is-recommended font-base">
                         <IconStarPrimary color="1abb9c" class="pricing-icon margin-right-xs"/>
                         Recommended
-                    </span>
-                    <h3 class="font-xl-b padding-top-lg padding-bottom-sm font-color-light">Package 2</h3>
-                    <span class="font-base font-color-light">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, laudantium deleniti!
-                    </span>
+                    </span> -->
+                    <h3 class="font-xl-b padding-top-lg padding-bottom-sm font-color-light text-center">Professional (PRQ)</h3>
                 </div>
             </template>
-            <template v-slot:col-4>
-                <div class="d-flex flex-column">
-                    <h3 class="font-xl-b padding-top-lg padding-bottom-sm font-color-light">Package 3</h3>
-                    <span class="font-base font-color-light">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, laudantium deleniti!
-                    </span>
+            <template v-slot:col-5>
+                <div class="d-flex flex-column w-100">
+                    <h3 class="font-xl-b padding-top-lg padding-bottom-sm font-color-light text-center">Enterprise</h3>
                 </div>
             </template>
         </PricingComponentRow>
+        
         <PricingComponentRow class="padding-sm font-color-light pricing-table">
             <template v-slot:col-1>
-                <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">Task 1</h4>
+                <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">Passive Scans</h4>
             </template>
             <template v-slot:col-2>
-                <checkIcon class="pricing-checkmark"/>
+                <span class="font-base font-color-light">On-demand (Self-hosted)</span>
             </template>
             <template v-slot:col-3>
-                <checkIcon class="pricing-checkmark pricing-checkmark-is-recommended"/>
+                <span class="font-base font-color-light w-100 text-center">~</span>                
             </template>
             <template v-slot:col-4>
-                <checkIcon class="pricing-checkmark"/>
+                <span class="font-base font-color-light w-100 text-center">~</span>                
+            </template>
+            <template v-slot:col-5>
+                <span class="font-base font-color-light w-100 text-center">Dedicated Tenent Unlimited</span>                
             </template>
         </PricingComponentRow>
+
         <PricingComponentRow class="padding-sm font-color-light pricing-table">
             <template v-slot:col-1>
-                <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">Task 2</h4>
             </template>
             <template v-slot:col-2>
-                <checkIcon class="pricing-checkmark"/>
-            </template>
-            <template v-slot:col-3>
-                <checkIcon class="pricing-checkmark pricing-checkmark-is-recommended"/>
-            </template>
-            <template v-slot:col-4>
-                <checkIcon class="pricing-checkmark"/>
-            </template>
-        </PricingComponentRow>
-        <PricingComponentRow class="padding-sm font-color-light pricing-table">
-            <template v-slot:col-1>
-                <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">Task 2</h4>
-            </template>
-            <template v-slot:col-2>
-            </template>
-            <template v-slot:col-3>
-                <checkIcon class="pricing-checkmark pricing-checkmark-is-recommended"/>
-            </template>
-            <template v-slot:col-4>
-                <checkIcon class="pricing-checkmark"/>
-            </template>
-        </PricingComponentRow>
-        <PricingComponentRow class="padding-sm font-color-light pricing-table">
-            <template v-slot:col-1>
-                <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">Task 2</h4>
-            </template>
-            <template v-slot:col-2>
-            </template>
-            <template v-slot:col-3>
-                <checkIcon class="pricing-checkmark pricing-checkmark-is-recommended"/>
-            </template>
-            <template v-slot:col-4>
-                <checkIcon class="pricing-checkmark"/>
-            </template>
-        </PricingComponentRow>
-        <PricingComponentRow class="padding-sm font-color-light pricing-table">
-            <template v-slot:col-1>
-                <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">Task 2</h4>
-            </template>
-            <template v-slot:col-2>
+                <span class="font-base font-color-light">On-demand (Managed SaaS)</span>
             </template>
             <template v-slot:col-3>
             </template>
             <template v-slot:col-4>
-                <checkIcon class="pricing-checkmark"/>
+                <span class="font-base font-color-light w-100 text-center">500 / Day</span>                
+            </template>
+            <template v-slot:col-5>
+                <span class="font-base font-color-light w-100 text-center">Dedicated Tenent Unlimited</span>                
             </template>
         </PricingComponentRow>
+
+        <PricingComponentRow class="padding-sm font-color-light pricing-table border-bottom-primary">
+            <template v-slot:col-1>
+            </template>
+            <template v-slot:col-2>
+                <span class="font-base font-color-light">Monitored</span>
+            </template>
+            <template v-slot:col-3>
+            </template>
+            <template v-slot:col-4>
+                <span class="font-base font-color-light w-100 text-center">10 / Day</span>                
+            </template>
+            <template v-slot:col-5>
+                <span class="font-base font-color-light w-100 text-center">Dedicated Tenent Unlimited</span>                
+            </template>
+        </PricingComponentRow>
+
         <PricingComponentRow class="padding-sm font-color-light pricing-table">
             <template v-slot:col-1>
-                <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">Task 2</h4>
+                <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">Active Scans</h4>
+            </template>
+            <template v-slot:col-2>
+                <span class="font-base font-color-light">On-demand</span>
+            </template>
+            <template v-slot:col-3>
+                <span class="font-base font-color-light w-100 text-center"></span>                
+            </template>
+            <template v-slot:col-4>
+                <span class="font-base font-color-light w-100 text-center">50 / Day</span>                
+            </template>
+            <template v-slot:col-5>
+                <span class="font-base font-color-light w-100 text-center">Dedicated Tenent Unlimited</span>                        
+            </template>
+        </PricingComponentRow>
+
+        <PricingComponentRow class="padding-sm font-color-light pricing-table border-bottom-primary">
+            <template v-slot:col-1>
+            </template>
+            <template v-slot:col-2>
+                <span class="font-base font-color-light">Monitored</span>
+            </template>
+            <template v-slot:col-3>
+            </template>
+            <template v-slot:col-4>
+                <span class="font-base font-color-light w-100 text-center">10 / Day</span>                
+            </template>
+            <template v-slot:col-5>
+                <span class="font-base font-color-light w-100 text-center">Dedicated Tenent Unlimited</span>                
+            </template>
+        </PricingComponentRow>
+
+        <PricingComponentRow class="padding-sm font-color-light pricing-table border-bottom-primary">
+            <template v-slot:col-1>
+                <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">Common Web/HTTPS exposures</h4>
+            </template>
+            <template v-slot:col-2>
+            </template>
+            <template v-slot:col-3>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+            <template v-slot:col-4>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+            <template v-slot:col-5>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+        </PricingComponentRow>
+
+        <PricingComponentRow class="padding-sm font-color-light pricing-table border-bottom-primary">
+            <template v-slot:col-1>
+                <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">Git integrated SCA/SAST</h4>
             </template>
             <template v-slot:col-2>
             </template>
             <template v-slot:col-3>
             </template>
             <template v-slot:col-4>
-                <checkIcon class="pricing-checkmark"/>
+                <span class="font-base font-color-light w-100 text-center">10 / Day</span>                
+            </template>
+            <template v-slot:col-5>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
             </template>
         </PricingComponentRow>
+
+        <PricingComponentRow class="padding-sm font-color-light pricing-table border-bottom-primary">
+            <template v-slot:col-1>
+                <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">Customer provided SCA/SAST (Upload code archive)</h4>
+            </template>
+            <template v-slot:col-2>
+            </template>
+            <template v-slot:col-3>
+            </template>
+            <template v-slot:col-4>
+                <span class="font-base font-color-light w-100 text-center">10 / Day</span>                
+            </template>
+            <template v-slot:col-5>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+        </PricingComponentRow>
+        
+        <PricingComponentRow class="padding-sm font-color-light pricing-table border-bottom-primary">
+            <template v-slot:col-1>
+                <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">Unsupported Software</h4>
+            </template>
+            <template v-slot:col-2>
+            </template>
+            <template v-slot:col-3>
+            </template>
+            <template v-slot:col-4>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+            <template v-slot:col-5>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+        </PricingComponentRow>
+
+        <PricingComponentRow class="padding-sm font-color-light pricing-table">
+            <template v-slot:col-1>
+                <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">Alert Delivery</h4>
+            </template>
+            <template v-slot:col-2>
+                <span class="font-base font-color-light">Email</span>
+            </template>
+            <template v-slot:col-3>
+            </template>
+            <template v-slot:col-4>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+            <template v-slot:col-5>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+        </PricingComponentRow>
+
+        <PricingComponentRow class="padding-sm font-color-light pricing-table border-bottom-primary">
+            <template v-slot:col-1>
+            </template>
+            <template v-slot:col-2>
+                <span class="font-base font-color-light">Service Integrations</span>
+            </template>
+            <template v-slot:col-3>
+            </template>
+            <template v-slot:col-4>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+            <template v-slot:col-5>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+        </PricingComponentRow>
+
+        <PricingComponentRow class="padding-sm font-color-light pricing-table border-bottom-primary">
+            <template v-slot:col-1>
+                <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">Auto-remediation</h4>
+            </template>
+            <template v-slot:col-2>
+                <span class="font-base font-color-light">Webhook</span>
+            </template>
+            <template v-slot:col-3>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+            <template v-slot:col-4>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+            <template v-slot:col-5>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+        </PricingComponentRow>
+
+        <PricingComponentRow class="padding-sm font-color-light pricing-table">
+            <template v-slot:col-1>
+                <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">Threats</h4>
+            </template>
+            <template v-slot:col-2>
+                <span class="font-base font-color-light">Relevant Threat Intel Findings</span>
+            </template>
+            <template v-slot:col-3>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+            <template v-slot:col-4>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+            <template v-slot:col-5>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+        </PricingComponentRow>
+
         <PricingComponentRow class="padding-sm font-color-light pricing-table">
             <template v-slot:col-1>
             </template>
             <template v-slot:col-2>
-                <div class="d-flex flex-column text-center pricing-label w-100">
-                    <span class="font-xl margin-bottom-sm">
-                        Starting at <span class="font-xl-b font-color-primary">$200.00</span>
-                    </span>
-                    <a href="#" class="btn-outline-primary font-color-primary text-decoration-none">Get Started</a>
+                <span class="font-base font-color-light">Compromise Indicators</span>
+            </template>
+            <template v-slot:col-3>
+            </template>
+            <template v-slot:col-4>
+            </template>
+            <template v-slot:col-5>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+        </PricingComponentRow>
+
+        <PricingComponentRow class="padding-sm font-color-light pricing-table">
+            <template v-slot:col-1>
+            </template>
+            <template v-slot:col-2>
+                <span class="font-base font-color-light">Typosquatting / Brand protection ** <br/> (Fuzzy domain matching and keywords)</span>
+            </template>
+            <template v-slot:col-3>
+            </template>
+            <template v-slot:col-4>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+            <template v-slot:col-5>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+        </PricingComponentRow>
+
+        <PricingComponentRow class="padding-sm font-color-light pricing-table border-bottom-primary">
+            <template v-slot:col-1>
+            </template>
+            <template v-slot:col-2>
+                <span class="font-base font-color-light">MITRE ATT&CK mappings </span>
+            </template>
+            <template v-slot:col-3>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+            <template v-slot:col-4>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+            <template v-slot:col-5>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+        </PricingComponentRow>
+
+        <PricingComponentRow class="padding-sm font-color-light pricing-table">
+            <template v-slot:col-1>
+                <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">Compliance</h4>
+            </template>
+            <template v-slot:col-2>
+                <span class="font-base font-color-light">PCI</span>
+            </template>
+            <template v-slot:col-3>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+            <template v-slot:col-4>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+            <template v-slot:col-5>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+        </PricingComponentRow>
+
+        <PricingComponentRow class="padding-sm font-color-light pricing-table border-bottom-primary">
+            <template v-slot:col-1>
+            </template>
+            <template v-slot:col-2>
+                <span class="font-base font-color-light">CIS Benchmark</span>
+            </template>
+            <template v-slot:col-3>
+            </template>
+            <template v-slot:col-4>
+            </template>
+            <template v-slot:col-5>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+        </PricingComponentRow>
+
+        <PricingComponentRow class="padding-sm font-color-light pricing-table">
+            <template v-slot:col-1>
+                <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">Access</h4>
+            </template>
+            <template v-slot:col-2>
+                <span class="font-base font-color-light">Web Auth</span>
+            </template>
+            <template v-slot:col-3>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+            <template v-slot:col-4>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+            <template v-slot:col-5>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+        </PricingComponentRow>
+
+        <PricingComponentRow class="padding-sm font-color-light pricing-table">
+            <template v-slot:col-1>
+            </template>
+            <template v-slot:col-2>
+                <span class="font-base font-color-light">SAML SSO</span>
+            </template>
+            <template v-slot:col-3>
+            </template>
+            <template v-slot:col-4>
+            </template>
+            <template v-slot:col-5>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+        </PricingComponentRow>
+
+        <PricingComponentRow class="padding-sm font-color-light pricing-table">
+            <template v-slot:col-1>
+                <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">Support</h4>
+            </template>
+            <template v-slot:col-2>
+                <span class="font-base font-color-light">Bug reports</span>
+            </template>
+            <template v-slot:col-3>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+            <template v-slot:col-4>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+            <template v-slot:col-5>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+        </PricingComponentRow>
+
+        <PricingComponentRow class="padding-sm font-color-light pricing-table">
+            <template v-slot:col-1>
+            </template>
+            <template v-slot:col-2>
+                <span class="font-base font-color-light">20 Business Days Resolution</span>
+            </template>
+            <template v-slot:col-3>
+            </template>
+            <template v-slot:col-4>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+            <template v-slot:col-5>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+        </PricingComponentRow>
+
+        <PricingComponentRow class="padding-sm font-color-light pricing-table">
+            <template v-slot:col-1>
+            </template>
+            <template v-slot:col-2>
+                <span class="font-base font-color-light">5 Business Days Resolution</span>
+            </template>
+            <template v-slot:col-3>
+            </template>
+            <template v-slot:col-4>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+            <template v-slot:col-5>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+        </PricingComponentRow>
+
+        <PricingComponentRow class="padding-sm font-color-light pricing-table border-bottom-primary">
+            <template v-slot:col-1>
+            </template>
+            <template v-slot:col-2>
+                <span class="font-base font-color-light">48 Hours Resolution</span>
+            </template>
+            <template v-slot:col-3>
+            </template>
+            <template v-slot:col-4>
+            </template>
+            <template v-slot:col-5>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+        </PricingComponentRow>
+
+        <PricingComponentRow class="padding-sm font-color-light pricing-table">
+            <template v-slot:col-1>
+            </template>
+            <template v-slot:col-2>
+            </template>
+            <template v-slot:col-3>
+                <div class="d-flex flex-column justify-content-center align-items-center w-100 padding-sm">
+                    <span class="font-color-primary font-base-sb text-center w-100">Free</span>
                 </div>
             </template>
-            <template v-slot:col-3>
-                <div class="d-flex flex-column text-center pricing-label w-100">
-                    <span class="font-xl margin-bottom-sm">
-                        Starting at <span class="font-xl-b font-color-primary">$200.00</span>
-                    </span>
-                    <a href="#" class="btn-outline-primary font-color-primary text-decoration-none">Get Started</a>
+            <template v-slot:col-4>
+                <div class="d-flex flex-column justify-content-center align-items-center w-100 padding-sm">
+                    <span class="font-color-primary font-base-sb text-center w-100">USD $199 / Month </span>
                 </div>
             </template>
-            <template v-slot:col-4>
-                <div class="d-flex flex-column text-center pricing-label w-100">
-                    <span class="font-xl margin-bottom-sm">
-                        Starting at <span class="font-xl-b font-color-primary">$200.00</span>
-                    </span>
-                    <a href="#" class="btn-outline-primary font-color-primary text-decoration-none">Get Started</a>
+            <template v-slot:col-5>
+                <div class="d-flex flex-column justify-content-center align-items-center w-100 padding-sm">
+                    <span class="font-color-primary font-base-sb text-center w-100">Contact Us</span>
                 </div>
             </template>
         </PricingComponentRow>
     </div>
+
     <div class="d-block d-lg-none">
         <div class="accordion">
             <div class="margin-bottom-md">
@@ -156,15 +460,56 @@
                     :defaultCollapsed=false
                 >
                     <template v-slot:header>
-                        Package 1
+                        <div class="font-base font-color-light d-flex d-flex flex-column font-color-primary align-items-start"> 
+                            Community Edition (CE)
+                            <span class="text-xs font-color-primary">Free</span>
+                        </div>
                     </template>
                     <template v-slot:content>
-                        <div class="d-flex flex-column align-items-end">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa aspernatur similique voluptatem aut cum magni. Distinctio error officia, aliquam magnam necessitatibus totam eligendi accusamus perspiciatis dolore expedita. Quod, voluptatem veritatis.
-                            <a href="/" class="font-color-primary text-decoration-none">
-                                See more details
-                                <IconArrowPrimary class="pricing-icon" />
-                            </a>
+                        <div class="d-flex flex-column align-items-start">
+                            <ul class="font-sm">
+                                <li>
+                                    Passive Scans 
+                                    <ul class="margin-right-md">
+                                        <li>On-demand (Self-hosted)</li>
+                                    </ul> 
+                                </li>
+                                <li>
+                                    Common WEB/HTTPs Exposures
+                                </li>
+                                <li>
+                                    Auto-Remediation - Webhook
+                                    <ul class="margin-right-md">
+                                        <li>Webhook</li>
+                                    </ul> 
+                                </li>
+                                <li>
+                                    Threats 
+                                    <ul class="margin-right-md">
+                                        <li>Relevant threat intel findings</li>
+                                        <li>MITRE ATT&CK mappings</li>
+                                    </ul> 
+                                </li>
+                                <li>
+                                    Compliance
+                                    <ul class="margin-right-md">
+                                        <li>PCI</li>
+                                        <li>CIS Benchmark</li>
+                                    </ul> 
+                                </li>
+                                <li>
+                                    Access
+                                    <ul class="margin-right-md">
+                                        <li>WebAuth</li>
+                                    </ul> 
+                                </li>
+                                <li>
+                                    Support
+                                    <ul class="margin-right-md">
+                                        <li>Bug Reports</li>
+                                    </ul> 
+                                </li>
+                            </ul>
                         </div>
                     </template>
                 </Dropdown>
@@ -178,14 +523,87 @@
                     :defaultCollapsed=true
                 >
                     <template v-slot:header>
-                        <div class="text-sm d-flex margin-bottom-sm d-flex font-xs font-color-primary align-items-center"> 
+                        <!-- <div class="text-sm d-flex margin-bottom-sm d-flex font-xs font-color-primary align-items-center"> 
                             <IconStarPrimary class="pricing-icon-responsive margin-right-sm"/>
                             Recommended
+                        </div> -->
+                        <div class="font-base font-color-light d-flex d-flex flex-column font-color-primary align-items-start"> 
+                            Professional (PRO)
+                            <span class="text-xs font-color-primary">USD $199/Month</span>
                         </div>
-                        Package 2
                     </template>
                     <template v-slot:content>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa aspernatur similique voluptatem aut cum magni. Distinctio error officia, aliquam magnam necessitatibus totam eligendi accusamus perspiciatis dolore expedita. Quod, voluptatem veritatis.
+                        <div class="d-flex flex-column align-items-end">
+                            <ul class="font-sm">
+                                <li>
+                                    Passive Scans
+                                    <ul class="margin-right-md">
+                                        <li>On-demand (Self-hosted)</li>
+                                        <li>On-demand (Managed SaaS) - 500 / Day On-demand</li>
+                                        <li>Monitored - 10 / Day On-demand</li>
+                                        <li>On-demand (Self-hosted)</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    Active Scans 
+                                    <ul class="margin-right-md">
+                                        <li>On-demand - 50 / Day on-demand</li>
+                                        <li>Monitored (10 / Day on-demand)</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    Common WEB/HTTPs Exposures
+                                </li>
+                                <li>
+                                    Git integrated SCA/SAST (10 / Day On-demand)
+                                </li>
+                                <li>
+                                    Customer provided SCA/SAST (Upload Code Archive) (10 / Day On-demand)
+                                </li>
+                                <li>
+                                    Unsupported Software
+                                </li>
+                                <li>
+                                    Alert Delivery 
+                                    <ul class="margin-right-md">
+                                        <li>E-mail</li>
+                                        <li>Service Integrations</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    Auto-Remediation
+                                    <ul class="margin-right-md">
+                                        <li>Webhook</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    Threats  
+                                    <ul class="margin-right-md">
+                                        <li>Relevant threat intel findings</li>
+                                        <li>Typosquatting / Brand protection** (Fuzzy domain matching and keywords)</li>
+                                        <li>MITRE ATT&CK mappings</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    Compliance
+                                    <ul class="margin-right-md">
+                                        <li>PCI</li>
+                                        <li>CIS Benchmark</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    Access - WebAuth
+                                </li>
+                                <li>
+                                    Support
+                                    <ul class="margin-right-md">
+                                        <li>Bug Reports</li>
+                                        <li>20 business day resolution</li>
+                                        <li>50 business day resolution</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
                     </template>
                 </Dropdown>
             </div>
@@ -198,10 +616,85 @@
                     :defaultCollapsed=true
                 >
                     <template v-slot:header>
-                        Package 3
+                        <div class="font-base font-color-light d-flex d-flex flex-column font-color-primary align-items-start"> 
+                            Enterprise
+                            <span class="text-xs font-color-primary">Contact Us</span>
+                        </div>
                     </template>
                     <template v-slot:content>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa aspernatur similique voluptatem aut cum magni. Distinctio error officia, aliquam magnam necessitatibus totam eligendi accusamus perspiciatis dolore expedita. Quod, voluptatem veritatis.
+                        <div class="d-flex flex-column align-items-end">
+                            <ul class="font-sm">
+                                <li>
+                                    Passive Scans (Dedicated tenent unlimited) 
+                                    <ul class="margin-right-md">
+                                        <li>On-demand (Self-hosted)</li>
+                                        <li>On-demand (Managed SaaS)</li>
+                                        <li>Monitored</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    Active Scans (Dedicated tenent unlimited)
+                                    <ul class="margin-right-md">
+                                        <li>On-demand</li>
+                                        <li>Monitored</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    Common WEB/HTTPs Exposures
+                                </li>
+                                <li>
+                                    Git integrated SCA/SAST
+                                </li>
+                                <li>
+                                    Customer provided SCA/SAST (Upload Code Archive)
+                                </li>
+                                <li>
+                                    Unsupported Software
+                                </li>
+                                <li>
+                                    Alert Delivery 
+                                    <ul class="margin-right-md">
+                                        <li>Email</li>
+                                        <li>Service Integrations</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    Auto-Remediation - Webhook
+                                </li>
+                                <li>
+                                    Threats
+                                    <ul class="margin-right-md">
+                                        <li>Relevant threat intel findings</li>
+                                        <li>Compromise Indicators^</li>
+                                        <li>Typosquatting / Brand protection** (Fuzzy domain matching and keywords)</li>
+                                        <li>MITRE ATT&CK mappings^</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    Compliance 
+                                    <ul class="margin-right-md">
+                                        <li>PCI</li>
+                                        <li>CIS Benchmark</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    Access
+                                    <ul class="margin-right-md">
+                                        <li>WebAuth</li>
+                                        <li>SAML SSO</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    Support 
+                                    <ul class="margin-right-md">
+                                        <li>Bug Reports</li>
+                                        <li>20 business day resolution</li>
+                                        <li>50 business day resolution</li>
+                                        <li>48 hour resolution</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
                     </template>
                 </Dropdown>
             </div>
@@ -249,8 +742,8 @@
             justify-content: flex-start;
         }
         &-checkmark {
-            height: 50px;
-            width: 50px;
+            height: 25px;
+            width: 25px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -269,6 +762,8 @@
                 border-radius: 0 0 radius("sm") radius("sm");
                 background: color("primary");
             }
+        }
+        &-table {
         }
     }
 </style>
