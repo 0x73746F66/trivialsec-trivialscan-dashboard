@@ -37,7 +37,7 @@
             :required="true"
         />
         <EmaiInput
-            placeholder="Email Field"
+            placeholder="Primary contact email"
             id="id-email-2"
             label="Email"
             :required="true"
