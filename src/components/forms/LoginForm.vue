@@ -19,7 +19,6 @@
         })
         .catch(errors => {
             console.log(errors)
-
         })
     }
 </script>
@@ -29,6 +28,8 @@
         class="login-form"
         @submit.prevent="login"
     >
+        <ValidationMessage :message="message" :type="messageType" />
+
         <EmaiInput
             placeholder="Send an email with login link"
             id="id-email-1"
@@ -45,11 +46,12 @@
     </form>
 </template>
 <script>
-    import EmaiInput from "../inputs/EmaiInput.vue"
-    import Button from "../general/Button.vue"
+    import EmaiInput from "../inputs/EmaiInput.vue";
+    import Button from "../general/Button.vue";
+    import ValidationMessage from "../general/ValidationMessage.vue";
 
     export default {
-        components: {EmaiInput, Button},
+        components: {EmaiInput, Button, ValidationMessage},
     }
 </script>
 <style lang="scss">
