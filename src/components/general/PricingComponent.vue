@@ -1,6 +1,6 @@
 <template>
     <div class="container border-radius-sm pricing d-none d-lg-block">
-        <PricingComponentRow class="padding-sm font-color-light pricing-table border-bottom-primary">
+        <PricingComponentRow class="font-color-light pricing-table">
             <template v-slot:col-1>
                 <div class="d-flex flex-column">
                     <h3 class="font-xl-b padding-top-lg padding-bottom-sm font-color-light">Features</h3>
@@ -29,7 +29,7 @@
             </template>
         </PricingComponentRow>
 
-        <PricingComponentRow class="padding-sm font-color-light pricing-table">
+        <PricingComponentRow class="font-color-light pricing-table border-bottom-primary">
             <template v-slot:col-1>
             </template>
             <template v-slot:col-2>
@@ -398,28 +398,6 @@
             </template>
             <template v-slot:col-5>
                 <checkIcon color="1abb9c" class="pricing-checkmark"/>
-            </template>
-        </PricingComponentRow>
-
-        <PricingComponentRow class="padding-sm font-color-light pricing-table">
-            <template v-slot:col-1>
-            </template>
-            <template v-slot:col-2>
-            </template>
-            <template v-slot:col-3>
-                <div class="d-flex flex-column justify-content-center align-items-center w-100 padding-sm">
-                    <span class="font-color-primary font-base-sb text-center w-100">Free</span>
-                </div>
-            </template>
-            <template v-slot:col-4>
-                <div class="d-flex flex-column justify-content-center align-items-center w-100 padding-sm">
-                    <span class="font-color-primary font-base-sb text-center w-100">USD $199 / Month </span>
-                </div>
-            </template>
-            <template v-slot:col-5>
-                <div class="d-flex flex-column justify-content-center align-items-center w-100 padding-sm">
-                    <span class="font-color-primary font-base-sb text-center w-100">Contact Us</span>
-                </div>
             </template>
         </PricingComponentRow>
     </div>
