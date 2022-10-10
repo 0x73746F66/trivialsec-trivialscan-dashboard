@@ -79,7 +79,7 @@
                 <checkIcon color="1abb9c" class="pricing-checkmark"/>
             </template>
             <template v-slot:col-4>
-                <span class="font-base w-100 text-center">500 tertiary Day</span>
+                <span class="font-base w-100 text-center">500 / Day</span>
             </template>
             <template v-slot:col-5>
                 <checkIcon color="1abb9c" class="pricing-checkmark"/>
@@ -96,7 +96,7 @@
                 <checkIcon color="1abb9c" class="pricing-checkmark"/>
             </template>
             <template v-slot:col-4>
-                <span class="font-base w-100 text-center">10 tertiary Day</span>
+                <span class="font-base w-100 text-center">10 / Day</span>
             </template>
             <template v-slot:col-5>
                 <checkIcon color="1abb9c" class="pricing-checkmark"/>
@@ -114,7 +114,7 @@
                 <span class="font-base w-100 text-center font-color-tertiary">X</span>
             </template>
             <template v-slot:col-4>
-                <span class="font-base w-100 text-center">50 tertiary Day</span>
+                <span class="font-base w-100 text-center">50 / Day</span>
             </template>
             <template v-slot:col-5>
                 <checkIcon color="1abb9c" class="pricing-checkmark"/>
@@ -131,7 +131,7 @@
                 <span class="font-base w-100 text-center font-color-tertiary">X</span>
             </template>
             <template v-slot:col-4>
-                <span class="font-base w-100 text-center">10 tertiary Day</span>
+                <span class="font-base w-100 text-center">10 / Day</span>
             </template>
             <template v-slot:col-5>
                 <checkIcon color="1abb9c" class="pricing-checkmark"/>
