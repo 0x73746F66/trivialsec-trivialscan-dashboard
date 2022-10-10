@@ -73,6 +73,7 @@ import RegisterForm from "../components/forms/RegisterForm.vue";
 import BasicFeature from "../components/general/BasicFeature.vue"
 import PricingComponent from "../components/general/PricingComponent.vue"
 import IconNotificationLight from "@/components/icons/IconNotificationLight.vue"
+import IconData from "@/components/icons/IconData.vue"
 import IconScan2Light from "@/components/icons/IconScan2Light.vue"
 import IconScan1Light from "@/components/icons/IconScan1Light.vue"
 import IconLightningLight from "@/components/icons/IconLightningLight.vue"
@@ -162,7 +163,7 @@ export default {
         },
         {
           id: 11,
-          icon: IconTuneLight,
+          icon: IconData,
           header: "On-prem / Self-hosting",
           description: "While Trivial Security was created to make accessible many features typically out of reach to most organisations, our solutions equally benefit large enterprise with data sovereignty and complete control needs also"
         },
