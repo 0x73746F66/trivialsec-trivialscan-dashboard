@@ -82,6 +82,11 @@ const router = createRouter({
       name: "certificate",
       component: () => import("../views/CertificateView.vue"),
     },
+    {
+      path: "/support",
+      name: "support",
+      component: () => import("../views/SupportView.vue"),
+    },
   ],
 });
 

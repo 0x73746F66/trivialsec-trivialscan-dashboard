@@ -27,6 +27,23 @@ $colors: (
     "lighter-60": rgba(248, 248, 248, 0.6)
 );
 
+// Override bootstrap theme
+$theme-colors: () !default;
+
+$theme-colors: map-merge(
+  (
+    "primary":    map.get($colors, primary),
+    "secondary":  map.get($colors, primary),
+    "success":    map.get($colors, success),
+    "info":       map.get($colors, light),
+    "warning":    map.get($colors, warning),
+    "danger":     map.get($colors, danger),
+    "light":      map.get($colors, light),
+    "dark":       map.get($colors, dark)
+  ),
+  $theme-colors
+);
+
 $spacers: (
     "xxs": 5px,
     "xs": 10px,
@@ -62,6 +79,7 @@ $breakpoint-md: 768px;
 $breakpoint-lg: 992px;
 $breakpoint-xl: 1200px;
 $breakpoint-xxl: 1400px;
+
 
 @function color($color) {
     @return map.get($colors, $color);

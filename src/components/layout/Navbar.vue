@@ -35,6 +35,7 @@
                         <RouterLink v-if="!logged_in" to="/register" class="router-link font-base font-color-light text-decoration-none margin-right-md">Register</RouterLink>
                         <RouterLink v-if="logged_in" to="/logout" class="router-link font-base font-color-light text-decoration-none margin-right-md">Logout</RouterLink>
                         <RouterLink v-if="logged_in" to="/profile" class="router-link font-base font-color-light text-decoration-none margin-right-md">{{account_name}}<br>{{member_email}}</RouterLink>
+                        <RouterLink to="/support" class="router-link font-base font-color-light text-decoration-none margin-right-md">Support</RouterLink>
                     </div>
                 </div>
             </div>
@@ -71,6 +72,14 @@
     }
 </script>
 <style lang="scss">
+    header {
+        &:after {
+            content: "";
+            display: block;
+            width: 100%;
+            height: 75px;
+        }
+    }
     .nav {
         @extend .bg-dark-40;
         @extend .padding-md;
@@ -79,9 +88,9 @@
         background: #1a1616;
         position: fixed;
         transition: 0.2s linear;
+        top: 0;
         animation: showNavbar 0.5s forwards;
         
-
         &-animate-hidden {
             animation: hideNavbar 1s forwards;
         }

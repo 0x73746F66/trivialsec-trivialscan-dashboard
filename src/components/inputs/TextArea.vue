@@ -1,7 +1,7 @@
 <template>
-    <div class="custom-field">
+    <div class="custom-field h-100">
         <label :for="id">{{this.label}}</label>
-        <textarea :required="required" :id="id" :name="id" :placeholder="placeholder">
+        <textarea class="p-0" :required="required" :id="id" :name="id" :placeholder="placeholder">
         </textarea>
     </div>
 </template>
@@ -20,6 +20,15 @@ export default {
 
 
 <style scoped lang="scss">
+    label {
+        top: -10px;
+    }
+    .custom-field {
+        textarea {
+            min-height: 250px;
+        }
+    }
+    
     input {
         &::placeholder {
             color: color('light-60');
