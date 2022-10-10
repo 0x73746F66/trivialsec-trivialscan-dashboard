@@ -14,16 +14,13 @@
     </div>
   </div>
 
-  <div 
-    class="container-fluid padding-top-xl padding-bottom-md bg-dark-20 pricing-container px-0" 
+  <div
+    class="container-fluid padding-top-xl padding-bottom-md bg-dark-20 pricing-container px-0"
     ref="pricingContainer"
   >
     <div class="container">
       <PricingComponent />
-      <span class="margin-top-sm d-block font-sm font-color-light">* Software or Libraries as provided in supported formats with CVE.</span>
-      <span class="d-block font-sm font-color-light">** Depends on customer provided software, advises how many patches behind your installed versions are.</span>
-      <span class="d-block font-sm font-color-light">^ Customers unique identifiers appear in malware or intelligence reported as a threat actor</span>
-      <span class="d-block font-sm font-color-light">^^ Customers industry or market is showing signs of increased malware or threat actor activity</span>
+      <span class="margin-top-sm d-block font-sm font-color-light">* Self-managed refers to Trivial Scanner running on your self-hosted and on-prem servers, your cloud, or your client computers, and connecting to Trivial Security SaaS services.</span>
     </div>
   </div>
 
@@ -31,11 +28,11 @@
     <div class="login-register-section d-flex flex-lg-row flex-column align-items-center justify-content-start">
       <Modal id="loginModal" label="modal-login-header">
         <template v-slot:button="buttonProps">
-          <button 
-            v-bind="buttonProps" 
+          <button
+            v-bind="buttonProps"
             class="btn-fill-primary-full font-xl font-color-light border-0"
-          > 
-            Login 
+          >
+            Login
           </button>
         </template>
         <template v-slot:modalTitle>
@@ -50,11 +47,11 @@
 
       <Modal id="registerModal" label="modal-register-header">
         <template v-slot:button="buttonProps">
-          <button 
-            v-bind="buttonProps" 
+          <button
+            v-bind="buttonProps"
             class="btn-fill-primary-full font-xl font-color-light border-0"
-          > 
-            Register 
+          >
+            Register
           </button>
         </template>
         <template v-slot:modalTitle>

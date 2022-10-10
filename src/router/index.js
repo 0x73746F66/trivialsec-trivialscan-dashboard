@@ -14,7 +14,12 @@ const router = createRouter({
       name: "magic_link",
       beforeEnter: to => {
         fetch(`${import.meta.env.VITE_API_URL}/magic-link/${to.params.magic_link}`)
-        .then(response => response.json())
+        .then(response => {
+          if (response.status !== 200) {
+            throw Error(response.statusText)
+          }
+          return response.json()
+        })
         .then(member => {
           console.log('member')
           console.log(member)
@@ -26,9 +31,7 @@ const router = createRouter({
           window.location.href = '/results'
         })
         .catch(errors => {
-          console.log('errors')
           console.log(errors)
-
         })
       }
     },
