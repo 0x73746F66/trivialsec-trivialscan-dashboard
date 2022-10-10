@@ -163,13 +163,13 @@ export default {
         },
         {
           id: 11,
-          icon: IconData,
+          icon: IconTuneLight,
           header: "On-prem / Self-hosting",
           description: "While Trivial Security was created to make accessible many features typically out of reach to most organisations, our solutions equally benefit large enterprise with data sovereignty and complete control needs also"
         },
         {
           id: 12,
-          icon: IconTuneLight,
+          icon: IconData,
           header: "Interoperability",
           description: "We adhere to open standards. You control your data, and we enable you with a growing list of supported data exchange formats so you can access and control your data at all times"
         },
