@@ -1,8 +1,13 @@
 <template>
     <div class="custom-field h-100">
         <label :for="id">{{this.label}}</label>
-        <textarea class="p-0" :required="required" :id="id" :name="id" :placeholder="placeholder">
-        </textarea>
+        <textarea 
+            :required="required" 
+            :id="id" 
+            :name="id" 
+            :placeholder="placeholder" 
+            @input="handleInput"
+        ></textarea>
     </div>
 </template>
 
@@ -14,15 +19,17 @@ export default {
         id: String, 
         label: String,
         required: Boolean
+    },
+    methods: {
+        handleInput(e) {
+            this.$emit('input', e.target.value)
+        }
     }
 }
 </script>
 
 
 <style scoped lang="scss">
-    label {
-        top: -10px;
-    }
     .custom-field {
         textarea {
             min-height: 250px;

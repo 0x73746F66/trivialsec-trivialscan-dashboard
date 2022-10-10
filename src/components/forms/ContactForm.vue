@@ -5,26 +5,17 @@
 <template>
     <form
         class="contact-form"
+        @submit.prevent="sendSupport"
     >
-        <!-- 
-                @submit.prevent="login"
-        -->
         <div class="subject-field">
             <TextInput
                 placeholder=""
                 id="subject-field"
                 label="Subject"
                 :required="true"
+                @change="handleSubject"
             />
         </div>
-
-        <EmaiInput
-            placeholder=""
-            id="id-email-1"
-            label="Email"
-            :required="true"
-            :model="email"
-        />
 
         <div class="text-area-field margin-bottom-lg">
             <TextArea 
@@ -32,6 +23,8 @@
                 id="text-area-field"
                 label="Message"
                 :required="true"
+                @change="handleContent"
+
             />
         </div>
 
@@ -45,11 +38,41 @@
 <script>
     import TextInput from "../inputs/TextInput.vue"
     import TextArea from "../inputs/TextArea.vue"
-    import EmaiInput from "../inputs/EmaiInput.vue"
     import Button from "../general/Button.vue"
 
     export default {
-        components: {TextInput, TextArea, EmaiInput, Button},
+        components: {TextInput, TextArea, Button},
+        data() {
+            return {
+                subjectField: "",
+                contentField: "",
+                api_url: import.meta.env.VITE_API_URL 
+            }
+        },
+        methods: {
+            handleSubject(v) {
+                this.subjectField = v.target.value;
+            },
+            handleContent(v) {
+                this.contentField = v.target.value;
+            },
+
+            sendSupport() {
+                const payload = JSON.stringify({
+                    'subject': this.subjectField,
+                    'message': this.contentField
+                })
+                fetch(this.api_url + `/support`, {
+                    method: 'POST',
+                    headers: {/* generated Authorization */},
+                    body: {
+                        payload
+                    }
+                })
+                .then(response => response.json())
+                .catch(console.log);
+            }
+        }
     }
 </script>
 <style lang="scss">

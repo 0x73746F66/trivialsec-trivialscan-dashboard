@@ -12,10 +12,9 @@
 </script>
 
 <script>
-export default {
-  components: {ContactForm}
-
-};
+  export default {
+    components: {ContactForm}
+  };
 </script>
 
 <style scoped lang="scss">
