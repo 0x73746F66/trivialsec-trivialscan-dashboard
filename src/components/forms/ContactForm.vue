@@ -18,6 +18,14 @@
             />
         </div>
 
+        <EmaiInput
+            placeholder=""
+            id="id-email-1"
+            label="Email"
+            :required="true"
+            :model="email"
+        />
+
         <div class="text-area-field margin-bottom-lg">
             <TextArea 
                 placeholder=""
@@ -37,10 +45,11 @@
 <script>
     import TextInput from "../inputs/TextInput.vue"
     import TextArea from "../inputs/TextArea.vue"
+    import EmaiInput from "../inputs/EmaiInput.vue"
     import Button from "../general/Button.vue"
 
     export default {
-        components: {TextInput, TextArea, Button},
+        components: {TextInput, TextArea, EmaiInput, Button},
     }
 </script>
 <style lang="scss">
