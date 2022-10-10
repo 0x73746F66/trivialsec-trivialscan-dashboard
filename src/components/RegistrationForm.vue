@@ -16,12 +16,10 @@ const register = (event) => {
     .then(response => response.text())
     .then(result => {
         const account = JSON.parse(result)
-        console.log('account')
         console.log(account)
 
     })
     .catch(errors => {
-        console.log('errors')
         console.log(errors)
 
     })
@@ -32,7 +30,7 @@ export default {
     props: ['display', 'primary_email', 'errors'],
 }
 </script>
-      
+
 <template>
     <form @submit.prevent="register">
         <div>
