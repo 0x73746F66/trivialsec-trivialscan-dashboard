@@ -4,15 +4,18 @@
             <div class="row">
                 <div class="col-12 d-flex flex-lg-row flex-column justify-content-between">
                     <div class="d-flex justify-content-between">
-                        <div class="d-flex align-items-center">
-                            <IconTrivialSecurity
-                                alt="Trivial Security"
-                                class="margin-right-lg"
-                                width="50"
-                                height=""
-                            />
-                            <span class="d-none d-lg-block font-xxl-b font-color-primary">Trivial Security</span>
-                        </div>
+                        <RouterLink to="/" class="text-decoration-none">
+                            <div class="d-flex align-items-center">
+                                <IconTrivialSecurity
+                                    alt="Trivial Security"
+                                    class="margin-right-lg"
+                                    width="50"
+                                    height=""
+                                />
+                                <span class="d-none d-lg-block font-xxl-b font-color-primary">Trivial Security</span>
+                            </div>
+                        </RouterLink>
+
 
                         <button
                             class="navbar-toggler navbar-dark d-lg-none"
@@ -27,15 +30,8 @@
                         class="d-flex flex-column flex-lg-row align-items-center nav-transition nav-content"
                         :class="{'nav-hidden' : navbarHidden}"
                     >
-                        <RouterLink to="/" class="router-link font-base font-color-light text-decoration-none margin-right-md">Home</RouterLink>
-                        <RouterLink v-if="logged_in" to="/results" class="router-link font-base font-color-light text-decoration-none margin-right-md">Reports</RouterLink>
-                        <RouterLink v-if="$route.params.report_id" :to="{name: 'summary', params: {report_id: $route.params.report_id}}" class="router-link font-base font-color-light text-decoration-none margin-right-md">Summary</RouterLink>
-                        <RouterLink v-if="$route.params.report_id" :to="{name: 'detail', params: {report_id: $route.params.report_id}}" class="router-link font-base font-color-light text-decoration-none margin-right-md">Full Report</RouterLink>
-                        <RouterLink v-if="!logged_in" to="/login" class="router-link font-base font-color-light text-decoration-none margin-right-md">Login</RouterLink>
-                        <RouterLink v-if="!logged_in" to="/register" class="router-link font-base font-color-light text-decoration-none margin-right-md">Register</RouterLink>
                         <RouterLink v-if="logged_in" to="/logout" class="router-link font-base font-color-light text-decoration-none margin-right-md">Logout</RouterLink>
                         <RouterLink v-if="logged_in" to="/profile" class="router-link font-base font-color-light text-decoration-none margin-right-md">{{account_name}}<br>{{member_email}}</RouterLink>
-                        <RouterLink to="/support" class="router-link font-base font-color-light text-decoration-none margin-right-md">Support</RouterLink>
                     </div>
                 </div>
             </div>
@@ -91,11 +87,11 @@
         transition: 0.2s linear;
         top: 0;
         animation: showNavbar 0.5s forwards;
-        
+
         &-animate-hidden {
             animation: hideNavbar 1s forwards;
         }
-        
+
         @keyframes hideNavbar {
             0% {
                 top: 0;
