@@ -133,6 +133,12 @@ body {
     background-color: color("dark") !important;
 }
 
+a {
+    &:hover {
+        color: color("secondary") !important;
+    }
+}
+
 .padding {
     &-bottom-none{
         padding-bottom: none;

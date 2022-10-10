@@ -67,24 +67,40 @@
 </template>
 
 <script>
+import { shallowRef } from 'vue'
+
 import Hero from "../components/layout/Hero.vue";
 import LoginForm from "../components/forms/LoginForm.vue";
 import RegisterForm from "../components/forms/RegisterForm.vue";
 import BasicFeature from "../components/general/BasicFeature.vue"
 import PricingComponent from "../components/general/PricingComponent.vue"
-import IconNotificationLight from "@/components/icons/IconNotificationLight.vue"
-import IconScan2Light from "@/components/icons/IconScan2Light.vue"
-import IconScan1Light from "@/components/icons/IconScan1Light.vue"
-import IconLightningLight from "@/components/icons/IconLightningLight.vue"
-import IconIntLight from "@/components/icons/IconIntLight.vue"
-import IconFeedLight from "@/components/icons/IconFeedLight.vue"
-import IconIntegrationLight from "@/components/icons/IconIntegrationLight.vue"
-import IconCliLight from "@/components/icons/IconCliLight.vue"
-import IconGlobeLight from "@/components/icons/IconGlobeLight.vue"
-import IconFishLight from "@/components/icons/IconFishLight.vue"
-import IconTuneLight from "@/components/icons/IconTuneLight.vue"
+import cIconNotificationLight from "@/components/icons/IconNotificationLight.vue"
+import cIconData from "@/components/icons/IconData.vue"
+import cIconScan2Light from "@/components/icons/IconScan2Light.vue"
+import cIconScan1Light from "@/components/icons/IconScan1Light.vue"
+import cIconLightningLight from "@/components/icons/IconLightningLight.vue"
+import cIconIntLight from "@/components/icons/IconIntLight.vue"
+import cIconFeedLight from "@/components/icons/IconFeedLight.vue"
+import cIconIntegrationLight from "@/components/icons/IconIntegrationLight.vue"
+import cIconCliLight from "@/components/icons/IconCliLight.vue"
+import cIconGlobeLight from "@/components/icons/IconGlobeLight.vue"
+import cIconFishLight from "@/components/icons/IconFishLight.vue"
+import cIconTuneLight from "@/components/icons/IconTuneLight.vue"
 import Dropdown from "@/components/general/Dropdown.vue"
 import Modal from "@/components/general/Modal.vue"
+
+const IconNotificationLight = shallowRef(cIconNotificationLight);
+const IconData = shallowRef(cIconData);
+const IconScan2Light = shallowRef(cIconScan2Light);
+const IconScan1Light = shallowRef(cIconScan1Light);
+const IconLightningLight = shallowRef(cIconLightningLight);
+const IconIntLight = shallowRef(cIconIntLight);
+const IconFeedLight = shallowRef(cIconFeedLight);
+const IconIntegrationLight = shallowRef(cIconIntegrationLight);
+const IconCliLight = shallowRef(cIconCliLight);
+const IconGlobeLight = shallowRef(cIconGlobeLight);
+const IconFishLight = shallowRef(cIconFishLight);
+const IconTuneLight = shallowRef(cIconTuneLight);
 
 export default {
   components: {
@@ -168,7 +184,7 @@ export default {
         },
         {
           id: 12,
-          icon: IconTuneLight,
+          icon: IconData,
           header: "Interoperability",
           description: "We adhere to open standards. You control your data, and we enable you with a growing list of supported data exchange formats so you can access and control your data at all times"
         },
