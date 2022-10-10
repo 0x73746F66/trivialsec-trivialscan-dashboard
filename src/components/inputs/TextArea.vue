@@ -7,6 +7,7 @@
             :name="id" 
             :placeholder="placeholder" 
             @input="handleInput"
+            maxlength="2000"
         ></textarea>
     </div>
 </template>
