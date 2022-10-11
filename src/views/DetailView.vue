@@ -31,6 +31,7 @@ export default {
     fetchData() {
       this.loading = true
       const req_url = `${this.api_url}/report/${this.$route.params.report_id}`
+      console.log(req_url)
       const ts = moment().utc().unix()
       const url = new URL(req_url)
       const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
