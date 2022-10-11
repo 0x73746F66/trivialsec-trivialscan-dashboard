@@ -1,6 +1,3 @@
-if (window.location.hostname == 'trivialsec.com') {
-    window.location.href = `https://www.trivialsec.com${window.location.pathname}`
-}
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { createApp } from "vue"

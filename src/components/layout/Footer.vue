@@ -43,11 +43,14 @@
 <script>
     import { RouterLink, RouterView } from "vue-router";
     import IconTrivialSecurity from '../icons/IconTrivialSecurity.vue';
+    import IconGitlab from '../icons/IconGitlab.vue';
+    import IconLinkedin from '../icons/IconLinkedin.vue';
+    import IconTwitter from '../icons/IconTwitter.vue';
 
     export default {
-        components: { IconTrivialSecurity }
+        components: { IconTrivialSecurity, IconGitlab, IconLinkedin, IconTwitter }
     }
-
+    
 </script>
 <style lang="scss">
     .footer {

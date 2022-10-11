@@ -63,9 +63,8 @@ export default {
             justify-content: flex-end;
             transition: 0.2s linear;
             &:hover {
-                color: color("dark") !important;
+                color: color("light") !important;
             }
-
             &.hidden {
                 @media (min-width: $breakpoint-lg) {
                     padding: 0 padding(sm);
