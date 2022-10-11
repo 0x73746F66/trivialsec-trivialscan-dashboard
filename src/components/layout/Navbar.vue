@@ -71,21 +71,22 @@
     }
 </script>
 <style lang="scss">
-    .nav {
+.nav {
         @extend .bg-dark-40;
         @extend .padding-md;
         width: 100%;
         z-index: 10;
-        background: #1a1616;
+        background: rgb(26 22 22 / 80%);
+        backdrop-filter: blur(8px);
         position: fixed;
         transition: 0.2s linear;
         animation: showNavbar 0.5s forwards;
-        
+
 
         &-animate-hidden {
             animation: hideNavbar 1s forwards;
         }
-        
+
         @keyframes hideNavbar {
             0% {
                 top: 0;
