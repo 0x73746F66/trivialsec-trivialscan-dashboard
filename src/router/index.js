@@ -21,6 +21,13 @@ const router = createRouter({
           return response.json()
         })
         .then(member => {
+<<<<<<< HEAD
+          console.log(member)
+          localStorage.setItem('/account/name', member?.account?.name)
+          localStorage.setItem('/member/email', member?.email)
+          localStorage.setItem('/session/key', member?.access_token)
+          window.location.href = '/profile'
+=======
           console.log('member')
           console.log(member)
           //TODO: save member to vue3 store backed by localStorage
@@ -29,6 +36,7 @@ const router = createRouter({
           localStorage.setItem('/session/key', member?.access_token)
           //TODO: redirect to activities page when created
           window.location.href = '/results'
+>>>>>>> e79e2d0582aa25a0f14b4f788a62d6e4f0ce10e7
         })
         .catch(errors => {
           console.log(errors)
@@ -39,7 +47,10 @@ const router = createRouter({
       path: "/logout",
       name: "logout",
       beforeEnter: () => {
+<<<<<<< HEAD
+=======
         //TODO: use vue3 store backed by localStorage
+>>>>>>> e79e2d0582aa25a0f14b4f788a62d6e4f0ce10e7
         localStorage.setItem('/account/name', "")
         localStorage.setItem('/member/email', "")
         localStorage.setItem('/session/key', "")
@@ -95,10 +106,13 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
     // redirect to login page if not logged in and trying to access a restricted page
-    const publicPages = ['/', '/docs', '/privacy'];
+    const publicPages = ['/login'];
     const authRequired = !publicPages.includes(to.path);
-    if (authRequired && !localStorage.getItem('/session/key')) {
-        return '/';
-    }
+    // const auth = useAuthStore();
+
+    // if (authRequired && !auth.user) {
+    //     auth.returnUrl = to.fullPath;
+    //     return '/login';
+    // }
 });
 export default router;
