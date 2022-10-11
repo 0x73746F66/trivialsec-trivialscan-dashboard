@@ -1,5 +1,5 @@
 <template>
-    <div class="w-100 validation-message d-flex justify-content-between align-items-center">
+    <div v-if="message.length > 0" class="w-100 validation-message d-flex justify-content-between align-items-center">
         <span :class="messageClassType">
             {{message}}
         </span>
@@ -45,7 +45,7 @@ export default {
         &-warning {
             @extend .font-color-warning;
         }
-        &-danger {
+        &-error {
             @extend .font-color-danger;
         }
     }

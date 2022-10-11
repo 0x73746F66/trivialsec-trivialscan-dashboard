@@ -64,7 +64,10 @@ resource "aws_cloudfront_distribution" "trivialscan_dashboard" {
   enabled             = true
   is_ipv6_enabled     = true
   default_root_object = "index.html"
-  aliases = ["scanner.${local.apex_domain}"]
+  aliases = [
+    local.apex_domain,
+    "www.${local.apex_domain}"
+  ]
 
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
@@ -118,7 +121,7 @@ resource "aws_cloudfront_distribution" "trivialscan_dashboard" {
 
 resource "aws_route53_record" "assets_a" {
     zone_id = local.hosted_zone
-    name    = "scanner.${local.apex_domain}"
+    name    = "www.${local.apex_domain}"
     type    = "A"
 
     alias {
@@ -130,7 +133,7 @@ resource "aws_route53_record" "assets_a" {
 
 resource "aws_route53_record" "assets_aaaa" {
     zone_id = local.hosted_zone
-    name    = "scanner.${local.apex_domain}"
+    name    = "www.${local.apex_domain}"
     type    = "AAAA"
 
     alias {
