@@ -11,11 +11,11 @@
             </div>
             <a
                 href="#"
-                class="text-decoration-none font-color-light basic-feature-read-more-link w-100 padding-sm"
+                class="text-decoration-none font-color-dark basic-feature-read-more-link w-100 padding-sm"
                 :class="{ 'hidden': !showLink }"
             >
                 Read More
-                <IconArrowPrimary color='FFFFFF' class="basic-feature-read-more-link-icon margin-left-xs"/>
+                <IconArrowPrimary color='000000' class="basic-feature-read-more-link-icon margin-left-xs"/>
             </a>
         </div>
     </div>
@@ -39,7 +39,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.basic-feature {
+    .basic-feature {    
         border-radius: radius("sm");
         background: color("dark-40");
         color: color("light");
@@ -49,9 +49,6 @@ export default {
         align-items: center;
         justify-content: space-between;
 
-        &:hover {
-            background: color("dark-60");
-        }
         &-icon {
             width: 100px;
         }
@@ -63,8 +60,9 @@ export default {
             justify-content: flex-end;
             transition: 0.2s linear;
             &:hover {
-                color: color("light") !important;
+                color: color("dark") !important;
             }
+
             &.hidden {
                 @media (min-width: $breakpoint-lg) {
                     padding: 0 padding(sm);
