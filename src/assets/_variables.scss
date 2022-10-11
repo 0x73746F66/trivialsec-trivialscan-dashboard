@@ -85,7 +85,6 @@ $breakpoint-lg: 992px;
 $breakpoint-xl: 1200px;
 $breakpoint-xxl: 1400px;
 
-
 @function color($color) {
     @return map.get($colors, $color);
 }
