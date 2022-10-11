@@ -1,0 +1,26 @@
+.custom-field {
+    @extend .padding-bottom-lg;
+    display: block;
+    position: relative;
+    width: 100%;
+
+    label {
+        @extend .font-base-sb;
+        position: absolute;
+        top: spacers("xs");
+        color: color("light");
+        padding: 0 spacers('xs');
+        text-shadow: 1px 1px color("dark");
+    }
+
+    input, textarea {
+        padding: padding("md") padding("md");
+        border-radius: radius("sm");
+        margin-top: spacers("md");
+        background: color("light-40");
+        color: color("light");
+        border: none;
+        width: 100%;
+        height: 100%;
+    }
+}
