@@ -20,7 +20,7 @@
   >
     <div class="container">
       <PricingComponent />
-      <span class="margin-top-sm d-block font-sm font-color-light">* Self-managed refers to Trivial Scanner running on your self-hosted and on-prem servers, your cloud, or your client computers, and connecting to Trivial Security SaaS services.</span>
+      <span class="margin-top-sm d-block font-xs font-color-light">* Self-managed refers to Trivial Scanner running on your self-hosted and on-prem servers, your cloud, or your client computers, and connecting to Trivial Security SaaS services.</span>
     </div>
   </div>
 
@@ -30,13 +30,13 @@
         <template v-slot:button="buttonProps">
           <button
             v-bind="buttonProps"
-            class="btn-fill-primary-full font-xl font-color-light border-0"
+            class="btn-fill-primary-full font-base font-color-light border-0"
           >
             Login
           </button>
         </template>
         <template v-slot:modalTitle>
-          <h5 class="font-xl-b font-color-light">Login</h5>
+          <h5 class="font-base-b font-color-light">Login</h5>
         </template>
         <template v-slot:modalContent>
           <LoginForm />
@@ -49,13 +49,13 @@
         <template v-slot:button="buttonProps">
           <button
             v-bind="buttonProps"
-            class="btn-fill-primary-full font-xl font-color-light border-0"
+            class="btn-fill-primary-full font-base font-color-light border-0"
           >
             Register
           </button>
         </template>
         <template v-slot:modalTitle>
-          <h5 class="font-xl-b font-color-light">Register</h5>
+          <h5 class="font-base-b font-color-light">Register</h5>
         </template>
         <template v-slot:modalContent>
           <RegisterForm />

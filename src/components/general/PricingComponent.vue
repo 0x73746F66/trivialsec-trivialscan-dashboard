@@ -402,6 +402,258 @@
         </PricingComponentRow>
     </div>
 
+    <div class="d-block d-lg-none">
+        <div class="accordion">
+            <div class="margin-bottom-md">
+                <Dropdown 
+                    id="headingOne"
+                    target="collapseOne"
+                    parent="accordion"
+                    :defaultShow=true
+                    :defaultCollapsed=false
+                >
+                    <template v-slot:header>
+                        <div class="font-base font-color-light d-flex d-flex flex-column font-color-primary align-items-start"> 
+                            Community Edition (CE)
+                            <span class="text-xs font-color-primary">Free</span>
+                        </div>
+                    </template>
+                    <template v-slot:content>
+                        <div class="d-flex flex-column align-items-start">
+                            <ul class="font-sm">
+                                <li>
+                                    Passive Scans 
+                                    <ul class="margin-right-md">
+                                        <li>On-demand (Self-hosted)</li>
+                                    </ul> 
+                                </li>
+                                <li>
+                                    Common WEB/HTTPs Exposures
+                                </li>
+                                <li>
+                                    Auto-Remediation - Webhook
+                                    <ul class="margin-right-md">
+                                        <li>Webhook</li>
+                                    </ul> 
+                                </li>
+                                <li>
+                                    Threats 
+                                    <ul class="margin-right-md">
+                                        <li>Relevant threat intel findings</li>
+                                        <li>MITRE ATT&CK mappings</li>
+                                    </ul> 
+                                </li>
+                                <li>
+                                    Compliance
+                                    <ul class="margin-right-md">
+                                        <li>PCI</li>
+                                        <li>CIS Benchmark</li>
+                                    </ul> 
+                                </li>
+                                <li>
+                                    Access
+                                    <ul class="margin-right-md">
+                                        <li>WebAuth</li>
+                                    </ul> 
+                                </li>
+                                <li>
+                                    Support
+                                    <ul class="margin-right-md">
+                                        <li>Bug Reports</li>
+                                    </ul> 
+                                </li>
+                            </ul>
+                        </div>
+                    </template>
+                </Dropdown>
+            </div>
+            <div class="margin-bottom-md">
+                <Dropdown 
+                    id="headingTwo"
+                    target="collapseTwo"
+                    parent="accordion"
+                    :defaultShow=false
+                    :defaultCollapsed=true
+                >
+                    <template v-slot:header>
+                        <!-- <div class="text-sm d-flex margin-bottom-sm d-flex font-xs font-color-primary align-items-center"> 
+                            <IconStarPrimary class="pricing-icon-responsive margin-right-sm"/>
+                            Recommended
+                        </div> -->
+                        <div class="font-base font-color-light d-flex d-flex flex-column font-color-primary align-items-start"> 
+                            Professional (PRO)
+                            <span class="text-xs font-color-primary">USD $199/Month</span>
+                        </div>
+                    </template>
+                    <template v-slot:content>
+                        <div class="d-flex flex-column align-items-end">
+                            <ul class="font-sm">
+                                <li>
+                                    Passive Scans
+                                    <ul class="margin-right-md">
+                                        <li>On-demand (Self-hosted)</li>
+                                        <li>On-demand (Managed SaaS) - 500 / Day On-demand</li>
+                                        <li>Monitored - 10 / Day On-demand</li>
+                                        <li>On-demand (Self-hosted)</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    Active Scans 
+                                    <ul class="margin-right-md">
+                                        <li>On-demand - 50 / Day on-demand</li>
+                                        <li>Monitored (10 / Day on-demand)</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    Common WEB/HTTPs Exposures
+                                </li>
+                                <li>
+                                    Git integrated SCA/SAST (10 / Day On-demand)
+                                </li>
+                                <li>
+                                    Customer provided SCA/SAST (Upload Code Archive) (10 / Day On-demand)
+                                </li>
+                                <li>
+                                    Unsupported Software
+                                </li>
+                                <li>
+                                    Alert Delivery 
+                                    <ul class="margin-right-md">
+                                        <li>E-mail</li>
+                                        <li>Service Integrations</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    Auto-Remediation
+                                    <ul class="margin-right-md">
+                                        <li>Webhook</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    Threats  
+                                    <ul class="margin-right-md">
+                                        <li>Relevant threat intel findings</li>
+                                        <li>Typosquatting / Brand protection** (Fuzzy domain matching and keywords)</li>
+                                        <li>MITRE ATT&CK mappings</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    Compliance
+                                    <ul class="margin-right-md">
+                                        <li>PCI</li>
+                                        <li>CIS Benchmark</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    Access - WebAuth
+                                </li>
+                                <li>
+                                    Support
+                                    <ul class="margin-right-md">
+                                        <li>Bug Reports</li>
+                                        <li>20 business day resolution</li>
+                                        <li>50 business day resolution</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </template>
+                </Dropdown>
+            </div>
+            <div class="margin-bottom-md">
+                <Dropdown 
+                    id="headingThree"
+                    target="collapseThree"
+                    parent="accordion"
+                    :defaultShow=false
+                    :defaultCollapsed=true
+                >
+                    <template v-slot:header>
+                        <div class="font-base font-color-light d-flex d-flex flex-column font-color-primary align-items-start"> 
+                            Enterprise
+                            <span class="text-xs font-color-primary">Contact Us</span>
+                        </div>
+                    </template>
+                    <template v-slot:content>
+                        <div class="d-flex flex-column align-items-end">
+                            <ul class="font-sm">
+                                <li>
+                                    Passive Scans (Dedicated tenent unlimited) 
+                                    <ul class="margin-right-md">
+                                        <li>On-demand (Self-hosted)</li>
+                                        <li>On-demand (Managed SaaS)</li>
+                                        <li>Monitored</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    Active Scans (Dedicated tenent unlimited)
+                                    <ul class="margin-right-md">
+                                        <li>On-demand</li>
+                                        <li>Monitored</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    Common WEB/HTTPs Exposures
+                                </li>
+                                <li>
+                                    Git integrated SCA/SAST
+                                </li>
+                                <li>
+                                    Customer provided SCA/SAST (Upload Code Archive)
+                                </li>
+                                <li>
+                                    Unsupported Software
+                                </li>
+                                <li>
+                                    Alert Delivery 
+                                    <ul class="margin-right-md">
+                                        <li>Email</li>
+                                        <li>Service Integrations</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    Auto-Remediation - Webhook
+                                </li>
+                                <li>
+                                    Threats
+                                    <ul class="margin-right-md">
+                                        <li>Relevant threat intel findings</li>
+                                        <li>Compromise Indicators^</li>
+                                        <li>Typosquatting / Brand protection** (Fuzzy domain matching and keywords)</li>
+                                        <li>MITRE ATT&CK mappings^</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    Compliance 
+                                    <ul class="margin-right-md">
+                                        <li>PCI</li>
+                                        <li>CIS Benchmark</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    Access
+                                    <ul class="margin-right-md">
+                                        <li>WebAuth</li>
+                                        <li>SAML SSO</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    Support 
+                                    <ul class="margin-right-md">
+                                        <li>Bug Reports</li>
+                                        <li>20 business day resolution</li>
+                                        <li>50 business day resolution</li>
+                                        <li>48 hour resolution</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </template>
+                </Dropdown>
+            </div>
+        </div>
+    </div>
+
 </template>
 
 <script>

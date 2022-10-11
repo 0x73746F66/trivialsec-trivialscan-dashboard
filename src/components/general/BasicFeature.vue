@@ -7,7 +7,7 @@
             <div class="padding-lg">
                 <component :is="feature.icon" color='1ABB9C'></component>
                 <h3 class="font-xl-sb font-color-light margin-bottom-sm margin-top-lg">{{feature.header}}</h3>
-                <span class="font-base font-color-light">{{feature.description}}</span>
+                <span class="font-sm font-color-light">{{feature.description}}</span>
             </div>
             <a
                 href="#"
