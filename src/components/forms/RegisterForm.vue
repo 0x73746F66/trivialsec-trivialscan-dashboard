@@ -41,7 +41,7 @@
             :required="true"
         />
         <Button
-            class="btn-outline-primary-full font-xl-sb font-color-primary"
+            class="btn-outline-primary-full font-base-sb font-color-primary"
             text="Register"
             @click="submit"
         />

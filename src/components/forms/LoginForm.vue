@@ -1,28 +1,3 @@
-<!-- <script setup>
-    const api_url = import.meta.env.VITE_API_URL
-    const login = (event) => {
-        const email = event.target.querySelector('[name="id-email-1"]').value
-        const payload = JSON.stringify({ email })
-        const req_url = `${api_url}/magic-link`
-
-        fetch(req_url, {
-            headers: {
-                'Content-Type': 'application/json;charset=UTF-8'
-            },
-            method: 'POST',
-            body: payload
-        })
-        .then(response => {
-            console.log(response)
-            //TODO: notify user to check their email
-            window.location.href = '/'
-        })
-        .catch(errors => {
-            console.log(errors)
-        })
-    }
-</script> -->
-
 <template>
     <form
         class="login-form"

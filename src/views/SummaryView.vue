@@ -39,10 +39,6 @@ export default {
       hash.update(canonical_string)
       const mac = hash.finalize()
       const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
-
-      fetch(req_url, {
-        headers: {
-          "Authorization": header,
           "X-Trivialscan-Account": localStorage.getItem('/account/name'),
         },
         method: 'GET'

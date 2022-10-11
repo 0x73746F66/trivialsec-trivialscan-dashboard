@@ -39,7 +39,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.basic-feature {
+    .basic-feature {    
         border-radius: radius("sm");
         background: color("dark-40");
         color: color("light");
@@ -63,8 +63,9 @@ export default {
             justify-content: flex-end;
             transition: 0.2s linear;
             &:hover {
-                color: color("light") !important;
+                color: color("dark") !important;
             }
+
             &.hidden {
                 @media (min-width: $breakpoint-lg) {
                     padding: 0 padding(sm);

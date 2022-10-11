@@ -26,7 +26,6 @@
     },
     methods: {
       unFixNavbar() {
-        // console.log(window.innerHeight)
         if(document.body.offsetHeight > window.innerHeight + this.$refs.footer.$el.clientHeight) {
           if(window.innerHeight + window.scrollY >= document.body.offsetHeight - this.$refs.footer.$el.clientHeight) {
             this.isNavbarHidden = true

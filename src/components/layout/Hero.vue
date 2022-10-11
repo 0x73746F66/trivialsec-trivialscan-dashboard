@@ -36,7 +36,6 @@
         position: relative;
         align-items: center;
         justify-content: center;
-    
 
         &-icon {
             position: absolute;
