@@ -76,7 +76,8 @@
                 <span class="font-base font-color-light">On-demand (Managed)</span>
             </template>
             <template v-slot:col-3>
-                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+                <span class="font-base w-100 text-center">All Hosts Initial Scan Free</span>
+                <span class="font-base w-100 text-center">$15 / Month Unlimited Rescans</span>
             </template>
             <template v-slot:col-4>
                 <span class="font-base w-100 text-center">500 / Day</span>
@@ -93,7 +94,8 @@
                 <span class="font-base font-color-light">Continuous Monitoring</span>
             </template>
             <template v-slot:col-3>
-                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+                <span class="font-base w-100 text-center">1 Free / Day</span>
+                <span class="font-base w-100 text-center">$3 / Month per Host</span>
             </template>
             <template v-slot:col-4>
                 <span class="font-base w-100 text-center">10 / Day</span>
@@ -301,7 +303,41 @@
                 <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">Compliance</h4>
             </template>
             <template v-slot:col-2>
-                <span class="font-base font-color-light">PCI</span>
+                <span class="font-base font-color-light">PCI DSS (v3.2.1, 4.0)</span>
+            </template>
+            <template v-slot:col-3>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+            <template v-slot:col-4>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+            <template v-slot:col-5>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+        </PricingComponentRow>
+
+        <PricingComponentRow class="padding-sm font-color-light pricing-tabley">
+            <template v-slot:col-1>
+            </template>
+            <template v-slot:col-2>
+                <span class="font-base font-color-light">NIST SP800-131A</span>
+            </template>
+            <template v-slot:col-3>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+            <template v-slot:col-4>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+            <template v-slot:col-5>
+                <checkIcon color="1abb9c" class="pricing-checkmark"/>
+            </template>
+        </PricingComponentRow>
+
+        <PricingComponentRow class="padding-sm font-color-light pricing-table">
+            <template v-slot:col-1>
+            </template>
+            <template v-slot:col-2>
+                <span class="font-base font-color-light">FIPS 140-2</span>
             </template>
             <template v-slot:col-3>
                 <checkIcon color="1abb9c" class="pricing-checkmark"/>
@@ -318,7 +354,7 @@
             <template v-slot:col-1>
             </template>
             <template v-slot:col-2>
-                <span class="font-base font-color-light">CIS Benchmark</span>
+                <span class="font-base font-color-light">Branded Reports</span>
             </template>
             <template v-slot:col-3>
                 <span class="font-base w-100 text-center font-color-tertiary">X</span>
@@ -405,7 +441,7 @@
     <div class="d-block d-lg-none">
         <div class="accordion">
             <div class="margin-bottom-md">
-                <Dropdown 
+                <Dropdown
                     id="headingOne"
                     target="collapseOne"
                     parent="accordion"
@@ -413,62 +449,26 @@
                     :defaultCollapsed=false
                 >
                     <template v-slot:header>
-                        <div class="font-base font-color-light d-flex d-flex flex-column font-color-primary align-items-start"> 
+                        <div class="font-base font-color-light d-flex d-flex flex-column font-color-primary align-items-start">
                             Community Edition (CE)
                             <span class="text-xs font-color-primary">Free</span>
                         </div>
                     </template>
                     <template v-slot:content>
                         <div class="d-flex flex-column align-items-start">
-                            <ul class="font-sm">
-                                <li>
-                                    Passive Scans 
-                                    <ul class="margin-right-md">
-                                        <li>On-demand (Self-hosted)</li>
-                                    </ul> 
-                                </li>
-                                <li>
-                                    Common WEB/HTTPs Exposures
-                                </li>
-                                <li>
-                                    Auto-Remediation - Webhook
-                                    <ul class="margin-right-md">
-                                        <li>Webhook</li>
-                                    </ul> 
-                                </li>
-                                <li>
-                                    Threats 
-                                    <ul class="margin-right-md">
-                                        <li>Relevant threat intel findings</li>
-                                        <li>MITRE ATT&CK mappings</li>
-                                    </ul> 
-                                </li>
-                                <li>
-                                    Compliance
-                                    <ul class="margin-right-md">
-                                        <li>PCI</li>
-                                        <li>CIS Benchmark</li>
-                                    </ul> 
-                                </li>
-                                <li>
-                                    Access
-                                    <ul class="margin-right-md">
-                                        <li>WebAuth</li>
-                                    </ul> 
-                                </li>
-                                <li>
-                                    Support
-                                    <ul class="margin-right-md">
-                                        <li>Bug Reports</li>
-                                    </ul> 
-                                </li>
-                            </ul>
+                            Get the Professional plan upgrade to enable Active Scans.
+                            <br><br>
+                            CE includes On-demand self-hosted Passive Scans or the managed initial Scan for all hosts is Free (Add USD $15/Month for Unlimited Rescans)
+                            <br><br>
+                            CE has 1 Free / Day Continuous Monitoring, (Add USD $3/Month per additional Host)
+                            <br><br>
+                            What you will get; Web/API Trivial exposures, MITRE ATT&CK mappings, Auto-Remediation via Webhooks, Compliance (PCI, NIST SP800-131A, FIPS 140-2), and Open Source Issue reports.
                         </div>
                     </template>
                 </Dropdown>
             </div>
             <div class="margin-bottom-md">
-                <Dropdown 
+                <Dropdown
                     id="headingTwo"
                     target="collapseTwo"
                     parent="accordion"
@@ -476,92 +476,27 @@
                     :defaultCollapsed=true
                 >
                     <template v-slot:header>
-                        <!-- <div class="text-sm d-flex margin-bottom-sm d-flex font-xs font-color-primary align-items-center"> 
+                        <!-- <div class="text-sm d-flex margin-bottom-sm d-flex font-xs font-color-primary align-items-center">
                             <IconStarPrimary class="pricing-icon-responsive margin-right-sm"/>
                             Recommended
                         </div> -->
-                        <div class="font-base font-color-light d-flex d-flex flex-column font-color-primary align-items-start"> 
+                        <div class="font-base font-color-light d-flex d-flex flex-column font-color-primary align-items-start">
                             Professional (PRO)
                             <span class="text-xs font-color-primary">USD $199/Month</span>
                         </div>
                     </template>
                     <template v-slot:content>
-                        <div class="d-flex flex-column align-items-end">
-                            <ul class="font-sm">
-                                <li>
-                                    Passive Scans
-                                    <ul class="margin-right-md">
-                                        <li>On-demand (Self-hosted)</li>
-                                        <li>On-demand (Managed SaaS) - 500 / Day On-demand</li>
-                                        <li>Monitored - 10 / Day On-demand</li>
-                                        <li>On-demand (Self-hosted)</li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    Active Scans 
-                                    <ul class="margin-right-md">
-                                        <li>On-demand - 50 / Day on-demand</li>
-                                        <li>Monitored (10 / Day on-demand)</li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    Common WEB/HTTPs Exposures
-                                </li>
-                                <li>
-                                    Git integrated SCA/SAST (10 / Day On-demand)
-                                </li>
-                                <li>
-                                    Customer provided SCA/SAST (Upload Code Archive) (10 / Day On-demand)
-                                </li>
-                                <li>
-                                    Unsupported Software
-                                </li>
-                                <li>
-                                    Alert Delivery 
-                                    <ul class="margin-right-md">
-                                        <li>E-mail</li>
-                                        <li>Service Integrations</li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    Auto-Remediation
-                                    <ul class="margin-right-md">
-                                        <li>Webhook</li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    Threats  
-                                    <ul class="margin-right-md">
-                                        <li>Relevant threat intel findings</li>
-                                        <li>Typosquatting / Brand protection** (Fuzzy domain matching and keywords)</li>
-                                        <li>MITRE ATT&CK mappings</li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    Compliance
-                                    <ul class="margin-right-md">
-                                        <li>PCI</li>
-                                        <li>CIS Benchmark</li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    Access - WebAuth
-                                </li>
-                                <li>
-                                    Support
-                                    <ul class="margin-right-md">
-                                        <li>Bug Reports</li>
-                                        <li>20 business day resolution</li>
-                                        <li>50 business day resolution</li>
-                                    </ul>
-                                </li>
-                            </ul>
+                        <div class="d-flex flex-column align-items-start">
+                            All Community Edition inclusions plus; 500/Day On-demand managed Passive Scans, 50/Day Active Scans, and 10/Day Continuous Monitoring for both.
+                            <br>
+                            <br>
+                            Additionally PRO unlocks Vulnerable Software CVE/GSD alerts via Email and Service Integrations, with 5 Business Days Resolution support SLA.
                         </div>
                     </template>
                 </Dropdown>
             </div>
             <div class="margin-bottom-md">
-                <Dropdown 
+                <Dropdown
                     id="headingThree"
                     target="collapseThree"
                     parent="accordion"
@@ -569,84 +504,21 @@
                     :defaultCollapsed=true
                 >
                     <template v-slot:header>
-                        <div class="font-base font-color-light d-flex d-flex flex-column font-color-primary align-items-start"> 
+                        <div class="font-base font-color-light d-flex d-flex flex-column font-color-primary align-items-start">
                             Enterprise
                             <span class="text-xs font-color-primary">Contact Us</span>
                         </div>
                     </template>
                     <template v-slot:content>
-                        <div class="d-flex flex-column align-items-end">
-                            <ul class="font-sm">
-                                <li>
-                                    Passive Scans (Dedicated tenent unlimited) 
-                                    <ul class="margin-right-md">
-                                        <li>On-demand (Self-hosted)</li>
-                                        <li>On-demand (Managed SaaS)</li>
-                                        <li>Monitored</li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    Active Scans (Dedicated tenent unlimited)
-                                    <ul class="margin-right-md">
-                                        <li>On-demand</li>
-                                        <li>Monitored</li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    Common WEB/HTTPs Exposures
-                                </li>
-                                <li>
-                                    Git integrated SCA/SAST
-                                </li>
-                                <li>
-                                    Customer provided SCA/SAST (Upload Code Archive)
-                                </li>
-                                <li>
-                                    Unsupported Software
-                                </li>
-                                <li>
-                                    Alert Delivery 
-                                    <ul class="margin-right-md">
-                                        <li>Email</li>
-                                        <li>Service Integrations</li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    Auto-Remediation - Webhook
-                                </li>
-                                <li>
-                                    Threats
-                                    <ul class="margin-right-md">
-                                        <li>Relevant threat intel findings</li>
-                                        <li>Compromise Indicators^</li>
-                                        <li>Typosquatting / Brand protection** (Fuzzy domain matching and keywords)</li>
-                                        <li>MITRE ATT&CK mappings^</li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    Compliance 
-                                    <ul class="margin-right-md">
-                                        <li>PCI</li>
-                                        <li>CIS Benchmark</li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    Access
-                                    <ul class="margin-right-md">
-                                        <li>WebAuth</li>
-                                        <li>SAML SSO</li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    Support 
-                                    <ul class="margin-right-md">
-                                        <li>Bug Reports</li>
-                                        <li>20 business day resolution</li>
-                                        <li>50 business day resolution</li>
-                                        <li>48 hour resolution</li>
-                                    </ul>
-                                </li>
-                            </ul>
+                        <div class="d-flex flex-column align-items-start">
+                            All Professional Edition inclusions plus; Restriction free, Unlimited, Active and Passive Scans both Managed On-demand and Continuous Monitoring
+                            <br>
+                            Branded Reports on Compliance
+                            <br>
+                            SAML SSO Access
+                            <br>
+                            <br>
+                            Support SLA 48 Hours Resolution
                         </div>
                     </template>
                 </Dropdown>
