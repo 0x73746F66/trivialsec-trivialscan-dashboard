@@ -81,6 +81,12 @@ const router = createRouter({
       name: "certificate",
       component: () => import("../views/CertificateView.vue"),
     },
+    {
+      // ADD PARAMETER LATER.
+      path: "/profile",
+      name: "profile",
+      component: () => import("../views/ProfileView.vue"),
+    },
   ],
 });
 
@@ -89,7 +95,8 @@ router.beforeEach(async (to) => {
       const publicPages = [
         '/',
         '/docs',
-        '/privacy'
+        '/privacy',
+        '/profile'
       ]
       const authRequired = !publicPages.includes(to.path)
       if (authRequired && !localStorage.getItem('/session/key')) {

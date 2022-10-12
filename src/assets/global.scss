@@ -162,6 +162,14 @@ a {
         &-primary {
             border-bottom: 1px solid color("primary");
         }
+        &-light-20 {
+            border-bottom: 1px solid color("light-20");
+        }
+    }
+    &-radius {
+        &-round {
+            border-radius: 50%;
+        }
     }
 }
 
