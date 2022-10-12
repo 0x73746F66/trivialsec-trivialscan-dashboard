@@ -16,7 +16,6 @@
                             </div>
                         </RouterLink>
 
-
                         <button
                             class="navbar-toggler navbar-dark d-lg-none"
                             type="button"
@@ -30,12 +29,9 @@
                         class="d-flex flex-column flex-lg-row align-items-center nav-transition nav-content"
                         :class="{'nav-hidden' : navbarHidden}"
                     >
-                        <RouterLink to="/" class="router-link font-base font-color-light text-decoration-none margin-right-md">Home</RouterLink>
                         <RouterLink v-if="logged_in" to="/results" class="router-link font-base font-color-light text-decoration-none margin-right-md">Reports</RouterLink>
                         <RouterLink v-if="$route.params.report_id" :to="{name: 'summary', params: {report_id: $route.params.report_id}}" class="router-link font-base font-color-light text-decoration-none margin-right-md">Summary</RouterLink>
                         <RouterLink v-if="$route.params.report_id" :to="{name: 'detail', params: {report_id: $route.params.report_id}}" class="router-link font-base font-color-light text-decoration-none margin-right-md">Full Report</RouterLink>
-                        <RouterLink v-if="!logged_in" to="/login" class="router-link font-base font-color-light text-decoration-none margin-right-md">Login</RouterLink>
-                        <RouterLink v-if="!logged_in" to="/register" class="router-link font-base font-color-light text-decoration-none margin-right-md">Register</RouterLink>
                         <RouterLink v-if="logged_in" to="/logout" class="router-link font-base font-color-light text-decoration-none margin-right-md">Logout</RouterLink>
                         <RouterLink v-if="logged_in" to="/profile" class="router-link font-base font-color-light text-decoration-none margin-right-md">{{account_name}}<br>{{member_email}}</RouterLink>
                     </div>
