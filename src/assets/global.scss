@@ -93,7 +93,7 @@
     }
     .btn-fill-#{$name}-full {
         background: $color;
-        padding: padding("sm");
+        padding: padding("sm") padding("md");
         border-radius: radius("sm");
         border: 1px solid $color;
         width: 100%;

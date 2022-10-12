@@ -22,15 +22,15 @@
             <div class="d-flex justify-content-between align-items-start flex-column flex-lg-row">
                 <div class="d-flex flex-column font-color-light align-items-start margin-top-md margin-bottom-md">
                     <div class="d-flex margin-bottom-sm align-items-center">
-                        <span class="font-base-b margin-right-sm ">IP Address:</span>
+                        <span class="font-base-sb margin-right-sm ">IP Address:</span>
                         <span class="font-sm font-sm">{{account.ip_addr}}</span>
                     </div>
                     <div class="d-flex margin-bottom-sm align-items-center">
-                        <span class="font-base-b margin-right-sm">User Agent:</span>
+                        <span class="font-base-sb margin-right-sm">User Agent:</span>
                         <span class="font-sm font-sm">{{account.user_agent}}</span>
                     </div>
                     <div class="d-flex margin-bottom-sm align-items-center">
-                        <span class="font-base-b margin-right-sm">API Key:</span>
+                        <span class="font-base-sb margin-right-sm">API Key:</span>
                         <span class="font-sm font-sm">{{account.api_key}}</span>
                     </div>
                     <Button class="btn-outline-primary-sm font-color-primary font-sm" text="Generate Client Credential"/>
@@ -40,22 +40,22 @@
                     <div class="d-flex flex-column justify-content-between">
                         <div class="d-flex justify-content-between margin-bottom-sm">
                             <div class="margin-right-lg">
-                                <span class="font-base-b margin-right-sm margin-bottom-sm">Active Plan:</span>
+                                <span class="font-base-sb margin-right-sm margin-bottom-sm">Active Plan:</span>
                                 <span class="font-sm font-sm">{{account.active_plan.label}}</span>
                             </div>
                             <span class="font-color-primary font-lg-b">{{account.active_plan.price}}</span>
                         </div>
                         
                         <div class="d-flex margin-bottom-sm align-items-center">
-                            <span class="font-base-b margin-right-sm">Credit Card:</span>
+                            <span class="font-base-sb margin-right-sm">Credit Card:</span>
                             <span class="font-sm font-sm">{{credit_card}}</span>
                         </div>
                         <div class="d-flex margin-bottom-sm align-items-center">
-                            <span class="font-base-b margin-right-sm">Issuer:</span>
+                            <span class="font-base-sb margin-right-sm">Issuer:</span>
                             <span class="font-sm font-sm">{{issuer}}</span>
                         </div>
                         <div class="d-flex margin-bottom-sm align-items-center">
-                            <span class="font-base-b margin-right-sm">Billing Mail Address:</span>
+                            <span class="font-base-sb margin-right-sm">Billing Mail Address:</span>
                             <span class="font-sm font-sm">{{account.billing_email}}</span>
                         </div>
                         <div class="d-flex">
@@ -122,7 +122,7 @@
                             </div>
 
                             <div class="text-left font-color-light font-sm">
-                                <p class="mb-0">
+                                <p class="mb-0 font-base">
                                     {{member.account.display}}
                                     <span 
                                         v-if="member.account.ip_addr === account.ip_addr" 
@@ -131,11 +131,11 @@
                                         (You)
                                     </span>
                                 </p>
-                                <p class="mb-0">{{member.account.primary_email}}</p>                            
-                                <p class="mb-0">{{member.account.api_key}}</p>                            
-                                <p class="mb-0">{{member.account.ip_addr}}</p>                            
-                                <p class="mb-0">{{member.account.user_agent}}</p>
-                                <p class="mb-0">{{member.email_md5}}</p>
+                                <p class="mb-0 font-sm">{{member.account.primary_email}}</p>                            
+                                <p class="mb-0 font-sm">{{member.account.api_key}}</p>                            
+                                <p class="mb-0 font-sm">{{member.account.ip_addr}}</p>                            
+                                <p class="mb-0 font-sm">{{member.account.user_agent}}</p>
+                                <p class="mb-0 font-sm">{{member.email_md5}}</p>
                             </div>
                                                     
                         </swiper-slide>
