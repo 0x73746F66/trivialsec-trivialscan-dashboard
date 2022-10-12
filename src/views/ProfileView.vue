@@ -9,15 +9,44 @@
                         alt="{{account.display}}'s Profile Picture'"
                     >
                     <div class="d-flex flex-column justify-content-start">
-                        <h1 class="font-xl-b font-color-light">
-                            {{account.display}}
-                        </h1>
-                        <span class="font-base font-color-light">
-                            {{account.primary_email}}
-                        </span>
+                        <div class="d-flex flex-column justify-content-start">
+                            <h1 class="font-xl-b font-color-light">
+                                {{account.display}}
+                            </h1>
+                            <EditableTextField :editMode="editMode">
+                                <template #staticField>
+                                    <span class="font-base font-color-light">
+                                        {{account.primary_email}}
+                                    </span>
+                                </template>
+                                <template #inputField>
+                                    <span class="font-base font-color-light">
+                                        <TextInput
+                                            :placeholder="account.primary_email"
+                                            id="PrimaryEmail"
+                                            label="Email"
+                                            :required="true"
+                                        />
+                                    </span>
+                                </template>
+                            </EditableTextField>
+                        </div>
+                        <ValidationMessage 
+                            class="justify-content-start"
+                            :message="this.emailUpdateMessage"
+                            :type="this.emailUpdateMessageType"
+                        />
                     </div>
                 </div>
-                <IconPencil class="profile-edit-icon"/>
+                <button class="edit-mode-btn" v-if="!editMode" @click="toggleEditMode()">
+                    <IconPencil class="profile-edit-icon"/>
+                </button>
+                <div v-else>
+                    <div class="d-flex justify-content-end">
+                        <button class="edit-mode-btn" @click="toggleEditMode()"><IconCancel class="profile-edit-icon" color="f45e5e"/></button>
+                        <button class="edit-mode-btn" @click="updateEmail()"><checkIcon class="profile-edit-icon" color="1abb9c"/></button>
+                    </div>
+                </div>
             </div>
             <div class="d-flex justify-content-between align-items-start flex-column flex-lg-row">
                 <div class="d-flex flex-column font-color-light align-items-start margin-top-md margin-bottom-md">
@@ -33,7 +62,11 @@
                         <span class="font-base-sb margin-right-sm">API Key:</span>
                         <span class="font-sm font-sm">{{account.api_key}}</span>
                     </div>
-                    <Button class="btn-outline-primary-sm font-color-primary font-sm" text="Generate Client Credential"/>
+                    <Button 
+                        class="btn-outline-primary-sm font-color-primary font-sm" 
+                        text="Generate Client Credential"
+                        @click="generateClientCredential()"
+                    />
                 </div>
 
                 <div class="d-flex flex-column bg-dark-60 padding-sm border-radius-sm font-color-light">
@@ -76,9 +109,42 @@
         <div class="padding-xl bg-dark-40 border-radius-sm d-flex flex-column">
             <div class="profile-members-section d-flex flex-column">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h3 class="font-color-light font-lg-b">Members</h3>
-                    <Button class="btn-outline-primary-sm font-color-primary font-sm" text="Invite Members"/>
+                    <h3 class="font-color-light font-lg-b modal-invite-header">Members</h3>
+                    <Modal id="inviteModal" label="modal-invite-header">
+                        <template v-slot:button="buttonProps">
+                            <Button 
+                                v-bind="buttonProps" 
+                                class="btn-outline-primary-sm font-color-primary font-sm" 
+                                text="Invite Members"
+                            />
+                        </template>
+                        <template v-slot:modalTitle>
+                            <h5 class="font-base-b font-color-light">Invite members</h5>
+                        </template>
+                        <template v-slot:modalContent>
+                            <form @submit.prevent="inviteMembers()">
+                                <ValidationMessage 
+                                    class="justify-content-between"
+                                    :message="this.inviteMessage"
+                                    :type="this.inviteMessageType"
+                                />
+                                <EmaiInput />
+                                <Button 
+                                    class="btn-outline-primary-full font-color-primary font-sm" 
+                                    text="Invite"
+                                    type="submit"
+                                />
+                            </form>
+                        </template>
+                    </Modal>
                 </div>
+                <div class="d-flex w-100">
+                    <ValidationMessage 
+                        class="justify-content-start" 
+                        :message="this.memberDeleteMessage" 
+                        :type="this.memberDeleteMessageType" 
+                    />
+                </div>    
                 <div class="margin-top-sm">
                     <swiper
                         :modules="modules"
@@ -110,7 +176,7 @@
                         <swiper-slide 
                             class="d-flex border-radius-sm flex-column padding-md bg-dark-60"
                             :class="member.account.ip_addr === account.ip_addr ? 'user-slider' : '' "
-                            v-for="member in members" 
+                            v-for="(member, index) in members" 
                             :key="member.email_md5"
                         >
                             <div class="d-flex justify-content-end">
@@ -136,6 +202,28 @@
                                 <p class="mb-0 font-sm">{{member.account.ip_addr}}</p>                            
                                 <p class="mb-0 font-sm">{{member.account.user_agent}}</p>
                                 <p class="mb-0 font-sm">{{member.email_md5}}</p>
+                                <div class="d-flex justify-content-end delete-member-modal">
+                                    <Modal :id="`deleteMember${index}`" label="delete-member-header">
+                                        <template v-slot:button=buttonProps>
+                                            <button class="edit-mode-btn" v-bind='buttonProps'>
+                                                <IconTrash class="profile-edit-icon"/>                                                
+                                            </button>
+                                        </template>
+
+                                        <template v-slot:modalTitle>
+                                            <h5 class="delete-member-header font-base font-color-light">Are you sure you want to delete this member?</h5>
+                                        </template>
+                                        <template v-slot:modalContent>
+                                            <div class="d-flex w-100">
+                                                <Button 
+                                                    class="btn-outline-danger-full font-color-danger font-sm" 
+                                                    text="Yes"
+                                                    @click="deleteMember()"
+                                                />
+                                            </div>
+                                        </template>
+                                    </Modal>
+                                </div>
                             </div>
                                                     
                         </swiper-slide>
@@ -154,6 +242,13 @@
             <div class="client-members-section d-flex flex-column margin-top-lg">
                 <div class="d-flex justify-content-between align-items-center">
                     <h3 class="font-color-light font-lg-b">Clients</h3>
+                </div>
+                <div class="d-flex w-100">
+                    <ValidationMessage 
+                        class="justify-content-start"
+                        :message="this.toggleFeedMessage"
+                        :type="this.toggleFeedMessageType"
+                    />
                 </div>
                 <div class="margin-top-sm">
                     <swiper
@@ -189,13 +284,13 @@
                             :key="client.account.ip_addr"
                         >
                             <div class="text-left font-color-light font-sm">
-                                <p class="mb-0 font-base">{{client.client_info.operating_system}}</p>
+                                <p class="mb-0 font-base">{{client.client_info.perating_system}}</p>
                                 <p class="mb-0 font-xs">{{client.client_info.operating_system_version}}</p>                            
                                 <p class="mb-0 font-xs">{{client.client_info.operating_system_release}}</p>                            
                                 <p class="mb-0 font-xs">{{client.client_info.architecture}}</p>                            
                             </div>
                             <div class="d-flex justify-content-end">
-                                <Toggle :defaultChecked=client.active />
+                                <Toggle :defaultChecked=client.active @change="toggleClientFeed($event)"/>
                             </div>                      
                         </swiper-slide>
                     </swiper>
@@ -219,8 +314,16 @@
     import 'swiper/css';
 
     import IconPencil from "../components/icons/IconPencil.vue";
+    import IconCancel from '../components/icons/IconCancel.vue';
+    import IconTrash from '../components/icons/IconTrash.vue';
+    import checkIcon from '../components/icons/checkIcon.vue';
     import Button from "../components/general/Button.vue";
-    import Toggle from "../components/general/Toggle.vue"
+    import Toggle from "../components/general/Toggle.vue";
+    import EditableTextField from '../components/inputs/EditableTextField.vue';
+    import TextInput from '../components/inputs/TextInput.vue';
+    import EmaiInput from '../components/inputs/EmaiInput.vue';
+    import Modal from "../components/general/Modal.vue";
+    import ValidationMessage from '../components/general/ValidationMessage.vue';
 
     export default {
         components: {
@@ -228,7 +331,15 @@
             Button,
             Swiper,
             SwiperSlide,
-            Toggle
+            Toggle,
+            EditableTextField,
+            TextInput,
+            IconCancel,
+            checkIcon,
+            IconTrash,
+            EmaiInput,
+            Modal,
+            ValidationMessage
         },
         setup() {
             return {
@@ -415,10 +526,60 @@
                 "timestamp": 0,
                 "credit_card": "xxxx-xxxx-xxxx-1234",
                 "issuer": "xxxx",
+                editMode: false,
+                inviteMessage: "",
+                inviteMessageType: "",
+                emailUpdateMessage: "",
+                emailUpdateMessageType: "",
+                memberDeleteMessage: "",
+                memberDeleteMessageType: "",
+                toggleFeedMessage: "",
+                toggleFeedMessageType: ""
+            }
+        },
+        methods: {
+            toggleEditMode() {
+                this.editMode = !this.editMode;
+                this.emailUpdateMessage = "";
+                this.emailUpdateMessageType  = "";
+            },
+            updateEmail() {
+                console.log("API CALL");
+                this.emailUpdateMessage = "E-mail was updated!"
+                this.emailUpdateMessageType = "success"
+                this.editMode= !this.editMode;
+            },
+            inviteMembers(){
+                console.log("invite members - API CALL");
+                this.inviteMessage = "E-mail was sent!"
+                this.inviteMessageType = "success"
+            },
+            deleteMember(){
+                console.log("member deleted");
+                this.memberDeleteMessage = "Member was deleted"
+                this.memberDeleteMessageType = "success"
+                console.log("delete member")
+                console.log("return new list of members")
+            },
+            generateClientCredential(){
+                console.log("generate client credentail")
+            },
+            toggleClientFeed($event) {
+                if($event.target.checked === true) {
+                    // API call to disable feed
+                    console.log("checked")
+                    this.toggleFeedMessage = "Feed was enabled with success"
+                    this.toggleFeedMessageType = "success"
+                } else {
+                    // API call to enable feed
+                    this.toggleFeedMessage = "Feed was disabled with success"
+                    this.toggleFeedMessageType = "success"
+                }
             }
         }
     }
 </script>
+
 <style lang="scss">
     .profile {
         &-picture {
@@ -430,6 +591,7 @@
         &-edit-icon {
             width: 25px;
             height: 25px;
+            cursor: pointer;
         }
     }
     .swiper-slide {
@@ -466,5 +628,23 @@
             display: none;
         }
     }
-    
+    .edit-mode-btn {
+        border: none;
+        background: none;
+    }
+    #deleteMember {
+        .modal-dialog {
+            margin-top: 0;
+            margin-bottom: 0;
+            height: 100%;
+            .modal-content {
+                height: 100%;
+                .modal-body {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+        }
+    }   
 </style>

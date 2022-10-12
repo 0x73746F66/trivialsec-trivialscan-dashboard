@@ -188,3 +188,8 @@ a {
 .debug-later  {
     border: 2px solid red;
 }
+
+.modal-backdrop {
+    z-index: 1;
+    width: 0;
+}
