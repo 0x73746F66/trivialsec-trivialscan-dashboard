@@ -73,6 +73,9 @@
     .border-color-#{$name} {
         border-color: $color;
     }
+    .border-#{$name} {
+        border: 1px solid $color;
+    }
     .font-color-#{$name} {
         color: $color;
     }
@@ -80,16 +83,19 @@
         background: $color;
         padding: padding("xs") padding("sm");
         border-radius: radius("sm");
+        border: 1px solid $color;
     }
     .btn-fill-#{$name} {
         background: $color;
         padding: padding("sm") padding("md");
         border-radius: radius("sm");
+        border: 1px solid $color;
     }
     .btn-fill-#{$name}-full {
         background: $color;
         padding: padding("sm");
         border-radius: radius("sm");
+        border: 1px solid $color;
         width: 100%;
     }
     .btn-outline {
@@ -136,6 +142,12 @@ body {
 a {
     &:hover {
         color: color("secondary") !important;
+    }
+}
+
+.text-decoration-none {
+    &:hover {
+        color: inherit !important;
     }
 }
 

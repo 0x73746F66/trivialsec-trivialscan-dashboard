@@ -33,7 +33,7 @@
                         <span class="font-base-b margin-right-sm">API Key:</span>
                         <span class="font-sm font-sm">{{account.api_key}}</span>
                     </div>
-                    <Button class="btn-outline-primary-sm font-color-primary font-sm" text="Generate New Token"/>
+                    <Button class="btn-outline-primary-sm font-color-primary font-sm" text="Generate Client Credential"/>
                 </div>
 
                 <div class="d-flex flex-column bg-dark-60 padding-sm border-radius-sm font-color-light">
@@ -58,8 +58,17 @@
                             <span class="font-base-b margin-right-sm">Billing Mail Address:</span>
                             <span class="font-sm font-sm">{{account.billing_email}}</span>
                         </div>
-                        <Button class="btn-outline-primary-sm align-self-end font-color-primary font-sm" text="Upgrade"/>
-
+                        <div class="d-flex">
+                            <a 
+                                href="/stripe" 
+                                class="text-decoration-none d-flex align-items-center justify-content-center margin-right-sm btn-outline-primary-full font-color-primary font-sm" 
+                                text="See Payments"
+                            />
+                            <Button 
+                                class="btn-fill-primary-full font-color-light font-sm" 
+                                text="Upgrade"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
