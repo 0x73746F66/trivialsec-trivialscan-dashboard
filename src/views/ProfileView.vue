@@ -22,16 +22,16 @@
             <div class="d-flex justify-content-between align-items-start flex-column flex-lg-row">
                 <div class="d-flex flex-column font-color-light align-items-start margin-top-md margin-bottom-md">
                     <div class="d-flex margin-bottom-sm align-items-center">
-                        <span class="font-base-sb margin-right-sm ">IP Address:</span>
-                        <span class="font-sm font-sm">{{account.ip_addr}}</span>
+                        <span class="font-base-sb margin-right-sm ">Created:</span>
+                        <span class="font-sm font-sm">{{created}}</span>
                     </div>
                     <div class="d-flex margin-bottom-sm align-items-center">
-                        <span class="font-base-sb margin-right-sm">User Agent:</span>
-                        <span class="font-sm font-sm">{{account.user_agent}}</span>
+                        <span class="font-base-sb margin-right-sm">Status:</span>
+                        <span class="font-sm font-sm">{{status}}</span>
                     </div>
                     <div class="d-flex margin-bottom-sm align-items-center">
-                        <span class="font-base-sb margin-right-sm">API Key:</span>
-                        <span class="font-sm font-sm">{{account.api_key}}</span>
+                        <span class="font-base-sb margin-right-sm">Client Account Name:</span>
+                        <span class="font-sm font-sm">{{account.name}}</span>
                     </div>
                     <Button class="btn-outline-primary-sm font-color-primary font-sm" text="Generate Client Credential"/>
                 </div>
@@ -48,11 +48,11 @@
                         
                         <div class="d-flex margin-bottom-sm align-items-center">
                             <span class="font-base-sb margin-right-sm">Credit Card:</span>
-                            <span class="font-sm font-sm">{{credit_card}}</span>
+                            <span class="font-sm font-sm">{{account.active_plan.credit_card}}</span>
                         </div>
                         <div class="d-flex margin-bottom-sm align-items-center">
                             <span class="font-base-sb margin-right-sm">Issuer:</span>
-                            <span class="font-sm font-sm">{{issuer}}</span>
+                            <span class="font-sm font-sm">{{account.active_plan.issuer}}</span>
                         </div>
                         <div class="d-flex margin-bottom-sm align-items-center">
                             <span class="font-base-sb margin-right-sm">Billing Mail Address:</span>
@@ -109,7 +109,7 @@
                     >
                         <swiper-slide 
                             class="d-flex border-radius-sm flex-column padding-md bg-dark-60"
-                            :class="member.account.ip_addr === account.ip_addr ? 'user-slider' : '' "
+                            :class="member.email === account.primary_email ? 'user-slider' : '' "
                             v-for="member in members" 
                             :key="member.email_md5"
                         >
@@ -123,21 +123,19 @@
 
                             <div class="text-left font-color-light font-sm">
                                 <p class="mb-0 font-base">
-                                    {{member.account.display}}
+                                    {{member.email}}
                                     <span 
-                                        v-if="member.account.ip_addr === account.ip_addr" 
+                                        v-if="member.email === account.primary_email" 
                                         class="font-sm font-color-secondary"
                                     >
                                         (You)
                                     </span>
                                 </p>
-                                <p class="mb-0 font-sm">{{member.account.primary_email}}</p>                            
-                                <p class="mb-0 font-sm">{{member.account.api_key}}</p>                            
-                                <p class="mb-0 font-sm">{{member.account.ip_addr}}</p>                            
-                                <p class="mb-0 font-sm">{{member.account.user_agent}}</p>
-                                <p class="mb-0 font-sm">{{member.email_md5}}</p>
+                                <p v-if="member.email !== account.primary_email" class="mb-0 font-sm">Guest invited {{member.invited}}</p>
+                                <p v-else class="mb-0 font-xs">Owner</p>
+                                <p class="mb-0 font-sm">Joined {{member.created}}</p>
                             </div>
-                                                    
+
                         </swiper-slide>
                     </swiper>
                     <div class="d-flex justify-content-between margin-top-sm padding-bottom-sm border-bottom-light-20">
@@ -149,7 +147,7 @@
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
 
             <div class="client-members-section d-flex flex-column margin-top-lg">
                 <div class="d-flex justify-content-between align-items-center">
@@ -189,10 +187,12 @@
                             :key="client.account.ip_addr"
                         >
                             <div class="text-left font-color-light font-sm">
-                                <p class="mb-0 font-base">{{client.client_info.operating_system}}</p>
-                                <p class="mb-0 font-xs">{{client.client_info.operating_system_version}}</p>                            
-                                <p class="mb-0 font-xs">{{client.client_info.operating_system_release}}</p>                            
-                                <p class="mb-0 font-xs">{{client.client_info.architecture}}</p>                            
+                                <p class="mb-0 font-base">{{client.name}}</p>
+                                <p class="mb-0 font-xs">CLI Version: {{client.cli_version}}</p>
+                                <p class="mb-0 font-xs">{{client.ip_addr}}</p>
+                                <p class="mb-0 font-xs">{{client.client_info.operating_system}} {{client.client_info.operating_system_version}}</p>
+                                <p class="mb-0 font-xs">{{client.client_info.operating_system_release}} {{client.client_info.architecture}}</p>
+                                <p class="mb-0 font-sm">Created {{client.created}}</p>
                             </div>
                             <div class="d-flex justify-content-end">
                                 <Toggle :defaultChecked=client.active />
@@ -215,7 +215,9 @@
 <script> 
     import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
     import { Swiper, SwiperSlide  } from 'swiper/vue';
-    
+    import moment from 'moment'
+    import CryptoJS from 'crypto-js'
+
     import 'swiper/css';
 
     import IconPencil from "../components/icons/IconPencil.vue";
@@ -237,184 +239,138 @@
         },
         data() {
             return {
-                "account": {
-                    "name": "name",
-                    "display": "Display Name",
-                    "primary_email": "user@example.com",
-                    "billing_email": "user@example.com",
-                    "api_key": "a51f2de9-5287-4dac-b30b-ad303ed35aa8",
-                    "ip_addr": "129.144.50.56.",
-                    "user_agent": "user_agent",
-                    "timestamp": 0,
-                    "active_plan": {
-                        "label": "Current Plan",
-                        "price": "$999.99"
-                    }
+                loading: false,
+                error: null,
+                report: {},
+                api_url: import.meta.env.VITE_API_URL,
+                account: {},
+                members: [],
+                clients: [],
+            }
+        },
+        created() {
+            // watch the params of the route to fetch the data again
+            this.$watch(
+                () => this.$route.params,
+                () => {
+                    this.fetchProfile()
                 },
-                "members": [
-                    {
-                        "account": {
-                            "name": "name",
-                            "display": "display",
-                            "primary_email": "user@example.com",
-                            "billing_email": "user@example.com",
-                            "api_key": "api_key",
-                            "ip_addr": "129.144.50.56.",
-                            "user_agent": "user_agent",
-                            "timestamp": 0
-                        },
-                        "email": "user@example.com",
-                        "email_md5": "email_md5",
-                        "confirmed": false,
-                        "confirmation_token": "string",
-                        "ip_addr": "string",
-                        "user_agent": "string",
-                        "timestamp": 0
-                    },
-                    {
-                        "account": {
-                        "name": "string",
-                        "display": "string",
-                        "primary_email": "user@example.com",
-                        "billing_email": "user@example.com",
-                        "api_key": "string",
-                        "ip_addr": "string",
-                        "user_agent": "string",
-                        "timestamp": 0
-                    },
-                        "email": "user@example.com",
-                        "email_md5": "string",
-                        "confirmed": false,
-                        "confirmation_token": "string",
-                        "ip_addr": "string",
-                        "user_agent": "string",
-                        "timestamp": 0
-                    },
-                    {
-                        "account": {
-                        "name": "string",
-                        "display": "string",
-                        "primary_email": "user@example.com",
-                        "billing_email": "user@example.com",
-                        "api_key": "string",
-                        "ip_addr": "string",
-                        "user_agent": "string",
-                        "timestamp": 0
-                    },
-                        "email": "user@example.com",
-                        "email_md5": "string",
-                        "confirmed": false,
-                        "confirmation_token": "string",
-                        "ip_addr": "string",
-                        "user_agent": "string",
-                        "timestamp": 0
-                    },
-                    {
-                        "account": {
-                        "name": "string",
-                        "display": "string",
-                        "primary_email": "user@example.com",
-                        "billing_email": "user@example.com",
-                        "api_key": "string",
-                        "ip_addr": "string",
-                        "user_agent": "string",
-                        "timestamp": 0
-                    },
-                        "email": "user@example.com",
-                        "email_md5": "string",
-                        "confirmed": false,
-                        "confirmation_token": "string",
-                        "ip_addr": "string",
-                        "user_agent": "string",
-                        "timestamp": 0
+                // fetch the data when the view is created and the data is
+                // already being observed
+                { immediate: true }
+            )
+        },
+        methods: {
+            async fetchProfile() {
+                if (!!localStorage.getItem('/session/key')) {
+                    this.loading = true
+                    const req_url = `${this.api_url}/me`
+                    const ts = moment().utc().unix()
+                    const url = new URL(req_url)
+                    const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
+                    console.log(canonical_string)
+                    const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+                    hash.update(canonical_string)
+                    const mac = hash.finalize()
+                    const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+                    console.log(header)
+                    const response = await fetch(req_url, {
+                        headers: {"Authorization": header}
+                    }).catch(error => {
+                        this.error = error
+                        this.loading = false
+                    })
+                    this.loading = false
+                    if (response.status !== 200) {
+                        alert(`${response.status} ${response.statusText}`)
+                    } else {
+                        const data = await response.json()
+                        console.log(data)
+                        this.account = data.account
+                        this.email_md5 = data.email_md5
+                        this.confirmed = data.confirmed
+                        this.status = data.confirmed ? "Confirmed" : "Pending activation"
+                        this.created = moment(data.timestamp).fromNow()
+                        // placeholders
+                        this.account.active_plan = {
+                            label: "Community Edition",
+                            price: "FREE",
+                            credit_card: "xxxx-xxxx-xxxx-1234",
+                            issuer: "VISA",
+                        }
+                        this.fetchClients()
+                        this.fetchMembers()
                     }
-                ],
-                "clients": [
-                    {
-                        "account": {
-                            "name": "name 1",
-                            "display": "display 1",
-                            "primary_email": "primary_email@example.com",
-                            "billing_email": "billing_email@example.com",
-                            "api_key": "api_key",
-                            "ip_addr": "ip_addr",
-                            "user_agent": "user_agent",
-                            "timestamp": 0
-                        },
-                        "client_info": {
-                            "operating_system": "operating_system",
-                            "operating_system_release": "operating_system_release",
-                            "operating_system_version": "operating_system_version",
-                            "architecture": "architecture"
-                        },
-                        "name": "name",
-                        "cli_version": "cli_version",
-                        "access_token": "access_token",
-                        "ip_addr": "ip_addr",
-                        "user_agent": "user_agent",
-                        "timestamp": 0,
-                        "active": false
-                    },
-                    {
-                        "account": {
-                            "name": "name 2",
-                            "display": "display 2",
-                            "primary_email": "primary_email@example.com",
-                            "billing_email": "billing_email@example.com",
-                            "api_key": "api_key",
-                            "ip_addr": "ip_addr",
-                            "user_agent": "user_agent",
-                            "timestamp": 0
-                        },
-                        "client_info": {
-                            "operating_system": "operating_system",
-                            "operating_system_release": "operating_system_release",
-                            "operating_system_version": "operating_system_version",
-                            "architecture": "architecture"
-                        },
-                        "name": "name",
-                        "cli_version": "cli_version",
-                        "access_token": "access_token",
-                        "ip_addr": "ip_addr",
-                        "user_agent": "user_agent",
-                        "timestamp": 0,
-                        "active": false
-                    },
-                    {
-                        "account": {
-                            "name": "name 3",
-                            "display": "display 3",
-                            "primary_email": "primary_email@example.com",
-                            "billing_email": "billing_email@example.com",
-                            "api_key": "api_key",
-                            "ip_addr": "ip_addr",
-                            "user_agent": "user_agent",
-                            "timestamp": 0
-                        },
-                        "client_info": {
-                            "operating_system": "operating_system",
-                            "operating_system_release": "operating_system_release",
-                            "operating_system_version": "operating_system_version",
-                            "architecture": "architecture"
-                        },
-                        "name": "name",
-                        "cli_version": "cli_version",
-                        "access_token": "access_token",
-                        "ip_addr": "ip_addr",
-                        "user_agent": "user_agent",
-                        "timestamp": 0,
-                        "active": false
+                }
+            },
+            async fetchClients() {
+                if (!!localStorage.getItem('/session/key')) {
+                    this.loading = true
+                    const req_url = `${this.api_url}/clients`
+                    const ts = moment().utc().unix()
+                    const url = new URL(req_url)
+                    const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
+                    console.log(canonical_string)
+                    const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+                    hash.update(canonical_string)
+                    const mac = hash.finalize()
+                    const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+                    console.log(header)
+                    const response = await fetch(req_url, {
+                        headers: {"Authorization": header}
+                    }).catch(error => {
+                        this.error = error
+                        this.loading = false
+                    })
+                    this.loading = false
+                    if (response.status === 404) {
+                        this.members = []
+                    } else if (response.status !== 200) {
+                        alert(`${response.status} ${response.statusText}`)
+                    } else {
+                        const data = await response.json()
+                        console.log(data)
+                        this.clients = data.map(client => {
+                            client.created = moment(client.timestamp).fromNow()
+                            return client
+                        })
                     }
-                ],
-                "email": "user@example.com",
-                "email_md5": "205e460b479e2e5b48aec07710c08d50",
-                "confirmed": false,
-                "confirmation_token": "string",
-                "ip_addr": "string",
-                "user_agent": "string",
-                "timestamp": 0,
-                "credit_card": "xxxx-xxxx-xxxx-1234",
-                "issuer": "xxxx",
+                }
+            },
+            async fetchMembers() {
+                if (!!localStorage.getItem('/session/key')) {
+                    this.loading = true
+                    const req_url = `${this.api_url}/members`
+                    const ts = moment().utc().unix()
+                    const url = new URL(req_url)
+                    const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
+                    console.log(canonical_string)
+                    const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+                    hash.update(canonical_string)
+                    const mac = hash.finalize()
+                    const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+                    console.log(header)
+                    const response = await fetch(req_url, {
+                        headers: {"Authorization": header}
+                    }).catch(error => {
+                        this.error = error
+                        this.loading = false
+                    })
+                    this.loading = false
+                    if (response.status === 404) {
+                        this.members = []
+                    } else if (response.status !== 200) {
+                        alert(`${response.status} ${response.statusText}`)
+                    } else {
+                        const data = await response.json()
+                        console.log(data)
+                        this.members = data.map(member => {
+                            member.created = moment(member.timestamp).fromNow()
+                            member.status = data.confirmed ? "Confirmed" : "Pending activation"
+                            return member
+                        })
+                    }
+                }
             }
         }
     }
