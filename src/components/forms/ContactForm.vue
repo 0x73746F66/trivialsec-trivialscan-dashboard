@@ -31,7 +31,7 @@
         </div>
         <div class="d-flex justify-content-end">
             <Button
-                class="btn-outline-primary mr-0 ml-auto font-lg-sb font-color-primary"
+                class="btn-outline-primary mr-0 ml-auto font-sm font-color-primary padding-xs"
                 text="Submit"
                 @click="submit"
             />

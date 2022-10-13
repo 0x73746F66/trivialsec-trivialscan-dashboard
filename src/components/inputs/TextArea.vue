@@ -33,7 +33,7 @@ export default {
 <style scoped lang="scss">
     .custom-field {
         textarea {
-            min-height: 250px;
+            min-height: 190px;
         }
     }
     

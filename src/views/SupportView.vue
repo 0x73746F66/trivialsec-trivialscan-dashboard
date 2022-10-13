@@ -1,7 +1,7 @@
 <template>
   <div class="support-section container">
     <div class="padding-top-xl padding-bottom-xl">
-      <h2 class="font-color-light">Need help? Reach out to us!</h2>
+      <h2 class="font-xl-sb font-color-light">Need help? Reach out to us!</h2>
       <ContactForm />
     </div>
   </div>
