@@ -13,7 +13,7 @@
                             <h1 class="font-xl-b font-color-light">
                                 {{account.display}}
                             </h1>
-                            <EditableTextField :editMode="editMode">
+                            <EditableTextField :editMode="editMode" class="margin-bottom-sm">
                                 <template #staticField>
                                     <span class="font-base font-color-light">
                                         {{account.primary_email}}
@@ -70,11 +70,11 @@
                     />
                 </div>
 
-                <div class="d-flex flex-column bg-dark-60 padding-sm border-radius-sm font-color-light w-100">
+                <div class="d-flex flex-column bg-dark-60 padding-sm border-radius-sm font-color-light profile-plan-information">
                     <div class="d-flex flex-column justify-content-between">
                         <div class="d-flex flex-column flex-lg-row justify-content-between margin-bottom-sm">
-                            <div class="margin-right-lg d-flex flex-lg-row flex-column">
-                                <span class="font-base-sb margin-right-sm margin-bottom-sm">Active Plan:</span>
+                            <div class="margin-right-lg d-flex flex-lg-row flex-column align-items-center">
+                                <span class="font-base-sb margin-right-sm margin-bottom-sm mb-lg-0">Active Plan:</span>
                                 <span class="font-sm font-sm">{{account.active_plan.label}}</span>
                             </div>
                             <span class="font-color-primary font-lg-b">{{account.active_plan.price}}</span>
@@ -158,6 +158,7 @@
                         :modules="modules"
                         :slides-per-view="1"
                         :space-between="10"
+                        class="padding-bottom-sm"
                         :navigation="{ 
                             nextEl: '.custom-member-swiper-button-next', 
                             prevEl: '.custom-member-swiper-button-prev' 
@@ -196,7 +197,7 @@
                             </div>
 
                             <div class="text-left font-color-light font-sm">
-                                <p class="mb-0 font-base">
+                                <p class="mb-0 font-sm">
                                     {{member.email}}
                                     <span 
                                         v-if="member.email === account.primary_email" 
@@ -234,7 +235,7 @@
 
                         </swiper-slide>
                     </swiper>
-                    <div class="d-flex justify-content-between margin-top-sm padding-bottom-sm border-bottom-light-20">
+                    <div class="d-flex justify-content-between margin-top-sm border-bottom-light-20">
                         <div>
                             <button class="custom-swiper-button custom-member-swiper-button-prev font-color-light"> &lt; </button>
                         </div>
@@ -550,6 +551,12 @@
             height: 100px;
             object-fit: cover;
         }
+        &-plan-information {
+            width: 100%;
+            @media (min-width: $breakpoint-lg) {
+                width: auto;
+            }
+        }
         &-edit-icon {
             width: 25px;
             height: 25px;
@@ -604,17 +611,19 @@
         border: none;
         background: none;
     }
-    #deleteMember {
-        .modal-dialog {
-            margin-top: 0;
-            margin-bottom: 0;
-            height: 100%;
-            .modal-content {
+    .delete-member-modal {
+        .modal {
+            .modal-dialog {
+                margin-top: 0;
+                margin-bottom: 0;
                 height: 100%;
-                .modal-body {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
+                .modal-content {
+                    height: 100%;
+                    .modal-body {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
                 }
             }
         }

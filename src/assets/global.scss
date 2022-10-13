@@ -141,13 +141,7 @@ body {
 
 a {
     &:hover {
-        color: color("secondary") !important;
-    }
-}
-
-.text-decoration-none {
-    &:hover {
-        color: inherit !important;
+        color: color("secondary");
     }
 }
 
