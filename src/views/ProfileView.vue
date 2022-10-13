@@ -13,21 +13,27 @@
                             <h1 class="font-xl-b font-color-light">
                                 {{account.display}}
                             </h1>
-                            <EditableTextField :editMode="editMode" class="margin-bottom-sm">
+                            <EditableTextField :editMode="editMode" class="margin-bottom-sm position-relative">
                                 <template #staticField>
                                     <span class="font-base font-color-light">
                                         {{account.primary_email}}
                                     </span>
                                 </template>
                                 <template #inputField>
-                                    <span class="font-base font-color-light">
-                                        <TextInput
-                                            :placeholder="account.primary_email"
-                                            id="PrimaryEmail"
-                                            label="Email"
-                                            :required="true"
-                                        />
-                                    </span>
+                                    <form 
+                                            class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm" 
+                                            @submit.prevent="updateBillingEmail()"
+                                        >
+                                            <TextInput
+                                                :placeholder="account.primary_email"
+                                                id="PrimaryEmail"
+                                                label="Email"
+                                                :required="true"
+                                            />
+                                            <button type="submit" class="inline-custom-form-btn">
+                                                <checkIcon class="profile-edit-icon" color="1abb9c"/>
+                                            </button>
+                                        </form>
                                 </template>
                             </EditableTextField>
                         </div>
@@ -43,10 +49,7 @@
                     <IconPencil class="profile-edit-icon"/>
                 </button>
                 <div v-else>
-                    <div class="d-flex justify-content-end">
-                        <button class="edit-mode-btn" @click="toggleEditMode()"><IconCancel class="profile-edit-icon" color="f45e5e"/></button>
-                        <button class="edit-mode-btn" @click="updateEmail()"><checkIcon class="profile-edit-icon" color="1abb9c"/></button>
-                    </div>
+                    <button class="edit-mode-btn close" @click="toggleEditMode()"><IconCancel class="profile-edit-icon" color="f45e5e"/></button>
                 </div>
             </div>
             <div class="d-flex justify-content-between align-items-start flex-column flex-lg-row">
@@ -73,7 +76,7 @@
                 <div class="d-flex flex-column bg-dark-60 padding-sm border-radius-sm font-color-light profile-plan-information">
                     <div class="d-flex flex-column justify-content-between">
                         <div class="d-flex flex-column flex-lg-row justify-content-between margin-bottom-sm">
-                            <div class="margin-right-lg d-flex flex-lg-row flex-column align-items-center">
+                            <div class="margin-right-lg d-flex flex-lg-row flex-column align-items-lg-center">
                                 <span class="font-base-sb margin-right-sm margin-bottom-sm mb-lg-0">Active Plan:</span>
                                 <span class="font-sm font-sm">{{account.active_plan.label}}</span>
                             </div>
@@ -90,7 +93,29 @@
                         </div>
                         <div class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
                             <span class="font-base-sb margin-right-sm">Billing Mail Address:</span>
-                            <span class="font-sm font-sm">{{account.billing_email}}</span>
+                            <EditableTextField :editMode="editMode" class="position-relative">
+                                <template #staticField>
+                                    <span class="font-sm font-sm">{{account.billing_email}}</span>
+                                </template>
+                                <template #inputField>
+                                    <span class="font-base font-color-light">
+                                        <form 
+                                            class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm" 
+                                            @submit.prevent="updateBillingEmail()"
+                                        >
+                                            <TextInput
+                                                :placeholder="account.billing_email"
+                                                id="BillingEmail"
+                                                label="Billing Email"
+                                                :required="true"
+                                            />
+                                            <button type="submit" class="inline-custom-form-btn">
+                                                <checkIcon class="profile-edit-icon" color="1abb9c"/>
+                                            </button>
+                                        </form>
+                                    </span>
+                                </template>
+                            </EditableTextField>
                         </div>
                         <div class="d-flex flex-lg-row flex-column">
                             <a 
@@ -179,8 +204,6 @@
                                 spaceBetween: 50,
                             },
                         }"
-                        @swiper="onSwiper"
-                        @slideChange="onSlideChange"
                     >
                         <swiper-slide 
                             class="d-flex border-radius-sm flex-column padding-md bg-dark-60"
@@ -197,7 +220,7 @@
                             </div>
 
                             <div class="text-left font-color-light font-sm">
-                                <p class="mb-0 font-sm">
+                                <p class="mb-0 font-sm word-break-all">
                                     {{member.email}}
                                     <span 
                                         v-if="member.email === account.primary_email" 
@@ -212,7 +235,7 @@
                                 <div class="d-flex justify-content-end delete-member-modal">
                                     <Modal :id="`deleteMember${index}`" label="delete-member-header">
                                         <template v-slot:button=buttonProps>
-                                            <button class="edit-mode-btn" v-bind='buttonProps'>
+                                            <button class="edit-mode-btn delete" v-bind='buttonProps'>
                                                 <IconTrash class="profile-edit-icon"/>                                                
                                             </button>
                                         </template>
@@ -283,8 +306,6 @@
                                 spaceBetween: 50,
                             },
                         }"
-                        @swiper="onSwiper"
-                        @slideChange="onSlideChange"
                     >
                         <swiper-slide 
                             class="d-flex border-radius-sm flex-column padding-md bg-dark-60"
@@ -292,15 +313,26 @@
                             :key="client.account.ip_addr"
                         >
                             <div class="text-left font-color-light font-sm">
-                                <p class="mb-0 font-base">{{client.name}}</p>
-                                <p class="mb-0 font-xs">CLI Version: {{client.cli_version}}</p>
-                                <p class="mb-0 font-xs">{{client.ip_addr}}</p>
-                                <p class="mb-0 font-xs">{{client.client_info.operating_system}} {{client.client_info.operating_system_version}}</p>
-                                <p class="mb-0 font-xs">{{client.client_info.operating_system_release}} {{client.client_info.architecture}}</p>
-                                <p class="mb-0 font-sm">Created {{client.created}}</p>
+                                <p class="font-base-sb margin-bottom-sm">{{client.name}}</p>
+                                <p class="mb-0">
+                                    <span class="font-sm-sb margin-right-sm">CLI Version:</span>
+                                    <span class="font-sm">{{client.cli_version}}</span>
+                                </p>
+                                <p class="mb-0">
+                                    <span class="font-sm">{{client.ip_addr}}</span>
+                                </p>
+                                <p class="mb-0">
+                                    <span class="font-sm">{{client.client_info.operating_system}} {{client.client_info.operating_system_version}}</span>
+                                </p>
+                                <p class="margin-bottom-sm">
+                                    <span class="font-sm">{{client.client_info.operating_system_release}} {{client.client_info.architecture}}</span>
+                                </p>
+                                <p class="mb-0 font-xs">
+                                    <span>Created {{client.created}}</span>
+                                </p>
                             </div>
                             <div class="d-flex justify-content-end">
-                                <Toggle :defaultChecked=client.active @change="toggleClientFeed($event)"/>
+                                <Toggle :defaultChecked=client.active @change="toggleClientFeed($event, client.name)"/>
                             </div>                      
                         </swiper-slide>
                     </swiper>
@@ -371,6 +403,8 @@
                 inviteMessageType: "",
                 emailUpdateMessage: "",
                 emailUpdateMessageType: "",
+                billingEmailUpdateMessage: "",
+                billingEmailUpdateMessageType: "",
                 memberDeleteMessage: "",
                 memberDeleteMessageType: "",
                 toggleFeedMessage: "",
@@ -510,6 +544,13 @@
                 console.log("API CALL");
                 this.emailUpdateMessage = "E-mail was updated!"
                 this.emailUpdateMessageType = "success"
+                console.log(this.primaryEmail);
+                console.log(this.billingEmail);
+                this.editMode= !this.editMode;
+            },
+            updateBillingEmail() {
+                this.billingEmailUpdateMessage = "E-mail was updated!"
+                this.billingEmailUpdateMessageType = "success"
                 this.editMode= !this.editMode;
             },
             inviteMembers(){
@@ -527,16 +568,39 @@
             generateClientCredential(){
                 console.log("generate client credentail")
             },
-            toggleClientFeed($event) {
+            async toggleClientFeed($event, client_name) {
+                const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+                const deactivate_url = `${this.api_url}/deactived/${client_name}`
+                const activate_url = `${this.api_url}/activate/${client_name}`
+                const ts = moment().utc().unix()
+                const mac = hash.finalize()
+                const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+                
                 if($event.target.checked === true) {
-                    // API call to disable feed
-                    console.log("checked")
-                    this.toggleFeedMessage = "Feed was enabled with success"
-                    this.toggleFeedMessageType = "success"
+                    const response = await fetch(activate_url, {
+                        headers: {"Authorization": header}
+                    })
+
+                    if (response.status == 200) {
+                        this.toggleFeedMessage = "Feed was enabled with success"
+                        this.toggleFeedMessageType = "success"
+                    } else {
+                        this.toggleFeedMessage = `${response.status}: An error has occured, please try again.`
+                        this.toggleFeedMessageType = "error"
+                    }
+
                 } else {
-                    // API call to enable feed
-                    this.toggleFeedMessage = "Feed was disabled with success"
-                    this.toggleFeedMessageType = "success"
+                    const response = await fetch(deactivate_url, {
+                        headers: {"Authorization": header}
+                    })
+
+                    if (response.status == 200) {
+                        this.toggleFeedMessage = "Feed was disabled with success"
+                        this.toggleFeedMessageType = "success"
+                    } else {
+                        this.toggleFeedMessage = `${response.status}: An error has occured, please try again.`
+                        this.toggleFeedMessageType = "error"
+                    }
                 }
             }
         }
@@ -610,6 +674,30 @@
     .edit-mode-btn {
         border: none;
         background: none;
+        border-radius: 50%;
+        transition: 0.2s linear;
+        height: 40px;
+        width: 40px;
+
+        &.close {
+            svg {
+                width: 30px;
+            }   
+            &:hover {
+                background: color("light-20");
+            }
+        }
+        &.delete {
+            svg {
+                width: 30px;
+            }   
+            &:hover {
+                background: color("danger");
+            }
+        }
+        &:hover {
+            background: color("primary");
+        }
     }
     .delete-member-modal {
         .modal {
@@ -627,5 +715,27 @@
                 }
             }
         }
-    }   
+    }  
+    .inline-custom-form {
+        &-btn {
+            border-radius: 50%;
+            background: none;
+            border: 1px solid color("primary");
+            height: 40px;
+            width: 40px;
+            display: flex;
+            margin-left: 10px;
+            align-items: center;
+            justify-content: center;
+            svg {
+                width: 35px;
+            }
+        }
+        label {
+            top: -10px !important;
+        }
+        input {
+            margin-top: 0 !important;
+        }
+    } 
 </style>

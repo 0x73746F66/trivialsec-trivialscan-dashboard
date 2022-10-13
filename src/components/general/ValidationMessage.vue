@@ -45,7 +45,7 @@ export default {
         &-warning {
             @extend .font-color-warning;
         }
-        &-danger {
+        &-error {
             @extend .font-color-danger;
         }
     }

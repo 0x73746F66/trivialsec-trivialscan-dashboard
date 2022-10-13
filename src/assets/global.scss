@@ -163,6 +163,14 @@ a {
     }
 }
 
+.max-w {
+    &lg-300 {
+        @media (min-width: $breakpoint-lg){
+            max-width: 300px;
+        }
+    }
+}
+
 .border {
     &-bottom {
         &-primary {
@@ -186,4 +194,8 @@ a {
 .modal-backdrop {
     z-index: 1;
     width: 0;
+}
+
+.word-break-all {
+    word-break: break-all;
 }
