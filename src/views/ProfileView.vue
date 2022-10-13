@@ -499,9 +499,7 @@
                         })
                     }
                 }
-            }
-        },
-        methods: {
+            },
             toggleEditMode() {
                 this.editMode = !this.editMode;
                 this.emailUpdateMessage = "";
