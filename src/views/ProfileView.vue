@@ -1,6 +1,6 @@
 <template>
     <div class="container padding-top-xl padding-bottom-xl">
-        <div class="padding-xl bg-dark-40 border-radius-sm margin-bottom-lg d-flex flex-column">
+        <div class="profile-container bg-dark-40 border-radius-sm margin-bottom-lg d-flex flex-column">
             <div class="d-flex justify-content-between align-items-start">
                 <div class="h-100 d-flex align-items-lg-center flex-column flex-lg-row">
                     <img 
@@ -31,7 +31,8 @@
                                 </template>
                             </EditableTextField>
                         </div>
-                        <ValidationMessage 
+                        <ValidationMessage
+                            v-if="this.emailUpdateMessage.length > 0" 
                             class="justify-content-start"
                             :message="this.emailUpdateMessage"
                             :type="this.emailUpdateMessageType"
@@ -69,32 +70,32 @@
                     />
                 </div>
 
-                <div class="d-flex flex-column bg-dark-60 padding-sm border-radius-sm font-color-light">
+                <div class="d-flex flex-column bg-dark-60 padding-sm border-radius-sm font-color-light w-100">
                     <div class="d-flex flex-column justify-content-between">
-                        <div class="d-flex justify-content-between margin-bottom-sm">
-                            <div class="margin-right-lg">
+                        <div class="d-flex flex-column flex-lg-row justify-content-between margin-bottom-sm">
+                            <div class="margin-right-lg d-flex flex-lg-row flex-column">
                                 <span class="font-base-sb margin-right-sm margin-bottom-sm">Active Plan:</span>
                                 <span class="font-sm font-sm">{{account.active_plan.label}}</span>
                             </div>
                             <span class="font-color-primary font-lg-b">{{account.active_plan.price}}</span>
                         </div>
                         
-                        <div class="d-flex margin-bottom-sm align-items-center">
+                        <div class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
                             <span class="font-base-sb margin-right-sm">Credit Card:</span>
                             <span class="font-sm font-sm">{{credit_card}}</span>
                         </div>
-                        <div class="d-flex margin-bottom-sm align-items-center">
+                        <div class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
                             <span class="font-base-sb margin-right-sm">Issuer:</span>
                             <span class="font-sm font-sm">{{issuer}}</span>
                         </div>
-                        <div class="d-flex margin-bottom-sm align-items-center">
+                        <div class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
                             <span class="font-base-sb margin-right-sm">Billing Mail Address:</span>
                             <span class="font-sm font-sm">{{account.billing_email}}</span>
                         </div>
-                        <div class="d-flex">
+                        <div class="d-flex flex-lg-row flex-column">
                             <a 
                                 href="/stripe" 
-                                class="text-decoration-none d-flex align-items-center justify-content-center margin-right-sm btn-outline-primary-full font-color-primary font-sm" 
+                                class="text-decoration-none d-flex align-items-center justify-content-center margin-right-sm margin-bottom-sm mb-lg-0 btn-outline-primary-full font-color-primary font-sm" 
                                 text="See Payments"
                             />
                             <Button 
@@ -106,9 +107,9 @@
                 </div>
             </div>
         </div>
-        <div class="padding-xl bg-dark-40 border-radius-sm d-flex flex-column">
+        <div class="profile-container bg-dark-40 border-radius-sm d-flex flex-column">
             <div class="profile-members-section d-flex flex-column">
-                <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center">
                     <h3 class="font-color-light font-lg-b modal-invite-header">Members</h3>
                     <Modal id="inviteModal" label="modal-invite-header">
                         <template v-slot:button="buttonProps">
@@ -124,11 +125,17 @@
                         <template v-slot:modalContent>
                             <form @submit.prevent="inviteMembers()">
                                 <ValidationMessage 
+                                    v-if="this.inviteMessage.length > 0" 
                                     class="justify-content-between"
                                     :message="this.inviteMessage"
                                     :type="this.inviteMessageType"
                                 />
-                                <EmaiInput />
+                                <EmaiInput 
+                                    placeholder="Who do you want to invite?"
+                                    id="id-invite-email"
+                                    label="E-mail"
+                                    :required="true"
+                                />
                                 <Button 
                                     class="btn-outline-primary-full font-color-primary font-sm" 
                                     text="Invite"
@@ -139,7 +146,8 @@
                     </Modal>
                 </div>
                 <div class="d-flex w-100">
-                    <ValidationMessage 
+                    <ValidationMessage
+                        v-if="this.memberDeleteMessage.length > 0" 
                         class="justify-content-start" 
                         :message="this.memberDeleteMessage" 
                         :type="this.memberDeleteMessageType" 
@@ -245,6 +253,7 @@
                 </div>
                 <div class="d-flex w-100">
                     <ValidationMessage 
+                        v-if="this.toggleFeedMessage.length > 0" 
                         class="justify-content-start"
                         :message="this.toggleFeedMessage"
                         :type="this.toggleFeedMessageType"
@@ -284,7 +293,7 @@
                             :key="client.account.ip_addr"
                         >
                             <div class="text-left font-color-light font-sm">
-                                <p class="mb-0 font-base">{{client.client_info.perating_system}}</p>
+                                <p class="mb-0 font-base">{{client.client_info.operating_system}}</p>
                                 <p class="mb-0 font-xs">{{client.client_info.operating_system_version}}</p>                            
                                 <p class="mb-0 font-xs">{{client.client_info.operating_system_release}}</p>                            
                                 <p class="mb-0 font-xs">{{client.client_info.architecture}}</p>                            
@@ -593,12 +602,22 @@
             height: 25px;
             cursor: pointer;
         }
+        &-container {
+            padding: spacers('md');
+
+            @media (min-width: $breakpoint-lg) {
+                padding: spacers('xl');
+            }
+        }
     }
     .swiper-slide {
         &-avatar {
             border-radius: 50%;
             width: 50px;
             height: 50px;
+        }
+        .swiper-wrapper {
+            padding-bottom: spacers("sm");
         }
     }
     .user-slider {

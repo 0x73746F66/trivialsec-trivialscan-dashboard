@@ -28,6 +28,12 @@
     .input-field {
         transition: 0.2s linear;
         width: 100%;
+        .custom-field {
+            padding-bottom: 0;
+            input {
+                padding: spacers('sm');
+            }
+        }
     }
 
     .hide-input,

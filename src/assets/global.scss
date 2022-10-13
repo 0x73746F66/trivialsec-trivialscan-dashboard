@@ -87,13 +87,13 @@
     }
     .btn-fill-#{$name} {
         background: $color;
-        padding: padding("sm") padding("md");
+        padding: padding("xs") padding("sm");
         border-radius: radius("sm");
         border: 1px solid $color;
     }
     .btn-fill-#{$name}-full {
         background: $color;
-        padding: padding("sm") padding("md");
+        padding: padding("xs") padding("sm");
         border-radius: radius("sm");
         border: 1px solid $color;
         width: 100%;
@@ -118,7 +118,7 @@
     .btn-outline-#{$name} {
         @extend .btn-outline;
         border: 2px solid $color;
-        padding: padding("sm") padding("md");
+        padding: padding("xs") padding("sm");
         &:hover {
             background: $color;
         }
@@ -126,7 +126,7 @@
     .btn-outline-#{$name}-full {
         @extend .btn-outline;
         border: 2px solid $color;
-        padding: padding("sm");
+        padding: padding("xs") padding("sm");
         width: 100%;
         &:hover {
             background: $color;

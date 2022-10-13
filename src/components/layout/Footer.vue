@@ -22,7 +22,7 @@
                     </div>
                 </div>
                 <div class="col-12 col-lg-10 d-flex flex-lg-row flex-column justify-content-end">
-                    <div class="d-flex flex-column margin-right-lg">
+                    <div class="d-flex flex-column margin-right-lg margin-bottom-lg">
                         <span class="font-lg-sb font-color-light margin-bottom-md">Quick Links</span>
                         <RouterLink to="/" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Home</RouterLink>
                         <RouterLink to="/results" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Reports</RouterLink>
