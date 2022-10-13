@@ -3,9 +3,9 @@
         <div class="profile-container bg-dark-40 border-radius-sm margin-bottom-lg d-flex flex-column">
             <div class="d-flex justify-content-between align-items-start">
                 <div class="h-100 d-flex align-items-lg-center flex-column flex-lg-row">
-                    <img 
-                        :src="`https://www.gravatar.com/avatar/${email_md5}`" 
-                        class="border-radius-round profile-picture margin-right-md margin-bottom-md mb-lg-0" 
+                    <img
+                        :src="`https://www.gravatar.com/avatar/${email_md5}`"
+                        class="border-radius-round profile-picture margin-right-md margin-bottom-md mb-lg-0"
                         alt="{{account.display}}'s Profile Picture'"
                     >
                     <div class="d-flex flex-column justify-content-start">
@@ -32,7 +32,7 @@
                             </EditableTextField>
                         </div>
                         <ValidationMessage
-                            v-if="this.emailUpdateMessage.length > 0" 
+                            v-if="this.emailUpdateMessage.length > 0"
                             class="justify-content-start"
                             :message="this.emailUpdateMessage"
                             :type="this.emailUpdateMessageType"
@@ -63,8 +63,8 @@
                         <span class="font-base-sb margin-right-sm">Client Account Name:</span>
                         <span class="font-sm font-sm">{{account.name}}</span>
                     </div>
-                    <Button 
-                        class="btn-outline-primary-sm font-color-primary font-sm" 
+                    <Button
+                        class="btn-outline-primary-sm font-color-primary font-sm"
                         text="Generate Client Credential"
                         @click="generateClientCredential()"
                     />
@@ -79,7 +79,7 @@
                             </div>
                             <span class="font-color-primary font-lg-b">{{account.active_plan.price}}</span>
                         </div>
-                        
+
                         <div class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
                             <span class="font-base-sb margin-right-sm">Credit Card:</span>
                             <span class="font-sm font-sm">{{account.active_plan.credit_card}}</span>
@@ -93,13 +93,13 @@
                             <span class="font-sm font-sm">{{account.billing_email}}</span>
                         </div>
                         <div class="d-flex flex-lg-row flex-column">
-                            <a 
-                                href="/stripe" 
-                                class="text-decoration-none d-flex align-items-center justify-content-center margin-right-sm margin-bottom-sm mb-lg-0 btn-outline-primary-full font-color-primary font-sm" 
+                            <a
+                                href="/stripe"
+                                class="text-decoration-none d-flex align-items-center justify-content-center margin-right-sm margin-bottom-sm mb-lg-0 btn-outline-primary-full font-color-primary font-sm"
                                 text="See Payments"
                             />
-                            <Button 
-                                class="btn-fill-primary-full font-color-light font-sm" 
+                            <Button
+                                class="btn-fill-primary-full font-color-light font-sm"
                                 text="Upgrade"
                             />
                         </div>
@@ -113,9 +113,9 @@
                     <h3 class="font-color-light font-lg-b modal-invite-header">Members</h3>
                     <Modal id="inviteModal" label="modal-invite-header">
                         <template v-slot:button="buttonProps">
-                            <Button 
-                                v-bind="buttonProps" 
-                                class="btn-outline-primary-sm font-color-primary font-sm" 
+                            <Button
+                                v-bind="buttonProps"
+                                class="btn-outline-primary-sm font-color-primary font-sm"
                                 text="Invite Members"
                             />
                         </template>
@@ -124,20 +124,20 @@
                         </template>
                         <template v-slot:modalContent>
                             <form @submit.prevent="inviteMembers()">
-                                <ValidationMessage 
-                                    v-if="this.inviteMessage.length > 0" 
+                                <ValidationMessage
+                                    v-if="this.inviteMessage.length > 0"
                                     class="justify-content-between"
                                     :message="this.inviteMessage"
                                     :type="this.inviteMessageType"
                                 />
-                                <EmaiInput 
+                                <EmaiInput
                                     placeholder="Who do you want to invite?"
                                     id="id-invite-email"
                                     label="E-mail"
                                     :required="true"
                                 />
-                                <Button 
-                                    class="btn-outline-primary-full font-color-primary font-sm" 
+                                <Button
+                                    class="btn-outline-primary-full font-color-primary font-sm"
                                     text="Invite"
                                     type="submit"
                                 />
@@ -147,21 +147,21 @@
                 </div>
                 <div class="d-flex w-100">
                     <ValidationMessage
-                        v-if="this.memberDeleteMessage.length > 0" 
-                        class="justify-content-start" 
-                        :message="this.memberDeleteMessage" 
-                        :type="this.memberDeleteMessageType" 
+                        v-if="this.memberDeleteMessage.length > 0"
+                        class="justify-content-start"
+                        :message="this.memberDeleteMessage"
+                        :type="this.memberDeleteMessageType"
                     />
-                </div>    
+                </div>
                 <div class="margin-top-sm">
                     <swiper
                         :modules="modules"
                         :slides-per-view="1"
                         :space-between="10"
                         class="padding-bottom-sm"
-                        :navigation="{ 
-                            nextEl: '.custom-member-swiper-button-next', 
-                            prevEl: '.custom-member-swiper-button-prev' 
+                        :navigation="{
+                            nextEl: '.custom-member-swiper-button-next',
+                            prevEl: '.custom-member-swiper-button-prev'
                         }"
                         :pagination="{ clickable: true }"
                         :scrollbar="{ draggable: true }"
@@ -182,16 +182,16 @@
                         @swiper="onSwiper"
                         @slideChange="onSlideChange"
                     >
-                        <swiper-slide 
+                        <swiper-slide
                             class="d-flex border-radius-sm flex-column padding-md bg-dark-60"
-                            :class="member.email === account.primary_email ? 'user-slider' : '' "
-                            v-for="(member, index) in members" 
+                            :class="member.current ? 'user-slider' : '' "
+                            v-for="(member, index) in members"
                             :key="member.email_md5"
                         >
                             <div class="d-flex justify-content-end">
-                                <img 
-                                    :src="`https://www.gravatar.com/avatar/${member.email_md5}`" 
-                                    class="swiper-slide-avatar margin-bottom-sm" 
+                                <img
+                                    :src="`https://www.gravatar.com/avatar/${member.email_md5}`"
+                                    class="swiper-slide-avatar margin-bottom-sm"
                                     alt=""
                                 />
                             </div>
@@ -199,8 +199,8 @@
                             <div class="text-left font-color-light font-sm">
                                 <p class="mb-0 font-sm">
                                     {{member.email}}
-                                    <span 
-                                        v-if="member.email === account.primary_email" 
+                                    <span
+                                        v-if="member.current"
                                         class="font-sm font-color-secondary"
                                     >
                                         (You)
@@ -213,7 +213,7 @@
                                     <Modal :id="`deleteMember${index}`" label="delete-member-header">
                                         <template v-slot:button=buttonProps>
                                             <button class="edit-mode-btn" v-bind='buttonProps'>
-                                                <IconTrash class="profile-edit-icon"/>                                                
+                                                <IconTrash class="profile-edit-icon"/>
                                             </button>
                                         </template>
 
@@ -222,8 +222,8 @@
                                         </template>
                                         <template v-slot:modalContent>
                                             <div class="d-flex w-100">
-                                                <Button 
-                                                    class="btn-outline-danger-full font-color-danger font-sm" 
+                                                <Button
+                                                    class="btn-outline-danger-full font-color-danger font-sm"
                                                     text="Yes"
                                                     @click="deleteMember()"
                                                 />
@@ -251,8 +251,8 @@
                     <h3 class="font-color-light font-lg-b">Clients</h3>
                 </div>
                 <div class="d-flex w-100">
-                    <ValidationMessage 
-                        v-if="this.toggleFeedMessage.length > 0" 
+                    <ValidationMessage
+                        v-if="this.toggleFeedMessage.length > 0"
                         class="justify-content-start"
                         :message="this.toggleFeedMessage"
                         :type="this.toggleFeedMessageType"
@@ -263,9 +263,9 @@
                         :modules="modules"
                         :slides-per-view="1"
                         :space-between="10"
-                        :navigation="{ 
-                            nextEl: '.custom-client-swiper-button-next', 
-                            prevEl: '.custom-client-swiper-button-prev' 
+                        :navigation="{
+                            nextEl: '.custom-client-swiper-button-next',
+                            prevEl: '.custom-client-swiper-button-prev'
                         }"
                         :pagination="{ clickable: true }"
                         :scrollbar="{ draggable: true }"
@@ -286,9 +286,9 @@
                         @swiper="onSwiper"
                         @slideChange="onSlideChange"
                     >
-                        <swiper-slide 
+                        <swiper-slide
                             class="d-flex border-radius-sm flex-column padding-md bg-dark-60"
-                            v-for="client in clients" 
+                            v-for="client in clients"
                             :key="client.account.ip_addr"
                         >
                             <div class="text-left font-color-light font-sm">
@@ -301,7 +301,7 @@
                             </div>
                             <div class="d-flex justify-content-end">
                                 <Toggle :defaultChecked=client.active @change="toggleClientFeed($event)"/>
-                            </div>                      
+                            </div>
                         </swiper-slide>
                     </swiper>
                     <div class="d-flex justify-content-between margin-top-sm">
@@ -317,7 +317,7 @@
         </div>
     </div>
 </template>
-<script> 
+<script>
     import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
     import { Swiper, SwiperSlide  } from 'swiper/vue';
     import moment from 'moment'
@@ -627,5 +627,5 @@
                 }
             }
         }
-    }   
+    }
 </style>
