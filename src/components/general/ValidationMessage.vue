@@ -1,5 +1,5 @@
 <template>
-    <div class="w-100 validation-message d-flex justify-content-between align-items-center">
+    <div class="w-100 validation-message d-flex align-items-center">
         <span :class="messageClassType">
             {{message}}
         </span>
