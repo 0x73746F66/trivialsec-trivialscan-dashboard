@@ -1,5 +1,5 @@
 <template>
-    <div class="nav" :class="{'nav-animate-hidden' : isNavbarHidden}">
+    <div class="nav" :class="{'nav-animate-hidden' : isNavbarHidden, 'nav-logged-in': logged_in}">
         <div class="container">
             <div class="row">
                 <div class="col-12 d-flex flex-lg-row flex-column justify-content-between">
@@ -83,9 +83,10 @@
             display: block;
             width: 100%;
             height: 75px;
-            height: calc(36px + (spacers("sm") * 2));
+            height: calc(56px + (spacers("sm") * 2));
         }
     }
+
     .nav {
         @extend .bg-dark-40;
         @extend .padding-md;
