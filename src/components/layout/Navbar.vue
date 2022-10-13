@@ -76,9 +76,10 @@
             display: block;
             width: 100%;
             height: 75px;
-            height: calc(36px + (spacers("sm") * 2));
+            height: calc(56px + (spacers("sm") * 2));
         }
     }
+
     .nav {
         @extend .bg-dark-40;
         @extend .padding-md;

@@ -7,6 +7,8 @@
         class="contact-form"
         @submit.prevent="sendSupport"
     >
+        <ValidationMessage :message="message" :type="messageType" />
+    
         <div class="subject-field">
             <TextInput
                 placeholder=""
@@ -17,7 +19,7 @@
             />
         </div>
 
-        <div class="text-area-field margin-bottom-lg">
+        <div class="text-area-field">
             <TextArea 
                 placeholder=""
                 id="text-area-field"
@@ -27,25 +29,29 @@
 
             />
         </div>
-
-        <Button
-            class="btn-outline-primary-full font-lg-sb font-color-primary"
-            text="Submit"
-            @click="submit"
-        />
+        <div class="d-flex justify-content-end">
+            <Button
+                class="btn-outline-primary mr-0 ml-auto font-lg-sb font-color-primary"
+                text="Submit"
+                @click="submit"
+            />
+        </div>
     </form>
 </template>
 <script>
     import TextInput from "../inputs/TextInput.vue"
     import TextArea from "../inputs/TextArea.vue"
     import Button from "../general/Button.vue"
+    import ValidationMessage from "../general/ValidationMessage.vue"
 
     export default {
-        components: {TextInput, TextArea, Button},
+        components: {TextInput, TextArea, Button, ValidationMessage},
         data() {
             return {
                 subjectField: "",
                 contentField: "",
+                message: "",
+                messageType: "",
                 api_url: import.meta.env.VITE_API_URL 
             }
         },
@@ -69,8 +75,15 @@
                         payload
                     }
                 })
-                .then(response => response.json())
-                .catch(console.log);
+                .then(response => {
+                    response.json()
+                    this.message = "Your message was sent. Thank you!"
+                    this.messageType = "success"
+                })
+                .catch(error => {
+                    this.message = "Something went wrong, please try again later."
+                    this.messageType = "error"
+                });
             }
         }
     }
