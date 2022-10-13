@@ -34,7 +34,7 @@
                         <RouterLink v-if="$route.params.report_id" :to="{name: 'detail', params: {report_id: $route.params.report_id}}" class="router-link font-base font-color-light text-decoration-none margin-right-md">Full Report</RouterLink>
                         <RouterLink v-if="logged_in" to="/logout" class="router-link font-base font-color-light text-decoration-none margin-right-md">Logout</RouterLink>
                         <RouterLink v-if="logged_in" to="/profile" class="router-link d-flex align-items-end font-color-light text-decoration-none margin-right-md d-flex">
-                            <div class="d-flex flex-column margin-right-sm">
+                            <div class="d-flex flex-column margin-right-sm align-items-end">
                                 <span class="font-base">{{account_name}}</span>
                                 <span class="font-sm">{{member_email}}</span>
                             </div>
