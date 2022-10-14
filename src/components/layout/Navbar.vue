@@ -61,7 +61,6 @@
         },
         created() {
             this.account_name = localStorage.getItem('/account/name')
-            this.account_name = localStorage.getItem('/account/display')
             this.member_email = localStorage.getItem('/member/email')
             this.email_md5 = localStorage.getItem('/member/email_md5')
             this.logged_in = !!localStorage.getItem('/session/key')
@@ -96,6 +95,10 @@
         position: fixed;
         transition: 0.2s linear;
         animation: showNavbar 0.5s forwards;
+        height: calc(56px + (spacers("sm") * 2));
+        @media (max-width: $breakpoint-lg) {
+            height: 65px;
+        }
         &-profile {
             width: 40px;
             height: 40px;

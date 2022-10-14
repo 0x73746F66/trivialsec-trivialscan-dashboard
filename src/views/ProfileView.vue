@@ -134,16 +134,16 @@
                                 </template>
                             </EditableTextField>
                         </div>
-                        <div class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
+                        <div class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-column">
                             <Button
-                                class="btn-outline-danger-sm font-color-danger font-sm margin-right-sm"
-                                text="Permanantly Delete Account"
-                                @click="deleteAccount()"
-                            />
-                            <Button
-                                class="btn-outline-primary-sm font-color-primary font-sm"
+                                class="btn-outline-primary-sm font-color-primary font-sm margin-bottom-sm"
                                 text="Generate CLI Client Credential"
                                 @click="generateClientCredential()"
+                            />
+                            <Button
+                                class="btn-outline-danger-sm font-color-danger font-sm"
+                                text="Permanantly Delete Account"
+                                @click="deleteAccount()"
                             />
                         </div>
                 </div>
@@ -204,18 +204,20 @@
                                 </template>
                             </EditableTextField>
                         </div>
-                        <div class="d-flex flex-lg-row flex-column">
-                            <RouterLink to="/billing"
-                                class="text-decoration-none d-flex align-items-center justify-content-center margin-right-sm margin-bottom-sm mb-lg-0 btn-outline-primary-full font-color-primary font-sm"
-                                v-if="member.account?.active_plan?.type !== 'Trial'"
-                            >
-                                Past Invoices
-                            </RouterLink>
-                            <a v-if="member.account?.active_plan?.stripe_customer_url"
-                                :href="member.account?.active_plan?.stripe_customer_url"
-                                class="text-decoration-none d-flex align-items-center justify-content-center margin-right-sm margin-bottom-sm mb-lg-0 btn-outline-primary-full font-color-primary font-sm"
-                                text="Next Invoice"
-                            />
+                        <div class="d-flex flex-column">
+                            <div class="d-flex margin-bottom-sm">
+                                <RouterLink to="/billing"
+                                    class="text-decoration-none d-flex align-items-center justify-content-center margin-right-xs margin-bottom-sm mb-lg-0 btn-outline-primary-full font-color-primary font-sm"
+                                    v-if="member.account?.active_plan?.type !== 'Trial'"
+                                >
+                                    Past Invoices
+                                </RouterLink>
+                                <a v-if="member.account?.active_plan?.stripe_customer_url"
+                                    :href="member.account?.active_plan?.stripe_customer_url"
+                                    class="text-decoration-none d-flex align-items-center justify-content-center margin-bottom-sm mb-lg-0 btn-outline-primary-full font-color-primary font-sm"
+                                    text="Next Invoice"
+                                />
+                            </div>
                             <Button
                                 class="btn-fill-primary-full font-color-light font-sm"
                                 text="Upgrade"
