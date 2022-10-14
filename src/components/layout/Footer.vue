@@ -25,15 +25,15 @@
                     <div class="d-flex flex-column margin-right-lg margin-bottom-lg">
                         <span class="font-lg-sb font-color-light margin-bottom-md">Quick Links</span>
                         <RouterLink to="/privacy" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Privacy Policy</RouterLink>
-                        <RouterLink to="/docs" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Documentation</RouterLink>
                         <RouterLink v-if="logged_in" to="/results" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Reports</RouterLink>
                         <RouterLink v-if="logged_in" to="/activities" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Activities</RouterLink>
                         <RouterLink v-if="$route.params.report_id" :to="{name: 'summary', params: {report_id: $route.params.report_id}}" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Summary</RouterLink>
                         <RouterLink v-if="$route.params.report_id" :to="{name: 'detail', params: {report_id: $route.params.report_id}}" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Full Report</RouterLink>
                     </div>
-                    <div v-if="logged_in && $route.path != '/support'" class="d-flex flex-column">
+                    <div class="d-flex flex-column">
                         <span class="font-lg-sb font-color-light margin-bottom-md">Need Support?</span>
-                        <RouterLink to="/support" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Support Page</RouterLink>
+                        <RouterLink to="/docs" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Documentation</RouterLink>
+                        <RouterLink v-if="logged_in" to="/support" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Support Page</RouterLink>
                     </div>
                 </div>
             </div>

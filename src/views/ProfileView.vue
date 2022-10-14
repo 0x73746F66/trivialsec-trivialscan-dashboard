@@ -4,19 +4,19 @@
             <div class="d-flex justify-content-between align-items-start">
                 <div class="h-100 d-flex align-items-lg-center flex-column flex-lg-row">
                     <img
-                        :src="`https://www.gravatar.com/avatar/${email_md5}`"
+                        :src="`https://www.gravatar.com/avatar/${member.email_md5}`"
                         class="border-radius-round profile-picture margin-right-md margin-bottom-md mb-lg-0"
-                        alt="{{account.display}}'s Profile Picture'"
+                        alt="{{member.account.display}}'s Profile Picture'"
                     >
                     <div class="d-flex flex-column justify-content-start">
                         <div class="d-flex flex-column justify-content-start">
                             <h1 class="font-xl-b font-color-light">
-                                {{account.display}}
+                                {{member.account.display}}
                             </h1>
                             <EditableTextField :editMode="editMode" class="margin-bottom-sm position-relative">
                                 <template #staticField>
                                     <span class="font-base font-color-light">
-                                        {{account.primary_email}}
+                                        {{member.email}}
                                     </span>
                                 </template>
                                 <template #inputField>
@@ -25,7 +25,7 @@
                                             @submit.prevent="updateBillingEmail()"
                                         >
                                             <TextInput
-                                                :placeholder="account.primary_email"
+                                                :placeholder="member.account.primary_email"
                                                 id="PrimaryEmail"
                                                 label="Email"
                                                 :required="true"
@@ -53,49 +53,72 @@
                 </div>
             </div>
             <div class="d-flex justify-content-between align-items-start flex-column flex-lg-row">
-                <div class="d-flex flex-column font-color-light align-items-start margin-top-md margin-bottom-md">
-                    <div class="d-flex margin-bottom-sm align-items-center">
+                <div class="d-flex flex-column font-color-light align-items-start margin-top-md margin-bottom-sm">
+                    <div class="d-flex margin-bottom-xs align-items-center">
                         <span class="font-base-sb margin-right-sm ">Created:</span>
-                        <span class="font-sm font-sm">{{created}}</span>
+                        <span class="font-sm font-sm">{{member.created}}</span>
                     </div>
-                    <div class="d-flex margin-bottom-sm align-items-center">
+                    <div class="d-flex margin-bottom-xs align-items-center">
                         <span class="font-base-sb margin-right-sm">Status:</span>
-                        <span class="font-sm font-sm">{{status}}</span>
+                        <span class="font-sm font-sm">{{member.status}}</span>
                     </div>
-                    <div class="d-flex margin-bottom-sm align-items-center">
-                        <span class="font-base-sb margin-right-sm">Client Account Name:</span>
-                        <span class="font-sm font-sm">{{account.name}}</span>
-                    </div>
-                    <Button
-                        class="btn-outline-primary-sm font-color-primary font-sm"
-                        text="Generate Client Credential"
-                        @click="generateClientCredential()"
-                    />
-                </div>
-
-                <div class="d-flex flex-column bg-dark-60 padding-sm border-radius-sm font-color-light profile-plan-information">
-                    <div class="d-flex flex-column justify-content-between">
-                        <div class="d-flex flex-column flex-lg-row justify-content-between margin-bottom-sm">
-                            <div class="margin-right-lg d-flex flex-lg-row flex-column align-items-lg-center">
-                                <span class="font-base-sb margin-right-sm margin-bottom-sm mb-lg-0">Active Plan:</span>
-                                <span class="font-sm font-sm">{{account.active_plan.label}}</span>
-                            </div>
-                            <span class="font-color-primary font-lg-b">{{account.active_plan.price}}</span>
-                        </div>
-
-                        <div class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
-                            <span class="font-base-sb margin-right-sm">Credit Card:</span>
-                            <span class="font-sm font-sm">{{account.active_plan.credit_card}}</span>
-                        </div>
-                        <div class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
-                            <span class="font-base-sb margin-right-sm">Issuer:</span>
-                            <span class="font-sm font-sm">{{account.active_plan.issuer}}</span>
-                        </div>
-                        <div class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
-                            <span class="font-base-sb margin-right-sm">Billing Mail Address:</span>
+                    <div class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
+                            <span class="font-base-sb margin-right-sm">Account Name:</span>
                             <EditableTextField :editMode="editMode" class="position-relative">
                                 <template #staticField>
-                                    <span class="font-sm font-sm">{{account.billing_email}}</span>
+                                    <span class="font-sm font-sm">{{member.account.primary_email}}</span>
+                                </template>
+                                <template #inputField>
+                                    <span class="font-base font-color-light">
+                                        <form 
+                                            class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm" 
+                                            @submit.prevent="updateAccountName()"
+                                        >
+                                            <TextInput
+                                                :placeholder="member.account.name"
+                                                id="AccountName"
+                                                label="Account Name"
+                                                :required="true"
+                                            />
+                                            <button type="submit" class="inline-custom-form-btn">
+                                                <checkIcon class="profile-edit-icon" color="1abb9c"/>
+                                            </button>
+                                        </form>
+                                    </span>
+                                </template>
+                            </EditableTextField>
+                        </div>
+                        <div class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
+                            <span class="font-base-sb margin-right-sm">Primary Contact:</span>
+                            <EditableTextField :editMode="editMode" class="position-relative">
+                                <template #staticField>
+                                    <span class="font-sm font-sm">{{member.account.primary_email}}</span>
+                                </template>
+                                <template #inputField>
+                                    <span class="font-base font-color-light">
+                                        <form 
+                                            class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm" 
+                                            @submit.prevent="updatePrimaryEmail()"
+                                        >
+                                            <TextInput
+                                                :placeholder="member.account.primary_email"
+                                                id="PrimaryEmail"
+                                                label="Primary Email"
+                                                :required="true"
+                                            />
+                                            <button type="submit" class="inline-custom-form-btn">
+                                                <checkIcon class="profile-edit-icon" color="1abb9c"/>
+                                            </button>
+                                        </form>
+                                    </span>
+                                </template>
+                            </EditableTextField>
+                        </div>
+                        <div class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
+                            <span class="font-base-sb margin-right-sm">Billing Contact:</span>
+                            <EditableTextField :editMode="editMode" class="position-relative">
+                                <template #staticField>
+                                    <span class="font-sm font-sm">{{member.account.billing_email}}</span>
                                 </template>
                                 <template #inputField>
                                     <span class="font-base font-color-light">
@@ -104,7 +127,7 @@
                                             @submit.prevent="updateBillingEmail()"
                                         >
                                             <TextInput
-                                                :placeholder="account.billing_email"
+                                                :placeholder="member.account.billing_email"
                                                 id="BillingEmail"
                                                 label="Billing Email"
                                                 :required="true"
@@ -117,11 +140,59 @@
                                 </template>
                             </EditableTextField>
                         </div>
+                    <Button
+                        class="btn-outline-danger-sm margin-bottom-sm font-color-danger font-sm"
+                        text="Permanantly Delete Account"
+                        @click="deleteAccount()"
+                    />
+                    <Button
+                        class="btn-outline-primary-sm font-color-primary font-sm"
+                        text="Generate Scanner Credential"
+                        @click="generateClientCredential()"
+                    />
+                </div>
+
+                <div class="d-flex flex-column bg-dark-60 padding-sm border-radius-sm font-color-light profile-plan-information">
+                    <div class="d-flex flex-column justify-content-between">
+                        <div class="d-flex flex-column flex-lg-row justify-content-between margin-bottom-sm">
+                            <div class="margin-right-lg d-flex flex-lg-row flex-column align-items-lg-center">
+                                <span class="font-base-sb margin-right-sm margin-bottom-sm mb-lg-0">Active Plan:</span>
+                                <span class="font-sm font-sm">{{member.account?.active_plan?.label}}</span>
+                            </div>
+                            <span class="font-color-primary font-lg-b">{{member.account?.active_plan?.price}} </span>
+                            <span v-if="member.account?.active_plan?.subscription" class="font-lg-b">/{{member.account?.active_plan?.subscription}}</span>
+                        </div>
+                        <div v-if="member.account?.active_plan?.debit_account" class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
+                            <span class="font-base-sb margin-right-sm">Debit Account:</span>
+                            <span class="font-sm font-sm">{{member.account?.active_plan?.debit_account}}</span>
+                        </div>
+                        <div v-if="member.account?.active_plan?.credit_card" class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
+                            <span class="font-base-sb margin-right-sm">Credit Card:</span>
+                            <span class="font-sm font-sm">{{member.account?.active_plan?.credit_card}}</span>
+                        </div>
+                        <div v-if="member.account?.active_plan?.issuer" class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
+                            <span class="font-base-sb margin-right-sm">Issuer:</span>
+                            <span class="font-sm font-sm">{{member.account?.active_plan?.issuer}}</span>
+                        </div>
+                        <div v-if="member.account?.active_plan?.expiry" class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
+                            <span class="font-base-sb margin-right-sm">Expiry:</span>
+                            <span class="font-sm font-sm">{{member.account?.active_plan?.expiry}}</span>
+                        </div>
+                        <div v-if="member.account?.active_plan?.due_date" class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
+                            <span class="font-base-sb margin-right-sm">Next Payment:</span>
+                            <span class="font-sm font-sm">{{member.account?.active_plan?.due_date}}</span>
+                        </div>
                         <div class="d-flex flex-lg-row flex-column">
-                            <a
-                                href="/stripe"
+                            <RouterLink to="/billing"
                                 class="text-decoration-none d-flex align-items-center justify-content-center margin-right-sm margin-bottom-sm mb-lg-0 btn-outline-primary-full font-color-primary font-sm"
-                                text="See Payments"
+                                v-if="member.account?.active_plan?.type !== 'Trial'"
+                            >
+                                Past Invoices
+                            </RouterLink>
+                            <a v-if="member.account?.active_plan?.stripe_customer_url"
+                                :href="member.account?.active_plan?.stripe_customer_url"
+                                class="text-decoration-none d-flex align-items-center justify-content-center margin-right-sm margin-bottom-sm mb-lg-0 btn-outline-primary-full font-color-primary font-sm"
+                                text="Next Invoice"
                             />
                             <Button
                                 class="btn-fill-primary-full font-color-light font-sm"
@@ -229,9 +300,9 @@
                                         (You)
                                     </span>
                                 </p>
-                                <p v-if="member.email !== account.primary_email" class="mb-0 font-sm">Guest invited {{member.invited}}</p>
-                                <p v-else class="mb-0 font-xs">Owner</p>
-                                <p class="mb-0 font-sm">Joined {{member.created}}</p>
+                                <p class="mb-0 font-sm">{{member.status}}</p>
+                                <p v-if="member.confirmed" class="mb-0 font-sm">Joined {{member.created}}</p>
+                                <p v-else class="mb-0 font-sm">Invited {{member.created}}</p>
                                 <div class="d-flex justify-content-end delete-member-modal">
                                     <Modal :id="`deleteMember${index}`" label="delete-member-header">
                                         <template v-slot:button=buttonProps>
@@ -350,6 +421,7 @@
     </div>
 </template>
 <script>
+    import { RouterLink } from "vue-router";
     import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
     import { Swiper, SwiperSlide  } from 'swiper/vue';
     import moment from 'moment'
@@ -392,10 +464,8 @@
         },
         data() {
             return {
-                loading: false,
-                error: null,
                 api_url: import.meta.env.VITE_API_URL,
-                account: {},
+                member: {},
                 members: [],
                 clients: [],
                 editMode: false,
@@ -412,127 +482,126 @@
             }
         },
         created() {
-            // watch the params of the route to fetch the data again
-            this.$watch(
-                () => this.$route.params,
-                () => {
-                    this.fetchProfile()
-                },
-                // fetch the data when the view is created and the data is
-                // already being observed
-                { immediate: true }
-            )
+            this.fetchProfile()
+            this.fetchClients()
+            this.fetchMembers()
         },
         methods: {
             async fetchProfile() {
-                if (!!localStorage.getItem('/session/key')) {
-                    this.loading = true
-                    const req_url = `${this.api_url}/me`
-                    const ts = moment().utc().unix()
-                    const url = new URL(req_url)
-                    const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
-                    console.log(canonical_string)
-                    const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
-                    hash.update(canonical_string)
-                    const mac = hash.finalize()
-                    const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
-                    console.log(header)
-                    const response = await fetch(req_url, {
-                        headers: {"Authorization": header}
-                    }).catch(error => {
-                        this.error = error
-                        this.loading = false
-                    })
-                    this.loading = false
-                    if (response.status !== 200) {
-                        alert(`${response.status} ${response.statusText}`)
-                    } else {
-                        const data = await response.json()
-                        console.log(data)
-                        this.account = data.account
-                        this.email_md5 = data.email_md5
-                        this.confirmed = data.confirmed
-                        this.status = data.confirmed ? "Confirmed" : "Pending activation"
-                        this.created = moment(data.timestamp).fromNow()
-                        // placeholders
-                        this.account.active_plan = {
-                            label: "Community Edition",
-                            price: "FREE",
-                            credit_card: "xxxx-xxxx-xxxx-1234",
-                            issuer: "VISA",
-                        }
-                        this.fetchClients()
-                        this.fetchMembers()
-                    }
+                const req_url = `${this.api_url}/me`
+                const ts = moment().utc().unix()
+                const url = new URL(req_url)
+                const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
+                console.log(canonical_string)
+                const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+                hash.update(canonical_string)
+                const mac = hash.finalize()
+                const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+                console.log(header)
+                const response = await fetch(req_url, {
+                    headers: {"Authorization": header}
+                }).catch(alert)
+                const data = await response.json()
+                console.log(data)
+                if (response.status !== 200) {
+                    alert(`${response.status} ${response.statusText}`)
                 }
+                this.member = data
+                this.member.status = data.confirmed ? "Confirmed" : "Pending activation"
+                this.member.created = moment(data.timestamp).fromNow()
+                // placeholders
+                const payments = [
+                    {
+                        label: "Community Edition", // Community Edition, Enterprise, Professional
+                        price: "FREE", // FREE, $39, $199, $12,500
+                        type: "Trial", // Trial, Quota, Unlimited
+                    },
+                    {
+                        label: "Professional", // Community Edition, Enterprise, Professional
+                        price: "$39", // FREE, $39, $199, $12,500
+                        subscription: "Month", // Month, Year
+                        type: "Quota", // Trial, Quota, Unlimited
+                        credit_card: "xxxx-xxxx-xxxx-1234",
+                        issuer: "VISA",
+                        expiry: "10/24",
+                        due_date: moment(new Date(1667723919438)).fromNow(),
+                        stripe_customer_url: "https://invoice.stripe.com/i/",
+                    },
+                    {
+                        label: "Enterprise", // Community Edition, Enterprise, Professional
+                        price: "$12,500", // FREE, $39, $199, $12,500
+                        subscription: "Year", // Month, Year
+                        type: "Unlimited", // Trial, Quota, Unlimited
+                        debit_account: "Swift Payments",
+                        due_date: moment(new Date(1667723919438)).fromNow(),
+                        stripe_customer_url: "https://invoice.stripe.com/i/",
+                    }
+                ]
+                this.member.account.active_plan = payments[Math.floor(Math.random()*payments.length)]
             },
             async fetchClients() {
-                if (!!localStorage.getItem('/session/key')) {
-                    this.loading = true
-                    const req_url = `${this.api_url}/clients`
-                    const ts = moment().utc().unix()
-                    const url = new URL(req_url)
-                    const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
-                    console.log(canonical_string)
-                    const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
-                    hash.update(canonical_string)
-                    const mac = hash.finalize()
-                    const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
-                    console.log(header)
-                    const response = await fetch(req_url, {
-                        headers: {"Authorization": header}
-                    }).catch(error => {
-                        this.error = error
-                        this.loading = false
-                    })
+                this.loading = true
+                const req_url = `${this.api_url}/clients`
+                const ts = moment().utc().unix()
+                const url = new URL(req_url)
+                const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
+                console.log(canonical_string)
+                const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+                hash.update(canonical_string)
+                const mac = hash.finalize()
+                const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+                console.log(header)
+                const response = await fetch(req_url, {
+                    headers: {"Authorization": header}
+                }).catch(error => {
+                    this.error = error
                     this.loading = false
-                    if (response.status === 404) {
-                        this.members = []
-                    } else if (response.status !== 200) {
-                        alert(`${response.status} ${response.statusText}`)
-                    } else {
-                        const data = await response.json()
-                        console.log(data)
-                        this.clients = data.map(client => {
-                            client.created = moment(client.timestamp).fromNow()
-                            return client
-                        })
-                    }
+                })
+                this.loading = false
+                if (response.status === 404) {
+                    this.members = []
+                } else if (response.status !== 200) {
+                    alert(`${response.status} ${response.statusText}`)
+                } else {
+                    const data = await response.json()
+                    console.log(data)
+                    this.clients = data.map(client => {
+                        client.created = moment(client.timestamp).fromNow()
+                        return client
+                    })
                 }
             },
             async fetchMembers() {
-                if (!!localStorage.getItem('/session/key')) {
-                    this.loading = true
-                    const req_url = `${this.api_url}/members`
-                    const ts = moment().utc().unix()
-                    const url = new URL(req_url)
-                    const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
-                    console.log(canonical_string)
-                    const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
-                    hash.update(canonical_string)
-                    const mac = hash.finalize()
-                    const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
-                    console.log(header)
-                    const response = await fetch(req_url, {
-                        headers: {"Authorization": header}
-                    }).catch(error => {
-                        this.error = error
-                        this.loading = false
-                    })
+                this.loading = true
+                const req_url = `${this.api_url}/members`
+                const ts = moment().utc().unix()
+                const url = new URL(req_url)
+                const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
+                console.log(canonical_string)
+                const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+                hash.update(canonical_string)
+                const mac = hash.finalize()
+                const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+                console.log(header)
+                const response = await fetch(req_url, {
+                    headers: {"Authorization": header}
+                }).catch(error => {
+                    this.error = error
                     this.loading = false
-                    if (response.status === 404) {
-                        this.members = []
-                    } else if (response.status !== 200) {
-                        alert(`${response.status} ${response.statusText}`)
-                    } else {
-                        const data = await response.json()
-                        console.log(data)
-                        this.members = data.map(member => {
-                            member.created = moment(member.timestamp).fromNow()
-                            member.status = data.confirmed ? "Confirmed" : "Pending activation"
-                            return member
-                        })
-                    }
+                })
+                this.loading = false
+                if (response.status === 404) {
+                    this.members = []
+                } else if (response.status !== 200) {
+                    alert(`${response.status} ${response.statusText}`)
+                } else {
+                    const data = await response.json()
+                    console.log(data)
+                    this.members = data.map(member => {
+                        member.created = moment(member.timestamp).fromNow()
+                        member.status = member.confirmed ? "Confirmed" : "Pending Activation"
+                        return member
+                    })
                 }
             },
             toggleEditMode() {
