@@ -1,3 +1,31 @@
+<script setup>
+    const api_url = import.meta.env.VITE_API_URL
+    const register = (event) => {
+        const display = event.target.querySelector('[name="registerUsername"]').value
+        const primary_email = event.target.querySelector('[name="id-email-2"]').value
+        const payload = JSON.stringify({ display, primary_email, name: '' })
+        const req_url = `${api_url}/account/register`
+
+        fetch(req_url, {
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8'
+            },
+            method: 'POST',
+            body: payload
+        })
+        .then(response => response.text())
+        .then(result => {
+            const account = JSON.parse(result)
+            console.log(account)
+
+        })
+        .catch(errors => {
+            console.log(errors)
+
+        })
+    }
+</script>
+
 <template>
     <form class="register-form" @submit.prevent="register">
 

@@ -119,7 +119,7 @@ resource "aws_cloudfront_distribution" "trivialscan_dashboard" {
   }
 }
 
-resource "aws_route53_record" "assets_a" {
+resource "aws_route53_record" "site_a" {
     zone_id = local.hosted_zone
     name    = "www.${local.apex_domain}"
     type    = "A"
@@ -131,7 +131,7 @@ resource "aws_route53_record" "assets_a" {
     }
 }
 
-resource "aws_route53_record" "assets_aaaa" {
+resource "aws_route53_record" "site_aaaa" {
     zone_id = local.hosted_zone
     name    = "www.${local.apex_domain}"
     type    = "AAAA"
