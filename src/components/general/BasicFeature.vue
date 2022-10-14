@@ -11,11 +11,11 @@
             </div>
             <a
                 href="#"
-                class="text-decoration-none font-color-light basic-feature-read-more-link w-100 padding-sm"
+                class="text-decoration-none font-color-dark basic-feature-read-more-link w-100 padding-sm"
                 :class="{ 'hidden': !showLink }"
             >
                 Read More
-                <IconArrowPrimary color='FFFFFF' class="basic-feature-read-more-link-icon margin-left-xs"/>
+                <IconArrowPrimary color='2b2525' class="basic-feature-read-more-link-icon margin-left-xs"/>
             </a>
         </div>
     </div>
@@ -63,7 +63,7 @@ export default {
             justify-content: flex-end;
             transition: 0.2s linear;
             &:hover {
-                color: color("light") !important;
+                color: color("dark") !important;
             }
             &.hidden {
                 @media (min-width: $breakpoint-lg) {
