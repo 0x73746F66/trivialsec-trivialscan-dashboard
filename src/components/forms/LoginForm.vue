@@ -1,4 +1,6 @@
 <template>
+    <loadingComponent class="loading" :class="{'inactive': !loading}"/>
+
     <form
         class="login-form"
         @submit.prevent="login"
@@ -26,15 +28,17 @@
     import EmaiInput from "../inputs/EmaiInput.vue";
     import Button from "../general/Button.vue";
     import ValidationMessage from "../general/ValidationMessage.vue";
+    import loadingComponent from "../general/loadingComponent.vue";
 
     export default {
-        components: {EmaiInput, Button, ValidationMessage},
+        components: {EmaiInput, Button, ValidationMessage, loadingComponent},
         data() {
             return {
                 emailField: "",
                 message: "",
                 messageType: "",
-                api_url: import.meta.env.VITE_API_URL 
+                api_url: import.meta.env.VITE_API_URL,
+                loading: false
             }
         },
         methods: {
@@ -42,6 +46,7 @@
                 this.emailField = v.target.value;
             },
             async login() {
+                this.loading = true;
                 const payload = JSON.stringify({
                     'email': this.emailField,
                 })
@@ -55,16 +60,19 @@
                     console.log(errors)
                     this.message = "An error has occured, please try again."
                     this.messageType = "error"
+                    this.loading = false;
                 })
                 const data = await response.json()
                 if (response.status === 202) {
                     this.message = "Please check you e-mail to complete login."
                     this.messageType = "success"
+                    this.loading = false;
                     setTimeout(()=>window.location.href = '/', 3000)
                 } else {
                     console.log(data)
                     this.message = `Something went wrong, please try again later.`
                     this.messageType = "error"
+                    this.loading = false;
                 }
             }
         }

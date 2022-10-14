@@ -1,6 +1,4 @@
 <template>
-  <loadingComponent class="loading inactive"/>
-
   <div class="hero-container">
     <Hero :class="{ 'hero-scrolled': heroScrolled }"/>
   </div>
