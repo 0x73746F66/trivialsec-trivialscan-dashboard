@@ -61,6 +61,7 @@
         },
         created() {
             this.account_name = localStorage.getItem('/account/name')
+            this.account_name = localStorage.getItem('/account/display')
             this.member_email = localStorage.getItem('/member/email')
             this.email_md5 = localStorage.getItem('/member/email_md5')
             this.logged_in = !!localStorage.getItem('/session/key')

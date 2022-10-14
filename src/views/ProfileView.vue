@@ -10,9 +10,29 @@
                     >
                     <div class="d-flex flex-column justify-content-start">
                         <div class="d-flex flex-column justify-content-start">
-                            <h1 class="font-xl-b font-color-light">
-                                {{member.account.display}}
-                            </h1>
+                            <EditableTextField :editMode="editMode" class="margin-bottom-sm position-relative">
+                                <template #staticField>
+                                    <h1 class="font-xl-b font-color-light">
+                                        {{member.account.display}}
+                                    </h1>
+                                </template>
+                                <template #inputField>
+                                    <form 
+                                            class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm" 
+                                            @submit.prevent="updateAccountDisplay()"
+                                        >
+                                            <TextInput
+                                                :placeholder="member.account.display"
+                                                id="AccountDisplay"
+                                                label="Display Name"
+                                                :required="true"
+                                            />
+                                            <button type="submit" class="inline-custom-form-btn">
+                                                <checkIcon class="profile-edit-icon" color="1abb9c"/>
+                                            </button>
+                                        </form>
+                                </template>
+                            </EditableTextField>
                             <EditableTextField :editMode="editMode" class="margin-bottom-sm position-relative">
                                 <template #staticField>
                                     <span class="font-base font-color-light">
@@ -66,7 +86,7 @@
                             <span class="font-base-sb margin-right-sm">Account Name:</span>
                             <EditableTextField :editMode="editMode" class="position-relative">
                                 <template #staticField>
-                                    <span class="font-sm font-sm">{{member.account.primary_email}}</span>
+                                    <span class="font-sm font-sm">{{member.account.name}}</span>
                                 </template>
                                 <template #inputField>
                                     <span class="font-base font-color-light">
@@ -115,41 +135,17 @@
                             </EditableTextField>
                         </div>
                         <div class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
-                            <span class="font-base-sb margin-right-sm">Billing Contact:</span>
-                            <EditableTextField :editMode="editMode" class="position-relative">
-                                <template #staticField>
-                                    <span class="font-sm font-sm">{{member.account.billing_email}}</span>
-                                </template>
-                                <template #inputField>
-                                    <span class="font-base font-color-light">
-                                        <form 
-                                            class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm" 
-                                            @submit.prevent="updateBillingEmail()"
-                                        >
-                                            <TextInput
-                                                :placeholder="member.account.billing_email"
-                                                id="BillingEmail"
-                                                label="Billing Email"
-                                                :required="true"
-                                            />
-                                            <button type="submit" class="inline-custom-form-btn">
-                                                <checkIcon class="profile-edit-icon" color="1abb9c"/>
-                                            </button>
-                                        </form>
-                                    </span>
-                                </template>
-                            </EditableTextField>
+                            <Button
+                                class="btn-outline-danger-sm font-color-danger font-sm"
+                                text="Permanantly Delete Account"
+                                @click="deleteAccount()"
+                            />
+                            <Button
+                                class="btn-outline-primary-sm font-color-primary font-sm"
+                                text="Generate CLI Client Credential"
+                                @click="generateClientCredential()"
+                            />
                         </div>
-                    <Button
-                        class="btn-outline-danger-sm margin-bottom-sm font-color-danger font-sm"
-                        text="Permanantly Delete Account"
-                        @click="deleteAccount()"
-                    />
-                    <Button
-                        class="btn-outline-primary-sm font-color-primary font-sm"
-                        text="Generate Scanner Credential"
-                        @click="generateClientCredential()"
-                    />
                 </div>
 
                 <div class="d-flex flex-column bg-dark-60 padding-sm border-radius-sm font-color-light profile-plan-information">
@@ -181,6 +177,32 @@
                         <div v-if="member.account?.active_plan?.due_date" class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
                             <span class="font-base-sb margin-right-sm">Next Payment:</span>
                             <span class="font-sm font-sm">{{member.account?.active_plan?.due_date}}</span>
+                        </div>
+                        <div class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
+                            <span class="font-base-sb margin-right-sm">Billing Contact:</span>
+                            <EditableTextField :editMode="editMode" class="position-relative">
+                                <template #staticField>
+                                    <span class="font-sm font-sm">{{member.account.billing_email}}</span>
+                                </template>
+                                <template #inputField>
+                                    <span class="font-base font-color-light">
+                                        <form 
+                                            class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm" 
+                                            @submit.prevent="updateBillingEmail()"
+                                        >
+                                            <TextInput
+                                                :placeholder="member.account.billing_email"
+                                                id="BillingEmail"
+                                                label="Billing Email"
+                                                :required="true"
+                                            />
+                                            <button type="submit" class="inline-custom-form-btn">
+                                                <checkIcon class="profile-edit-icon" color="1abb9c"/>
+                                            </button>
+                                        </form>
+                                    </span>
+                                </template>
+                            </EditableTextField>
                         </div>
                         <div class="d-flex flex-lg-row flex-column">
                             <RouterLink to="/billing"

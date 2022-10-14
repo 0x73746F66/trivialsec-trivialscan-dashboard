@@ -23,6 +23,7 @@ const router = createRouter({
         } else {
           const data = await response.json()
           localStorage.setItem('/account/name', data?.member?.account?.name || localStorage.getItem('/account/name'))
+          localStorage.setItem('/account/display', data?.member?.account?.display || localStorage.getItem('/account/display'))
           localStorage.setItem('/member/email', data?.member?.email || localStorage.getItem('/member/email'))
           localStorage.setItem('/member/email_md5', data?.member?.email_md5 || localStorage.getItem('/member/email_md5'))
           localStorage.setItem('/session/key', data?.access_token || localStorage.getItem('/session/key'))
@@ -37,6 +38,7 @@ const router = createRouter({
       name: "logout",
       beforeEnter: () => {
         localStorage.setItem('/account/name', "")
+        localStorage.setItem('/account/display', "")
         localStorage.setItem('/member/email', "")
         localStorage.setItem('/member/email_md5', "")
         localStorage.setItem('/session/key', "")
