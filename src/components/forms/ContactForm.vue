@@ -3,6 +3,8 @@
 </script>
 
 <template>
+    <loadingComponent class="loading" :class="{'inactive': !loading}"/>
+
     <form
         class="contact-form"
         @submit.prevent="sendSupport"
@@ -44,17 +46,19 @@
     import TextInput from "../inputs/TextInput.vue"
     import TextArea from "../inputs/TextArea.vue"
     import Button from "../general/Button.vue"
+    import loadingComponent from "../general/loadingComponent.vue"
     import ValidationMessage from "../general/ValidationMessage.vue"
 
     export default {
-        components: {TextInput, TextArea, Button, ValidationMessage},
+        components: {TextInput, TextArea, Button, ValidationMessage, loadingComponent},
         data() {
             return {
                 subjectField: "",
                 contentField: "",
                 message: "",
                 messageType: "",
-                api_url: import.meta.env.VITE_API_URL 
+                api_url: import.meta.env.VITE_API_URL,
+                loading: false
             }
         },
         methods: {
@@ -70,6 +74,7 @@
                     'subject': this.subjectField,
                     'message': this.contentField
                 })
+                this.loading = true;
                 const req_url = `${this.api_url}/support`
                 const ts = moment().utc().unix()
                 const url = new URL(req_url)
@@ -90,15 +95,18 @@
                 }).catch(error => {
                     this.message = `Something went wrong, please try again later. Server responded with: ${error}`
                     this.messageType = "error"
+                    this.loading = false;
                 })
                 const data = await response.json()
                 if (response.status === 202) {
                     this.message = "Your message was sent. Thank you!"
                     this.messageType = "success"
+                    this.loading = false;
                 } else {
                     console.log(data)
                     this.message = `Something went wrong, please try again later.`
                     this.messageType = "info"
+                    this.loading = false;
                 }
 
             }

@@ -1,4 +1,6 @@
 <template>
+    <loadingComponent class="loading" :class="{'inactive': !loading}"/>
+
     <form class="register-form" @submit.prevent="register">
 
         <ValidationMessage :message="message" :type="messageType" />
@@ -29,9 +31,10 @@
     import EmaiInput from "../inputs/EmaiInput.vue";
     import Button from "../general/Button.vue";
     import ValidationMessage from "../general/ValidationMessage.vue";
+    import loadingComponent from "../general/loadingComponent.vue";
 
     export default {
-        components: {TextInput, EmaiInput, Button, ValidationMessage},
+        components: {TextInput, EmaiInput, Button, ValidationMessage, loadingComponent},
         data() {
             return {
                 api_url: import.meta.env.VITE_API_URL,
@@ -39,6 +42,7 @@
                 email: '',
                 message: "",
                 messageType: "",
+                loading: false
             }
         },
         methods: {
@@ -49,6 +53,7 @@
                 this.email = v.target.value;
             },
             async register() {
+                this.loading = true;
                 const payload = JSON.stringify({
                     'display': this.displayName,
                     'primary_email': this.email,
@@ -63,18 +68,22 @@
                 }).catch(error => {
                     this.message = `Something went wrong, please try again later.\r\nServer responded with: ${error}`
                     this.messageType = "error"
+                    this.loading = false;
                 })
                 const data = await response.json()
                 if (response.status === 201) {
                     this.message = "Account registered with success.\r\nPlease check your e-mail inbox."
                     this.messageType = "success"
+                    this.loading = false;
                 } else if (response.status === 409) {
                     this.message = "Account already registered."
                     this.messageType = "warning"
+                    this.loading = false;
                 } else {
                     console.log(data)
                     this.message = `Something went wrong, please try again later.`
                     this.messageType = "warning"
+                    this.loading = false;
                 }
             }
         }
