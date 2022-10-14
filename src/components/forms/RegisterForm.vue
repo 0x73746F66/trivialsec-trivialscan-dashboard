@@ -1,31 +1,3 @@
-<script setup>
-    const api_url = import.meta.env.VITE_API_URL
-    const register = (event) => {
-        const display = event.target.querySelector('[name="registerUsername"]').value
-        const primary_email = event.target.querySelector('[name="id-email-2"]').value
-        const payload = JSON.stringify({ display, primary_email, name: '' })
-        const req_url = `${api_url}/account/register`
-
-        fetch(req_url, {
-            headers: {
-                'Content-Type': 'application/json;charset=UTF-8'
-            },
-            method: 'POST',
-            body: payload
-        })
-        .then(response => response.text())
-        .then(result => {
-            const account = JSON.parse(result)
-            console.log(account)
-
-        })
-        .catch(errors => {
-            console.log(errors)
-
-        })
-    }
-</script>
-
 <template>
     <form class="register-form" @submit.prevent="register">
 
@@ -62,7 +34,7 @@
         components: {TextInput, EmaiInput, Button, ValidationMessage},
         data() {
             return {
-                apiUrl: import.meta.env.VITE_API_URL,
+                api_url: import.meta.env.VITE_API_URL,
                 displayName: '',
                 email: '',
                 message: "",
@@ -76,32 +48,34 @@
             handleEmail(v) {
                 this.email = v.target.value;
             },
-            register() {
+            async register() {
                 const payload = JSON.stringify({
                     'display': this.displayName,
                     'primary_email': this.email,
                     'name': ''
                 })
-                fetch(`${this.api_url}/account/register`, {
-                    headers: {
-                        'Content-Type': 'application/json;charset=UTF-8'
-                    },
+                const response = await fetch(`${this.api_url}/account/register`, {
                     method: 'POST',
-                    body: payload
-                })
-                .then(response => response.text())
-                .then(result => {
-                    const account = JSON.parse(result)
-                    this.message = "Account registered with success. Please check your e-mail inbox."
-                    this.messageType = "success"
-                    console.log(account)
-
-                })
-                .catch(errors => {
-                    console.log(errors)
-                    this.message = "An error has occured, please try again."
+                    body: payload,
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8',
+                    },
+                }).catch(error => {
+                    this.message = `Something went wrong, please try again later.\r\nServer responded with: ${error}`
                     this.messageType = "error"
                 })
+                const data = await response.json()
+                if (response.status === 201) {
+                    this.message = "Account registered with success.\r\nPlease check your e-mail inbox."
+                    this.messageType = "success"
+                } else if (response.status === 409) {
+                    this.message = "Account already registered."
+                    this.messageType = "warning"
+                } else {
+                    console.log(data)
+                    this.message = `Something went wrong, please try again later.`
+                    this.messageType = "warning"
+                }
             }
         }
     }
