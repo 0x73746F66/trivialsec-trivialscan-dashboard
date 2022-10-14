@@ -41,31 +41,31 @@
             handleEmail(v) {
                 this.emailField = v.target.value;
             },
-            login() {
+            async login() {
                 const payload = JSON.stringify({
-                    'email': this.subjectField,
+                    'email': this.emailField,
                 })
-
-                fetch(this.api_url + '/magic-link', {
+                const response = await fetch(`${this.api_url}/magic-link`, {
+                    method: 'POST',
+                    body: payload,
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
                     },
-                    method: 'POST',
-                    body: payload
-                })
-                .then(response => {
-                    console.log(response)
-                    //TODO: notify user to check their email
-                    this.message = "Please check you e-mail to complete login."
-                    this.messageType = "success"
-                    window.location.href = '/'
-                })
-                .catch(errors => {
+                }).catch(errors => {
                     console.log(errors)
                     this.message = "An error has occured, please try again."
                     this.messageType = "error"
-
                 })
+                const data = await response.json()
+                if (response.status === 202) {
+                    this.message = "Please check you e-mail to complete login."
+                    this.messageType = "success"
+                    setTimeout(()=>window.location.href = '/', 3000)
+                } else {
+                    console.log(data)
+                    this.message = `Something went wrong, please try again later.`
+                    this.messageType = "error"
+                }
             }
         }
     }
