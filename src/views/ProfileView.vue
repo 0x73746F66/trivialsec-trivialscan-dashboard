@@ -134,7 +134,7 @@
                                 </template>
                             </EditableTextField>
                         </div>
-                        <div class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-column">
+                        <div class="d-flex margin-bottom-sm align-items-lg-start d-flex flex-column">
                             <Button
                                 class="btn-outline-primary-sm font-color-primary font-sm margin-bottom-sm"
                                 text="Generate CLI Client Credential"
