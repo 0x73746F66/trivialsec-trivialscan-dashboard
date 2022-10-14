@@ -75,8 +75,10 @@
             content: "";
             display: block;
             width: 100%;
-            height: 75px;
             height: calc(56px + (spacers("sm") * 2));
+            @media (max-width: $breakpoint-lg) {
+                height: 65px;
+            }
         }
     }
 
@@ -84,7 +86,7 @@
         @extend .bg-dark-40;
         @extend .padding-md;
         width: 100%;
-        z-index: 10;
+        z-index: 100;
         background: rgb(26 22 22 / 80%);
         backdrop-filter: blur(8px);
         position: fixed;
