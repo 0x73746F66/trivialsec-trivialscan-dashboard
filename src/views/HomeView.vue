@@ -63,7 +63,6 @@
       </Modal>
     </div>
   </div>
-
 </template>
 
 <script>
