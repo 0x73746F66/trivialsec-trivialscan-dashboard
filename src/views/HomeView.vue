@@ -1,4 +1,5 @@
 <template>
+  <loadingComponent class="loading inactive"/>
 
   <div class="hero-container">
     <Hero :class="{ 'hero-scrolled': heroScrolled }"/>
@@ -63,6 +64,7 @@
       </Modal>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -88,6 +90,7 @@ import cIconTuneLight from "@/components/icons/IconTuneLight.vue"
 import Dropdown from "@/components/general/Dropdown.vue"
 import Modal from "@/components/general/Modal.vue"
 import ContactForm from "@/components/forms/ContactForm.vue"
+import loadingComponent from "@/components/general/loadingComponent.vue"
 
 const IconNotificationLight = shallowRef(cIconNotificationLight);
 const IconData = shallowRef(cIconData);
@@ -111,7 +114,8 @@ export default {
     PricingComponent,
     Dropdown,
     Modal,
-    ContactForm
+    ContactForm,
+    loadingComponent
   },
   data(){
     return {
