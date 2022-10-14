@@ -24,17 +24,16 @@
                 <div class="col-12 col-lg-10 d-flex flex-lg-row flex-column justify-content-end">
                     <div class="d-flex flex-column margin-right-lg margin-bottom-lg">
                         <span class="font-lg-sb font-color-light margin-bottom-md">Quick Links</span>
-                        <RouterLink to="/" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Home</RouterLink>
-                        <RouterLink to="/results" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Reports</RouterLink>
+                        <RouterLink to="/privacy" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Privacy Policy</RouterLink>
+                        <RouterLink to="/docs" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Documentation</RouterLink>
+                        <RouterLink v-if="logged_in" to="/results" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Reports</RouterLink>
+                        <RouterLink v-if="logged_in" to="/activities" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Activities</RouterLink>
                         <RouterLink v-if="$route.params.report_id" :to="{name: 'summary', params: {report_id: $route.params.report_id}}" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Summary</RouterLink>
                         <RouterLink v-if="$route.params.report_id" :to="{name: 'detail', params: {report_id: $route.params.report_id}}" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Full Report</RouterLink>
-                        <RouterLink to="/login" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Login</RouterLink>
-                        <RouterLink to="/register" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Register</RouterLink>
-                        <RouterLink to="/logout" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Logout</RouterLink>
                     </div>
-                    <div class="d-flex flex-column">
+                    <div v-if="logged_in && $route.path != '/support'" class="d-flex flex-column">
                         <span class="font-lg-sb font-color-light margin-bottom-md">Need Support?</span>
-                        <RouterLink to="/" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Support Page</RouterLink>
+                        <RouterLink to="/support" class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none">Support Page</RouterLink>
                     </div>
                 </div>
             </div>
@@ -49,6 +48,18 @@
     import IconTwitter from '../icons/IconTwitter.vue';
 
     export default {
+        data() {
+            return {
+                logged_in: false,
+                account_name: null,
+                member_email: null,
+            }
+        },
+        created() {
+            this.account_name = localStorage.getItem('/account/name')
+            this.member_email = localStorage.getItem('/member/email')
+            this.logged_in = !!localStorage.getItem('/session/key')
+        },
         components: { IconTrivialSecurity, IconGitlab, IconLinkedin, IconTwitter }
     }
     

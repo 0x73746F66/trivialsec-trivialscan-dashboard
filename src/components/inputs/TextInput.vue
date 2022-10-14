@@ -7,7 +7,8 @@
             :id="id" 
             :name="id" 
             :placeholder="placeholder"
-            @input="updateValue"
+            @change="updateValue"
+            @input="handleInput"
         >
     </div>
 </template>
@@ -22,7 +23,10 @@ export default {
     }, 
     methods: {
         updateValue(event) {
-            this.$emit('update:modelValue', event.target.value);
+            this.$emit('update:modelValue', event.target.value)
+        },
+        handleInput(event) {
+            this.$emit('input', event.target.value)
         }
     }
 }

@@ -26,10 +26,12 @@
     },
     methods: {
       unFixNavbar() {
-        if(window.innerHeight + window.scrollY >= document.body.offsetHeight - this.$refs.footer.$el.clientHeight) {
+        if(document.body.offsetHeight > window.innerHeight + this.$refs.footer.$el.clientHeight) {
+          if(window.innerHeight + window.scrollY >= document.body.offsetHeight - this.$refs.footer.$el.clientHeight) {
             this.isNavbarHidden = true
-        } else {
-          this.isNavbarHidden = false
+          } else {
+            this.isNavbarHidden = false
+          }
         }
       }
     }

@@ -63,7 +63,6 @@
       </Modal>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -88,6 +87,7 @@ import cIconFishLight from "@/components/icons/IconFishLight.vue"
 import cIconTuneLight from "@/components/icons/IconTuneLight.vue"
 import Dropdown from "@/components/general/Dropdown.vue"
 import Modal from "@/components/general/Modal.vue"
+import ContactForm from "@/components/forms/ContactForm.vue"
 
 const IconNotificationLight = shallowRef(cIconNotificationLight);
 const IconData = shallowRef(cIconData);
@@ -110,7 +110,8 @@ export default {
     BasicFeature,
     PricingComponent,
     Dropdown,
-    Modal
+    Modal,
+    ContactForm
   },
   data(){
     return {

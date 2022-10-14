@@ -29,7 +29,6 @@
                         class="d-flex flex-column flex-lg-row align-items-center nav-transition nav-content"
                         :class="{'nav-hidden' : navbarHidden}"
                     >
-                        <RouterLink v-if="logged_in" to="/results" class="router-link font-base font-color-light text-decoration-none margin-right-md">Reports</RouterLink>
                         <RouterLink v-if="$route.params.report_id" :to="{name: 'summary', params: {report_id: $route.params.report_id}}" class="router-link font-base font-color-light text-decoration-none margin-right-md">Summary</RouterLink>
                         <RouterLink v-if="$route.params.report_id" :to="{name: 'detail', params: {report_id: $route.params.report_id}}" class="router-link font-base font-color-light text-decoration-none margin-right-md">Full Report</RouterLink>
                         <RouterLink v-if="logged_in" to="/logout" class="router-link font-base font-color-light text-decoration-none margin-right-md">Logout</RouterLink>
@@ -63,7 +62,6 @@
             }
         },
         created() {
-            //TODO: use vue3 store backed by localStorage
             this.account_name = localStorage.getItem('/account/name')
             this.member_email = localStorage.getItem('/member/email')
             this.logged_in = !!localStorage.getItem('/session/key')
@@ -82,8 +80,10 @@
             content: "";
             display: block;
             width: 100%;
-            height: 75px;
             height: calc(56px + (spacers("sm") * 2));
+            @media (max-width: $breakpoint-lg) {
+                height: 65px;
+            }
         }
     }
 
@@ -91,7 +91,7 @@
         @extend .bg-dark-40;
         @extend .padding-md;
         width: 100%;
-        z-index: 10;
+        z-index: 100;
         background: rgb(26 22 22 / 80%);
         backdrop-filter: blur(8px);
         position: fixed;

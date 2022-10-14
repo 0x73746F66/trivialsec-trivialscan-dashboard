@@ -82,10 +82,14 @@ const router = createRouter({
       component: () => import("../views/CertificateView.vue"),
     },
     {
-      // ADD PARAMETER LATER.
       path: "/profile",
       name: "profile",
       component: () => import("../views/ProfileView.vue"),
+    },
+    {
+      path: "/support",
+      name: "support",
+      component: () => import("../views/SupportView.vue"),
     },
   ],
 });

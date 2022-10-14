@@ -7,15 +7,15 @@
             <div class="padding-lg">
                 <component :is="feature.icon" color='1ABB9C'></component>
                 <h3 class="font-xl-sb font-color-light margin-bottom-sm margin-top-lg">{{feature.header}}</h3>
-                <span class="font-sm font-color-light">{{feature.description}}</span>
+                <span class="font-base font-color-light">{{feature.description}}</span>
             </div>
             <a
                 href="#"
-                class="text-decoration-none font-color-dark basic-feature-read-more-link w-100 padding-sm"
+                class="text-decoration-none font-color-light basic-feature-read-more-link w-100 padding-sm"
                 :class="{ 'hidden': !showLink }"
             >
                 Read More
-                <IconArrowPrimary color='000000' class="basic-feature-read-more-link-icon margin-left-xs"/>
+                <IconArrowPrimary color='FFFFFF' class="basic-feature-read-more-link-icon margin-left-xs"/>
             </a>
         </div>
     </div>
@@ -49,6 +49,9 @@ export default {
         align-items: center;
         justify-content: space-between;
 
+        &:hover {
+            background: color("dark-60");
+        }
         &-icon {
             width: 100px;
         }
@@ -60,9 +63,8 @@ export default {
             justify-content: flex-end;
             transition: 0.2s linear;
             &:hover {
-                color: color("dark") !important;
+                color: color("light") !important;
             }
-
             &.hidden {
                 @media (min-width: $breakpoint-lg) {
                     padding: 0 padding(sm);
