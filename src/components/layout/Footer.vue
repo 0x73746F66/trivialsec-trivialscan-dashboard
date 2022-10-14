@@ -48,6 +48,18 @@
     import IconTwitter from '../icons/IconTwitter.vue';
 
     export default {
+        data() {
+            return {
+                logged_in: false,
+                account_name: null,
+                member_email: null,
+            }
+        },
+        created() {
+            this.account_name = localStorage.getItem('/account/name')
+            this.member_email = localStorage.getItem('/member/email')
+            this.logged_in = !!localStorage.getItem('/session/key')
+        },
         components: { IconTrivialSecurity, IconGitlab, IconLinkedin, IconTwitter }
     }
     

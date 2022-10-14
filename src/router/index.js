@@ -12,24 +12,24 @@ const router = createRouter({
     {
       path: "/login/:magic_link",
       name: "magic_link",
-      beforeEnter: to => {
-        fetch(`${import.meta.env.VITE_API_URL}/magic-link/${to.params.magic_link}`)
-        .then(response => {
-          if (response.status !== 200) {
-            throw Error(response.statusText)
-          }
-          return response.json()
-        })
-        .then(data => {
-          localStorage.setItem('/account/name', data?.member?.account?.name)
-          localStorage.setItem('/member/email', data?.member?.email)
-          localStorage.setItem('/session/key', data?.member?.access_token)
+      beforeEnter: async to => {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/magic-link/${to.params.magic_link}`)
+          .catch(errors => {
+            console.log('errors')
+            console.log(errors)
+          })
+        if (response.status !== 200) {
+            alert(`${response.status} ${response.statusText}`)
+        } else {
+          const data = await response.json()
+          localStorage.setItem('/account/name', data?.member?.account?.name || localStorage.getItem('/account/name'))
+          localStorage.setItem('/account/email_md5', data?.member?.account?.email_md5 || localStorage.getItem('/account/email_md5'))
+          localStorage.setItem('/member/email', data?.member?.email || localStorage.getItem('/member/email'))
+          localStorage.setItem('/session/key', data?.access_token || localStorage.getItem('/session/key'))
+        }
+        if (!!localStorage.getItem('/session/key')) {
           window.location.href = '/profile'
-        })
-        .catch(errors => {
-          console.log('errors')
-          console.log(errors)
-        })
+        }
       }
     },
     {
