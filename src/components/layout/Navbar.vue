@@ -35,7 +35,7 @@
                                 <span class="font-base">{{account_name}}</span>
                                 <span class="font-sm">{{member_email}}</span>
                             </div>
-                            <img src="https://www.gravatar.com/avatar/${email_md5}" :alt="`${account_name} Profile Picture`" class="font-xs nav-profile">
+                            <img :src="`https://www.gravatar.com/avatar/${email_md5}`" :alt="`${account_name} Profile Picture`" class="font-xs nav-profile">
                         </RouterLink>
                     </div>
                 </div>
@@ -62,8 +62,8 @@
         created() {
             this.account_name = localStorage.getItem('/account/name')
             this.member_email = localStorage.getItem('/member/email')
+            this.email_md5 = localStorage.getItem('/member/email_md5')
             this.logged_in = !!localStorage.getItem('/session/key')
-            this.email_md5 = !!localStorage.getItem('/session/email_md5')
         },
         methods: {
             toggleNavbar() {
