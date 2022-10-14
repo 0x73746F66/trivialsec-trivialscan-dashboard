@@ -1,17 +1,9 @@
 <template>
-    <div
-        class="hero"
-    >
-    <!--      
-        <img
-            src="@/assets/media/hero.png"
-            alt="Code on a black screen"
-            class="hero-img"
-        >-->
+    <div class="hero">
         <div class="d-flex flex-column align-items-center hero-content hero-icon padding-right-xl padding-left-xl w-100">
             <IconTrivialSecurity
                 width="150"
-                class="margin-bottom-md"
+                class="margin-bottom-md margin-top-md"
             />
             <h1 class="font-header-lg-b text-center font-color-primary margin-bottom-sm">Trivial Security</h1>
             <div class="font-color-light text-center margin-bottom-md">

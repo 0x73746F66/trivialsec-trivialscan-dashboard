@@ -29,7 +29,6 @@
                         class="d-flex flex-column flex-lg-row align-items-center nav-transition nav-content"
                         :class="{'nav-hidden' : navbarHidden}"
                     >
-                        <RouterLink v-if="logged_in" to="/results" class="router-link font-base font-color-light text-decoration-none margin-right-md">Reports</RouterLink>
                         <RouterLink v-if="$route.params.report_id" :to="{name: 'summary', params: {report_id: $route.params.report_id}}" class="router-link font-base font-color-light text-decoration-none margin-right-md">Summary</RouterLink>
                         <RouterLink v-if="$route.params.report_id" :to="{name: 'detail', params: {report_id: $route.params.report_id}}" class="router-link font-base font-color-light text-decoration-none margin-right-md">Full Report</RouterLink>
                         <RouterLink v-if="logged_in" to="/logout" class="router-link font-base font-color-light text-decoration-none margin-right-md">Logout</RouterLink>
@@ -57,7 +56,6 @@
             }
         },
         created() {
-            //TODO: use vue3 store backed by localStorage
             this.account_name = localStorage.getItem('/account/name')
             this.member_email = localStorage.getItem('/member/email')
             this.logged_in = !!localStorage.getItem('/session/key')
@@ -81,6 +79,7 @@
             }
         }
     }
+
     .nav {
         @extend .bg-dark-40;
         @extend .padding-md;
