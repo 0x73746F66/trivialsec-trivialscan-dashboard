@@ -17,8 +17,8 @@
                                     </h1>
                                 </template>
                                 <template #inputField>
-                                    <form 
-                                            class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm" 
+                                    <form
+                                            class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm"
                                             @submit.prevent="updateAccountDisplay()"
                                         >
                                             <TextInput
@@ -40,8 +40,8 @@
                                     </span>
                                 </template>
                                 <template #inputField>
-                                    <form 
-                                            class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm" 
+                                    <form
+                                            class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm"
                                             @submit.prevent="updateBillingEmail()"
                                         >
                                             <TextInput
@@ -90,8 +90,8 @@
                                 </template>
                                 <template #inputField>
                                     <span class="font-base font-color-light">
-                                        <form 
-                                            class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm" 
+                                        <form
+                                            class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm"
                                             @submit.prevent="updateAccountName()"
                                         >
                                             <TextInput
@@ -116,8 +116,8 @@
                                 </template>
                                 <template #inputField>
                                     <span class="font-base font-color-light">
-                                        <form 
-                                            class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm" 
+                                        <form
+                                            class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm"
                                             @submit.prevent="updatePrimaryEmail()"
                                         >
                                             <TextInput
@@ -136,7 +136,7 @@
                         </div>
                         <div class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
                             <Button
-                                class="btn-outline-danger-sm font-color-danger font-sm"
+                                class="btn-outline-danger-sm font-color-danger font-sm margin-right-sm"
                                 text="Permanantly Delete Account"
                                 @click="deleteAccount()"
                             />
@@ -186,8 +186,8 @@
                                 </template>
                                 <template #inputField>
                                     <span class="font-base font-color-light">
-                                        <form 
-                                            class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm" 
+                                        <form
+                                            class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm"
                                             @submit.prevent="updateBillingEmail()"
                                         >
                                             <TextInput
@@ -329,7 +329,7 @@
                                     <Modal :id="`deleteMember${index}`" label="delete-member-header">
                                         <template v-slot:button=buttonProps>
                                             <button class="edit-mode-btn delete" v-bind='buttonProps'>
-                                                <IconTrash class="profile-edit-icon"/>                                                
+                                                <IconTrash class="profile-edit-icon"/>
                                             </button>
                                         </template>
 
@@ -426,7 +426,7 @@
                             </div>
                             <div class="d-flex justify-content-end">
                                 <Toggle :defaultChecked=client.active @change="toggleClientFeed($event, client.name)"/>
-                            </div>                      
+                            </div>
                         </swiper-slide>
                     </swiper>
                     <div class="d-flex justify-content-between margin-top-sm">
@@ -528,9 +528,9 @@
                 if (response.status !== 200) {
                     alert(`${response.status} ${response.statusText}`)
                 }
-                this.member = data
-                this.member.status = data.confirmed ? "Confirmed" : "Pending activation"
-                this.member.created = moment(data.timestamp).fromNow()
+                this.member = data.member
+                this.member.status = this.member.confirmed ? "Confirmed" : "Pending activation"
+                this.member.created = moment(this.member.timestamp).fromNow()
                 // placeholders
                 const payments = [
                     {
@@ -666,7 +666,7 @@
                 const ts = moment().utc().unix()
                 const mac = hash.finalize()
                 const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
-                
+
                 if($event.target.checked === true) {
                     const response = await fetch(activate_url, {
                         headers: {"Authorization": header}
@@ -773,7 +773,7 @@
         &.close {
             svg {
                 width: 30px;
-            }   
+            }
             &:hover {
                 background: color("light-20");
             }
@@ -781,7 +781,7 @@
         &.delete {
             svg {
                 width: 30px;
-            }   
+            }
             &:hover {
                 background: color("danger");
             }
@@ -806,7 +806,7 @@
                 }
             }
         }
-    }  
+    }
     .inline-custom-form {
         &-btn {
             border-radius: 50%;
@@ -828,5 +828,5 @@
         input {
             margin-top: 0 !important;
         }
-    } 
+    }
 </style>
