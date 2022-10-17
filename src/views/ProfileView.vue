@@ -155,8 +155,10 @@
                                 <span class="font-base-sb margin-right-sm margin-bottom-sm mb-lg-0">Active Plan:</span>
                                 <span class="font-sm font-sm">{{member.account?.active_plan?.label}}</span>
                             </div>
-                            <span class="font-color-primary font-lg-b">{{member.account?.active_plan?.price}} </span>
-                            <span v-if="member.account?.active_plan?.subscription" class="font-lg-b">/{{member.account?.active_plan?.subscription}}</span>
+                            <div>
+                                <span class="font-color-primary font-lg-b">{{member.account?.active_plan?.price}} </span>
+                                <span v-if="member.account?.active_plan?.subscription" class="font-lg-b">/{{member.account?.active_plan?.subscription}}</span>
+                            </div>
                         </div>
                         <div v-if="member.account?.active_plan?.debit_account" class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
                             <span class="font-base-sb margin-right-sm">Debit Account:</span>
@@ -218,11 +220,10 @@
                                     text="Next Invoice"
                                 />
                             </div>
-                            
                             <div
                                 v-if="member.account?.active_plan?.type === 'Trial'"
                             >
-                                <Modal id="inviteModal" label="modal-invite-header">
+                                <Modal id="upgradeModal" label="modal-upgrade-header">
                                     <template v-slot:button="buttonProps">
                                         <Button
                                             v-bind="buttonProps"
@@ -239,8 +240,8 @@
                                     </template>
                                 </Modal>
                             </div>
-                            <div v-else>
-                                <Modal id="inviteModal" label="modal-invite-header">
+                            <div v-if="member.account?.active_plan?.type === 'Quota'">
+                                <Modal id="upgradeModal" label="modal-upgrade-header">
                                     <template v-slot:button="buttonProps">
                                         <Button
                                             v-bind="buttonProps"
@@ -249,13 +250,25 @@
                                         />
                                     </template>
                                     <template v-slot:modalTitle>
+                                        <h3 class="font-light font-lg-sb">Do you wish to upgrade your account type?</h3>
                                     </template>
                                     <template v-slot:modalContent>
-                                       <form @submit.prevent="updateForm()">
-                                            <ContactForm 
-                                                SubjectFieldDefault="I want to update my account!"
-                                                :TextAreaFieldDefault="`My account is ${member.account?.active_plan.type}. I want to update it.`"
+                                        <ValidationMessage 
+                                            v-if="upgradeFormMessage.length > 0"
+                                            class="justify-content-between"
+                                            :message="upgradeFormMessage" 
+                                            :type="upgradeFormMessageType" 
+                                        />
+                                        <p class="font-sm font-light">Please provide us with your preferred method of contact (i.e. Phone number, e-mail)</p>
+                                        <form @submit.prevent="upgradeForm($event)">
+                                            <TextInput 
+                                                :placeholder="member.account.primary_email"
+                                                id="preferredMethodOfContact"
+                                                label="Contact"
+                                                :required="true"
+                                                :textDefault="member.account.primary_email"
                                             />
+                                            <button type="submit" class="btn-fill-primary-full font-color-light font-sm">Submit</button>
                                        </form>
                                     </template>
                                 </Modal>
@@ -499,7 +512,6 @@
     import Toggle from "../components/general/Toggle.vue";
     import EditableTextField from '../components/inputs/EditableTextField.vue';
     import TextInput from '../components/inputs/TextInput.vue';
-    import ContactForm from "../components/forms/ContactForm.vue";
     import EmaiInput from '../components/inputs/EmaiInput.vue';
     import Modal from "../components/general/Modal.vue";
     import ValidationMessage from '../components/general/ValidationMessage.vue';
@@ -521,7 +533,7 @@
             Modal,
             ValidationMessage,
             loadingComponent,
-            ContactForm
+            
         },
         setup() {
             return {
@@ -541,6 +553,8 @@
                 emailUpdateMessageType: "",
                 billingEmailUpdateMessage: "",
                 billingEmailUpdateMessageType: "",
+                upgradeFormMessage: "",
+                upgradeFormMessageType: "",
                 memberDeleteMessage: "",
                 memberDeleteMessageType: "",
                 toggleFeedMessage: "",
@@ -738,30 +752,71 @@
                 this.inviteMessage = "E-mail was sent!"
                 this.inviteMessageType = "success"
             },
-            async deleteAccount() {
-                this.loading = true
-                const req_url = `${this.api_url}/members/${localStorage.getItem('/member/email')}`
+            async upgradeForm(e) {
+                const payload = JSON.stringify({
+                    'contact': e.target.elements.preferredMethodOfContact.value
+                })
+
+                this.loading = true;
+                const req_url = `${this.api_url}/account/upgrade`
                 const ts = moment().utc().unix()
                 const url = new URL(req_url)
-                const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
+                const canonical_string = `POST\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}\n${window.btoa(payload)}`
                 const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
-                hash.update(canonical_string)
                 const mac = hash.finalize()
                 const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+                
                 const response = await fetch(req_url, {
-                    headers: {"Authorization": header},
-                    method: 'DELETE'
+                    method: 'POST',
+                    body: payload,
+                    headers: {
+                        'Authorization': header,
+                        'Content-Type': 'application/json;charset=UTF-8',
+                    },
                 })
-                if (response.status == 200) {
-                    this.memberDeleteMessage = "Account was deleted"
-                    this.memberDeleteMessageType = "success"
-                    this.loading = false
+
+                if (response.status === 202) {
+                    this.upgradeFormMessage = "Thank you for reaching out to us! We will be in contact soon.";
+                    this.upgradeFormMessageType = "success";
+                    this.loading = false;
                 } else {
-                    this.memberDeleteMessage = "Something went wrong. Couldn't delete account."
-                    this.memberDeleteMessageType = "error"
-                    this.loading = false
+                    this.upgradeFormMessage = `Something went wrong, your contact wasn't sent.`;
+                    this.upgradeFormMessageType = "error";
+                    this.loading = false;
                 }
+
+                console.log(this.upgradeFormMessage);
+
             },
+            // async deleteAccount() {
+                
+            //     this.loading = true
+            //     const req_url = `${this.api_url}/summary/Mv1N0o4lOTPaATxodTlsEPYFc9Rkr7-w97ygP4zweoSxL_6rBG347F7T6jbgaz1VMI5VwID4f14`
+            //     const ts = moment().utc().unix()
+            //     const url = new URL(req_url)
+            //     const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
+            //     const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+            //     hash.update(canonical_string)
+            //     const mac = hash.finalize()
+            //     const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+            //     const response = await fetch(req_url, {
+            //         headers: {"Authorization": header},
+            //         method: 'GET'
+            //     })
+                
+            //     const data = await response.json()
+            //     console.log('delete account');
+            //     console.log(data);
+            //     if (response.status == 200) {
+            //         this.memberDeleteMessage = "Account was deleted"
+            //         this.memberDeleteMessageType = "success"
+            //         this.loading = false
+            //     } else {
+            //         this.memberDeleteMessage = "Something went wrong. Couldn't delete account."
+            //         this.memberDeleteMessageType = "error"
+            //         this.loading = false
+            //     }
+            // },
             async deleteMember(){
                 this.loading = true
                 const req_url = `${this.api_url}/account`
