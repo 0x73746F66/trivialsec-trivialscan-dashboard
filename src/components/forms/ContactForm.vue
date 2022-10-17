@@ -10,13 +10,13 @@
         @submit.prevent="sendSupport"
     >
         <ValidationMessage :message="message" :type="messageType" />
-    
         <div class="subject-field">
             <TextInput
                 placeholder=""
                 id="subject-field"
                 label="Subject"
                 :required="true"
+                :textDefault="SubjectFieldDefault"
                 @change="handleSubject"
             />
         </div>
@@ -27,6 +27,7 @@
                 id="text-area-field"
                 label="Message"
                 :required="true"
+                :textDefault="TextAreaFieldDefault"
                 @change="handleContent"
 
             />
@@ -51,6 +52,10 @@
 
     export default {
         components: {TextInput, TextArea, Button, ValidationMessage, loadingComponent},
+        props: {
+            SubjectFieldDefault: String,
+            TextAreaFieldDefault: String,
+        },
         data() {
             return {
                 subjectField: "",

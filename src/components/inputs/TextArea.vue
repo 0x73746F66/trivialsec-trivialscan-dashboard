@@ -8,7 +8,7 @@
             :placeholder="placeholder" 
             @input="handleInput"
             maxlength="2000"
-        ></textarea>
+        >{{textDefault}}</textarea>
     </div>
 </template>
 
@@ -19,7 +19,8 @@ export default {
         placeholder:String, 
         id: String, 
         label: String,
-        required: Boolean
+        required: Boolean,
+        textDefault: String
     },
     methods: {
         handleInput(e) {

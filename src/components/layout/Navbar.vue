@@ -2,7 +2,7 @@
     <div class="nav" :class="{'nav-animate-hidden' : isNavbarHidden, 'nav-logged-in': logged_in}">
         <div class="container">
             <div class="row">
-                <div class="col-12 d-flex flex-lg-row flex-column justify-content-between">
+                <div class="col-12 d-flex flex-lg-row flex-column justify-content-between ">
                     <div class="d-flex justify-content-between">
                         <RouterLink to="/" class="text-decoration-none">
                             <div class="d-flex align-items-center">
@@ -147,6 +147,12 @@
         }
 
         &-content {
+            @media (max-width: $breakpoint-lg) {
+                background: rgb(26 22 22);
+                backdrop-filter: blur(8px);
+                z-index: 100;
+                // padding: spacers("sm");s
+            }
         }
 
         &-hidden {

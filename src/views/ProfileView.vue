@@ -1,4 +1,6 @@
-<template>
+<template>    
+    <loadingComponent class="loading" :class="{'inactive': !loading}"/>
+
     <div class="container padding-top-xl padding-bottom-xl">
         <div class="profile-container bg-dark-40 border-radius-sm margin-bottom-lg d-flex flex-column">
             <div class="d-flex justify-content-between align-items-start">
@@ -12,7 +14,7 @@
                         <div class="d-flex flex-column justify-content-start">
                             <EditableTextField :editMode="editMode" class="margin-bottom-sm position-relative">
                                 <template #staticField>
-                                    <h1 class="font-xl-b font-color-light">
+                                    <h1 class="font-xl-b font-color-light" v-if="member.account">
                                         {{member.account.display}}
                                     </h1>
                                 </template>
@@ -22,6 +24,7 @@
                                             @submit.prevent="updateAccountDisplay()"
                                         >
                                             <TextInput
+                                                v-if="member.account"
                                                 :placeholder="member.account.display"
                                                 id="AccountDisplay"
                                                 label="Display Name"
@@ -42,9 +45,10 @@
                                 <template #inputField>
                                     <form
                                             class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm"
-                                            @submit.prevent="updateBillingEmail()"
+                                            @submit.prevent="updateEmail()"
                                         >
                                             <TextInput
+                                                v-if="member.account"
                                                 :placeholder="member.account.primary_email"
                                                 id="PrimaryEmail"
                                                 label="Email"
@@ -82,7 +86,7 @@
                         <span class="font-base-sb margin-right-sm">Status:</span>
                         <span class="font-sm font-sm">{{member.status}}</span>
                     </div>
-                    <div class="d-flex margin-bottom-xs align-items-center">
+                    <div class="d-flex margin-bottom-xs align-items-center" v-if="member.account">
                         <span class="font-base-sb margin-right-sm">Account Name:</span>
                         <span class="font-sm font-sm">{{member.account.name}}</span>
                     </div>
@@ -90,7 +94,10 @@
                         <span class="font-base-sb margin-right-sm">Primary Contact:</span>
                         <EditableTextField :editMode="editMode" class="position-relative">
                             <template #staticField>
-                                <span class="font-sm font-sm">{{member.account.primary_email}}</span>
+                                <span 
+                                    class="font-sm font-sm" 
+                                    v-if="member.account"
+                                >{{member.account.primary_email}}</span>
                             </template>
                             <template #inputField>
                                 <span class="font-base font-color-light">
@@ -99,6 +106,7 @@
                                         @submit.prevent="updatePrimaryEmail()"
                                     >
                                         <TextInput
+                                            v-if="member.account"
                                             :placeholder="member.account.primary_email"
                                             id="PrimaryEmail"
                                             label="Primary Email"
@@ -118,11 +126,26 @@
                             text="Generate CLI Client Credential"
                             @click="generateClientCredential()"
                         />
-                        <Button
-                            class="btn-outline-danger-sm font-color-danger font-sm"
-                            text="Permanantly Delete Account"
-                            @click="deleteAccount()"
-                        />
+                        <Modal id="deleteAccountModal" label="modal-delete-account-header">
+                            <template v-slot:button="buttonProps">
+                                <button
+                                    v-bind="buttonProps"
+                                    class="btn-outline-danger-sm font-color-danger font-sm"
+                                >
+                                    Permanantly Delete Account
+                                </button>
+                            </template>
+                            <template v-slot:modalTitle>
+                                <h5 class="font-base-b font-color-light">Are you sure you want to delete your account? This action is not reversible.</h5>
+                            </template>
+                            <template v-slot:modalContent>
+                                <Button
+                                    class="btn-outline-danger-sm font-color-danger font-sm"
+                                    text="Procced"
+                                    @click="deleteAccount()"
+                                />
+                            </template>
+                        </Modal>
                     </div>
                 </div>
                 <div class="d-flex flex-column bg-dark-60 padding-sm border-radius-sm font-color-light profile-plan-information">
@@ -159,7 +182,7 @@
                             <span class="font-base-sb margin-right-sm">Billing Contact:</span>
                             <EditableTextField :editMode="editMode" class="position-relative">
                                 <template #staticField>
-                                    <span class="font-sm font-sm">{{member.account.billing_email}}</span>
+                                    <span class="font-sm font-sm">{{member?.account?.billing_email}}</span>
                                 </template>
                                 <template #inputField>
                                     <span class="font-base font-color-light">
@@ -168,7 +191,7 @@
                                             @submit.prevent="updateBillingEmail()"
                                         >
                                             <TextInput
-                                                :placeholder="member.account.billing_email"
+                                                :placeholder="member?.account?.billing_email"
                                                 id="BillingEmail"
                                                 label="Billing Email"
                                                 :required="true"
@@ -195,10 +218,48 @@
                                     text="Next Invoice"
                                 />
                             </div>
-                            <Button
-                                class="btn-fill-primary-full font-color-light font-sm"
-                                text="Upgrade"
-                            />
+                            
+                            <div
+                                v-if="member.account?.active_plan?.type === 'Trial'"
+                            >
+                                <Modal id="inviteModal" label="modal-invite-header">
+                                    <template v-slot:button="buttonProps">
+                                        <Button
+                                            v-bind="buttonProps"
+                                            class="btn-fill-primary-full font-color-light font-sm"
+                                            text="Upgrade"
+                                        />
+                                    </template>
+                                    <template v-slot:modalTitle>
+                                    </template>
+                                    <template v-slot:modalContent>
+                                        <stripe-pricing-table pricing-table-id="prctbl_1LtVOcGZtHTgMn6lK07ldv8B"
+                                        publishable-key="pk_live_51HTJBRGZtHTgMn6l6LdsX1xQYlEwDSFR2aUpjzooo0wIiRTvxJZC4Op6aSeceg5JLGPy9qeam7s1AKVBXoSNjY8R00Qi76Bera">
+                                        </stripe-pricing-table>
+                                    </template>
+                                </Modal>
+                            </div>
+                            <div v-else>
+                                <Modal id="inviteModal" label="modal-invite-header">
+                                    <template v-slot:button="buttonProps">
+                                        <Button
+                                            v-bind="buttonProps"
+                                            class="btn-fill-primary-full font-color-light font-sm"
+                                            text="Upgrade"
+                                        />
+                                    </template>
+                                    <template v-slot:modalTitle>
+                                    </template>
+                                    <template v-slot:modalContent>
+                                       <form @submit.prevent="updateForm()">
+                                            <ContactForm 
+                                                SubjectFieldDefault="I want to update my account!"
+                                                :TextAreaFieldDefault="`My account is ${member.account?.active_plan.type}. I want to update it.`"
+                                            />
+                                       </form>
+                                    </template>
+                                </Modal>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -438,9 +499,11 @@
     import Toggle from "../components/general/Toggle.vue";
     import EditableTextField from '../components/inputs/EditableTextField.vue';
     import TextInput from '../components/inputs/TextInput.vue';
+    import ContactForm from "../components/forms/ContactForm.vue";
     import EmaiInput from '../components/inputs/EmaiInput.vue';
     import Modal from "../components/general/Modal.vue";
     import ValidationMessage from '../components/general/ValidationMessage.vue';
+    import loadingComponent from '../components/general/loadingComponent.vue';
 
     export default {
         components: {
@@ -456,7 +519,9 @@
             IconTrash,
             EmaiInput,
             Modal,
-            ValidationMessage
+            ValidationMessage,
+            loadingComponent,
+            ContactForm
         },
         setup() {
             return {
@@ -480,6 +545,7 @@
                 memberDeleteMessageType: "",
                 toggleFeedMessage: "",
                 toggleFeedMessageType: "",
+                loading: false,
             }
         },
         created() {
@@ -487,7 +553,17 @@
             this.fetchClients()
             this.fetchMembers()
         },
+        mounted(){
+            let stripeScript = document.createElement('script');
+            stripeScript.setAttribute('src', 'https://js.stripe.com/v3/pricing-table.js');
+            document.head.appendChild(stripeScript)
+        },
         methods: {
+            toggleEditMode() {
+                this.editMode = !this.editMode;
+                this.emailUpdateMessage = "";
+                this.emailUpdateMessageType  = "";
+            },
             async fetchProfile() {
                 const req_url = `${this.api_url}/me`
                 const ts = moment().utc().unix()
@@ -539,6 +615,7 @@
                     }
                 ]
                 this.member.account.active_plan = payments[Math.floor(Math.random()*payments.length)]
+                this.loading = false;
             },
             async fetchClients() {
                 this.loading = true
@@ -558,7 +635,6 @@
                     this.error = error
                     this.loading = false
                 })
-                this.loading = false
                 if (response.status === 404) {
                     this.members = []
                 } else if (response.status !== 200) {
@@ -571,6 +647,7 @@
                         return client
                     })
                 }
+                this.loading = false;
             },
             async fetchMembers() {
                 this.loading = true
@@ -590,7 +667,6 @@
                     this.error = error
                     this.loading = false
                 })
-                this.loading = false
                 if (response.status === 404) {
                     this.members = []
                 } else if (response.status !== 200) {
@@ -604,11 +680,37 @@
                         return member
                     })
                 }
+                this.loading = false
             },
-            toggleEditMode() {
-                this.editMode = !this.editMode;
-                this.emailUpdateMessage = "";
-                this.emailUpdateMessageType  = "";
+            async updateEmail() {
+                this.loading = true;
+                const req_url = `${this.api_url}/members/${localStorage.getItem('/member/email')}`
+                const ts = moment().utc().unix()
+                const url = new URL(req_url)
+                const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
+                const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+                hash.update(canonical_string)
+                const mac = hash.finalize()
+                const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+                const payload = JSON.stringify({
+                    "email": this.primaryEmail,
+                });
+                const response = await fetch(req_url, {
+                    headers: {"Authorization": header},
+                    method: 'POST',
+                    body: payload
+                }).catch(error => {
+                    this.error = error
+                    this.memberDeleteMessage = "Something went wrong. E-mail wasn't updated."
+                    this.memberDeleteMessageType = "error"
+                    this.loading = false
+                })
+                if (response.status == 200) {
+                    this.editMode= !this.editMode;
+                    this.emailUpdateMessage = "E-mail was updated!"
+                    this.emailUpdateMessageType = "success"
+                    this.loading = false
+                }
             },
             updateEmail() {
                 console.log("API CALL");
@@ -636,15 +738,86 @@
                 this.inviteMessage = "E-mail was sent!"
                 this.inviteMessageType = "success"
             },
-            deleteMember(){
-                console.log("member deleted");
-                this.memberDeleteMessage = "Member was deleted"
-                this.memberDeleteMessageType = "success"
-                console.log("delete member")
-                console.log("return new list of members")
+            async deleteAccount() {
+                this.loading = true
+                const req_url = `${this.api_url}/members/${localStorage.getItem('/member/email')}`
+                const ts = moment().utc().unix()
+                const url = new URL(req_url)
+                const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
+                const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+                hash.update(canonical_string)
+                const mac = hash.finalize()
+                const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+                const response = await fetch(req_url, {
+                    headers: {"Authorization": header},
+                    method: 'DELETE'
+                })
+                if (response.status == 200) {
+                    this.memberDeleteMessage = "Account was deleted"
+                    this.memberDeleteMessageType = "success"
+                    this.loading = false
+                } else {
+                    this.memberDeleteMessage = "Something went wrong. Couldn't delete account."
+                    this.memberDeleteMessageType = "error"
+                    this.loading = false
+                }
             },
-            generateClientCredential(){
-                console.log("generate client credentail")
+            async deleteMember(){
+                this.loading = true
+                const req_url = `${this.api_url}/account`
+                const ts = moment().utc().unix()
+                const url = new URL(req_url)
+                const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
+                const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+                hash.update(canonical_string)
+                const mac = hash.finalize()
+                const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+                const response = await fetch(req_url, {
+                    headers: {"Authorization": header},
+                    method: 'DELETE'
+                })
+                if (response.status == 200) {
+                    this.memberDeleteMessage = "This member was deleted"
+                    this.memberDeleteMessageType = "success"
+                    this.loading = false
+                } else {
+                    this.memberDeleteMessage = "Something went wrong. Member couldn't be deleted."
+                    this.memberDeleteMessageType = "error"
+                    this.loading = false
+                }
+                
+            },
+            async generateClientCredential(){
+                this.loading = true
+                const req_url = `${this.api_url}/claim/${localStorage.getItem('/account/name')}`
+                const ts = moment().utc().unix()
+                const url = new URL(req_url)
+                const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
+                const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+                hash.update(canonical_string)
+                const mac = hash.finalize()
+                const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+                // const payload = JSON.stringify({
+                //     "operating_system": this.clients[0].client_info.operating_system,
+                //     "operating_system_release": this.clients[0].client_info.operating_system_release,
+                //     "operating_system_version": this.clients[0].client_info.operating_system_version,
+                //     "architecture": this.clients[0].client_info.architecture,
+                // });
+                const response = await fetch(req_url, {
+                    headers: {"Authorization": header},
+                    method: 'POST',
+                    // body: payload
+                })
+                if (response.status == 200) {
+                    this.memberDeleteMessage = "New Credentials generated!"
+                    this.memberDeleteMessageType = "success"
+                    this.loading = false
+                } else {
+                    this.memberDeleteMessage = `${response.status}: Something went wrong. Couldn't generate new credentials.`
+                    this.memberDeleteMessageType = "error"
+                    this.loading = false
+                }
+                this.fetchClients();
             },
             async toggleClientFeed($event, client_name) {
                 const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))

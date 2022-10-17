@@ -18,7 +18,7 @@ export default {
         left: 0;
         right: 0;
         background: color('dark-60');
-        z-index: 1000;
+        z-index: 1000000;
         height: 100%;
         width: 100%;
         display: flex;
