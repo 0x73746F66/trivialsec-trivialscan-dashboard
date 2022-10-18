@@ -1,4 +1,4 @@
-<template>    
+<template>
     <loadingComponent class="loading" :class="{'inactive': !loading}"/>
 
     <div class="container padding-top-xl padding-bottom-xl">
@@ -21,7 +21,7 @@
                                 <template #inputField>
                                     <form
                                             class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm"
-                                            @submit.prevent="updateAccountDisplay()"
+                                            @submit.prevent="updateAccountDisplay($event)"
                                         >
                                             <TextInput
                                                 v-if="member.account"
@@ -45,12 +45,12 @@
                                 <template #inputField>
                                     <form
                                             class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm"
-                                            @submit.prevent="updateEmail()"
+                                            @submit.prevent="updateEmail($event)"
                                         >
                                             <TextInput
-                                                v-if="member.account"
-                                                :placeholder="member.account.primary_email"
-                                                id="PrimaryEmail"
+                                                v-if="member.email"
+                                                :placeholder="member.email"
+                                                id="Email"
                                                 label="Email"
                                                 :required="true"
                                             />
@@ -94,8 +94,8 @@
                         <span class="font-base-sb margin-right-sm">Primary Contact:</span>
                         <EditableTextField :editMode="editMode" class="position-relative">
                             <template #staticField>
-                                <span 
-                                    class="font-sm font-sm" 
+                                <span
+                                    class="font-sm font-sm"
                                     v-if="member.account"
                                 >{{member.account.primary_email}}</span>
                             </template>
@@ -103,7 +103,7 @@
                                 <span class="font-base font-color-light">
                                     <form
                                         class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm"
-                                        @submit.prevent="updatePrimaryEmail()"
+                                        @submit.prevent="updatePrimaryEmail($event)"
                                     >
                                         <TextInput
                                             v-if="member.account"
@@ -190,7 +190,7 @@
                                     <span class="font-base font-color-light">
                                         <form
                                             class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm"
-                                            @submit.prevent="updateBillingEmail()"
+                                            @submit.prevent="updateBillingEmail($event)"
                                         >
                                             <TextInput
                                                 :placeholder="member?.account?.billing_email"
@@ -253,15 +253,15 @@
                                         <h3 class="font-light font-lg-sb">Do you wish to upgrade your account type?</h3>
                                     </template>
                                     <template v-slot:modalContent>
-                                        <ValidationMessage 
+                                        <ValidationMessage
                                             v-if="upgradeFormMessage.length > 0"
                                             class="justify-content-between"
-                                            :message="upgradeFormMessage" 
-                                            :type="upgradeFormMessageType" 
+                                            :message="upgradeFormMessage"
+                                            :type="upgradeFormMessageType"
                                         />
                                         <p class="font-sm font-light">Please provide us with your preferred method of contact (i.e. Phone number, e-mail)</p>
                                         <form @submit.prevent="upgradeForm($event)">
-                                            <TextInput 
+                                            <TextInput
                                                 :placeholder="member.account.primary_email"
                                                 id="preferredMethodOfContact"
                                                 label="Contact"
@@ -294,7 +294,7 @@
                             <h5 class="font-base-b font-color-light">Invite members</h5>
                         </template>
                         <template v-slot:modalContent>
-                            <form @submit.prevent="inviteMembers()">
+                            <form @submit.prevent="inviteMembers($event)">
                                 <ValidationMessage
                                     v-if="this.inviteMessage.length > 0"
                                     class="justify-content-between"
@@ -533,7 +533,7 @@
             Modal,
             ValidationMessage,
             loadingComponent,
-            
+
         },
         setup() {
             return {
@@ -549,8 +549,13 @@
                 editMode: false,
                 inviteMessage: "",
                 inviteMessageType: "",
+                email: "",
                 emailUpdateMessage: "",
                 emailUpdateMessageType: "",
+                primaryEmail: "",
+                primaryEmailUpdateMessage: "",
+                primaryEmailUpdateMessageType: "",
+                billingEmail: "",
                 billingEmailUpdateMessage: "",
                 billingEmailUpdateMessageType: "",
                 upgradeFormMessage: "",
@@ -579,23 +584,25 @@
                 this.emailUpdateMessageType  = "";
             },
             async fetchProfile() {
+                this.loading = true;
                 const req_url = `${this.api_url}/me`
                 const ts = moment().utc().unix()
                 const url = new URL(req_url)
                 const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
-                console.log(canonical_string)
                 const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
                 hash.update(canonical_string)
                 const mac = hash.finalize()
                 const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
-                console.log(header)
                 const response = await fetch(req_url, {
                     headers: {"Authorization": header}
-                }).catch(alert)
+                }).catch(error => {
+                    this.error = error
+                })
                 const data = await response.json()
-                console.log(data)
                 if (response.status !== 200) {
-                    alert(`${response.status} ${response.statusText}`)
+                    this.error = `${response.status} ${response.statusText}`
+                    this.loading = false
+                    return;
                 }
                 this.member = data.member
                 this.member.status = this.member.confirmed ? "Confirmed" : "Pending activation"
@@ -629,7 +636,7 @@
                     }
                 ]
                 this.member.account.active_plan = payments[Math.floor(Math.random()*payments.length)]
-                this.loading = false;
+                this.loading = false
             },
             async fetchClients() {
                 this.loading = true
@@ -637,31 +644,31 @@
                 const ts = moment().utc().unix()
                 const url = new URL(req_url)
                 const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
-                console.log(canonical_string)
                 const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
                 hash.update(canonical_string)
                 const mac = hash.finalize()
                 const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
-                console.log(header)
                 const response = await fetch(req_url, {
                     headers: {"Authorization": header}
                 }).catch(error => {
                     this.error = error
-                    this.loading = false
                 })
-                if (response.status === 404) {
-                    this.members = []
+                if (response.status === 204) {
+                    this.clients = []
+                    this.loading = false
+                    return;
                 } else if (response.status !== 200) {
-                    alert(`${response.status} ${response.statusText}`)
-                } else {
-                    const data = await response.json()
-                    console.log(data)
-                    this.clients = data.map(client => {
-                        client.created = moment(client.timestamp).fromNow()
-                        return client
-                    })
+                    this.error = `${response.status} ${response.statusText}`
+                    this.loading = false
+                    return;
                 }
-                this.loading = false;
+                const data = await response.json()
+                console.log(data)
+                this.clients = data.map(client => {
+                    client.created = moment(client.timestamp).fromNow()
+                    return client
+                })
+                this.loading = false
             },
             async fetchMembers() {
                 this.loading = true
@@ -669,77 +676,151 @@
                 const ts = moment().utc().unix()
                 const url = new URL(req_url)
                 const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
-                console.log(canonical_string)
                 const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
                 hash.update(canonical_string)
                 const mac = hash.finalize()
                 const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
-                console.log(header)
                 const response = await fetch(req_url, {
                     headers: {"Authorization": header}
                 }).catch(error => {
                     this.error = error
-                    this.loading = false
                 })
-                if (response.status === 404) {
+                if (response.status === 204) {
                     this.members = []
+                    this.loading = false
+                    return;
                 } else if (response.status !== 200) {
-                    alert(`${response.status} ${response.statusText}`)
-                } else {
-                    const data = await response.json()
-                    console.log(data)
-                    this.members = data.map(member => {
-                        member.created = moment(member.timestamp).fromNow()
-                        member.status = member.confirmed ? "Confirmed" : "Pending Activation"
-                        return member
-                    })
+                    this.error = `${response.status} ${response.statusText}`
+                    this.loading = false
+                    return;
                 }
+                const data = await response.json()
+                this.members = data.map(member => {
+                    member.created = moment(member.timestamp).fromNow()
+                    member.status = member.confirmed ? "Confirmed" : "Pending Activation"
+                    return member
+                })
                 this.loading = false
             },
-            async updateEmail() {
+            async updateEmail(event) {
+                const email = event.target.elements['Email'].value
+                const payload = JSON.stringify({
+                    "email": email,
+                })
                 this.loading = true;
-                const req_url = `${this.api_url}/members/${localStorage.getItem('/member/email')}`
+                const req_url = `${this.api_url}/member/email`
                 const ts = moment().utc().unix()
                 const url = new URL(req_url)
-                const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
+                const canonical_string = `POST\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}\n${window.btoa(payload)}`
                 const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
                 hash.update(canonical_string)
                 const mac = hash.finalize()
                 const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
-                const payload = JSON.stringify({
-                    "email": this.primaryEmail,
-                });
                 const response = await fetch(req_url, {
-                    headers: {"Authorization": header},
+                    headers: {
+                        "Content-Type": 'application/json;charset=UTF-8',
+                        "Authorization": header,
+                    },
                     method: 'POST',
                     body: payload
                 }).catch(error => {
                     this.error = error
-                    this.memberDeleteMessage = "Something went wrong. E-mail wasn't updated."
-                    this.memberDeleteMessageType = "error"
+                    this.emailUpdateMessage = "Something went wrong. E-mail wasn't updated."
+                    this.emailUpdateMessageType = "error"
                     this.loading = false
                 })
-                if (response.status == 200) {
-                    this.editMode= !this.editMode;
-                    this.emailUpdateMessage = "E-mail was updated!"
-                    this.emailUpdateMessageType = "success"
+                if (response.status !== 200) {
+                    this.error = `${response.status} ${response.statusText}`
                     this.loading = false
+                    return;
                 }
-            },
-            updateEmail() {
-                console.log("API CALL");
+                const data = await response.json()
+                this.editMode = !this.editMode
+                this.member.email = email
                 this.emailUpdateMessage = "E-mail was updated!"
                 this.emailUpdateMessageType = "success"
-                console.log(this.primaryEmail);
-                console.log(this.billingEmail);
-                localStorage.setItem('/member/email', data?.member?.email || localStorage.getItem('/member/email'))
+                localStorage.setItem('/member/email', this.email)
                 localStorage.setItem('/member/email_md5', data?.member?.email_md5 || localStorage.getItem('/member/email_md5'))
-                this.editMode= !this.editMode;
+                this.$forceUpdate()
+                this.loading = false
             },
-            updateBillingEmail() {
+            async updatePrimaryEmail(event) {
+                const primaryEmail = event.target.elements['PrimaryEmail'].value
+                const payload = JSON.stringify({
+                    "email": primaryEmail,
+                })
+                this.loading = true;
+                const req_url = `${this.api_url}/member/email`
+                const ts = moment().utc().unix()
+                const url = new URL(req_url)
+                const canonical_string = `POST\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}\n${window.btoa(payload)}`
+                const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+                hash.update(canonical_string)
+                const mac = hash.finalize()
+                const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+                const response = await fetch(req_url, {
+                    headers: {
+                        "Content-Type": 'application/json;charset=UTF-8',
+                        "Authorization": header,
+                    },
+                    method: 'POST',
+                    body: payload
+                }).catch(error => {
+                    this.error = error
+                    this.primaryEmailUpdateMessage = "Something went wrong. E-mail wasn't updated."
+                    this.primaryEmailUpdateMessageType = "error"
+                    this.loading = false
+                })
+                if (response.status !== 200) {
+                    this.error = `${response.status} ${response.statusText}`
+                    this.loading = false
+                    return;
+                }
+                this.editMode = !this.editMode
+                this.member.account.primary_email = primaryEmail
+                this.$forceUpdate()
+                this.primaryEmailUpdateMessage = "E-mail was updated!"
+                this.primaryEmailUpdateMessageType = "success"
+                this.loading = false
+            },
+            async updateBillingEmail(event) {
+                const billingEmail = event.target.elements['BillingEmail'].value
+                const payload = JSON.stringify({
+                    "email": billingEmail,
+                })
+                this.loading = true;
+                const req_url = `${this.api_url}/billing/email`
+                const ts = moment().utc().unix()
+                const url = new URL(req_url)
+                const canonical_string = `POST\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}\n${window.btoa(payload)}`
+                const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+                hash.update(canonical_string)
+                const mac = hash.finalize()
+                const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+                const response = await fetch(req_url, {
+                    headers: {
+                        "Content-Type": 'application/json;charset=UTF-8',
+                        "Authorization": header,
+                    },
+                    method: 'POST',
+                    body: payload
+                }).catch(error => {
+                    this.error = error
+                    this.billingEmailUpdateMessage = "Something went wrong. E-mail wasn't updated."
+                    this.billingEmailUpdateMessageType = "error"
+                    this.loading = false
+                })
+                if (response.status !== 202) {
+                    this.error = `${response.status} ${response.statusText}`
+                    this.loading = false
+                    return;
+                }
+                this.editMode= !this.editMode
+                this.member.account.billingEmail = billingEmail
+                this.$forceUpdate()
                 this.billingEmailUpdateMessage = "E-mail was updated!"
                 this.billingEmailUpdateMessageType = "success"
-                this.editMode = !this.editMode;
+                this.loading = false
             },
             updateAccountDisplay() {
                 this.billingEmailUpdateMessage = "Display Name was updated!"
@@ -756,16 +837,15 @@
                 const payload = JSON.stringify({
                     'contact': e.target.elements.preferredMethodOfContact.value
                 })
-
                 this.loading = true;
                 const req_url = `${this.api_url}/account/upgrade`
                 const ts = moment().utc().unix()
                 const url = new URL(req_url)
                 const canonical_string = `POST\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}\n${window.btoa(payload)}`
                 const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+                hash.update(canonical_string)
                 const mac = hash.finalize()
                 const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
-                
                 const response = await fetch(req_url, {
                     method: 'POST',
                     body: payload,
@@ -774,7 +854,6 @@
                         'Content-Type': 'application/json;charset=UTF-8',
                     },
                 })
-
                 if (response.status === 202) {
                     this.upgradeFormMessage = "Thank you for reaching out to us! We will be in contact soon.";
                     this.upgradeFormMessageType = "success";
@@ -789,7 +868,7 @@
 
             },
             // async deleteAccount() {
-                
+
             //     this.loading = true
             //     const req_url = `${this.api_url}/summary/Mv1N0o4lOTPaATxodTlsEPYFc9Rkr7-w97ygP4zweoSxL_6rBG347F7T6jbgaz1VMI5VwID4f14`
             //     const ts = moment().utc().unix()
@@ -803,7 +882,7 @@
             //         headers: {"Authorization": header},
             //         method: 'GET'
             //     })
-                
+
             //     const data = await response.json()
             //     console.log('delete account');
             //     console.log(data);
@@ -840,7 +919,7 @@
                     this.memberDeleteMessageType = "error"
                     this.loading = false
                 }
-                
+
             },
             async generateClientCredential(){
                 this.loading = true

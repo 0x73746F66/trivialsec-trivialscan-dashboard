@@ -37,7 +37,6 @@ const router = createRouter({
             path: "/accept/:token",
             name: "accept_link",
             beforeEnter: async to => {
-                console.log('###########################################')
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/accept/${to.params.token}`)
                 .catch(errors => {
                     console.log('errors')
