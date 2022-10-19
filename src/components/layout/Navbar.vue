@@ -1,8 +1,8 @@
 <template>
-    <div class="nav" :class="{'nav-animate-hidden' : isNavbarHidden}">
+    <div class="nav" :class="{'nav-animate-hidden' : isNavbarHidden, 'nav-logged-in': logged_in}">
         <div class="container">
             <div class="row">
-                <div class="col-12 d-flex flex-lg-row flex-column justify-content-between">
+                <div class="col-12 d-flex flex-lg-row flex-column justify-content-between ">
                     <div class="d-flex justify-content-between">
                         <RouterLink to="/" class="text-decoration-none">
                             <div class="d-flex align-items-center">
@@ -29,10 +29,14 @@
                         class="d-flex flex-column flex-lg-row align-items-center nav-transition nav-content"
                         :class="{'nav-hidden' : navbarHidden}"
                     >
-                        <RouterLink v-if="$route.params.report_id" :to="{name: 'summary', params: {report_id: $route.params.report_id}}" class="router-link font-base font-color-light text-decoration-none margin-right-md">Summary</RouterLink>
-                        <RouterLink v-if="$route.params.report_id" :to="{name: 'detail', params: {report_id: $route.params.report_id}}" class="router-link font-base font-color-light text-decoration-none margin-right-md">Full Report</RouterLink>
                         <RouterLink v-if="logged_in" to="/logout" class="router-link font-base font-color-light text-decoration-none margin-right-md">Logout</RouterLink>
-                        <RouterLink v-if="logged_in" to="/profile" class="router-link font-base font-color-light text-decoration-none margin-right-md">{{account_name}}<br>{{member_email}}</RouterLink>
+                        <RouterLink v-if="logged_in" to="/profile" class="router-link d-flex align-items-end font-color-light text-decoration-none margin-right-md d-flex">
+                            <div class="d-flex flex-column margin-right-sm align-items-end">
+                                <span class="font-base">{{account_name}}</span>
+                                <span class="font-sm">{{member_email}}</span>
+                            </div>
+                            <img :src="`https://www.gravatar.com/avatar/${email_md5}`" :alt="`${account_name} Profile Picture`" class="font-xs nav-profile">
+                        </RouterLink>
                     </div>
                 </div>
             </div>
@@ -56,8 +60,9 @@
             }
         },
         created() {
-            this.account_name = localStorage.getItem('/account/name')
+            this.account_name = localStorage.getItem('/account/display')
             this.member_email = localStorage.getItem('/member/email')
+            this.email_md5 = localStorage.getItem('/member/email_md5')
             this.logged_in = !!localStorage.getItem('/session/key')
         },
         methods: {
@@ -90,7 +95,15 @@
         position: fixed;
         transition: 0.2s linear;
         animation: showNavbar 0.5s forwards;
-
+        height: calc(56px + (spacers("sm") * 2));
+        @media (max-width: $breakpoint-lg) {
+            height: 65px;
+        }
+        &-profile {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
 
         &-animate-hidden {
             animation: hideNavbar 1s forwards;
@@ -134,6 +147,12 @@
         }
 
         &-content {
+            @media (max-width: $breakpoint-lg) {
+                background: rgb(26 22 22);
+                backdrop-filter: blur(8px);
+                z-index: 100;
+                // padding: spacers("sm");s
+            }
         }
 
         &-hidden {

@@ -5,7 +5,10 @@
         class="login-form"
         @submit.prevent="login"
     >
-        <ValidationMessage :message="message" :type="messageType" />
+        <ValidationMessage 
+            class="justify-content-between"
+            :message="message" :type="messageType" 
+        />
 
         <EmaiInput
             placeholder="Send an email with login link"

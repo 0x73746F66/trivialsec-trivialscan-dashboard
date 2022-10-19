@@ -1,0 +1,1086 @@
+<template>
+    <loadingComponent class="loading" :class="{'inactive': !loading}"/>
+
+    <div class="container padding-top-xl padding-bottom-xl">
+        <div class="profile-container bg-dark-40 border-radius-sm margin-bottom-lg d-flex flex-column">
+            <div class="d-flex justify-content-between align-items-start">
+                <div class="h-100 d-flex align-items-lg-center flex-column flex-lg-row">
+                    <img
+                        :src="`https://www.gravatar.com/avatar/${member.email_md5}`"
+                        class="border-radius-round profile-picture margin-right-md margin-bottom-md mb-lg-0"
+                        alt="{{member.account.display}}'s Profile Picture'"
+                    >
+                    <div class="d-flex flex-column justify-content-start">
+                        <div class="d-flex flex-column justify-content-start">
+                            <EditableTextField :editMode="editMode" class="margin-bottom-sm position-relative">
+                                <template #staticField>
+                                    <h1 class="font-xl-b font-color-light" v-if="member.account">
+                                        {{member.account.display}}
+                                    </h1>
+                                </template>
+                                <template #inputField>
+                                    <form
+                                            class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm"
+                                            @submit.prevent="updateAccountDisplay($event)"
+                                        >
+                                            <TextInput
+                                                v-if="member.account"
+                                                :placeholder="member.account.display"
+                                                id="AccountDisplay"
+                                                label="Display Name"
+                                                :required="true"
+                                            />
+                                            <button type="submit" class="inline-custom-form-btn">
+                                                <checkIcon class="profile-edit-icon" color="1abb9c"/>
+                                            </button>
+                                        </form>
+                                </template>
+                            </EditableTextField>
+                            <EditableTextField :editMode="editMode" class="margin-bottom-sm position-relative">
+                                <template #staticField>
+                                    <span class="font-base font-color-light">
+                                        {{member.email}}
+                                    </span>
+                                </template>
+                                <template #inputField>
+                                    <form
+                                            class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm"
+                                            @submit.prevent="updateEmail($event)"
+                                        >
+                                            <TextInput
+                                                v-if="member.email"
+                                                :placeholder="member.email"
+                                                id="Email"
+                                                label="Email"
+                                                :required="true"
+                                            />
+                                            <button type="submit" class="inline-custom-form-btn">
+                                                <checkIcon class="profile-edit-icon" color="1abb9c"/>
+                                            </button>
+                                        </form>
+                                </template>
+                            </EditableTextField>
+                        </div>
+                        <ValidationMessage
+                            v-if="this.emailUpdateMessage.length > 0"
+                            class="justify-content-start"
+                            :message="this.emailUpdateMessage"
+                            :type="this.emailUpdateMessageType"
+                        />
+                    </div>
+                </div>
+                <button class="edit-mode-btn" v-if="!editMode" @click="toggleEditMode()">
+                    <IconPencil class="profile-edit-icon"/>
+                </button>
+                <div v-else>
+                    <button class="edit-mode-btn close" @click="toggleEditMode()"><IconCancel class="profile-edit-icon" color="f45e5e"/></button>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-start flex-column flex-lg-row">
+                <div class="d-flex flex-column font-color-light align-items-start margin-top-md margin-bottom-sm">
+                    <div class="d-flex margin-bottom-xs align-items-center">
+                        <span class="font-base-sb margin-right-sm ">Created:</span>
+                        <span class="font-sm font-sm">{{member.created}}</span>
+                    </div>
+                    <div class="d-flex margin-bottom-xs align-items-center">
+                        <span class="font-base-sb margin-right-sm">Status:</span>
+                        <span class="font-sm font-sm">{{member.status}}</span>
+                    </div>
+                    <div class="d-flex margin-bottom-xs align-items-center" v-if="member.account">
+                        <span class="font-base-sb margin-right-sm">Account Name:</span>
+                        <span class="font-sm font-sm">{{member.account.name}}</span>
+                    </div>
+                    <div class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
+                        <span class="font-base-sb margin-right-sm">Primary Contact:</span>
+                        <EditableTextField :editMode="editMode" class="position-relative">
+                            <template #staticField>
+                                <span
+                                    class="font-sm font-sm"
+                                    v-if="member.account"
+                                >{{member.account.primary_email}}</span>
+                            </template>
+                            <template #inputField>
+                                <span class="font-base font-color-light">
+                                    <form
+                                        class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm"
+                                        @submit.prevent="updatePrimaryEmail($event)"
+                                    >
+                                        <TextInput
+                                            v-if="member.account"
+                                            :placeholder="member.account.primary_email"
+                                            id="PrimaryEmail"
+                                            label="Primary Email"
+                                            :required="true"
+                                        />
+                                        <button type="submit" class="inline-custom-form-btn">
+                                            <checkIcon class="profile-edit-icon" color="1abb9c"/>
+                                        </button>
+                                    </form>
+                                </span>
+                            </template>
+                        </EditableTextField>
+                    </div>
+                    <div class="d-flex margin-bottom-sm align-items-lg-start d-flex flex-column">
+                        <Button
+                            class="btn-outline-primary-sm font-color-primary font-sm margin-bottom-sm"
+                            text="Generate CLI Client Credential"
+                            @click="generateClientCredential()"
+                        />
+                        <Modal id="deleteAccountModal" label="modal-delete-account-header">
+                            <template v-slot:button="buttonProps">
+                                <button
+                                    v-bind="buttonProps"
+                                    class="btn-outline-danger-sm font-color-danger font-sm"
+                                >
+                                    Permanantly Delete Account
+                                </button>
+                            </template>
+                            <template v-slot:modalTitle>
+                                <h5 class="font-base-b font-color-light">Are you sure you want to delete your account? This action is not reversible.</h5>
+                            </template>
+                            <template v-slot:modalContent>
+                                <Button
+                                    class="btn-outline-danger-sm font-color-danger font-sm"
+                                    text="Procced"
+                                    @click="deleteAccount()"
+                                />
+                            </template>
+                        </Modal>
+                    </div>
+                </div>
+                <div class="d-flex flex-column bg-dark-60 padding-sm border-radius-sm font-color-light profile-plan-information">
+                    <div class="d-flex flex-column justify-content-between">
+                        <div class="d-flex flex-column flex-lg-row justify-content-between margin-bottom-sm">
+                            <div class="margin-right-lg d-flex flex-lg-row flex-column align-items-lg-center">
+                                <span class="font-base-sb margin-right-sm margin-bottom-sm mb-lg-0">Active Plan:</span>
+                                <span class="font-sm font-sm">{{member.account.billing.product_name}}</span>
+                            </div>
+                            <div>
+                                <span class="font-color-primary font-lg-b">{{member.account.billing.display_amount}} </span>
+                                <span v-if="member.account.billing?.display_period" class="font-lg-b">/{{member.account.billing.display_period}}</span>
+                            </div>
+                        </div>
+                        <div v-if="member.account.billing.is_trial" class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
+                            <span class="font-sm font-color-primary">Trial ends {{member.account.billing.next_payment}}</span>
+                        </div>
+                        <div v-if="member.account.billing?.description" class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
+                            <span class="font-base-sb margin-right-sm">Payment Method:</span>
+                            <span class="font-sm">{{member.account.billing.description}}</span>
+                        </div>
+                        <div v-if="member.account.billing?.next_due && !member.account.billing.is_trial" class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
+                            <span class="font-base-sb margin-right-sm">Next Payment:</span>
+                            <span class="font-sm">{{member.account.billing.next_payment}}</span>
+                        </div>
+                        <div class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
+                            <span class="font-base-sb margin-right-sm">Billing Contact:</span>
+                            <EditableTextField :editMode="editMode" class="position-relative">
+                                <template #staticField>
+                                    <span class="font-sm">{{member?.account?.billing_email}}</span>
+                                </template>
+                                <template #inputField>
+                                    <span class="font-base font-color-light">
+                                        <form
+                                            class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm"
+                                            @submit.prevent="updateBillingEmail($event)"
+                                        >
+                                            <TextInput
+                                                :placeholder="member?.account?.billing_email"
+                                                id="BillingEmail"
+                                                label="Billing Email"
+                                                :required="true"
+                                            />
+                                            <button type="submit" class="inline-custom-form-btn">
+                                                <checkIcon class="profile-edit-icon" color="1abb9c"/>
+                                            </button>
+                                        </form>
+                                    </span>
+                                </template>
+                            </EditableTextField>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <div class="d-flex margin-bottom-sm">
+                                <a v-if="member.account.billing?.has_invoice"
+                                    target="_blank"
+                                    href="https://billing.stripe.com/p/login/8wMcQ27YKdPcbxSeUU"
+                                    class="text-decoration-none d-flex align-items-center justify-content-center margin-bottom-sm mb-lg-0 btn-outline-primary-full font-color-primary font-sm"
+                                    text="Next Invoice"
+                                />
+                            </div>
+                            <div
+                                v-if="member.account.billing.product_name === 'Community Edition'"
+                            >
+                                <Modal id="upgradeModal" label="modal-upgrade-header">
+                                    <template v-slot:button="buttonProps">
+                                        <Button
+                                            v-bind="buttonProps"
+                                            class="btn-fill-primary-full font-color-light font-sm"
+                                            text="Upgrade"
+                                        />
+                                    </template>
+                                    <template v-slot:modalTitle>
+                                    </template>
+                                    <template v-slot:modalContent>
+                                        <stripe-pricing-table pricing-table-id="prctbl_1LtVOcGZtHTgMn6lK07ldv8B"
+                                        publishable-key="pk_live_51HTJBRGZtHTgMn6l6LdsX1xQYlEwDSFR2aUpjzooo0wIiRTvxJZC4Op6aSeceg5JLGPy9qeam7s1AKVBXoSNjY8R00Qi76Bera">
+                                        </stripe-pricing-table>
+                                    </template>
+                                </Modal>
+                            </div>
+                            <div v-if="member.account.billing.product_name === 'Professional'">
+                                <Modal id="upgradeModal" label="modal-upgrade-header">
+                                    <template v-slot:button="buttonProps">
+                                        <Button
+                                            v-bind="buttonProps"
+                                            class="btn-fill-primary-full font-color-light font-sm"
+                                            text="Upgrade"
+                                        />
+                                    </template>
+                                    <template v-slot:modalTitle>
+                                        <h3 class="font-light font-lg-sb">Do you wish to upgrade your account type?</h3>
+                                    </template>
+                                    <template v-slot:modalContent>
+                                        <ValidationMessage
+                                            v-if="upgradeFormMessage.length > 0"
+                                            class="justify-content-between"
+                                            :message="upgradeFormMessage"
+                                            :type="upgradeFormMessageType"
+                                        />
+                                        <p class="font-sm font-light">Please provide us with your preferred method of contact (i.e. Phone number, e-mail)</p>
+                                        <form @submit.prevent="upgradeForm($event)">
+                                            <TextInput
+                                                :placeholder="member.account.primary_email"
+                                                id="preferredMethodOfContact"
+                                                label="Contact"
+                                                :required="true"
+                                                :textDefault="member.account.primary_email"
+                                            />
+                                            <button type="submit" class="btn-fill-primary-full font-color-light font-sm">Submit</button>
+                                       </form>
+                                    </template>
+                                </Modal>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="profile-container bg-dark-40 border-radius-sm d-flex flex-column">
+            <div class="profile-members-section d-flex flex-column">
+                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center">
+                    <h3 class="font-color-light font-lg-b modal-invite-header">Members</h3>
+                    <Modal id="inviteModal" label="modal-invite-header">
+                        <template v-slot:button="buttonProps">
+                            <Button
+                                v-bind="buttonProps"
+                                class="btn-outline-primary-sm font-color-primary font-sm"
+                                text="Invite Members"
+                            />
+                        </template>
+                        <template v-slot:modalTitle>
+                            <h5 class="font-base-b font-color-light">Invite members</h5>
+                        </template>
+                        <template v-slot:modalContent>
+                            <form @submit.prevent="inviteMembers($event)">
+                                <ValidationMessage
+                                    v-if="this.inviteMessage.length > 0"
+                                    class="justify-content-between"
+                                    :message="this.inviteMessage"
+                                    :type="this.inviteMessageType"
+                                />
+                                <EmaiInput
+                                    placeholder="Who do you want to invite?"
+                                    id="id-invite-email"
+                                    label="E-mail"
+                                    :required="true"
+                                />
+                                <Button
+                                    class="btn-outline-primary-full font-color-primary font-sm"
+                                    text="Invite"
+                                    type="submit"
+                                />
+                            </form>
+                        </template>
+                    </Modal>
+                </div>
+                <div class="d-flex w-100">
+                    <ValidationMessage
+                        v-if="this.memberDeleteMessage.length > 0"
+                        class="justify-content-start"
+                        :message="this.memberDeleteMessage"
+                        :type="this.memberDeleteMessageType"
+                    />
+                </div>
+                <div class="margin-top-sm">
+                    <swiper
+                        :modules="modules"
+                        :slides-per-view="1"
+                        :space-between="10"
+                        class="padding-bottom-sm"
+                        :navigation="{
+                            nextEl: '.custom-member-swiper-button-next',
+                            prevEl: '.custom-member-swiper-button-prev'
+                        }"
+                        :pagination="{ clickable: true }"
+                        :scrollbar="{ draggable: true }"
+                        :breakpoints="{
+                            '640': {
+                                slidesPerView: 1,
+                                spaceBetween: 20,
+                            },
+                            '768': {
+                                slidesPerView: 2,
+                                spaceBetween: 40,
+                            },
+                            '1024': {
+                                slidesPerView: 3,
+                                spaceBetween: 50,
+                            },
+                        }"
+                    >
+                        <swiper-slide
+                            class="d-flex border-radius-sm flex-column padding-md bg-dark-60"
+                            :class="member.current ? 'user-slider' : '' "
+                            v-for="(member, index) in members"
+                            :key="member.email_md5"
+                        >
+                            <div class="d-flex justify-content-end">
+                                <img
+                                    :src="`https://www.gravatar.com/avatar/${member.email_md5}`"
+                                    class="swiper-slide-avatar margin-bottom-sm"
+                                    alt=""
+                                />
+                            </div>
+
+                            <div class="text-left font-color-light font-sm">
+                                <p class="mb-0 font-sm word-break-all">
+                                    {{member.email}}
+                                    <span
+                                        v-if="member.current"
+                                        class="font-sm font-color-secondary"
+                                    >
+                                        (You)
+                                    </span>
+                                </p>
+                                <p class="mb-0 font-sm">{{member.status}}</p>
+                                <p v-if="member.confirmed" class="mb-0 font-sm">Joined {{member.created}}</p>
+                                <p v-else class="mb-0 font-sm">Invited {{member.created}}</p>
+                                <div class="d-flex justify-content-end delete-member-modal">
+                                    <Modal :id="`deleteMember${index}`" label="delete-member-header">
+                                        <template v-slot:button=buttonProps>
+                                            <button class="edit-mode-btn delete" v-bind='buttonProps'>
+                                                <IconTrash class="profile-edit-icon"/>
+                                            </button>
+                                        </template>
+
+                                        <template v-slot:modalTitle>
+                                            <h5 class="delete-member-header font-base font-color-light">Are you sure you want to delete this member?</h5>
+                                        </template>
+                                        <template v-slot:modalContent>
+                                            <div class="d-flex w-100">
+                                                <Button
+                                                    class="btn-outline-danger-full font-color-danger font-sm"
+                                                    text="Yes"
+                                                    @click="deleteMember()"
+                                                />
+                                            </div>
+                                        </template>
+                                    </Modal>
+                                </div>
+                            </div>
+
+                        </swiper-slide>
+                    </swiper>
+                    <div class="d-flex justify-content-between margin-top-sm border-bottom-light-20">
+                        <div>
+                            <button class="custom-swiper-button custom-member-swiper-button-prev font-color-light"> &lt; </button>
+                        </div>
+                        <div>
+                            <button class="custom-swiper-button custom-member-swiper-button-next font-color-light"> &gt; </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="client-members-section d-flex flex-column margin-top-lg">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3 class="font-color-light font-lg-b">Clients</h3>
+                </div>
+                <div class="d-flex w-100">
+                    <ValidationMessage
+                        v-if="this.toggleFeedMessage.length > 0"
+                        class="justify-content-start"
+                        :message="this.toggleFeedMessage"
+                        :type="this.toggleFeedMessageType"
+                    />
+                </div>
+                <div class="margin-top-sm">
+                    <swiper
+                        :modules="modules"
+                        :slides-per-view="1"
+                        :space-between="10"
+                        :navigation="{
+                            nextEl: '.custom-client-swiper-button-next',
+                            prevEl: '.custom-client-swiper-button-prev'
+                        }"
+                        :pagination="{ clickable: true }"
+                        :scrollbar="{ draggable: true }"
+                        :breakpoints="{
+                            '640': {
+                                slidesPerView: 1,
+                                spaceBetween: 20,
+                            },
+                            '768': {
+                                slidesPerView: 2,
+                                spaceBetween: 40,
+                            },
+                            '1024': {
+                                slidesPerView: 3,
+                                spaceBetween: 50,
+                            },
+                        }"
+                    >
+                        <swiper-slide
+                            class="d-flex border-radius-sm flex-column padding-md bg-dark-60"
+                            v-for="client in clients"
+                            :key="client.account.ip_addr"
+                        >
+                            <div class="text-left font-color-light font-sm">
+                                <p class="font-base-sb margin-bottom-sm">{{client.name}}</p>
+                                <p class="mb-0">
+                                    <span class="font-sm-sb margin-right-sm">CLI Version:</span>
+                                    <span class="font-sm">{{client.cli_version}}</span>
+                                </p>
+                                <p class="mb-0">
+                                    <span class="font-sm">{{client.ip_addr}}</span>
+                                </p>
+                                <p class="mb-0">
+                                    <span class="font-sm">{{client.client_info.operating_system}} {{client.client_info.operating_system_version}}</span>
+                                </p>
+                                <p class="margin-bottom-sm">
+                                    <span class="font-sm">{{client.client_info.operating_system_release}} {{client.client_info.architecture}}</span>
+                                </p>
+                                <p class="mb-0 font-xs">
+                                    <span>Created {{client.created}}</span>
+                                </p>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <Toggle :defaultChecked=client.active @change="toggleClientFeed($event, client.name)"/>
+                            </div>
+                        </swiper-slide>
+                    </swiper>
+                    <div class="d-flex justify-content-between margin-top-sm">
+                        <div>
+                            <button class="custom-swiper-button custom-client-swiper-button-prev font-color-light"> &lt; </button>
+                        </div>
+                        <div>
+                            <button class="custom-swiper-button custom-client-swiper-button-next font-color-light"> &gt; </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+    import { RouterLink } from "vue-router";
+    import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
+    import { Swiper, SwiperSlide  } from 'swiper/vue';
+    import moment from 'moment'
+    import CryptoJS from 'crypto-js'
+
+    import 'swiper/css';
+
+    import IconPencil from "../components/icons/IconPencil.vue";
+    import IconCancel from '../components/icons/IconCancel.vue';
+    import IconTrash from '../components/icons/IconTrash.vue';
+    import checkIcon from '../components/icons/checkIcon.vue';
+    import Button from "../components/general/Button.vue";
+    import Toggle from "../components/general/Toggle.vue";
+    import EditableTextField from '../components/inputs/EditableTextField.vue';
+    import TextInput from '../components/inputs/TextInput.vue';
+    import EmaiInput from '../components/inputs/EmaiInput.vue';
+    import Modal from "../components/general/Modal.vue";
+    import ValidationMessage from '../components/general/ValidationMessage.vue';
+    import loadingComponent from '../components/general/loadingComponent.vue';
+
+    export default {
+        components: {
+            IconPencil,
+            Button,
+            Swiper,
+            SwiperSlide,
+            Toggle,
+            EditableTextField,
+            TextInput,
+            IconCancel,
+            checkIcon,
+            IconTrash,
+            EmaiInput,
+            Modal,
+            ValidationMessage,
+            loadingComponent,
+
+        },
+        setup() {
+            return {
+                modules: [Navigation, Pagination, Scrollbar, A11y],
+            };
+        },
+        data() {
+            return {
+                api_url: import.meta.env.VITE_API_URL,
+                member: {},
+                members: [],
+                clients: [],
+                editMode: false,
+                inviteMessage: "",
+                inviteMessageType: "",
+                email: "",
+                emailUpdateMessage: "",
+                emailUpdateMessageType: "",
+                primaryEmail: "",
+                primaryEmailUpdateMessage: "",
+                primaryEmailUpdateMessageType: "",
+                billingEmail: "",
+                billingEmailUpdateMessage: "",
+                billingEmailUpdateMessageType: "",
+                upgradeFormMessage: "",
+                upgradeFormMessageType: "",
+                memberDeleteMessage: "",
+                memberDeleteMessageType: "",
+                toggleFeedMessage: "",
+                toggleFeedMessageType: "",
+                loading: false,
+            }
+        },
+        created() {
+            this.fetchProfile()
+            this.fetchClients()
+            this.fetchMembers()
+        },
+        mounted(){
+            let stripeScript = document.createElement('script');
+            stripeScript.setAttribute('src', 'https://js.stripe.com/v3/pricing-table.js');
+            document.head.appendChild(stripeScript)
+        },
+        methods: {
+            toggleEditMode() {
+                this.editMode = !this.editMode;
+                this.emailUpdateMessage = "";
+                this.emailUpdateMessageType  = "";
+            },
+            async fetchProfile() {
+                this.loading = true;
+                const req_url = `${this.api_url}/me`
+                const ts = moment().utc().unix()
+                const url = new URL(req_url)
+                const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
+                const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+                hash.update(canonical_string)
+                const mac = hash.finalize()
+                const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+                const response = await fetch(req_url, {
+                    headers: {"Authorization": header}
+                }).catch(error => {
+                    this.error = error
+                })
+                const data = await response.json()
+                if (response.status !== 200) {
+                    this.error = `${response.status} ${response.statusText}`
+                    this.loading = false
+                    return;
+                }
+                this.member = data.member
+                this.member.status = this.member.confirmed ? "Confirmed" : "Pending activation"
+                this.member.created = moment(this.member.timestamp).fromNow()
+                if (this.member.account.billing?.next_due) {
+                    this.member.account.billing.next_payment = moment(this.member.account.billing.next_due).fromNow()
+                }
+                this.loading = false
+            },
+            async fetchClients() {
+                this.loading = true
+                const req_url = `${this.api_url}/clients`
+                const ts = moment().utc().unix()
+                const url = new URL(req_url)
+                const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
+                const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+                hash.update(canonical_string)
+                const mac = hash.finalize()
+                const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+                const response = await fetch(req_url, {
+                    headers: {"Authorization": header}
+                }).catch(error => {
+                    this.error = error
+                })
+                if (response.status === 204) {
+                    this.clients = []
+                    this.loading = false
+                    return;
+                } else if (response.status !== 200) {
+                    this.error = `${response.status} ${response.statusText}`
+                    this.loading = false
+                    return;
+                }
+                const data = await response.json()
+                console.log(data)
+                this.clients = data.map(client => {
+                    client.created = moment(client.timestamp).fromNow()
+                    return client
+                })
+                this.loading = false
+            },
+            async fetchMembers() {
+                this.loading = true
+                const req_url = `${this.api_url}/members`
+                const ts = moment().utc().unix()
+                const url = new URL(req_url)
+                const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
+                const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+                hash.update(canonical_string)
+                const mac = hash.finalize()
+                const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+                const response = await fetch(req_url, {
+                    headers: {"Authorization": header}
+                }).catch(error => {
+                    this.error = error
+                })
+                if (response.status === 204) {
+                    this.members = []
+                    this.loading = false
+                    return;
+                } else if (response.status !== 200) {
+                    this.error = `${response.status} ${response.statusText}`
+                    this.loading = false
+                    return;
+                }
+                const data = await response.json()
+                this.members = data.map(member => {
+                    member.created = moment(member.timestamp).fromNow()
+                    member.status = member.confirmed ? "Confirmed" : "Pending Activation"
+                    return member
+                })
+                this.loading = false
+            },
+            async updateEmail(event) {
+                const email = event.target.elements['Email'].value
+                const payload = JSON.stringify({
+                    "email": email,
+                })
+                this.loading = true;
+                const req_url = `${this.api_url}/member/email`
+                const ts = moment().utc().unix()
+                const url = new URL(req_url)
+                const canonical_string = `POST\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}\n${window.btoa(payload)}`
+                const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+                hash.update(canonical_string)
+                const mac = hash.finalize()
+                const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+                const response = await fetch(req_url, {
+                    headers: {
+                        "Content-Type": 'application/json;charset=UTF-8',
+                        "Authorization": header,
+                    },
+                    method: 'POST',
+                    body: payload
+                }).catch(error => {
+                    this.error = error
+                    this.emailUpdateMessage = "Something went wrong. E-mail wasn't updated."
+                    this.emailUpdateMessageType = "error"
+                    this.loading = false
+                })
+                if (response.status !== 200) {
+                    this.error = `${response.status} ${response.statusText}`
+                    this.loading = false
+                    return;
+                }
+                const data = await response.json()
+                this.editMode = !this.editMode
+                this.member.email = email
+                this.emailUpdateMessage = "E-mail was updated!"
+                this.emailUpdateMessageType = "success"
+                localStorage.setItem('/member/email', this.email)
+                localStorage.setItem('/member/email_md5', data?.member?.email_md5 || localStorage.getItem('/member/email_md5'))
+                this.$forceUpdate()
+                this.loading = false
+            },
+            async updatePrimaryEmail(event) {
+                const primaryEmail = event.target.elements['PrimaryEmail'].value
+                const payload = JSON.stringify({
+                    "email": primaryEmail,
+                })
+                this.loading = true;
+                const req_url = `${this.api_url}/member/email`
+                const ts = moment().utc().unix()
+                const url = new URL(req_url)
+                const canonical_string = `POST\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}\n${window.btoa(payload)}`
+                const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+                hash.update(canonical_string)
+                const mac = hash.finalize()
+                const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+                const response = await fetch(req_url, {
+                    headers: {
+                        "Content-Type": 'application/json;charset=UTF-8',
+                        "Authorization": header,
+                    },
+                    method: 'POST',
+                    body: payload
+                }).catch(error => {
+                    this.error = error
+                    this.primaryEmailUpdateMessage = "Something went wrong. E-mail wasn't updated."
+                    this.primaryEmailUpdateMessageType = "error"
+                    this.loading = false
+                })
+                if (response.status !== 200) {
+                    this.error = `${response.status} ${response.statusText}`
+                    this.loading = false
+                    return;
+                }
+                this.editMode = !this.editMode
+                this.member.account.primary_email = primaryEmail
+                this.$forceUpdate()
+                this.primaryEmailUpdateMessage = "E-mail was updated!"
+                this.primaryEmailUpdateMessageType = "success"
+                this.loading = false
+            },
+            async updateBillingEmail(event) {
+                const billingEmail = event.target.elements['BillingEmail'].value
+                const payload = JSON.stringify({
+                    "email": billingEmail,
+                })
+                this.loading = true;
+                const req_url = `${this.api_url}/billing/email`
+                const ts = moment().utc().unix()
+                const url = new URL(req_url)
+                const canonical_string = `POST\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}\n${window.btoa(payload)}`
+                const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+                hash.update(canonical_string)
+                const mac = hash.finalize()
+                const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+                const response = await fetch(req_url, {
+                    headers: {
+                        "Content-Type": 'application/json;charset=UTF-8',
+                        "Authorization": header,
+                    },
+                    method: 'POST',
+                    body: payload
+                }).catch(error => {
+                    this.error = error
+                    this.billingEmailUpdateMessage = "Something went wrong. E-mail wasn't updated."
+                    this.billingEmailUpdateMessageType = "error"
+                    this.loading = false
+                })
+                if (response.status !== 202) {
+                    this.error = `${response.status} ${response.statusText}`
+                    this.loading = false
+                    return;
+                }
+                this.editMode= !this.editMode
+                this.member.account.billingEmail = billingEmail
+                this.$forceUpdate()
+                this.billingEmailUpdateMessage = "E-mail was updated!"
+                this.billingEmailUpdateMessageType = "success"
+                this.loading = false
+            },
+            updateAccountDisplay() {
+                this.billingEmailUpdateMessage = "Display Name was updated!"
+                this.billingEmailUpdateMessageType = "success"
+                localStorage.setItem('/account/display', data?.member?.account?.display || localStorage.getItem('/account/display'))
+                this.editMode = !this.editMode;
+            },
+            inviteMembers(){
+                console.log("invite members - API CALL");
+                this.inviteMessage = "E-mail was sent!"
+                this.inviteMessageType = "success"
+            },
+            async upgradeForm(e) {
+                const payload = JSON.stringify({
+                    'contact': e.target.elements.preferredMethodOfContact.value
+                })
+                this.loading = true;
+                const req_url = `${this.api_url}/account/upgrade`
+                const ts = moment().utc().unix()
+                const url = new URL(req_url)
+                const canonical_string = `POST\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}\n${window.btoa(payload)}`
+                const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+                hash.update(canonical_string)
+                const mac = hash.finalize()
+                const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+                const response = await fetch(req_url, {
+                    method: 'POST',
+                    body: payload,
+                    headers: {
+                        'Authorization': header,
+                        'Content-Type': 'application/json;charset=UTF-8',
+                    },
+                })
+                if (response.status === 202) {
+                    this.upgradeFormMessage = "Thank you for reaching out to us! We will be in contact soon.";
+                    this.upgradeFormMessageType = "success";
+                    this.loading = false;
+                } else {
+                    this.upgradeFormMessage = `Something went wrong, your contact wasn't sent.`;
+                    this.upgradeFormMessageType = "error";
+                    this.loading = false;
+                }
+
+                console.log(this.upgradeFormMessage);
+
+            },
+            // async deleteAccount() {
+
+            //     this.loading = true
+            //     const req_url = `${this.api_url}/summary/Mv1N0o4lOTPaATxodTlsEPYFc9Rkr7-w97ygP4zweoSxL_6rBG347F7T6jbgaz1VMI5VwID4f14`
+            //     const ts = moment().utc().unix()
+            //     const url = new URL(req_url)
+            //     const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
+            //     const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+            //     hash.update(canonical_string)
+            //     const mac = hash.finalize()
+            //     const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+            //     const response = await fetch(req_url, {
+            //         headers: {"Authorization": header},
+            //         method: 'GET'
+            //     })
+
+            //     const data = await response.json()
+            //     console.log('delete account');
+            //     console.log(data);
+            //     if (response.status == 200) {
+            //         this.memberDeleteMessage = "Account was deleted"
+            //         this.memberDeleteMessageType = "success"
+            //         this.loading = false
+            //     } else {
+            //         this.memberDeleteMessage = "Something went wrong. Couldn't delete account."
+            //         this.memberDeleteMessageType = "error"
+            //         this.loading = false
+            //     }
+            // },
+            async deleteMember(){
+                this.loading = true
+                const req_url = `${this.api_url}/account`
+                const ts = moment().utc().unix()
+                const url = new URL(req_url)
+                const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
+                const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+                hash.update(canonical_string)
+                const mac = hash.finalize()
+                const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+                const response = await fetch(req_url, {
+                    headers: {"Authorization": header},
+                    method: 'DELETE'
+                })
+                if (response.status == 200) {
+                    this.memberDeleteMessage = "This member was deleted"
+                    this.memberDeleteMessageType = "success"
+                    this.loading = false
+                } else {
+                    this.memberDeleteMessage = "Something went wrong. Member couldn't be deleted."
+                    this.memberDeleteMessageType = "error"
+                    this.loading = false
+                }
+
+            },
+            async generateClientCredential(){
+                this.loading = true
+                const req_url = `${this.api_url}/claim/${localStorage.getItem('/account/name')}`
+                const ts = moment().utc().unix()
+                const url = new URL(req_url)
+                const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
+                const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+                hash.update(canonical_string)
+                const mac = hash.finalize()
+                const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+                // const payload = JSON.stringify({
+                //     "operating_system": this.clients[0].client_info.operating_system,
+                //     "operating_system_release": this.clients[0].client_info.operating_system_release,
+                //     "operating_system_version": this.clients[0].client_info.operating_system_version,
+                //     "architecture": this.clients[0].client_info.architecture,
+                // });
+                const response = await fetch(req_url, {
+                    headers: {"Authorization": header},
+                    method: 'POST',
+                    // body: payload
+                })
+                if (response.status == 200) {
+                    this.memberDeleteMessage = "New Credentials generated!"
+                    this.memberDeleteMessageType = "success"
+                    this.loading = false
+                } else {
+                    this.memberDeleteMessage = `${response.status}: Something went wrong. Couldn't generate new credentials.`
+                    this.memberDeleteMessageType = "error"
+                    this.loading = false
+                }
+                this.fetchClients();
+            },
+            async toggleClientFeed($event, client_name) {
+                const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
+                const deactivate_url = `${this.api_url}/deactived/${client_name}`
+                const activate_url = `${this.api_url}/activate/${client_name}`
+                const ts = moment().utc().unix()
+                const mac = hash.finalize()
+                const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
+
+                if($event.target.checked === true) {
+                    const response = await fetch(activate_url, {
+                        headers: {"Authorization": header}
+                    })
+
+                    if (response.status == 200) {
+                        this.toggleFeedMessage = "Feed was enabled with success"
+                        this.toggleFeedMessageType = "success"
+                    } else {
+                        this.toggleFeedMessage = `${response.status}: An error has occured, please try again.`
+                        this.toggleFeedMessageType = "error"
+                    }
+
+                } else {
+                    const response = await fetch(deactivate_url, {
+                        headers: {"Authorization": header}
+                    })
+
+                    if (response.status == 200) {
+                        this.toggleFeedMessage = "Feed was disabled with success"
+                        this.toggleFeedMessageType = "success"
+                    } else {
+                        this.toggleFeedMessage = `${response.status}: An error has occured, please try again.`
+                        this.toggleFeedMessageType = "error"
+                    }
+                }
+            }
+        }
+    }
+</script>
+
+<style lang="scss">
+    .profile {
+        &-picture {
+            border: 1px solid color("secondary");
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+        &-plan-information {
+            width: 100%;
+            @media (min-width: $breakpoint-lg) {
+                width: auto;
+            }
+        }
+        &-edit-icon {
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+        }
+        &-container {
+            padding: spacers('md');
+
+            @media (min-width: $breakpoint-lg) {
+                padding: spacers('xl');
+            }
+        }
+    }
+    .swiper-slide {
+        &-avatar {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+        }
+        .swiper-wrapper {
+            padding-bottom: spacers("sm");
+        }
+    }
+    .user-slider {
+        border: 1px solid color("secondary");
+    }
+    .custom-swiper-button {
+        position: relative;
+        border-radius: radius('sm');
+        padding:  0 padding('xs');
+        background: color('dark-60');
+        color: color(light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.2s linear;
+        border: 1px solid color("dark");
+
+        &:hover {
+            border: 1px solid color("secondary");
+            color: color('secondary');
+        }
+
+        &:disabled {
+            color: color("light-20");
+            background: none;
+            border: 1px solid color("light-20");
+            display: none;
+        }
+    }
+    .edit-mode-btn {
+        border: none;
+        background: none;
+        border-radius: 50%;
+        transition: 0.2s linear;
+        height: 40px;
+        width: 40px;
+
+        &.close {
+            svg {
+                width: 30px;
+            }
+            &:hover {
+                background: color("light-20");
+            }
+        }
+        &.delete {
+            svg {
+                width: 30px;
+            }
+            &:hover {
+                background: color("danger");
+            }
+        }
+        &:hover {
+            background: color("primary");
+        }
+    }
+    .delete-member-modal {
+        .modal {
+            .modal-dialog {
+                margin-top: 0;
+                margin-bottom: 0;
+                height: 100%;
+                .modal-content {
+                    height: 100%;
+                    .modal-body {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                }
+            }
+        }
+    }
+    .inline-custom-form {
+        &-btn {
+            border-radius: 50%;
+            background: none;
+            border: 1px solid color("primary");
+            height: 40px;
+            width: 40px;
+            display: flex;
+            margin-left: 10px;
+            align-items: center;
+            justify-content: center;
+            svg {
+                width: 35px;
+            }
+        }
+        label {
+            top: -10px !important;
+        }
+        input {
+            margin-top: 0 !important;
+        }
+    }
+</style>

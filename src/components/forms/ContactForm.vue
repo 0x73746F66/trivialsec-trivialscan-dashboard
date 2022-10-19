@@ -1,5 +1,5 @@
 <script setup>
-    
+
 </script>
 
 <template>
@@ -10,23 +10,24 @@
         @submit.prevent="sendSupport"
     >
         <ValidationMessage :message="message" :type="messageType" />
-    
         <div class="subject-field">
             <TextInput
                 placeholder=""
                 id="subject-field"
                 label="Subject"
                 :required="true"
+                :textDefault="SubjectFieldDefault"
                 @change="handleSubject"
             />
         </div>
 
         <div class="text-area-field">
-            <TextArea 
+            <TextArea
                 placeholder=""
                 id="text-area-field"
                 label="Message"
                 :required="true"
+                :textDefault="TextAreaFieldDefault"
                 @change="handleContent"
 
             />
@@ -51,6 +52,10 @@
 
     export default {
         components: {TextInput, TextArea, Button, ValidationMessage, loadingComponent},
+        props: {
+            SubjectFieldDefault: String,
+            TextAreaFieldDefault: String,
+        },
         data() {
             return {
                 subjectField: "",
@@ -79,12 +84,10 @@
                 const ts = moment().utc().unix()
                 const url = new URL(req_url)
                 const canonical_string = `POST\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}\n${window.btoa(payload)}`
-                console.log(canonical_string)
                 const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
                 hash.update(canonical_string)
                 const mac = hash.finalize()
                 const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
-                console.log(header)
                 const response = await fetch(req_url, {
                     method: 'POST',
                     body: payload,
@@ -115,7 +118,7 @@
 </script>
 <style lang="scss">
     @import "@/assets/forms";
-    
+
     .text-area-field {
         min-height: 250px;
     }

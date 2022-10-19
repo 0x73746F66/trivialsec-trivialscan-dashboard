@@ -73,6 +73,9 @@
     .border-color-#{$name} {
         border-color: $color;
     }
+    .border-#{$name} {
+        border: 1px solid $color;
+    }
     .font-color-#{$name} {
         color: $color;
     }
@@ -80,16 +83,19 @@
         background: $color;
         padding: padding("xs") padding("sm");
         border-radius: radius("sm");
+        border: 1px solid $color;
     }
     .btn-fill-#{$name} {
         background: $color;
-        padding: padding("sm") padding("md");
+        padding: padding("xs") padding("sm");
         border-radius: radius("sm");
+        border: 1px solid $color;
     }
     .btn-fill-#{$name}-full {
         background: $color;
-        padding: padding("sm");
+        padding: padding("xs") padding("sm");
         border-radius: radius("sm");
+        border: 1px solid $color;
         width: 100%;
     }
     .btn-outline {
@@ -112,7 +118,7 @@
     .btn-outline-#{$name} {
         @extend .btn-outline;
         border: 2px solid $color;
-        padding: padding("sm") padding("md");
+        padding: padding("xs") padding("sm");
         &:hover {
             background: $color;
         }
@@ -120,7 +126,7 @@
     .btn-outline-#{$name}-full {
         @extend .btn-outline;
         border: 2px solid $color;
-        padding: padding("sm");
+        padding: padding("xs") padding("sm");
         width: 100%;
         &:hover {
             background: $color;
@@ -135,7 +141,7 @@ body {
 
 a {
     &:hover {
-        color: color("secondary") !important;
+        color: color("secondary");
     }
 }
 
@@ -157,14 +163,39 @@ a {
     }
 }
 
+.max-w {
+    &lg-300 {
+        @media (min-width: $breakpoint-lg){
+            max-width: 300px;
+        }
+    }
+}
+
 .border {
     &-bottom {
         &-primary {
             border-bottom: 1px solid color("primary");
+        }
+        &-light-20 {
+            border-bottom: 1px solid color("light-20");
+        }
+    }
+    &-radius {
+        &-round {
+            border-radius: 50%;
         }
     }
 }
 
 .debug-later  {
     border: 2px solid red;
+}
+
+.modal-backdrop {
+    z-index: 1;
+    width: 0;
+}
+
+.word-break-all {
+    word-break: break-all;
 }

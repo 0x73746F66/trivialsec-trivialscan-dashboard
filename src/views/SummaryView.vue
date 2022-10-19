@@ -45,7 +45,6 @@ export default {
       fetch(req_url, {
         headers: {
           "Authorization": header,
-          "X-Trivialscan-Account": localStorage.getItem('/account/name'),
         },
         method: 'GET'
       })

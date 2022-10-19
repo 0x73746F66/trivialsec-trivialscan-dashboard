@@ -1,4 +1,5 @@
 <template>
+    
     <div class="custom-field">
         <label :for="id">{{this.label}}</label>
         <input 
@@ -7,7 +8,9 @@
             :id="id" 
             :name="id" 
             :placeholder="placeholder"
+            @change="updateValue"
             @input="handleInput"
+            :value="textDefault"
         >
     </div>
 </template>
@@ -18,11 +21,15 @@ export default {
         placeholder:String, 
         id: String, 
         label: String,
-        required: Boolean
-    },
+        required: Boolean,
+        textDefault: String
+    }, 
     methods: {
-        handleInput(e) {
-            this.$emit('input', e.target.value)
+        updateValue(event) {
+            this.$emit('update:modelValue', event.target.value)
+        },
+        handleInput(event) {
+            this.$emit('input', event.target.value)
         }
     }
 }
