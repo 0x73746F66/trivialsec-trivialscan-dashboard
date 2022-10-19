@@ -153,38 +153,29 @@
                         <div class="d-flex flex-column flex-lg-row justify-content-between margin-bottom-sm">
                             <div class="margin-right-lg d-flex flex-lg-row flex-column align-items-lg-center">
                                 <span class="font-base-sb margin-right-sm margin-bottom-sm mb-lg-0">Active Plan:</span>
-                                <span class="font-sm font-sm">{{member.account?.active_plan?.label}}</span>
+                                <span class="font-sm font-sm">{{member.account.billing.product_name}}</span>
                             </div>
                             <div>
-                                <span class="font-color-primary font-lg-b">{{member.account?.active_plan?.price}} </span>
-                                <span v-if="member.account?.active_plan?.subscription" class="font-lg-b">/{{member.account?.active_plan?.subscription}}</span>
+                                <span class="font-color-primary font-lg-b">{{member.account.billing.display_amount}} </span>
+                                <span v-if="member.account.billing?.display_period" class="font-lg-b">/{{member.account.billing.display_period}}</span>
                             </div>
                         </div>
-                        <div v-if="member.account?.active_plan?.debit_account" class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
-                            <span class="font-base-sb margin-right-sm">Debit Account:</span>
-                            <span class="font-sm font-sm">{{member.account?.active_plan?.debit_account}}</span>
+                        <div v-if="member.account.billing.is_trial" class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
+                            <span class="font-sm font-color-primary">Trial ends {{member.account.billing.next_payment}}</span>
                         </div>
-                        <div v-if="member.account?.active_plan?.credit_card" class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
-                            <span class="font-base-sb margin-right-sm">Credit Card:</span>
-                            <span class="font-sm font-sm">{{member.account?.active_plan?.credit_card}}</span>
+                        <div v-if="member.account.billing?.description" class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
+                            <span class="font-base-sb margin-right-sm">Payment Method:</span>
+                            <span class="font-sm">{{member.account.billing.description}}</span>
                         </div>
-                        <div v-if="member.account?.active_plan?.issuer" class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
-                            <span class="font-base-sb margin-right-sm">Issuer:</span>
-                            <span class="font-sm font-sm">{{member.account?.active_plan?.issuer}}</span>
-                        </div>
-                        <div v-if="member.account?.active_plan?.expiry" class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
-                            <span class="font-base-sb margin-right-sm">Expiry:</span>
-                            <span class="font-sm font-sm">{{member.account?.active_plan?.expiry}}</span>
-                        </div>
-                        <div v-if="member.account?.active_plan?.due_date" class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
+                        <div v-if="member.account.billing?.next_due && !member.account.billing.is_trial" class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
                             <span class="font-base-sb margin-right-sm">Next Payment:</span>
-                            <span class="font-sm font-sm">{{member.account?.active_plan?.due_date}}</span>
+                            <span class="font-sm">{{member.account.billing.next_payment}}</span>
                         </div>
                         <div class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column">
                             <span class="font-base-sb margin-right-sm">Billing Contact:</span>
                             <EditableTextField :editMode="editMode" class="position-relative">
                                 <template #staticField>
-                                    <span class="font-sm font-sm">{{member?.account?.billing_email}}</span>
+                                    <span class="font-sm">{{member?.account?.billing_email}}</span>
                                 </template>
                                 <template #inputField>
                                     <span class="font-base font-color-light">
@@ -208,20 +199,15 @@
                         </div>
                         <div class="d-flex flex-column">
                             <div class="d-flex margin-bottom-sm">
-                                <RouterLink to="/billing"
-                                    class="text-decoration-none d-flex align-items-center justify-content-center margin-right-xs margin-bottom-sm mb-lg-0 btn-outline-primary-full font-color-primary font-sm"
-                                    v-if="member.account?.active_plan?.type !== 'Trial'"
-                                >
-                                    Past Invoices
-                                </RouterLink>
-                                <a v-if="member.account?.active_plan?.stripe_customer_url"
-                                    :href="member.account?.active_plan?.stripe_customer_url"
+                                <a v-if="member.account.billing?.has_invoice"
+                                    target="_blank"
+                                    href="https://billing.stripe.com/p/login/8wMcQ27YKdPcbxSeUU"
                                     class="text-decoration-none d-flex align-items-center justify-content-center margin-bottom-sm mb-lg-0 btn-outline-primary-full font-color-primary font-sm"
                                     text="Next Invoice"
                                 />
                             </div>
                             <div
-                                v-if="member.account?.active_plan?.type === 'Trial'"
+                                v-if="member.account.billing.product_name === 'Community Edition'"
                             >
                                 <Modal id="upgradeModal" label="modal-upgrade-header">
                                     <template v-slot:button="buttonProps">
@@ -240,7 +226,7 @@
                                     </template>
                                 </Modal>
                             </div>
-                            <div v-if="member.account?.active_plan?.type === 'Quota'">
+                            <div v-if="member.account.billing.product_name === 'Professional'">
                                 <Modal id="upgradeModal" label="modal-upgrade-header">
                                     <template v-slot:button="buttonProps">
                                         <Button
@@ -607,35 +593,9 @@
                 this.member = data.member
                 this.member.status = this.member.confirmed ? "Confirmed" : "Pending activation"
                 this.member.created = moment(this.member.timestamp).fromNow()
-                // placeholders
-                const payments = [
-                    {
-                        label: "Community Edition", // Community Edition, Enterprise, Professional
-                        price: "FREE", // FREE, $39, $199, $12,500
-                        type: "Trial", // Trial, Quota, Unlimited
-                    },
-                    {
-                        label: "Professional", // Community Edition, Enterprise, Professional
-                        price: "$39", // FREE, $39, $199, $12,500
-                        subscription: "Month", // Month, Year
-                        type: "Quota", // Trial, Quota, Unlimited
-                        credit_card: "xxxx-xxxx-xxxx-1234",
-                        issuer: "VISA",
-                        expiry: "10/24",
-                        due_date: moment(new Date(1667723919438)).fromNow(),
-                        stripe_customer_url: "https://invoice.stripe.com/i/",
-                    },
-                    {
-                        label: "Enterprise", // Community Edition, Enterprise, Professional
-                        price: "$12,500", // FREE, $39, $199, $12,500
-                        subscription: "Year", // Month, Year
-                        type: "Unlimited", // Trial, Quota, Unlimited
-                        debit_account: "Swift Payments",
-                        due_date: moment(new Date(1667723919438)).fromNow(),
-                        stripe_customer_url: "https://invoice.stripe.com/i/",
-                    }
-                ]
-                this.member.account.active_plan = payments[Math.floor(Math.random()*payments.length)]
+                if (this.member.account.billing?.next_due) {
+                    this.member.account.billing.next_payment = moment(this.member.account.billing.next_due).fromNow()
+                }
                 this.loading = false
             },
             async fetchClients() {
