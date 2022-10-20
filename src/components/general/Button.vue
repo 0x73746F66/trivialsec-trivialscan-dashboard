@@ -1,17 +1,15 @@
 <template>
-    <button>
-        {{text}}
-    </button>
+  <button>
+    {{ text }}
+  </button>
 </template>
 
 <script>
 export default {
-    props: {
-        text: String
-    }
-}
+  props: {
+    text: String,
+  },
+};
 </script>
 
-<style lang="">
-    
-</style>
+<style lang=""></style>

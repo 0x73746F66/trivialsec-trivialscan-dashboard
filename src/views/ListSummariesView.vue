@@ -1,7 +1,7 @@
 <script setup>
-import moment from 'moment'
-import CryptoJS from 'crypto-js'
-import ReportListItem from "@/components/ReportListItem.vue"
+import moment from "moment";
+import CryptoJS from "crypto-js";
+import ReportListItem from "@/components/ReportListItem.vue";
 </script>
 
 <script>
@@ -19,47 +19,53 @@ export default {
     this.$watch(
       () => this.$route.params,
       () => {
-        this.fetchData()
+        this.fetchData();
       },
       // fetch the data when the view is created and the data is
       // already being observed
       { immediate: true }
-    )
+    );
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     fetchData() {
-      this.loading = true
-      const req_url = `${this.api_url}/reports`
-      const ts = moment().utc().unix()
-      const url = new URL(req_url)
-      const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
-      console.log(canonical_string)
-      const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
-      hash.update(canonical_string)
-      const mac = hash.finalize()
-      const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
-      console.log(header)
+      this.loading = true;
+      const req_url = `${this.api_url}/reports`;
+      const ts = moment().utc().unix();
+      const url = new URL(req_url);
+      const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${
+        url.pathname
+      }\n${ts}`;
+      console.log(canonical_string);
+      const hash = CryptoJS.algo.HMAC.create(
+        CryptoJS.algo.SHA512,
+        localStorage.getItem("/session/key")
+      );
+      hash.update(canonical_string);
+      const mac = hash.finalize();
+      const header = `HMAC id="${localStorage.getItem(
+        "/member/email"
+      )}", mac="${mac}", ts="${ts}"`;
+      console.log(header);
 
       fetch(req_url, {
         headers: {
-          "Authorization": header,
+          Authorization: header,
         },
-        method: 'GET'
+        method: "GET",
       })
-        .then(response => response.text())
-        .then(result => {
-          this.reports = JSON.parse(result)
-          this.loading = false
+        .then((response) => response.text())
+        .then((result) => {
+          this.reports = JSON.parse(result);
+          this.loading = false;
         })
-        .catch(error => {
-          this.error = error
-          this.loading = false
-        })
-    }
-  }
-}
+        .catch((error) => {
+          this.error = error;
+          this.loading = false;
+        });
+    },
+  },
+};
 </script>
 
 <template>
@@ -74,7 +80,7 @@ export default {
           <ReportListItem v-bind="report" />
         </li>
       </ul>
-  </div>
+    </div>
   </main>
 </template>
 

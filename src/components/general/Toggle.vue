@@ -1,20 +1,20 @@
 <template>
-    <div>
-        <label class="switch">
-            <input type="checkbox" :checked="defaultChecked">
-            <span class="slider round"></span>
-        </label>
-    </div>
+  <div>
+    <label class="switch">
+      <input type="checkbox" :checked="defaultChecked" />
+      <span class="slider round"></span>
+    </label>
+  </div>
 </template>
 <script>
 export default {
-    props: {
-        defaultChecked: Boolean
-    }
-}
+  props: {
+    defaultChecked: Boolean,
+  },
+};
 </script>
 <style lang="scss">
-    /* The switch - the box around the slider */
+/* The switch - the box around the slider */
 .switch {
   position: relative;
   display: inline-block;
@@ -36,8 +36,8 @@ export default {
   right: 0;
   bottom: 0;
   background-color: color("light-20");
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 .slider:before {
@@ -48,15 +48,15 @@ export default {
   left: 4px;
   bottom: 4px;
   background-color: color("light");
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 input:checked + .slider {
-    background-color: color("light-20");
-    &:before {
-        background-color: color("secondary")
-    }
+  background-color: color("light-20");
+  &:before {
+    background-color: color("secondary");
+  }
 }
 
 input:checked + .slider:before {
