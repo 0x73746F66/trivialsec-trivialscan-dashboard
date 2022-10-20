@@ -70,10 +70,10 @@
               </EditableTextField>
             </div>
             <ValidationMessage
-              v-if="this.emailUpdateMessage.length > 0"
+              v-if="emailUpdateMessage.length > 0"
               class="justify-content-start"
-              :message="this.emailUpdateMessage"
-              :type="this.emailUpdateMessageType"
+              :message="emailUpdateMessage"
+              :type="emailUpdateMessageType"
             />
           </div>
         </div>
@@ -143,10 +143,10 @@
             </EditableTextField>
           </div>
           <ValidationMessage
-            v-if="this.errorMessage.length > 0"
+            v-if="errorMessage.length > 0"
             class="justify-content-start"
-            :message="this.errorMessage"
-            :type="this.errorMessageType"
+            :message="errorMessage"
+            :type="errorMessageType"
           />
           <div
             class="d-flex margin-bottom-sm align-items-lg-start d-flex flex-column"
