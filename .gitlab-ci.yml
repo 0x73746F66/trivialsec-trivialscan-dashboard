@@ -1,6 +1,199 @@
+include:
+  - template: Security/SAST.gitlab-ci.yml
+
+variables:
+  NODE_ENV: development
+  BUILD_ENV: ci
+  APP_ENV: Prod
+  TF_VAR_app_env: Prod
+  TF_VAR_app_name: trivialscan-dashboard
+  TF_LOG: WARN
+  SOURCE_FILES: dist/
+
 stages:
-- test
+  - test
+  - pre-deploy
+  - deploy
+  - post-deploy
+
 sast:
   stage: test
-include:
-- template: Security/SAST.gitlab-ci.yml
+  tags:
+    - dashboard
+
+vite build:
+  retry: 2
+  tags:
+    - dashboard
+  stage: test
+  script:
+    - npm i
+    - make -B ci-build
+  only:
+    refs:
+      - merge_request
+      - main
+  artifacts:
+    name: dist
+    paths:
+      - node_modules/
+      - $SOURCE_FILES
+
+terraform validate:
+  stage: test
+  tags:
+    - dashboard
+  script:
+    - |+
+      TOOLS="terraform_checkov terraform_validate"
+      for i in $TOOLS
+      do
+        pre-commit run $i --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
+      done
+  only:
+    refs:
+      - merge_request
+      - main
+
+sca npm:
+  stage: test
+  tags:
+    - dashboard
+  allow_failure: true
+  script:
+    -  pre-commit run license-check-npm --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
+  dependencies:
+    - vite build
+  only:
+    refs:
+      - merge_request
+      - main
+
+secrets scanning:
+  stage: test
+  tags:
+    - dashboard
+  script:
+    - |+
+      TOOLS="detect-private-key detect-secrets"
+      for i in $TOOLS
+      do
+        pre-commit run $i --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
+      done
+  only:
+    refs:
+      - merge_request
+      - main
+
+repo checks:
+  stage: test
+  tags:
+    - dashboard
+  script:
+    - echo $CI_COMMIT_MESSAGE > commit-msg.txt
+    - pre-commit run conventional-pre-commit --hook-stage commit-msg --commit-msg-filename commit-msg.txt --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
+    - |+
+      TOOLS="no-commit-to-branch mixed-line-ending check-merge-conflict"
+      for i in $TOOLS
+      do
+        pre-commit run $i --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
+      done
+  only:
+    refs:
+      - merge_request
+      - main
+
+whitespace:
+  stage: test
+  tags:
+    - dashboard
+  allow_failure: true
+  script:
+    - |+
+      TOOLS="remove-tabs trailing-whitespace"
+      for i in $TOOLS
+      do
+        pre-commit run $i --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
+      done
+  only:
+    refs:
+      - merge_request
+      - main
+
+yaml json py linting:
+  stage: test
+  tags:
+    - dashboard
+  allow_failure: true
+  script:
+    - |+
+      TOOLS="prettier typos pretty-format-json check-json check-yaml"
+      for i in $TOOLS
+      do
+        pre-commit run $i --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
+      done
+  only:
+    refs:
+      - merge_request
+      - main
+
+tf:plan:
+  retry: 2
+  tags:
+    - dashboard
+  stage: pre-deploy
+  script:
+    - make init plan
+  only:
+    refs:
+      - merge_request
+      - main
+  dependencies:
+    - vite build
+  artifacts:
+    name: tfplan
+    paths:
+      - plans/.tfplan
+      - plans/.terraform.lock.hcl
+      - plans/.terraform
+    reports:
+      terraform: tfplan.json
+
+tf:apply:
+  retry: 2
+  tags:
+    - dashboard
+  stage: deploy
+  script:
+    - make apply
+  only:
+    refs:
+      - main
+  environment:
+    name: aws
+    url: https://sso.jumpcloud.com/saml2/aws1
+    on_stop: tf:destroy
+  dependencies:
+    - vite build
+    - tf:plan
+  when: manual
+
+tf:destroy:
+  retry: 2
+  stage: post-deploy
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - dashboard
+  script:
+    - make destroy
+  when: manual
+  environment:
+    name: aws
+    action: stop
+  artifacts:
+    name: tfdestroy
+    paths:
+      - plans/.tfdestroy
+    reports:
+      terraform: plans/tfdestroy.json

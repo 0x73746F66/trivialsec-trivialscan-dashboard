@@ -1,11 +1,26 @@
 SHELL := /bin/bash
--include .env
-export $(shell sed 's/=.*//' .env)
 .PHONY: help
-
 primary := '\033[1;36m'
 bold := '\033[1m'
 clear := '\033[0m'
+
+-include .env
+export $(shell sed 's/=.*//' .env)
+ifndef CI_BUILD_REF
+CI_BUILD_REF=local
+endif
+ifeq ($(CI_BUILD_REF), local)
+-include .env.local
+export $(shell sed 's/=.*//' .env.local)
+-include .env.development
+export $(shell sed 's/=.*//' .env.development)
+-include .env.development.local
+export $(shell sed 's/=.*//' .env.development.local)
+endif
+
+ifndef RUNNER_NAME
+RUNNER_NAME=$(shell basename $(shell pwd))
+endif
 
 help: ## This help.
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -13,8 +28,7 @@ help: ## This help.
 .DEFAULT_GOAL := help
 
 deps: ## install dependancies for development of this project
-	pip install -U pip
-	pip install -U -r requirements-dev.txt
+	npm i
 
 setup: deps ## setup for development of this project
 	pre-commit install --hook-type pre-push --hook-type pre-commit
@@ -37,6 +51,11 @@ tfinstall:
 	sudo apt-get update
 	sudo apt-get install -y terraform
 	terraform -chdir=plans -install-autocomplete || true
+
+env:
+	@echo -e $(bold)$(primary)VITE_API_URL$(clear) = $(VITE_API_URL)
+	@echo -e $(bold)$(primary)CI_BUILD_REF$(clear) = $(CI_BUILD_REF)
+	@echo -e $(bold)$(primary)APP_ENV$(clear) = $(APP_ENV)
 
 init:  ## Runs tf init
 	terraform -chdir=plans init -reconfigure -upgrade=true
@@ -62,11 +81,31 @@ test-local:  ## Prettier test outputs
 	pre-commit run --all-files
 	semgrep -q --strict --timeout=0 --config=p/terraform
 
-run-local:  ## npm run dev
+run-local: env  ## npm run dev
 	npm run dev
 
-run-build:  ## npm run build
+ci-build:  ## npm run build
 	npm run build
 
 lint:  ## npm run lint
 	npm run lint
+
+local-runner: ## local setup for a gitlab runner
+	@docker volume create --name=gitlab-cache 2>/dev/null || true
+	docker pull -q docker.io/gitlab/gitlab-runner:latest
+	docker build -t $(RUNNER_NAME)/runner:${CI_BUILD_REF} -f Dockerfile .
+	@echo $(shell [ -z "${RUNNER_TOKEN}" ] && echo "RUNNER_TOKEN missing" )
+	@docker run -d --rm \
+		--name $(RUNNER_NAME) \
+		-v "gitlab-cache:/cache:rw" \
+		-v "/var/run/docker.sock:/var/run/docker.sock:rw" \
+		-e RUNNER_TOKEN=${RUNNER_TOKEN} \
+		$(RUNNER_NAME)/runner:${CI_BUILD_REF}
+	@docker exec -ti $(RUNNER_NAME) gitlab-runner register --non-interactive \
+		--tag-list 'dashboard' \
+		--name $(RUNNER_NAME) \
+		--request-concurrency 10 \
+		--url https://gitlab.com/ \
+		--registration-token '$(RUNNER_TOKEN)' \
+		--cache-dir '/cache' \
+		--executor shell

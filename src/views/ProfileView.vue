@@ -203,7 +203,7 @@
                                     target="_blank"
                                     href="https://billing.stripe.com/p/login/8wMcQ27YKdPcbxSeUU"
                                     class="text-decoration-none d-flex align-items-center justify-content-center margin-bottom-sm mb-lg-0 btn-outline-primary-full font-color-primary font-sm"
-                                    text="Next Invoice"
+                                    text="Billing Portal"
                                 />
                             </div>
                             <div
