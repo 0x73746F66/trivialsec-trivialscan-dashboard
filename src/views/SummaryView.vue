@@ -1,17 +1,22 @@
 <script setup>
-import moment from "moment";
-import CryptoJS from "crypto-js";
 import ReportSummary from "@/components/ReportSummary.vue";
+import ValidationMessage from "@/components/general/ValidationMessage.vue";
+import loadingComponent from "@/components/general/loadingComponent.vue";
 </script>
 
 <script>
 export default {
+  components: {
+    ReportSummary,
+    ValidationMessage,
+    loadingComponent,
+  },
   data() {
     return {
       loading: false,
-      error: null,
+      message: "",
+      messageType: "",
       report: {},
-      api_url: import.meta.env.VITE_API_URL,
     };
   },
   created() {
@@ -28,41 +33,26 @@ export default {
   },
   mounted() {},
   methods: {
-    fetchData() {
+    async fetchData() {
       this.loading = true;
-      const req_url = `${this.api_url}/summary/${this.$route.params.report_id}`;
-      const ts = moment().utc().unix();
-      const url = new URL(req_url);
-      const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${
-        url.pathname
-      }\n${ts}`;
-      console.log(canonical_string);
-      const hash = CryptoJS.algo.HMAC.create(
-        CryptoJS.algo.SHA512,
-        localStorage.getItem("/session/key")
-      );
-      hash.update(canonical_string);
-      const mac = hash.finalize();
-      const header = `HMAC id="${localStorage.getItem(
-        "/member/email"
-      )}", mac="${mac}", ts="${ts}"`;
-      console.log(header);
-
-      fetch(req_url, {
-        headers: {
-          Authorization: header,
-        },
-        method: "GET",
-      })
-        .then((response) => response.text())
-        .then((result) => {
-          this.report = JSON.parse(result);
-          this.loading = false;
-        })
-        .catch((error) => {
-          this.error = error;
-          this.loading = false;
-        });
+      const response = await Api.get(`/summary/${this.$route.params.report_id}`).catch(error => {
+        this.message = error;
+        this.messageType = "error";
+        this.loading = false;
+      });
+      if (response.status === 204) {
+        this.message = "No reports available";
+        this.messageType = "warning";
+        this.loading = false;
+        return;
+      } else if (response.status !== 200) {
+        this.message = "An error occured";
+        this.messageType = "error";
+        this.loading = false;
+        return;
+      }
+      this.report = await response.json();
+      this.loading = false;
     },
   },
 };
@@ -70,10 +60,15 @@ export default {
 
 <template>
   <main>
+    <loadingComponent class="loading" :class="{ inactive: !loading }" />
     <div class="summary">
-      <div v-if="loading" class="loading">Loading...</div>
       {{ $log(report) }}
-      <div v-if="error" class="error">{{ error }}</div>
+      <ValidationMessage
+        v-if="this.message.length > 0"
+        class="justify-content-start"
+        :message="this.message"
+        :type="this.messageType"
+      />
 
       <ReportSummary v-bind="report" />
     </div>
