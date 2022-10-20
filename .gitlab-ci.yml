@@ -18,6 +18,12 @@ stages:
 
 sast:
   stage: test
+  allow_failure: true
+  tags:
+    - dashboard
+  only:
+    refs:
+      - merge_request
 
 vite build:
   retry: 2
@@ -65,7 +71,6 @@ sca npm:
   only:
     refs:
       - merge_request
-      - main
 
 secrets scanning:
   stage: test
@@ -81,7 +86,6 @@ secrets scanning:
   only:
     refs:
       - merge_request
-      - main
 
 repo checks:
   stage: test
@@ -99,7 +103,6 @@ repo checks:
   only:
     refs:
       - merge_request
-      - main
 
 whitespace:
   stage: test
@@ -116,7 +119,6 @@ whitespace:
   only:
     refs:
       - merge_request
-      - main
 
 yaml json py linting:
   stage: test
@@ -133,7 +135,6 @@ yaml json py linting:
   only:
     refs:
       - merge_request
-      - main
 
 tf:plan:
   retry: 2
