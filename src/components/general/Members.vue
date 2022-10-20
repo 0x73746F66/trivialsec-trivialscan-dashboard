@@ -1,11 +1,16 @@
 <template>
   <loadingComponent class="loading" :class="{ inactive: !loading }" />
-
   <div class="profile-members-section d-flex flex-column">
     <div
       class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center"
     >
       <h3 class="font-color-light font-lg-b modal-invite-header">Members</h3>
+      <ValidationMessage
+        v-if="this.errorMessage.length > 0"
+        class="justify-content-between"
+        :message="this.errorMessage"
+        :type="this.errorMessageType"
+      />
       <Modal id="inviteModal" label="modal-invite-header">
         <template v-slot:button="buttonProps">
           <Button
@@ -102,7 +107,7 @@
             </p>
             <p v-else class="mb-0 font-sm">Invited {{ member.created }}</p>
             <div class="d-flex justify-content-end delete-member-modal">
-              <Modal :id="`deleteMember${index}`" label="delete-member-header">
+              <Modal v-if="!member.current" :id="`deleteMember${index}`" label="delete-member-header">
                 <template v-slot:button="buttonProps">
                   <button class="edit-mode-btn delete" v-bind="buttonProps">
                     <IconTrash class="profile-edit-icon" />
@@ -158,8 +163,6 @@
 <script setup>
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
-import moment from "moment";
-import CryptoJS from "crypto-js";
 
 import "swiper/css";
 
@@ -170,6 +173,7 @@ import EmaiInput from "@/components/inputs/EmaiInput.vue";
 import Modal from "@/components/general/Modal.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";
 import loadingComponent from "@/components/general/loadingComponent.vue";
+import moment from "moment";
 </script>
 
 <script>
@@ -188,9 +192,10 @@ export default {
   data() {
     return {
       modules: [Navigation, Pagination, Scrollbar, A11y],
-      api_url: import.meta.env.VITE_API_URL,
       loading: false,
       members: [],
+      errorMessage: "",
+      errorMessageType: "",
       inviteMessage: "",
       inviteMessageType: "",
       memberDeleteMessage: "",
@@ -203,102 +208,30 @@ export default {
   mounted() {},
   methods: {
     async inviteMembers(event) {
-      const inviteEmail = event.target.elements["InviteEmail"].value;
-      const payload = JSON.stringify({
-        email: inviteEmail,
-      });
       this.loading = true;
-      const req_url = `${this.api_url}/member/invite`;
-      const ts = moment().utc().unix();
-      const url = new URL(req_url);
-      const canonical_string = `POST\n${url.hostname}\n${url.port || 443}\n${
-        url.pathname
-      }\n${ts}\n${window.btoa(payload)}`;
-      const hash = CryptoJS.algo.HMAC.create(
-        CryptoJS.algo.SHA512,
-        localStorage.getItem("/session/key")
-      );
-      hash.update(canonical_string);
-      const mac = hash.finalize();
-      const header = `HMAC id="${localStorage.getItem(
-        "/member/email"
-      )}", mac="${mac}", ts="${ts}"`;
-      const response = await fetch(req_url, {
-        headers: {
-          "Content-Type": "application/json;charset=UTF-8",
-          Authorization: header,
-        },
-        method: "POST",
-        body: payload,
-      }).catch((error) => {
+      const response = await Api.post("/member/invite", {
+        email: event.target.elements["InviteEmail"].value,
+      }).catch(error => {
         this.error = error;
         this.inviteMessage = "Something went wrong. E-mail wasn't sent.";
         this.inviteMessageType = "error";
         this.loading = false;
       });
       if (response.status !== 202) {
-        this.error = `${response.status} ${response.statusText}`;
+        this.inviteMessage = `${response.status} ${response.statusText}`
+        this.inviteMessageType = "error";
         this.loading = false;
         return;
       }
-      this.editMode = !this.editMode;
       this.inviteMessage = "Invited!";
       this.inviteMessageType = "success";
       setTimeout(this.fetchMembers, 2000);
     },
-
-    //     this.loading = true
-    //     const req_url = `${this.api_url}/summary/Mv1N0o4lOTPaATxodTlsEPYFc9Rkr7-w97ygP4zweoSxL_6rBG347F7T6jbgaz1VMI5VwID4f14`
-    //     const ts = moment().utc().unix()
-    //     const url = new URL(req_url)
-    //     const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
-    //     const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
-    //     hash.update(canonical_string)
-    //     const mac = hash.finalize()
-    //     const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
-    //     const response = await fetch(req_url, {
-    //         headers: {"Authorization": header},
-    //         method: 'GET'
-    //     })
-
-    //     const data = await response.json()
-    //     console.log('delete account');
-    //     console.log(data);
-    //     if (response.status == 200) {
-    //         this.memberDeleteMessage = "Account was deleted"
-    //         this.memberDeleteMessageType = "success"
-    //         this.loading = false
-    //     } else {
-    //         this.memberDeleteMessage = "Something went wrong. Couldn't delete account."
-    //         this.memberDeleteMessageType = "error"
-    //         this.loading = false
-    //     }
-    // },
     async deleteMember(event) {
-      const memberEmail = event.target.elements["MemberEmail"].value;
       this.loading = true;
-      const req_url = `${this.api_url}/member/${memberEmail}`;
-      const ts = moment().utc().unix();
-      const url = new URL(req_url);
-      const canonical_string = `DELETE\n${url.hostname}\n${url.port || 443}\n${
-        url.pathname
-      }\n${ts}`;
-      const hash = CryptoJS.algo.HMAC.create(
-        CryptoJS.algo.SHA512,
-        localStorage.getItem("/session/key")
-      );
-      hash.update(canonical_string);
-      const mac = hash.finalize();
-      const header = `HMAC id="${localStorage.getItem(
-        "/member/email"
-      )}", mac="${mac}", ts="${ts}"`;
-      const response = await fetch(req_url, {
-        headers: { Authorization: header },
-        method: "DELETE",
-      });
+      const response = await Api.delete(`/member/${event.target.elements["MemberEmail"].value}`)
       if (response.status != 202) {
-        this.memberDeleteMessage =
-          "Something went wrong. Member couldn't be deleted.";
+        this.memberDeleteMessage = "Something went wrong. Member couldn't be deleted.";
         this.memberDeleteMessageType = "error";
         this.loading = false;
         return;
@@ -309,32 +242,19 @@ export default {
     },
     async fetchMembers() {
       this.loading = true;
-      const req_url = `${this.api_url}/members`;
-      const ts = moment().utc().unix();
-      const url = new URL(req_url);
-      const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${
-        url.pathname
-      }\n${ts}`;
-      const hash = CryptoJS.algo.HMAC.create(
-        CryptoJS.algo.SHA512,
-        localStorage.getItem("/session/key")
-      );
-      hash.update(canonical_string);
-      const mac = hash.finalize();
-      const header = `HMAC id="${localStorage.getItem(
-        "/member/email"
-      )}", mac="${mac}", ts="${ts}"`;
-      const response = await fetch(req_url, {
-        headers: { Authorization: header },
-      }).catch((error) => {
-        this.error = error;
+      const response = await Api.get(`/members`).catch(error => {
+        this.errorMessage = error;
+        this.errorMessageType = "error";
       });
       if (response.status === 204) {
+        this.errorMessage = "Issue loading members";
+        this.errorMessageType = "error";
         this.members = [];
         this.loading = false;
         return;
       } else if (response.status !== 200) {
-        this.error = `${response.status} ${response.statusText}`;
+        this.errorMessage = `${response.status} ${response.statusText}`;
+        this.errorMessageType = "error";
         this.loading = false;
         return;
       }

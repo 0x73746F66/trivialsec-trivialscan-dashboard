@@ -1,6 +1,4 @@
 <script setup>
-import moment from "moment";
-import CryptoJS from "crypto-js";
 import HostDetail from "../components/HostDetail.vue";
 </script>
 
@@ -9,9 +7,7 @@ export default {
   data() {
     return {
       loading: false,
-      error: null,
       host: {},
-      api_url: import.meta.env.VITE_API_URL,
     };
   },
   created() {
@@ -27,42 +23,21 @@ export default {
     );
   },
   methods: {
-    fetchData() {
+    async fetchData() {
       this.loading = true;
-      const req_url = `${this.api_url}/host/${this.$route.params.hostname}?port=${this.$route.params.port}`;
-      console.log(req_url);
-      const ts = moment().utc().unix();
-      const url = new URL(req_url);
-      const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${
-        url.pathname
-      }\n${ts}`;
-      console.log(canonical_string);
-      const hash = CryptoJS.algo.HMAC.create(
-        CryptoJS.algo.SHA512,
-        localStorage.getItem("/session/key")
-      );
-      hash.update(canonical_string);
-      const mac = hash.finalize();
-      const header = `HMAC id="${localStorage.getItem(
-        "/member/email"
-      )}", mac="${mac}", ts="${ts}"`;
-      console.log(header);
-
-      fetch(req_url, {
-        headers: {
-          Authorization: header,
-        },
-        method: "GET",
-      })
-        .then((response) => response.text())
-        .then((result) => {
-          this.host = JSON.parse(result);
-          this.loading = false;
-        })
-        .catch((error) => {
-          this.error = error;
-          this.loading = false;
-        });
+      const response = await Api.get(`/host/${this.$route.params.hostname}?port=${this.$route.params.port}`).catch(error => {
+        this.message = error;
+        this.messageType = "error";
+        this.loading = false;
+      });
+      if (response.status !== 200) {
+        this.message = "Your message was sent. Thank you!";
+        this.messageType = "success";
+        this.loading = false;
+        return;
+      }
+      this.host = await response.json();
+      this.loading = false;
     },
   },
 };
