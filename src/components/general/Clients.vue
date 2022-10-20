@@ -53,8 +53,8 @@
             </p>
             <p class="mb-0 font-sm">
               Registration Token
-              <div class="token font-color-primary bg-dark padding-xs margin-bottom-xs">{{ client.access_token }}</div>
             </p>
+            <div class="token font-color-primary bg-dark padding-xs margin-bottom-xs">{{ client.access_token }}</div>
           </div>
           <div class="d-flex justify-content-end">
             <Toggle :defaultChecked="client.active" @change="toggleClientFeed($event, client.name)" />
