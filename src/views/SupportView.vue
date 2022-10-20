@@ -8,17 +8,17 @@
 </template>
 
 <script setup>
-  import ContactForm from '../components/forms/ContactForm.vue';
+import ContactForm from "../components/forms/ContactForm.vue";
 </script>
 
 <script>
-  export default {
-    components: {ContactForm}
-  };
+export default {
+  components: { ContactForm },
+};
 </script>
 
 <style scoped lang="scss">
-  .support-section {
-    min-height: 50vh;
-  }
+.support-section {
+  min-height: 50vh;
+}
 </style>

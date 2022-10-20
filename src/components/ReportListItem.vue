@@ -1,7 +1,20 @@
 <script>
 export default {
-  props: ['generator', 'version', 'account_name', 'client_name', 'project_name', 'targets', 'date', 'execution_duration_seconds', 'score', 'results', 'certificates', 'results_uri']
-}
+  props: [
+    "generator",
+    "version",
+    "account_name",
+    "client_name",
+    "project_name",
+    "targets",
+    "date",
+    "execution_duration_seconds",
+    "score",
+    "results",
+    "certificates",
+    "results_uri",
+  ],
+};
 </script>
 <template>
   <div v-if="results_uri">
@@ -26,7 +39,10 @@ export default {
     <p>execution_duration_seconds {{ execution_duration_seconds }}</p>
   </div>
   <div v-if="targets" v-for="target in targets">
-    <p>target <a :href="'/hostname/' + target.split(':').join('/')">{{ target }}</a></p>
+    <p>
+      target
+      <a :href="'/hostname/' + target.split(':').join('/')">{{ target }}</a>
+    </p>
   </div>
   <div v-if="score">
     <p>score {{ score }}</p>
@@ -38,7 +54,8 @@ export default {
     <p>info {{ results.info }}</p>
   </div>
   <div v-if="certificates" v-for="cert in certificates">
-    <p>certificate <a :href="'/certificate/' + cert">{{ cert }}</a></p>
+    <p>
+      certificate <a :href="'/certificate/' + cert">{{ cert }}</a>
+    </p>
   </div>
-
 </template>
