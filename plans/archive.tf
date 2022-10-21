@@ -58,7 +58,3 @@ resource "aws_s3_bucket_lifecycle_configuration" "trivialscan_archive_lifecycle"
     }
   }
 }
-
-output "trivialscan_archive_bucket" {
-  value = aws_s3_bucket.trivialscan_archive_bucket.id
-}

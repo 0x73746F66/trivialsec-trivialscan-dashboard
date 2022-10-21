@@ -152,11 +152,3 @@ resource "aws_s3_object" "dist" {
   content_type = lookup(tomap(local.mime_types), element(split(".", each.key), length(split(".", each.key)) - 1))
   etag   = filemd5("${abspath(path.module)}/../dist/${each.value}")
 }
-
-output "cloudfront_trivialscan_dashboard" {
-  value = aws_cloudfront_distribution.trivialscan_dashboard.id
-}
-
-output "trivialscan_dashboard_bucket" {
-  value = aws_s3_bucket.trivialscan_dashboard.id
-}

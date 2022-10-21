@@ -130,7 +130,3 @@ resource "aws_iam_role_policy_attachment" "trivialscan_store_replication" {
   role       = aws_iam_role.trivialscan_store_replication_role.name
   policy_arn = aws_iam_policy.trivialscan_store_replication_policy.arn
 }
-
-output "trivialscan_store_bucket" {
-  value = aws_s3_bucket.trivialscan_store_bucket.id
-}
