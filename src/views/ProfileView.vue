@@ -526,15 +526,28 @@ export default {
       this.primaryEmailUpdateMessageType = "success";
       setTimeout(this.fetchProfile, 2000)
     },
-    updateAccountDisplay() {
-      this.billingEmailUpdateMessage = "Display Name was updated!";
-      this.billingEmailUpdateMessageType = "success";
+    async updateAccountDisplay(event) {
+      const name = event.target.elements["AccountDisplay"].value;
+      this.loading = true;
+      const response = await Api.post(`/account/display`, {name});
+      if (response.status !== 202) {
+        this.errorMessage = `${response.status}: Something went wrong. Couldn't generate new credentials.`;
+        this.errorMessageType = "error";
+        this.loading = false;
+        return;
+      }
+      const data = await response.json()
+      console.log(data)
+      this.errorMessage = "Display Name was updated!";
+      this.errorMessageType = "success";
+      this.loading = false;
       localStorage.setItem(
         "/account/display",
-        data?.member?.account?.display ||
-          localStorage.getItem("/account/display")
+        data?.display ||
+        localStorage.getItem("/account/display")
       );
       this.editMode = !this.editMode;
+      this.$forceUpdate()
     },
     async upgradeForm(event) {
       this.loading = true;
