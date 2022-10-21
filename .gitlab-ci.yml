@@ -42,9 +42,6 @@ vite build:
     paths:
       - node_modules/
       - $SOURCE_FILES
-  rules:
-    - changes:
-        - src/*
 
 terraform validate:
   stage: test
@@ -61,9 +58,6 @@ terraform validate:
     refs:
       - merge_request
       - main
-  rules:
-    - changes:
-        - plans/*
 
 sca npm:
   stage: test
@@ -74,9 +68,6 @@ sca npm:
     -  pre-commit run license-check-npm --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
   dependencies:
     - vite build
-  only:
-    refs:
-      - merge_request
   rules:
     - changes:
         - package.json
@@ -128,9 +119,6 @@ whitespace:
   only:
     refs:
       - merge_request
-  rules:
-    - changes:
-        - src/*
 
 yaml json py linting:
   stage: test
@@ -147,9 +135,6 @@ yaml json py linting:
   only:
     refs:
       - merge_request
-  rules:
-    - changes:
-        - src/*
 
 tf:plan:
   retry: 2
