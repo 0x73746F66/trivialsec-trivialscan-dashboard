@@ -21,9 +21,9 @@ sast:
   allow_failure: true
   tags:
     - dashboard
-  only:
-    refs:
-      - merge_request
+  rules:
+    - changes:
+        - src/*
 
 vite build:
   retry: 2
@@ -42,6 +42,9 @@ vite build:
     paths:
       - node_modules/
       - $SOURCE_FILES
+  rules:
+    - changes:
+        - src/*
 
 terraform validate:
   stage: test
@@ -58,6 +61,9 @@ terraform validate:
     refs:
       - merge_request
       - main
+  rules:
+    - changes:
+        - plans/*
 
 sca npm:
   stage: test
@@ -71,6 +77,9 @@ sca npm:
   only:
     refs:
       - merge_request
+  rules:
+    - changes:
+        - package.json
 
 secrets scanning:
   stage: test
@@ -119,6 +128,9 @@ whitespace:
   only:
     refs:
       - merge_request
+  rules:
+    - changes:
+        - src/*
 
 yaml json py linting:
   stage: test
@@ -135,6 +147,9 @@ yaml json py linting:
   only:
     refs:
       - merge_request
+  rules:
+    - changes:
+        - src/*
 
 tf:plan:
   retry: 2
@@ -175,7 +190,6 @@ tf:apply:
   dependencies:
     - vite build
     - tf:plan
-  when: manual
 
 tf:destroy:
   retry: 2
