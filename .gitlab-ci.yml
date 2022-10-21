@@ -183,3 +183,16 @@ tf:destroy:
       - plans/.tfdestroy
     reports:
       terraform: plans/tfdestroy.json
+
+clear cdn cache:
+  stage: post-deploy
+  tags:
+    - dashboard
+  script:
+    - CF_DISTRIBUTION_ID=$(terraform -chdir=plans output cloudfront_trivialscan_dashboard)
+    - echo CF_DISTRIBUTION_ID=${CF_DISTRIBUTION_ID}
+    - |
+      aws cloudfront create-invalidation \
+      --distribution-id ${CF_DISTRIBUTION_ID} \
+      --paths "/index.html" "/assets/*.js" "/assets/*.css"
+  when: manual
