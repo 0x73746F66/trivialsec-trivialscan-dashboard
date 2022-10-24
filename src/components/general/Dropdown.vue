@@ -1,27 +1,29 @@
 <template>
-  <div
-    class="font-lg text-left padding-md font-color-light w-100 d-flex justify-content-left border-none custom-accordion-button"
-    :class="{ collapsed: defaultCollapsed }"
-    :id="id"
-    data-bs-toggle="collapse"
-    :data-bs-target="`#` + target"
-    aria-expanded="true"
-    :aria-controls="target"
-  >
-    <div>
-      <slot name="header"></slot>
+  <div class="margin-bottom-sm">
+    <div
+      class="font-lg text-left padding-left-sm font-color-light w-100 d-flex justify-content-left border-none custom-accordion-button padding-xxs"
+      :class="{ collapsed: defaultCollapsed }"
+      :id="id"
+      data-bs-toggle="collapse"
+      :data-bs-target="`#` + target"
+      aria-expanded="true"
+      :aria-controls="target"
+    >
+      <div class="w-100">
+        <slot name="header"></slot>
+      </div>
+      <IconExpandPrimary class="expand-icon" />
     </div>
-    <IconExpandPrimary class="expand-icon" />
-  </div>
-  <div
-    class="custom-according-content bg-dark-20 padding-md font-color-light font-base collapse"
-    :class="{ show: defaultShow }"
-    :id="target"
-    :aria-labelledby="id"
-    :data-bs-parent="`#` + parent"
-  >
-    <div>
-      <slot name="content"></slot>
+    <div
+      class="custom-according-content bg-dark-20 padding-md font-color-light font-base collapse"
+      :class="{ show: defaultShow }"
+      :id="target"
+      :aria-labelledby="id"
+      :data-bs-parent="`#` + parent"
+    >
+      <div>
+        <slot name="content"></slot>
+      </div>
     </div>
   </div>
 </template>

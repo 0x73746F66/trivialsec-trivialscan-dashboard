@@ -1,0 +1,70 @@
+<template>
+<Chart
+    :size="{ width: 500, height: 320 }"
+    :data="data"
+    :margin="margin"
+    :direction="direction"
+    :axis="axis">
+
+    <template #layers>
+      <Grid strokeDasharray="2,2" />
+      <Area :dataKeys="['name', 'num']" type="natural" />
+      <Line
+        :dataKeys="['name', 'num']"
+        type="natural"
+        :lineStyle="{
+          stroke: `url(#${label}chartgrad)`
+        }"
+      />
+     
+      <CustomChartDefs :defsId="`${label}chartgrad`"/>
+    </template>
+  </Chart>
+</template>
+
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
+import { Chart, Grid, Line } from 'vue3-charts'
+import CustomChartDefs from "./CustomChartDefs.vue"
+
+export default defineComponent({
+  name: 'LineChart',
+  props: {
+    chartData: Array,
+    label: String,
+  },
+  data() {
+    return {
+    }
+  },
+  components: { Chart, Grid, Line, CustomChartDefs },
+  setup(props) {
+    const data = props.chartData
+
+    const direction = ref('horizontal')
+    const margin = ref({
+      left: 0,
+      top: 20,
+      right: 20,
+      bottom: 0
+    })
+
+    const axis = ref({
+      primary: {
+        type: 'band'
+      },
+      secondary: {
+        domain: ['dataMin', 'dataMax + 100'],
+        type: 'linear',
+        ticks: 8
+      }
+    })
+
+    return { data, direction, margin, axis }
+  },
+})
+</script>
+
+<style lang="">
+    
+</style>

@@ -46,7 +46,7 @@ const router = createRouter({
           );
         }
         if (localStorage.getItem("/session/key")) {
-          window.location.href = "/profile";
+          window.location.href = "/dashboard";
         }
       },
     },
@@ -63,7 +63,7 @@ const router = createRouter({
         if (response.status !== 202) {
           alert(`${response.status} ${response.statusText}`);
         } else if (localStorage.getItem("/session/key")) {
-          window.location.href = "/profile";
+          window.location.href = "/dashboard";
         } else {
           window.location.href = "/";
         }
@@ -80,6 +80,11 @@ const router = createRouter({
         localStorage.setItem("/session/key", "");
         window.location.href = "/";
       },
+    },
+    {
+      path: "/dashboard",
+      name: "dashboard",
+      component: () => import("../views/DashboardView.vue"),
     },
     {
       path: "/results",
@@ -131,6 +136,16 @@ const router = createRouter({
     {
       path: "/support",
       name: "support",
+      component: () => import("../views/SupportView.vue"),
+    },
+    {
+      path: "/docs",
+      name: "docs",
+      component: () => import("../views/SupportView.vue"),
+    },
+    {
+      path: "/privacy",
+      name: "privacy",
       component: () => import("../views/SupportView.vue"),
     },
   ],

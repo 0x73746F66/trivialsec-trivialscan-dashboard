@@ -54,12 +54,6 @@
               >Reports</RouterLink
             >
             <RouterLink
-              v-if="logged_in"
-              to="/activities"
-              class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none"
-              >Activities</RouterLink
-            >
-            <RouterLink
               v-if="$route.params.report_id"
               :to="{
                 name: 'summary',

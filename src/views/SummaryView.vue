@@ -52,6 +52,7 @@ export default {
         return;
       }
       this.report = await response.json();
+      console.log(this.report);
       this.loading = false;
     },
   },
@@ -76,22 +77,4 @@ export default {
 </template>
 
 <style scoped>
-main {
-  margin: 0 auto;
-}
-
-@media (min-width: 1024px) {
-  main {
-    min-height: 90vh;
-    margin: 10vh 0 0 0;
-    width: 100%;
-    display: flex;
-    align-items: center;
-  }
-}
-.summary {
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--color-text);
-}
 </style>
