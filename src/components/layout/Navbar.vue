@@ -39,6 +39,12 @@
             class="d-flex flex-column flex-lg-row align-items-center nav-transition nav-content"
             :class="{ 'nav-hidden': navbarHidden }"
           >
+          <RouterLink
+              v-if="logged_in"
+              to="/dashboard"
+              class="router-link font-base font-color-light text-decoration-none margin-right-md"
+              >Dashboard</RouterLink
+            >
             <RouterLink
               v-if="logged_in"
               to="/logout"

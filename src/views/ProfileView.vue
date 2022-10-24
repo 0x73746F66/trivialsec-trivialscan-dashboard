@@ -440,6 +440,7 @@ export default {
       this.emailUpdateMessageType = "";
     },
     async fetchProfile() {
+      this.loading = true;
       const response = await Api.get("/me").catch(error => {
         this.errorMessage = error;
         this.errorMessageType = "error";
