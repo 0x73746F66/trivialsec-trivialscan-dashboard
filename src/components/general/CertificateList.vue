@@ -79,6 +79,7 @@
                           <ul>
                             <li v-for="ref in issue.references" :key="ref" class="overflow-wrap-anywhere">
                               <a
+                                target="_blank"
                                 :href="ref.url"
                                 class="text-decoration-none font-xs font-color-primary">
                                 {{ref.name}}

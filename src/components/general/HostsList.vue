@@ -31,7 +31,11 @@
             :key="index"
         >
           <div class="slide-target-item margin-bottom-sm" v-for="(t, i) in target" :key="i">
-            <a :href="t.href" class="text-decoration-none target-icon-link font-color-secondary">
+            <a
+              target="_blank"
+              :href="t.href"
+              class="text-decoration-none target-icon-link font-color-secondary"
+            >
               <IconTarget class="margin-right-sm target-icon" color="e2c878"/>{{t.label}}
             </a>
           </div>
