@@ -1,8 +1,8 @@
 <template>
-  <div class="margin-bottom-sm">
+  <div>
     <div
-      class="font-lg text-left padding-left-sm font-color-light w-100 d-flex justify-content-left border-none custom-accordion-button padding-xxs"
-      :class="{ collapsed: defaultCollapsed }"
+      class=""
+      :class="[{ collapsed: defaultCollapsed }, buttonClasses]"
       :id="id"
       data-bs-toggle="collapse"
       :data-bs-target="`#` + target"
@@ -15,8 +15,8 @@
       <IconExpandPrimary class="expand-icon" />
     </div>
     <div
-      class="custom-according-content bg-dark-20 padding-md font-color-light font-base collapse"
-      :class="{ show: defaultShow }"
+      class="collapse"
+      :class="[{ show: defaultShow }, contentClasses]"
       :id="target"
       :aria-labelledby="id"
       :data-bs-parent="`#` + parent"
@@ -38,6 +38,8 @@ export default {
     parent: String,
     defaultShow: Boolean,
     defaultCollapsed: Boolean,
+    buttonClasses: String,
+    contentClasses: String
   },
 };
 </script>

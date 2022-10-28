@@ -1,12 +1,14 @@
 <template>
   <div class="d-flex flex-row align-items-center justify-content-center">
       <loadingComponent class="loading" :class="{ inactive: !loading }" />
-      <ValidationMessage
-          v-if="errorMessage.length > 0"
-          class="justify-content-start"
-          :message="errorMessage"
-          :type="errorMessageType"
-      />
+      <div v-if="errorMessage.length > 0" class="d-flex flex-column w-100">
+        <ValidationMessage
+            class="justify-content-start"
+            :message="errorMessage"
+            :type="errorMessageType"
+        />
+        <span class="font-xl font-color-light-80 text-center w-100 bg-dark-40 border-radius-sm d-block">No data to display</span>
+      </div>
       <div>
         <button class="d-none d-lg-block target-swiper-button target-swiper-button-prev font-color-light">
           <IconChevron color="f0f0f0" />
@@ -32,11 +34,33 @@
         >
           <div class="slide-target-item margin-bottom-sm" v-for="(t, i) in target" :key="i">
             <a
-              target="_blank"
-              :href="t.href"
-              class="text-decoration-none target-icon-link font-color-secondary"
+              :href="`/hostname/${t.transport.hostname}/${t.transport.port}`"
+              class="text-decoration-none target-icon-link font-color-secondary w-100"
             >
-              <IconTarget class="margin-right-sm target-icon" color="e2c878"/>{{t.label}}
+              <div class="d-flex flex-row justify-content-between w-100">
+                <div class="d-flex flew-row">
+                  <IconTarget class="margin-right-sm target-icon" color="e2c878"/>
+                  <div class="d-flex flex-column">
+                    <span v-for="(http, id) in t.http" :key="id"
+                      class="http-status"
+                      :class="{'font-color-primary' : http.status_code === 200, 'font-color-danger' : http.status_code !== 200 }">
+                      {{http.title}}
+                      <span
+                        class="pill padding-xxs font-color-light status-code-pill"
+                        :class="{'success' : http.status_code[0] === 2}"
+                      >
+                        {{http.status_code}}
+                      </span>
+                    </span>
+                    <span class="d-block">{{t.transport.hostname}}:{{t.transport.port}}</span>
+                    <span v-if="t.error" class="d-block font-color-tertiary">{{ t.error[0] }} {{ t.error[1] }}</span>
+                    <span class="d-block font-color-light-20">{{t.transport.peer_address}}</span>
+                  </div>
+                </div>
+                <div class="font-color-light-40">
+                  {{t.timeago}}
+                </div>
+              </div>
             </a>
           </div>
         </swiper-slide>
@@ -54,6 +78,7 @@ import IconTarget from "@/components/icons/IconTarget.vue";
 import IconChevron from "@/components/icons/IconChevron.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";
 import loadingComponent from "@/components/general/loadingComponent.vue";
+import moment from "moment"
 
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/vue';
@@ -89,7 +114,7 @@ export default {
   methods: {
     async fetchHosts() {
       this.loading = true
-      const response = await Api.get("/hosts").catch(error => {
+      const response = await Api.get("/hosts?return_details=true").catch(error => {
         this.errorMessage = error
         this.errorMessageType = "error"
       });
@@ -100,8 +125,11 @@ export default {
         return;
       }
       const data = await response.json();
-      console.log(data);
-      this.targets = data.map(host => ({"href": `/hostname/${host.transport.hostname}/${host.transport.port}`, "label": `${host.transport.hostname}:${host.transport.port}`}))
+      this.targets = data.map(host => {
+        host.timeago = moment(host.last_updated).fromNow()
+        return host
+      })
+      console.log(this.targets[0]);
       this.loading = false
     },
   },
@@ -109,7 +137,7 @@ export default {
     slicedTargets() {
       var arrays = [];
       while(this.targets.length > 0) {
-        arrays.push(this.targets.splice(0, 9));
+        arrays.push(this.targets.splice(0, 15));
       }
       return arrays;
     },
@@ -175,6 +203,13 @@ export default {
         color: color("light-20");
         background: none;
         display: none;
+    }
+  }
+
+  .status-code-pill {
+    padding: 0 spacers("xxs")!important;
+    &.success {
+      background: color('primary');
     }
   }
 </style>

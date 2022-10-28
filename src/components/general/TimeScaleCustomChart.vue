@@ -10,6 +10,7 @@
             <select 
                 @change="handleComplianceTimeScale($event)"
                 class="time-scale-select text-capitalize"
+                v-if="ranges.length > 1"
                 v-model="selectedChart" 
             >
                 <option v-for="range in ranges" :key="`${transformedLabel}-${range}`" :value="`${transformedLabel}-${range}`" class="text-capitalize">{{range}}</option>

@@ -510,7 +510,9 @@
           parent="accordion"
           :defaultShow="true"
           :defaultCollapsed="false"
-        >
+          buttonClasses="font-lg text-left padding-left-sm font-color-light w-100 d-flex justify-content-left border-none custom-accordion-button padding-xxs"
+          contentClasses="custom-according-content bg-dark-20 padding-md font-color-light font-base"
+          >
           <template v-slot:header>
             <div
               class="font-base font-color-light d-flex d-flex flex-column font-color-primary align-items-start"
@@ -544,6 +546,8 @@
           parent="accordion"
           :defaultShow="false"
           :defaultCollapsed="true"
+          buttonClasses="font-lg text-left padding-left-sm font-color-light w-100 d-flex justify-content-left border-none custom-accordion-button padding-xxs"
+          contentClasses="custom-according-content bg-dark-20 padding-md font-color-light font-base"
         >
           <template v-slot:header>
             <!-- <div class="text-sm d-flex margin-bottom-sm d-flex font-xs font-color-primary align-items-center">
@@ -578,6 +582,8 @@
           parent="accordion"
           :defaultShow="false"
           :defaultCollapsed="true"
+          buttonClasses="font-lg text-left padding-left-sm font-color-light w-100 d-flex justify-content-left border-none custom-accordion-button padding-xxs"
+          contentClasses="custom-according-content bg-dark-20 padding-md font-color-light font-base"
         >
           <template v-slot:header>
             <div

@@ -1,17 +1,19 @@
 <template>
-<Chart
+  <Chart
     :size="{ width: 500, height: 320 }"
     :data="data"
     :margin="margin"
     :direction="direction"
-    :axis="axis">
+    :axis="axis"
+    v-if="chartData"
+  >
 
     <template #layers>
       <Grid strokeDasharray="2,2" />
-      <Area :dataKeys="['name', 'num']" type="natural" />
+      <Area :dataKeys="['name', 'num']" type="monotone" />
       <Line
         :dataKeys="['name', 'num']"
-        type="natural"
+        type="normal"
         :lineStyle="{
           stroke: `url(#${label}chartgrad)`
         }"
@@ -20,6 +22,9 @@
       <CustomChartDefs :defsId="`${label}chartgrad`"/>
     </template>
   </Chart>
+  <span class="font-xl font-color-light-80 text-center w-100 d-block" v-else>
+    No data to display
+  </span>
 </template>
 
 <script lang="ts">
@@ -39,8 +44,7 @@ export default defineComponent({
   },
   components: { Chart, Grid, Line, CustomChartDefs },
   setup(props) {
-    const data = props.chartData
-
+    const data = props.chartData.sort((a, b) => (a.timestamp < b.timestamp));
     const direction = ref('horizontal')
     const margin = ref({
       left: 0,
