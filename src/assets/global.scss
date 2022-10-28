@@ -189,6 +189,16 @@ a {
     height: 100%;
 }
 
+.w {
+    &-lg {
+        @media (min-width: $breakpoint-lg) {
+            &-75 {
+                width: 75% !important;
+            }
+        }
+    }
+}
+
 .max-h-320px {
     height: 320px !important;
 }
@@ -246,4 +256,16 @@ a {
 
 .overflow-wrap-anywhere {
     overflow-wrap: anywhere;
+}
+
+.swiper-pagination {
+    position: relative !important;
+    bottom: 0!important;
+    .swiper-pagination-bullet-active {
+        background: color("primary");
+    }
+}
+
+.white-space-pre {
+    white-space: pre;
 }

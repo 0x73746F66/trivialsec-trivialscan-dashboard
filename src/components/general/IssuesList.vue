@@ -1,12 +1,14 @@
 <template>
   <div class="d-flex flex-row align-items-center justify-content-center">
       <loadingComponent class="loading" :class="{ inactive: !loading }" />
-      <ValidationMessage
-          v-if="errorMessage.length > 0"
-          class="justify-content-start"
-          :message="errorMessage"
-          :type="errorMessageType"
-      />
+      <div v-if="errorMessage.length > 0" class="d-flex flex-column w-100">
+        <ValidationMessage
+            class="justify-content-start"
+            :message="errorMessage"
+            :type="errorMessageType"
+        />
+        <span class="font-xl font-color-light-80 text-center w-100 bg-dark-40 border-radius-sm d-block">No data to display</span>
+      </div>
       <div>
         <button class="d-none d-lg-block issue-swiper-button issue-swiper-button-prev font-color-light">
           <IconChevron color="f0f0f0" />
@@ -20,7 +22,7 @@
             nextEl: '.issue-swiper-button-next',
             prevEl: '.issue-swiper-button-prev'
         }"
-        :pagination="{ clickable: true }"
+        :pagination="{ pagination }"
         :scrollbar="{ draggable: false }"
     >
         <swiper-slide
@@ -35,34 +37,35 @@
             :defaultShow=false
             :defaultCollapsed=true
             :key="`${IssueIndex}${index}`"
+            buttonClasses="font-lg text-left dashboard-dropdown font-color-light w-100 d-flex justify-content-left border-none padding-xxs"
+            contentClasses=" bg-dark-20 dashboard-dropdown-content tpadding-md font-color-light font-base"
           >
             <template v-slot:header class="w-100">
                 <div class="font-base d-flex flex-column justify-content-between  font-color-primary w-100 align-items-start">
-                  <div class="d-flex align-items-start">
+                  <div class="d-flex">
                     <ThreatIcon :severity="issue.severity" />
-
-                    <div class="margin-right-xxs font-sm font-color-secondary">{{issue.rule_id}}</div>
-                    <span class="font-color-lighter font-base">{{issue.name}}</span>
-                  </div>
-                  <div class="align-items-center font-xs font-color-light-60">
-                    {{issue.transport.hostname}}:{{issue.transport.port}} ({{issue.transport.peer_address}})
+                    <div class="d-flex flex-column">
+                      <div class="margin-right-xxs font-sm-b font-color-secondary">{{issue.rule_id}}</div>
+                      <span class="font-color-lighter font-xs-sb">{{issue.name}}</span>
+                      <span class="font-xs font-color-light-40">{{issue.transport.hostname}}:{{issue.transport.port}} ({{issue.transport.peer_address}})</span>
+                    </div>
                   </div>
                 </div>
             </template>
             <template v-slot:content>
                 <div class="d-flex row">
                   <div class="col-lg-8 col-12 d-flex flex-column align-items-start margin-bottom-xs">
-                    <span class="font-sm">{{issue.description}}</span>
+                    <span class="font-xs">{{issue.description}}</span>
                   </div>
                   
                   <div class="col-lg-4 col-12 margin-bottom-sm">
                     <div class="bg-dark-40 border-radius-sm  d-flex flex-column align-items-start padding-sm">
                       <span class="font-sm-sb font-color-light margin-bottom-sm">
-                          <span class="font-color-danger">{{issue.result_label}}</span>
-                          <span class="margin-left-xxs">{{issue.observed}}</span>
+                          <span class="font-color-danger font-xs-sb">{{issue.result_label}}</span>
+                          <span class="margin-left-xxs font-xs">{{issue.observed}}</span>
                       </span>
 
-                      <span class="font-color-lighter">References:</span>
+                      <span class="font-color-lighter font-xs-sb">References:</span>
 
                       <ul>
                         <li v-for="ref in issue.references" :key="ref.id" class="overflow-wrap-anywhere">
@@ -87,7 +90,7 @@
                   </a>
                 </div>
             </template>
-        </Dropdown>
+          </Dropdown>
         </swiper-slide>
       </swiper>
       <div>
@@ -113,6 +116,7 @@ import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 
 import 'swiper/css';
+import "swiper/css/pagination";
 
 export default {
   components: {
@@ -137,6 +141,12 @@ export default {
   },
   setup() {
       return {
+          pagination: {
+            clickable: true,
+            renderBullet: function (index, className) {
+                return '<span class="' + className + '">' + (index + 1) + "</span>";
+              },
+          },
           modules: [Navigation, Pagination, Scrollbar, A11y],
       };
   },

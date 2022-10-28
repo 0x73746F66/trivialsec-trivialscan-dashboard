@@ -2,7 +2,7 @@
   <div class="hero-container">
     <Hero :class="{ 'hero-scrolled': heroScrolled }" />
   </div>
-
+  
   <div
     class="container basic-feature-container padding-bottom-md padding-top-md"
   >
