@@ -6,12 +6,12 @@
             :class="[{'show' : index == 0, 'hide' : index > 0}, `compliance-custom-chart-display-${transformedLabel}`]"
             :key="index"
             :id="`compliance-${transformedLabel}-${ranges[index]}`">
-            
-            <select 
+
+            <select
                 @change="handleComplianceTimeScale($event)"
                 class="time-scale-select text-capitalize"
                 v-if="ranges.length > 1"
-                v-model="selectedChart" 
+                v-model="selectedChart"
             >
                 <option v-for="range in ranges" :key="`${transformedLabel}-${range}`" :value="`${transformedLabel}-${range}`" class="text-capitalize">{{range}}</option>
             </select>
@@ -33,7 +33,7 @@ export default {
     props: {
         label: String,
         ranges: Array,
-        chartData: Array
+        chartData: Object
     },
     mounted() {
         this.selectedChart = this.transformedLabel + '-' + this.ranges[0]
@@ -61,7 +61,7 @@ export default {
     .compliance-custom-chart-display{
         &:not(.show) {
             display: none;
-        }   
+        }
 
         &.show {
             animation: fadeIn 0.5s linear forwards;
@@ -104,5 +104,5 @@ export default {
             opacity: 1;
         }
     }
-    
+
 </style>

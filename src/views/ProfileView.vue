@@ -538,7 +538,6 @@ export default {
         return;
       }
       const data = await response.json()
-      console.log(data)
       this.errorMessage = "Display Name was updated!";
       this.errorMessageType = "success";
       this.loading = false;
@@ -548,7 +547,6 @@ export default {
         localStorage.getItem("/account/display")
       );
       this.editMode = !this.editMode;
-      this.$forceUpdate()
     },
     async upgradeForm(event) {
       this.loading = true;
@@ -564,51 +562,22 @@ export default {
       this.upgradeFormMessageType = "error";
       this.loading = false;
     },
-    // async deleteAccount() {
-
-    //     this.loading = true
-    //     const req_url = `${this.api_url}/summary/Mv1N0o4lOTPaATxodTlsEPYFc9Rkr7-w97ygP4zweoSxL_6rBG347F7T6jbgaz1VMI5VwID4f14`
-    //     const ts = moment().utc().unix()
-    //     const url = new URL(req_url)
-    //     const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${url.pathname}\n${ts}`
-    //     const hash = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, localStorage.getItem('/session/key'))
-    //     hash.update(canonical_string)
-    //     const mac = hash.finalize()
-    //     const header = `HMAC id="${localStorage.getItem('/member/email')}", mac="${mac}", ts="${ts}"`
-    //     const response = await fetch(req_url, {
-    //         headers: {"Authorization": header},
-    //         method: 'GET'
-    //     })
-
-    //     const data = await response.json()
-    //     console.log('delete account');
-    //     console.log(data);
-    //     if (response.status == 200) {
-    //         this.memberDeleteMessage = "Account was deleted"
-    //         this.memberDeleteMessageType = "success"
-    //         this.loading = false
-    //     } else {
-    //         this.memberDeleteMessage = "Something went wrong. Couldn't delete account."
-    //         this.memberDeleteMessageType = "error"
-    //         this.loading = false
-    //     }
-    // },
+    async deleteAccount() {
+        console.log('delete account')
+    },
     async generateClientCredential() {
       const client_name = randomWords({ exactly: 2, join: '' })
       this.loading = true;
       const response = await Api.post(`/claim/${client_name}`, {});
       if (response.status !== 201) {
-        this.errorMessage = `${response.status}: Something went wrong. Couldn't generate new credentials.`;
+        this.errorMessage = `${response.status}: ${response.statusText}. Something went wrong. Couldn't generate new credentials.`;
         this.errorMessageType = "error";
         this.loading = false;
         return;
       }
-      const data = await response.json()
-      console.log(data)
       this.errorMessage = "New Credentials generated!";
       this.errorMessageType = "success";
       this.loading = false;
-      this.$forceUpdate()
     },
   },
 };

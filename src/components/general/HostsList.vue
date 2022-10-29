@@ -94,7 +94,6 @@ export default {
     ValidationMessage,
     loadingComponent,
   },
-  props: ['generator', 'version', 'account_name', 'client_name', 'project_name', 'targets', 'date', 'execution_duration_seconds', 'score', 'results', 'certificates', 'results_uri'],
   data() {
     return {
       loading: false,
@@ -129,7 +128,6 @@ export default {
         host.timeago = moment(host.last_updated).fromNow()
         return host
       })
-      console.log(this.targets[0]);
       this.loading = false
     },
   },

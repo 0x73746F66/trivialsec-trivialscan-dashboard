@@ -18,7 +18,7 @@
           stroke: `url(#${label}chartgrad)`
         }"
       />
-     
+
       <CustomChartDefs :defsId="`${label}chartgrad`"/>
     </template>
   </Chart>
@@ -29,20 +29,20 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { Chart, Grid, Line } from 'vue3-charts'
+import { Chart, Grid, Line, Area } from 'vue3-charts'
 import CustomChartDefs from "./CustomChartDefs.vue"
 
 export default defineComponent({
   name: 'LineChart',
   props: {
-    chartData: Array,
+    chartData: Object,
     label: String,
   },
   data() {
     return {
     }
   },
-  components: { Chart, Grid, Line, CustomChartDefs },
+  components: { Chart, Grid, Line, Area, CustomChartDefs },
   setup(props) {
     const data = props.chartData.sort((a, b) => (a.timestamp < b.timestamp));
     const direction = ref('horizontal')
@@ -70,5 +70,5 @@ export default defineComponent({
 </script>
 
 <style lang="">
-    
+
 </style>

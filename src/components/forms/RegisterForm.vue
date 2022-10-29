@@ -21,7 +21,6 @@
     <Button
       class="btn-outline-primary-full font-base-sb font-color-primary"
       text="Register"
-      @click="submit"
     />
   </form>
 </template>
@@ -75,10 +74,8 @@ export default {
         this.messageType = "error";
         this.loading = false;
       });
-      const data = await response.json();
       if (response.status === 201) {
-        this.message =
-          "Account registered with success.\r\nPlease check your e-mail inbox.";
+        this.message = "Account registered with success.\r\nPlease check your e-mail inbox.";
         this.messageType = "success";
         this.loading = false;
       } else if (response.status === 409) {
@@ -86,8 +83,7 @@ export default {
         this.messageType = "warning";
         this.loading = false;
       } else {
-        console.log(data);
-        this.message = `Something went wrong, please try again later.`;
+        this.message = `${response.status}: ${response.statusText}. Something went wrong, please try again later.`;
         this.messageType = "warning";
         this.loading = false;
       }

@@ -46,7 +46,7 @@
                 :section="quotaSections"
                 label="used-chart"
                 special-classes="w-lg-75 w-100"
-                column-style=true
+                :column-style=true
               >
                 <template v-slot:Monitoring>
                   <pieChart

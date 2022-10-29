@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex position-relative">
-        <select 
-            name="searchOptions" 
+        <select
+            name="searchOptions"
             id="search-options"
             class="search-select font-sm"
             :class="{ 'search-select-active' : searchActive, 'search-select-active-cornered' : searchInput.length > 0 }"
@@ -12,15 +12,15 @@
             <option value="reports">Reports</option>
             <option value="hosts">Hosts</option>
         </select>
-        <input 
-            type="text" 
-            name="Search" 
-            class="search-bar" 
+        <input
+            type="text"
+            name="Search"
+            class="search-bar"
             :class="{ 'search-bar-active' : searchActive, 'search-bar-active-cornered' : searchInput.length > 0 }"
             id="search-bar"
             v-model="searchInput"
         >
-        <div 
+        <div
             class="button-container"
             :class="{'position-absolute' : searchActive }"
         >
@@ -28,10 +28,10 @@
                 <IconArrowPrimary color="F0F0F0" class="search-btn-icon" v-if="searchActive"/>
                 <IconSearch color="F0F0F0" class="search-btn-icon" v-else />
             </button>
-            <button 
-                class="search-btn search-btn-close" 
+            <button
+                class="search-btn search-btn-close"
                 :class="{'search-btn-close-hidden' : !searchActive}"
-                @click="closeSearchBtn()" 
+                @click="closeSearchBtn()"
             >
                 <IconClose color="F0F0F0" class="search-btn-icon"/>
             </button>
@@ -75,7 +75,7 @@
                 <div class="search-result-item w-100 margin-bottom-sm">
                     <span class="d-flex justify-content-between align-items-center">
                         <span class="d-flex">
-                            Host result 
+                            Host result
                             <Toggle class="margin-left-xxs" />
                         </span>
                         <div class="d-flex flex-row">
@@ -87,7 +87,7 @@
                 <div class="search-result-item w-100 margin-bottom-sm">
                     <span class="d-flex justify-content-between align-items-center">
                         <span class="d-flex">
-                            Host result 
+                            Host result
                             <Toggle class="margin-left-xxs" />
                         </span>
                         <div class="d-flex flex-row">
@@ -107,7 +107,7 @@
                 <div class="search-result-item w-100 margin-bottom-sm">
                     <span class="d-flex justify-content-between align-items-center">
                         <span class="d-flex">
-                            Report result 
+                            Report result
                         </span>
                         <div class="d-flex flex-row">
                             <button class="search-result-item-btn search-result-item-btn-delete border-radius-lg margin-right-xxs">Delete</button>
@@ -118,7 +118,7 @@
                 <div class="search-result-item w-100 margin-bottom-sm">
                     <span class="d-flex justify-content-between align-items-center">
                         <span class="d-flex">
-                            Report result 
+                            Report result
                         </span>
                         <div class="d-flex flex-row">
                             <button class="search-result-item-btn search-result-item-btn-delete border-radius-lg margin-right-xxs">Delete</button>
@@ -140,8 +140,8 @@ import Toggle from "../general/Toggle.vue"
 
 export default {
     components: {
-        IconSearch, 
-        IconArrowPrimary, 
+        IconSearch,
+        IconArrowPrimary,
         IconClose,
         IconError,
         Toggle
@@ -159,7 +159,6 @@ export default {
         handleClick() {
             this.searchActive = !this.searchActive;
             this.clearSearchInput();
-            console.log(this.searchActive)
         },
         closeSearchBtn() {
             this.searchActive = false;
@@ -183,7 +182,7 @@ export default {
             @extend .font-color-light;
 
             &-active {
-                opacity: 1; 
+                opacity: 1;
                 width: 100%;
                 padding: 0 spacers("lg");
                 border-radius:  0 radius("lg") radius("lg") 0;
@@ -271,7 +270,7 @@ export default {
         background: color('primary');
         border: none;
         transition: 0.2s linear;
-        
+
         &-main {
             z-index: 2;
             display: flex;

@@ -13,14 +13,13 @@
       id="id-email-1"
       label="Email"
       :required="true"
-      :model="email"
+      :model="emailField"
       @change="handleEmail"
     />
 
     <Button
       class="btn-outline-primary-full font-xl-sb font-color-primary"
       text="Login"
-      @click="submit"
     />
   </form>
 </template>
@@ -57,20 +56,17 @@ export default {
           "Content-Type": "application/json;charset=UTF-8",
         },
       }).catch((errors) => {
-        console.log(errors);
-        this.message = "An error has occured, please try again.";
+        this.message = `An error has occured, please try again. ${errors}`;
         this.messageType = "error";
         this.loading = false;
       });
-      const data = await response.json();
       if (response.status === 202) {
         this.message = "Please check you e-mail to complete login.";
         this.messageType = "success";
         this.loading = false;
         setTimeout(() => (window.location.href = "/"), 3000);
       } else {
-        console.log(data);
-        this.message = `Something went wrong, please try again later.`;
+        this.message = `${response.status}: ${response.statusText}. Something went wrong, please try again later.`;
         this.messageType = "error";
         this.loading = false;
       }

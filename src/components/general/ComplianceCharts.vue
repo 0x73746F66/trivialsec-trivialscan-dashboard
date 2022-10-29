@@ -10,7 +10,7 @@
       :section="chartSections"
       label="complicance-chart"
       special-classes="w-lg-75"
-      column-style=true
+      :column-style=true
     >
         <template v-for="(comp, index) in compData" :key="index" #[comp.label]>
         <TimeScaleCustomChart
@@ -41,7 +41,6 @@ export default {
       errorMessage: "",
       errorMessageType: "",
       chartSections: [],
-      chartData: {},
       compData: [],
     }
   },
@@ -76,8 +75,6 @@ export default {
         }
         this.compData.push(comp)
       }
-      console.log('this.compData');
-      console.log(this.compData);
       this.loading = false
     }
   },
