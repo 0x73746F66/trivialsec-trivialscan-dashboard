@@ -1,4 +1,4 @@
-import HomeView from "../views/HomeView.vue"
+import HomeView from "@/views/HomeView.vue"
 
 const routes = [
     {
@@ -21,7 +21,7 @@ const routes = [
     {
         path: "/docs",
         name: "docs",
-        component: () => import("../views/DocsView.vue"),
+        component: () => import("@/views/DocsView.vue"),
     },
     {
         path: "/login/:magic_link",
@@ -82,6 +82,66 @@ const routes = [
                 window.location.href = "/"
             }
         },
+    },
+    {
+        path: "/feature/patch-alert",
+        name: "feature-patch-alert",
+        component: () => import("@/views/seo/FeaturePage.vue"),
+    },
+    {
+        path: "/feature/passive-scan",
+        name: "feature-passive-scan",
+        component: () => import("@/views/seo/FeaturePage.vue"),
+    },
+    {
+        path: "/feature/active-scan",
+        name: "feature-active-scan",
+        component: () => import("@/views/seo/FeaturePage.vue"),
+    },
+    {
+        path: "/feature/trivial-attacks",
+        name: "feature-trivial-attacks",
+        component: () => import("@/views/seo/FeaturePage.vue"),
+    },
+    {
+        path: "/feature/threat-intel",
+        name: "feature-threat-intel",
+        component: () => import("@/views/seo/FeaturePage.vue"),
+    },
+    {
+        path: "/feature/security-feeds",
+        name: "feature-security-feeds",
+        component: () => import("@/views/seo/FeaturePage.vue"),
+    },
+    {
+        path: "/feature/webhooks",
+        name: "feature-webhooks",
+        component: () => import("@/views/seo/FeaturePage.vue"),
+    },
+    {
+        path: "/feature/trivialscan",
+        name: "feature-trivialscan",
+        component: () => import("@/views/seo/FeaturePage.vue"),
+    },
+    {
+        path: "/feature/research",
+        name: "feature-research",
+        component: () => import("@/views/seo/FeaturePage.vue"),
+    },
+    {
+        path: "/feature/phishing-alerts",
+        name: "feature-phishing-alerts",
+        component: () => import("@/views/seo/FeaturePage.vue"),
+    },
+    {
+        path: "/feature/open-source",
+        name: "feature-open-source",
+        component: () => import("@/views/seo/FeaturePage.vue"),
+    },
+    {
+        path: "/feature/data-sovereignty",
+        name: "feature-data-sovereignty",
+        component: () => import("@/views/seo/FeaturePage.vue"),
     },
 ]
 

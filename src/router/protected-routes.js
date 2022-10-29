@@ -1,10 +1,10 @@
-import HomeView from "../views/HomeView.vue"
+import HomeView from "@/views/HomeView.vue"
 
 const routes = [
     {
         path: "/dashboard",
         name: "dashboard",
-        component: () => import("../views/DashboardView.vue"),
+        component: () => import("@/views/DashboardView.vue"),
     },
     {
         path: "/result/:report_id",
@@ -16,7 +16,7 @@ const routes = [
     {
         path: "/result/:report_id/detail",
         name: "detail",
-        component: () => import("../views/DetailView.vue"),
+        component: () => import("@/views/DetailView.vue"),
     },
     {
         path: "/hostname/:hostname",
@@ -31,22 +31,22 @@ const routes = [
     {
         path: "/hostname/:hostname/:port",
         name: "hostname_port",
-        component: () => import("../views/HostnameView.vue"),
+        component: () => import("@/views/HostnameView.vue"),
     },
     {
         path: "/certificate/:sha1_fingerprint",
         name: "certificate",
-        component: () => import("../views/CertificateView.vue"),
+        component: () => import("@/views/CertificateView.vue"),
     },
     {
         path: "/profile",
         name: "profile",
-        component: () => import("../views/ProfileView.vue"),
+        component: () => import("@/views/ProfileView.vue"),
     },
     {
         path: "/support",
         name: "support",
-        component: () => import("../views/SupportView.vue"),
+        component: () => import("@/views/SupportView.vue"),
     },
 ]
 

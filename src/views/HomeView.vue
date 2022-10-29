@@ -2,7 +2,7 @@
   <div class="hero-container">
     <Hero :class="{ 'hero-scrolled': heroScrolled }" />
   </div>
-  
+
   <div
     class="container basic-feature-container padding-bottom-md padding-top-md"
   >
@@ -129,85 +129,86 @@ export default {
         {
           id: 1,
           icon: IconNotificationLight,
+          href: "/feature/patch-alert",
           header: "Patch Alert",
-          description:
-            "Never miss a patch, kick off patch automation or inform your team",
+          description: "Never miss a patch, kick off patch automation or inform your team",
         },
         {
           id: 2,
           icon: IconScan2Light,
+          href: "/feature/passive-scan",
           header: "Passive scan",
-          description:
-            "Deep DNS analysis, real TLS validation, vast subdomain sources, public responding ports, web libraries, vast 3rd party API integrations for enriched results",
+          description: "Deep DNS analysis, real TLS validation, vast subdomain sources, public responding ports, web libraries, vast 3rd party API integrations for enriched results",
         },
         {
           id: 3,
           icon: IconScan1Light,
+          href: "/feature/active-scan",
           header: "Active scan",
-          description:
-            "Protected by an ownership validation; a passive scan but validates all findings",
+          description: "Protected by an ownership validation; a passive scan but validates all findings",
         },
         {
           id: 4,
           icon: IconLightningLight,
+          href: "/feature/trivial-attacks",
           header: "Trivial Attacks",
-          description:
-            "We automate many novel yet trivial attack vectors, and perform evaluations using standard tooling so you don't have to",
+          description: "We automate many novel yet trivial attack vectors, and perform evaluations using standard tooling so you don't have to",
         },
         {
           id: 5,
           icon: IconIntLight,
+          href: "/feature/threat-intel",
           header: "Threat Intelligence",
-          description:
-            "Let's be clear, this is something 'you do' not something you buy, we know this, so our module helps you find the signals you need from a vast source of OSINT and vendor data - and curate blocklists that can be downloaded or sent to your network defence systems",
+          description: "Let's be clear, this is something 'you do' not something you buy, we know this, so our module helps you find the signals you need from a vast source of OSINT and vendor data - and curate blocklists that can be downloaded or sent to your network defence systems",
         },
         {
           id: 6,
           icon: IconFeedLight,
+          href: "/feature/security-feeds",
           header: "Feeds",
-          description:
-            "There is a lot of written form security information published every hour relevant to your organisation. Our Research & Advisory feed is a curated source for analysts and CISO's for your RSS viewer",
+          description: "There is a lot of written form security information published every hour relevant to your organisation. Our Research & Advisory feed is a curated source for analysts and CISO's for your RSS viewer",
         },
         {
           id: 7,
           icon: IconIntegrationLight,
+          href: "/feature/webhooks",
           header: "Firehose",
-          description:
-            "We promote automation using Webhooks for real-time integration into your existing systems",
+          description: "We promote automation using Webhooks for real-time integration into your existing systems",
         },
         {
           id: 8,
           icon: IconCliLight,
+          href: "/feature/trivialscan",
           header: "CLI",
           description: "Enables automation via DevOps pipelines",
         },
         {
           id: 9,
           icon: IconGlobeLight,
-          header: "Recon",
-          description:
-            "We have a vast database of the public internet, compiled from the authoritative list of every registered domain using zone files (and not IP address probing)",
+          href: "/feature/research",
+          header: "Research",
+          description: "We have a vast database of the public internet, compiled from the authoritative list of every registered domain using zone files (and not IP address probing)",
         },
         {
           id: 10,
           icon: IconFishLight,
+          href: "/feature/phishing-alerts",
           header: "Phish Alert",
-          description:
-            "Know when sites are copied or domains with similarities for a phishing attacks are registered We adhere to the concept of interoperability. You control your data, and we enable you with a growing list of supported open standard data exchange formats",
+          description: "Know when sites are copied or domains with similarities for a phishing attacks are registered We adhere to the concept of interoperability. You control your data, and we enable you with a growing list of supported open standard data exchange formats",
         },
         {
           id: 11,
           icon: IconTuneLight,
+          href: "/feature/open-source",
           header: "On-prem / Self-hosting",
-          description:
-            "While Trivial Security was created to make accessible many features typically out of reach to most organisations, our solutions equally benefit large enterprise with data sovereignty and complete control needs also",
+          description: "While Trivial Security was created to make accessible many features typically out of reach to most organisations, our solutions equally benefit large enterprise with data sovereignty and complete control needs also",
         },
         {
           id: 12,
           icon: IconData,
+          href: "/feature/data-sovereignty",
           header: "Interoperability",
-          description:
-            "We adhere to open standards. You control your data, and we enable you with a growing list of supported data exchange formats so you can access and control your data at all times",
+          description: "We adhere to open standards. You control your data, and we enable you with a growing list of supported data exchange formats so you can access and control your data at all times",
         },
       ],
     };

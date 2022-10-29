@@ -14,17 +14,17 @@
           feature.description
         }}</span>
       </div>
-      <a
-        href="#"
+      <RouterLink
+        :to="feature.href"
         class="text-decoration-none font-color-dark basic-feature-read-more-link w-100 padding-sm"
         :class="{ hidden: !showLink }"
-      >
+        >
         Read More
         <IconArrowPrimary
           color="2b2525"
           class="basic-feature-read-more-link-icon margin-left-xs"
         />
-      </a>
+      </RouterLink>
     </div>
   </div>
 </template>
