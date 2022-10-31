@@ -1,30 +1,34 @@
 <template>
+    <loadingComponent class="loading" :class="{ inactive: !loading }" :active="loading" />
+
     <div class="d-flex position-relative">
         <select
             name="searchOptions"
             id="search-options"
             class="search-select font-sm"
-            :class="{ 'search-select-active' : searchActive, 'search-select-active-cornered' : searchInput.length > 0 }"
-
+            :class="{ 'search-select-active' : searchActive, 'search-select-active-cornered' : searchResults.findings.length > 0 || searchResults.hosts.length > 0 || searchResults.reports.length > 0 }"
+            v-model="searchType"
         >
-            <option value="certificates">Certificates</option>
-            <option value="threats">Threats</option>
-            <option value="reports">Reports</option>
-            <option value="hosts">Hosts</option>
+            <option value="host">Domain</option>
+            <option value="ip">IP Address</option>
+            <!-- <option value="certificatesha1">Certificate sha1</option> -->
+            <!-- <option value="certificatecommonname">Certificate Common Name</option> -->
+            <!-- <option value="any">Any</option> -->
         </select>
         <input
             type="text"
             name="Search"
             class="search-bar"
-            :class="{ 'search-bar-active' : searchActive, 'search-bar-active-cornered' : searchInput.length > 0 }"
+            :class="{ 'search-bar-active' : searchActive, 'search-bar-active-cornered' : searchResults.findings.length > 0 || searchResults.hosts.length > 0 || searchResults.reports.length > 0 }"
             id="search-bar"
             v-model="searchInput"
+            @keydown.enter="submitSearch()"
         >
         <div
             class="button-container"
             :class="{'position-absolute' : searchActive }"
         >
-            <button class="search-btn search-btn-main" @click="handleClick()">
+            <button class="search-btn search-btn-main" @click="submitSearch()">
                 <IconArrowPrimary color="F0F0F0" class="search-btn-icon" v-if="searchActive"/>
                 <IconSearch color="F0F0F0" class="search-btn-icon" v-else />
             </button>
@@ -37,27 +41,31 @@
             </button>
         </div>
     </div>
-    <div class="search-input-results" v-if="searchInput.length > 0">
-        <div>
+    <ValidationMessage :message='errorMessage' :type="errorMessageType" />
+    <div class="search-input-results" v-if="(searchResults.findings.length > 0 || searchResults.hosts.length > 0 || searchResults.reports.length > 0 ) && searchActive">
+        <!-- <div class="findings-results" v-if="searchResults.findings.length > 0">
             <div class="d-flex flex-row margin-bottom-sm justify-content-between padding-bottom-sm search-input-results-header border-bottom-light-20">
-                <p class="font-base font-color-light mb-0"><IconError color="f45e5e" class="search-result-item-icon" /> Findings</p>
-                <p class="font-sm font-color-light-40 mb-0">3 results</p>
+                <p class="font-base font-color-danger mb-0">
+                    <IconError color="f45e5e" class="search-result-item-icon" />
+                    Findings
+                </p>
+                <p class="font-sm font-color-light-40 mb-0">{{searchResults.findings.length}} result(s)</p>
             </div>
             <div class="d-flex flex-wrap flex-row">
                 <div class="search-result-item">
-                    <span>Findings result </span>
                 </div>
                 <div class="search-result-item">
-                    <span>Findings result </span>
                 </div>
                 <div class="search-result-item">
-                    <span>Findings result </span>
                 </div>
             </div>
-        </div>
-        <div>
+        </div> -->
+        <!-- <div class="certificates-results">
             <div class="d-flex flex-row margin-bottom-sm justify-content-between padding-bottom-sm search-input-results-header border-bottom-light-20">
-                <p class="font-base font-color-light mb-0"><IconError color="f0f0f0" class="search-result-item-icon" /> Certificates</p>
+                <p class="font-base font-color-secondary mb-0">
+                    <IconCertificate color="e2c878" class="search-result-item-icon" />
+                    Certificates
+                </p>
                 <p class="font-sm font-color-light-40 mb-0">1 result</p>
             </div>
             <div class="d-flex flex-wrap flex-row">
@@ -65,67 +73,126 @@
                     <span>Certificate result </span>
                 </div>
             </div>
-        </div>
-        <div>
+        </div> -->
+        <div class="host-results" v-if="searchResults.hosts.length > 0">
             <div class="d-flex flex-row margin-bottom-sm justify-content-between padding-bottom-sm search-input-results-header border-bottom-light-20">
-                <p class="font-base font-color-light mb-0"><IconError color="f0f0f0" class="search-result-item-icon" /> Host</p>
-                <p class="font-sm font-color-light-40 mb-0">2 results</p>
+                <p class="font-base font-color-primary mb-0">
+                    <IconGlobeLight color="1abb9c" class="search-result-item-icon" />
+                    Hosts
+                </p>
+                <p class="font-sm font-color-light-40 mb-0">{{searchResults.hosts.length}} result<span v-if="searchResults.hosts.length > 1">s</span></p>
             </div>
             <div class="d-flex flex-wrap flex-row w-100">
-                <div class="search-result-item w-100 margin-bottom-sm">
-                    <span class="d-flex justify-content-between align-items-center">
-                        <span class="d-flex">
-                            Host result
-                            <Toggle class="margin-left-xxs" />
+                <ValidationMessage :message="errorMessageScanHost" :type="errorMessageTypeScanHost" />
+                <div class="search-result-item w-100 margin-bottom-sm p-2" v-for="(result, index) in searchResults.hosts" :key="index">
+                    <span
+                        class="d-flex justify-content-between align-items-start margin-bottom-sm"
+                    >
+                        <span class="d-flex align-items-start ">
+                            <Toggle
+                                :defaultChecked="result.monitoring"
+                                @change="hostToggleChange($event, result.hostname)" class="margin-right-xxs"
+                            />
+                            <div class="d-flex flex-column">
+                                <span class="font-sm font-color-secondary">{{result.hostname}}</span>
+                                <span class="font-xs font-color-light" v-if="result.last_scanned_ago">Last scanned {{ result.last_scanned_ago }}</span>
+                                <span class="font-xs font-color-light" v-if="result.queue_status">{{ result.queue_status }} {{ result.queued_timestamp_ago }}</span>
+                                <div
+                                    class="d-flex flex-column"
+                                    :class="[{'ip-addr-res-container-div': (result.ip_addr.length + result.resolved_ip.length > 3)}]"
+                                    :id="`ip-addr-res-${index}`"
+                                >
+                                    <span class="font-xxs font-color-light-60 ip-addr-res" v-for="(ip_addr, index) in result.ip_addr" :key="index">
+                                        {{ip_addr}}
+                                    </span>
+                                    <span class="font-xxs font-color-light-60 ip-addr-res" v-for="(ip_addr, index) in result.resolved_ip" :key="index">
+                                        {{ip_addr}}
+                                    </span>
+                                </div>
+                                <button
+                                    @click="expandIPAddress($event, `ip-addr-res-${index}`)"
+                                    class="font-xs bg-none border-0 p-0 d-flex justify-content-start font-color-secondary"
+                                    v-if="result.ip_addr.length + result.resolved_ip.length > 3"
+                                >
+                                    ...
+                                </button>
+                                <div class="reports">
+                                    <div class="d-flex border-bottom-light-60 justify-content-start mt-2 w-100">
+                                        <span class="font-xxs font-color-light">{{result.reports.length}} Report(s):</span>
+                                    </div>
+                                    <a
+                                        v-for="(report, index) in result.reports" :key="index"
+                                        :href="`/result/${report}/detail`"
+                                        class="font-xs font-color-light-60"
+                                    >
+                                     {{index+1}}. Report <IconArrowPrimary color="f0f0f099" style="width:20px; height: 20px;" />
+                                    </a>
+                                </div>
+                            </div>
                         </span>
                         <div class="d-flex flex-row">
-                            <button class="search-result-item-btn search-result-item-btn-scan border-radius-lg margin-right-xxs">Scan now</button>
-                            <button class="search-result-item-btn search-result-item-btn-archive border-radius-lg">Archive</button>
-                        </div>
-                    </span>
-                </div>
-                <div class="search-result-item w-100 margin-bottom-sm">
-                    <span class="d-flex justify-content-between align-items-center">
-                        <span class="d-flex">
-                            Host result
-                            <Toggle class="margin-left-xxs" />
-                        </span>
-                        <div class="d-flex flex-row">
-                            <button class="search-result-item-btn search-result-item-btn-scan border-radius-lg margin-right-xxs">Scan now</button>
-                            <button class="search-result-item-btn search-result-item-btn-archive border-radius-lg">Archive</button>
+                            <button
+                                @click="scanHost(result.hostname)"
+                                class="search-result-item-btn search-result-item-btn-scan border-radius-lg margin-right-xxs"
+                            >
+                                Scan now
+                            </button>
                         </div>
                     </span>
                 </div>
             </div>
         </div>
-        <div>
+        <!-- <div class="reports-results"  v-if="searchResults.reports.length > 0">
             <div class="d-flex flex-row margin-bottom-sm justify-content-between padding-bottom-sm search-input-results-header border-bottom-light-20">
-                <p class="font-base font-color-light mb-0"><IconError color="f0f0f0" class="search-result-item-icon" /> Reports</p>
-                <p class="font-sm font-color-light-40 mb-0">2 results</p>
+                <p class="font-base font-color-light-60 mb-0">
+                    <IconDocumentation color="939292" class="search-result-item-icon" />
+                    Reports
+                </p>
+                <p class="font-sm font-color-light-40 mb-0">{{searchResults.reports.length}} results</p>
             </div>
             <div class="d-flex flex-wrap flex-row w-100">
-                <div class="search-result-item w-100 margin-bottom-sm">
+                <div
+                    class="search-result-item w-100 margin-bottom-sm"
+                    v-for="(report, index) in searchResults.reports"
+                    :key="index"
+                >
                     <span class="d-flex justify-content-between align-items-center">
-                        <span class="d-flex">
-                            Report result
-                        </span>
+                        <a :href="`/result/${report}/detail`" class="d-flex font-color-light text-decoration-none">
+                            Report {{index+1}}
+                        </a>
                         <div class="d-flex flex-row">
-                            <button class="search-result-item-btn search-result-item-btn-delete border-radius-lg margin-right-xxs">Delete</button>
-                            <button class="search-result-item-btn search-result-item-btn-archive border-radius-lg">Archive</button>
+                            <button
+                                class="search-result-item-btn search-result-item-btn-delete border-radius-lg margin-right-xxs"
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteReport"
+                                @click="selectReportToDelete(report)"
+                            >
+                                Delete
+                            </button>
                         </div>
                     </span>
                 </div>
-                <div class="search-result-item w-100 margin-bottom-sm">
-                    <span class="d-flex justify-content-between align-items-center">
-                        <span class="d-flex">
-                            Report result
-                        </span>
-                        <div class="d-flex flex-row">
-                            <button class="search-result-item-btn search-result-item-btn-delete border-radius-lg margin-right-xxs">Delete</button>
-                            <button class="search-result-item-btn search-result-item-btn-archive border-radius-lg">Archive</button>
-                        </div>
-                    </span>
-                </div>
+            </div>
+        </div> -->
+    </div>
+    <div class="modal fade" id="deleteReport" tabindex="-1" aria-labelledby="deleteReportLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content padding-sm">
+            <div class="d-flex">
+                <h5 class="modal-title font-base" id="deleteReportLabel">Are you sure you want to delete this report? This action is permanent</h5>
+                <button type="button" class="btn-close d-flex align-items-center justify-content-center font-color-light" data-bs-dismiss="modal" aria-label="Close">
+                    <IconClose class="modal-icon-close" color="f0f0f0" />
+                </button>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button
+                    type="button"
+                    class="btn delete-report-btn font-color-dark"
+                    @click="deleteReport()"
+                >
+                    Delete Report
+                </button>
+            </div>
             </div>
         </div>
     </div>
@@ -136,7 +203,13 @@ import IconSearch from "../icons/IconSearch.vue"
 import IconArrowPrimary from "../icons/IconArrowPrimary.vue"
 import IconClose from "../icons/IconClose.vue"
 import IconError from "../icons/IconError.vue"
+import IconCertificate from "../icons/IconCertificate.vue"
+import IconDocumentation from "../icons/IconDocumentation.vue"
+import IconGlobeLight from "../icons/IconGlobeLight.vue"
 import Toggle from "../general/Toggle.vue"
+import ValidationMessage from "../general/ValidationMessage.vue"
+import loadingComponent from "../general/loadingComponent.vue"
+import moment from "moment"
 
 export default {
     components: {
@@ -144,25 +217,138 @@ export default {
         IconArrowPrimary,
         IconClose,
         IconError,
-        Toggle
+        IconCertificate,
+        IconGlobeLight,
+        IconDocumentation,
+        Toggle,
+        ValidationMessage,
+        loadingComponent
     },
     data() {
         return {
+            loading: false,
             searchActive: false,
-            searchInput: ""
+            searchInput: "",
+            searchType: "host",
+            searchResults: {
+                hosts: [],
+                findings: [],
+                reports: [],
+            },
+            reportToDelete: '',
+            errorMessage: '',
+            errorMessageType: '',
+            errorMessageScanHost: '',
+            errorMessageTypeScanHost: ''
         }
     },
     methods: {
         clearSearchInput(){
             this.searchInput = "";
+            this.errorMessage = '',
+            this.errorMessageType = '',
+            this.errorMessageScanHost = '',
+            this.errorMessageTypeScanHost = ''
         },
-        handleClick() {
-            this.searchActive = !this.searchActive;
-            this.clearSearchInput();
+        async submitSearch() {
+            this.errorMessage = ""
+            this.errorMessageType = ""
+            this.searchResults.hosts = []
+            this.searchResults.findings = []
+            this.searchResults.reports = []
+
+            if (this.searchInput.length > 0) {
+                this.loading = true
+                const response = await Api.get(`/search/${this.searchType}/${this.searchInput}`).catch(error => {
+                    this.errorMessage = error + " . Couldn't complete search"
+                    this.errorMessageType = "error"
+                })
+                if (response.status !== 200) {
+                    this.errorMessage = `${response.status} ${response.statusText}: Sorry, we couldn't find what you're looking for`
+                    this.errorMessageType = "error"
+                    this.loading = false
+                    return
+                }
+                const data = await response.json()
+                this.searchResults.hosts = data.map(item => {
+                    if (item.last_scanned) {
+                        item.last_scanned_ago = moment(item.last_scanned).fromNow()
+                    }
+                    if (item.queued_timestamp) {
+                        item.queued_timestamp_ago = moment(item.queued_timestamp).fromNow()
+                    }
+                    return item
+                })
+                const allReports = []
+                data.forEach(result => allReports.push(result.reports))
+                this.searchResults.reports = allReports.flat(1)
+                this.loading = false
+            } else {
+                this.searchActive = !this.searchActive
+                this.clearSearchInput()
+            }
+        },
+        async scanHost(target) {
+            this.loading = true;
+            const response = await Api.get(`/scanner/queue/${target}`).catch(error => {
+                this.loading = false;
+                this.errorMessageScanHost = error + " . Couldn't complete this action."
+                this.errorMessageTypeScanHost = "error"
+            })
+            if (response.status !== 200) {
+                this.errorMessageScanHost = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
+                this.errorMessageTypeScanHost = "error";
+                this.loading = false
+                return;
+            }
+            this.loading = false;
+            this.errorMessageScanHost = `Host was added to on-demand scanning.`
+            this.errorMessageTypeScanHost = "success";
+        },
+        async hostToggleChange(e, target) {
+            this.loading = true
+            if(e.target.checked === true) {
+                const response = await Api.get(`/scanner/monitor/${target}`).catch(error => {
+                    this.errorMessageScanHost = error + " . Couldn't complete this action."
+                    this.errorMessageTypeScanHost = "error"
+                })
+                if (response.status !== 200) {
+                    this.errorMessageScanHost = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
+                    this.errorMessageTypeScanHost = "error";
+                    this.loading = false
+                    return;
+                }
+                this.errorMessageScanHost = `Monitoring host.`
+                this.errorMessageTypeScanHost = "success";
+            } else {
+                const response = await Api.get(`/scanner/deactivate/${target}`).catch(error => {
+                    this.errorMessageScanHost = error + " . Couldn't complete this action."
+                    this.errorMessageTypeScanHost = "error"
+                })
+                if (response.status !== 200) {
+                    this.errorMessageScanHost = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
+                    this.errorMessageTypeScanHost = "error";
+                    this.loading = false
+                    return;
+                }
+                this.errorMessageScanHost = `No longer monitoring host.`
+                this.errorMessageTypeScanHost = "success";
+            }
+            this.loading = false
         },
         closeSearchBtn() {
-            this.searchActive = false;
-            this.clearSearchInput();
+            this.searchActive = false
+            this.clearSearchInput()
+        },
+        expandIPAddress(e, target) {
+            document.querySelector(`#${target}`).classList.remove("ip-addr-res-container-div");
+            e.target.classList.add('d-none');
+        },
+        selectReportToDelete(report) {
+            this.reportToDelete = report;
+        },
+        deleteReport() {
+            console.log(this.reportToDelete)
         }
     }
 }
@@ -207,6 +393,9 @@ export default {
             &-active {
                 padding: 0 spacers("md");
                 width: 25%;
+                @media (max-width: $breakpoint-lg) {
+                    width: 50%;
+                }
                 &-cornered {
                     border-radius: 30px 0 0 0 ;
                 }
@@ -300,6 +489,26 @@ export default {
         &-icon {
             width: 25px;
             height: 25px;
+        }
+    }
+    .delete-report-btn {
+        background: color("danger");
+        margin-left: auto;
+        margin-right: 0;
+        &:hover {
+            background: color("danger");
+            color: color('dark');
+        }
+    }
+    .modal-icon-close {
+        width: 25px;
+        height: 25px;
+    }
+    .ip-addr-res {
+        line-height: 15px;
+        &-container-div {
+            height: calc(45px);
+            overflow: hidden;
         }
     }
 </style>
