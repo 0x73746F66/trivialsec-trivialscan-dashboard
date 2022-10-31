@@ -1,5 +1,5 @@
 <template>
-    <div 
+    <div
         class="d-flex flex-wrap collapsable-pill-container"
         :class="{'flex-column-btns' : columnStyle}"
         v-if="section.length > 1"
@@ -44,6 +44,7 @@
 </template>
 <script>
 export default {
+    emits: ["section-change"],
     props: {
         section: Array,
         label: String,
@@ -52,6 +53,7 @@ export default {
     },
     methods: {
         toggleCollapseable(e, collapseable) {
+            this.$emit('section-change', e.target.textContent);
             Array.from(document.getElementsByClassName(`collapsible-${this.label}-pill`)).forEach(
                 function(el) {
                     el.classList.remove("active");

@@ -1,20 +1,23 @@
 <template>
   <div class="container font-color-light padding-top-xl padding-bottom-xl">
-    <div class="w-100 d-flex align-items-center justify-content-between margin-bottom-sm">
-      <h1 class="font-xxxl-b d-inline-block margin-right-sm mb-0">Dashboard</h1>
+    <loadingComponent class="loading" v-if="loading"/>
+
+    <div class="w-100 d-flex align-items-lg-center flex-column flex-lg-row justify-content-between margin-bottom-sm">
       <div class="d-inline-block w-100 position-relative">
         <searchForm />
       </div>
     </div>
+
     <CollapseableSection
-      :section="['Data', 'Hosts', 'Findings', 'Certificates']"
+      @section-change="showSection"
+      :section="['Dashboard', 'Reports', 'Hosts', 'Findings', 'Certificates']"
       label="dashboard-tempalte"
     >
-      <template v-slot:Data>
+      <template v-if="showDashboard" v-slot:Dashboard>
         <div class="d-flex flex-column">
           <div class="w-100 margin-bottom-md position-relative compliance-section">
             <div class="d-flex">
-              <h2 class="font-xl-sb margin-right-sm">Compliance</h2>
+              <h2 class="font-xl-sb margin-right-sm">Compliance History</h2>
               <QuestionComponent
                   label="question-compliance"
                   content="something about compliance"
@@ -26,15 +29,13 @@
           </div>
           <div class="w-100 margin-bottom-md position-relative used-chart-section d-flex flex-column">
             <div class="d-flex">
-              <h2 class="font-xl-sb margin-right-sm">Total Available</h2>
-
+              <h2 class="font-xl-sb margin-right-sm">Plan Quotas</h2>
               <QuestionComponent
                 label="question-total-available"
                 :content="quotasTooltip"
               />
             </div>
             <div class="d-flex flex-lg-row flex-column h-100 bg-dark-40 border-radius-sm padding-sm justify-content-around">
-              <loadingComponent class="loading" :class="{ inactive: !loading }" />
               <ValidationMessage
                   v-if="errorMessage.length > 0"
                   class="justify-content-start"
@@ -77,7 +78,7 @@
                       <span class="square primary margin-right-xs"></span> In Use: {{quotas?.active.used}}
                     </span>
                     <span class="font-xs font-color-light d-flex align-items-center">
-                      <span class="square secondary margin-right-xs"></span> Available: {{quotas?.active.total}}
+                      <span class="square secondary margin-right-xs"></span> Available: {{quotas?.active.total - quotas?.active.used}}
                     </span>
                   </div>
                 </template>
@@ -94,7 +95,7 @@
                       <span class="square primary margin-right-xs"></span> In Use: {{quotas?.passive.used}}
                     </span>
                     <span class="font-xs font-color-light d-flex align-items-center">
-                      <span class="square secondary margin-right-xs"></span> Available: {{quotas?.passive.total}}
+                      <span class="square secondary margin-right-xs"></span> Available: {{quotas?.passive.total - quotas?.passive.used}}
                     </span>
                   </div>
                 </template>
@@ -105,33 +106,44 @@
         </div>
       </template>
 
-      <template v-slot:Hosts>
+      <template v-if="showReports" v-slot:Reports>
         <div class="w-100 margin-bottom-md">
-          <h2 class="font-xl-sb margin-bottom-md">Hosts</h2>
+          <div class="d-flex flex-column margin-bottom-md">
+            <h2 class="font-xl-sb">Report Summaries</h2>
+            <span class="font-sm font-color-primary">Trivial Scanner uploaded reports</span>
+          </div>
+
+          <Summary />
+        </div>
+      </template>
+
+      <template v-if="showHosts" v-slot:Hosts>
+        <div class="w-100 margin-bottom-md">
+          <h2 class="font-xl-sb margin-bottom-md">Hostname & IP Addresses</h2>
           <HostsList />
         </div>
       </template>
 
-      <template v-slot:Findings>
+      <template v-if="showFindings" v-slot:Findings>
         <div class="w-100 margin-bottom-md">
           <div class="d-flex flex-column margin-bottom-md">
-            <h2 class="font-xl-sb">Latest Problems</h2>
+            <h2 class="font-xl-sb">Vulnerabilities & Exposures</h2>
             <span class="font-sm font-color-primary">Security is hard, that's why this list is prioritising quick wins; Issues that have an easy fix but pose real and trivial to exploit risk if left in the current state</span>
           </div>
           <IssuesList />
         </div>
       </template>
 
-      <template v-slot:Certificates>
+      <template v-if="showCertificates" v-slot:Certificates>
         <div class="w-100 margin-bottom-md">
           <div class="d-flex flex-column margin-bottom-md">
             <h2 class="font-xl-sb">Certificate Issues</h2>
             <span class="font-sm font-color-primary">Encryption of the internet is based on inherent trust and complicated configuration, here are some issues we observed:</span>
           </div>
-
           <CertificateList />
         </div>
       </template>
+
     </CollapseableSection>
 
 
@@ -150,6 +162,7 @@ import ValidationMessage from "@/components/general/ValidationMessage.vue";
 import loadingComponent from "@/components/general/loadingComponent.vue";
 import pieChart from "@/components/general/pieChart.vue";
 import searchForm from "@/components/forms/SearchForm.vue";
+import Summary from "@/components/general/Summary.vue"
 
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/vue';
@@ -170,10 +183,16 @@ export default {
     ValidationMessage,
     loadingComponent,
     pieChart,
-    searchForm
+    searchForm,
+    Summary
   },
   data() {
     return {
+      showDashboard: true,
+      showReports: false,
+      showHosts: false,
+      showFindings: false,
+      showCertificates: false,
       loading: false,
       quotasTooltip: "",
       errorMessage: "",
@@ -191,6 +210,14 @@ export default {
       };
   },
   methods: {
+    showSection(section) {
+      this.showDashboard = false
+      this.showReports = false
+      this.showHosts = false
+      this.showFindings = false
+      this.showCertificates = false
+      this[`show${section}`] = true
+    },
     async fetchQuotas() {
       this.loading = true
       const response = await Api.get(`/dashboard/quotas`).catch(error => {

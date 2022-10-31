@@ -10,7 +10,7 @@
 
     <template #layers>
       <Grid strokeDasharray="2,2" />
-      <Area :dataKeys="['name', 'num']" type="monotone" />
+      <Area :dataKeys="['name', 'num']" type="monotone" :areaStyle="{ fillOpacity: 0 }" />
       <Line
         :dataKeys="['name', 'num']"
         type="normal"

@@ -150,7 +150,7 @@ export default {
           modules: [Navigation, Pagination, Scrollbar, A11y],
       };
   },
-  created() {
+  mounted() {
     this.fetchFindings()
   },
   methods: {
