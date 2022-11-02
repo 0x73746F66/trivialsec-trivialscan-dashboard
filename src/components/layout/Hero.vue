@@ -11,11 +11,11 @@
       </h1>
       <div class="font-color-light text-center margin-bottom-md">
         <h2 class="font-xl-b">
-          Stay informed of your threat surface. We track bad actors so you don't
+          Stay informed of your attack surface. We track the hacker exploits so you don't
           have to.
         </h2>
         <h3 class="font-lg">
-          Free service to identify the basic threats attackers use, raising the
+          Free service to identify your trivial to exploit vulnerabilities, raising the
           Cybersecurity poverty line.
         </h3>
       </div>

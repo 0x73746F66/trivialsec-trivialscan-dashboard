@@ -11,8 +11,19 @@
             <span class="font-color-primary w-100 d-flex align-items-end justify-content-end text-right font-xs">{{summary?.generator}} {{summary?.version}}</span>
             <div class="row">
                 <div class="col-6 d-flex flex-column justify-content-start align-items-start">
-                    <span class="font-base"><span class="font-base-sb margin-right-xxs">Project:</span>{{summary?.project_name}}</span>
-                    <span class="font-sm margin-top-xs"><span class="font-sm-sb margin-right-xxs">Client Name:</span>{{summary?.client_name}}</span>
+                    <span class="font-sm"><span class="font-sm-sb margin-right-xxs">Scanned</span>{{summary.dateAgo}}</span>
+                    <span v-if="summary?.project_name" class="font-base">
+                        <span class="font-base-sb margin-right-xxs">Project:</span>{{summary?.project_name}}
+                    </span>
+                    <span v-if="summary?.client_name" class="font-sm margin-top-xs">
+                        <span class="font-sm-sb margin-right-xxs">
+                            Client:
+                        </span>
+                        {{summary.client_name}}
+                        <span v-if="summary?.client" class="font-sm font-color-secondary">
+                            ({{ summary.client.operating_system }} {{ summary.client.architecture }})
+                        </span>
+                    </span>
                     <div class="d-flex margin-top-sm">
                         <div v-if="summary?.results.fail > 0" class="summary-pill error">
                             <IconError class="summary-icon" color="" />
@@ -61,6 +72,7 @@ import IconCertificate from "../icons/IconCertificate.vue"
 import IconArrowPrimary from "../icons/IconArrowPrimary.vue"
 import loadingComponent from "@/components/general/loadingComponent.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";
+import moment from "moment";
 
 export default {
     components: {
@@ -99,7 +111,10 @@ export default {
                 return;
             }
             const data = await response.json();
-            this.summaries = data
+            this.summaries = data.map(summary => {
+                summary.dateAgo = moment(summary.date).fromNow()
+                return summary
+            })
             this.loading = false
         },
     }

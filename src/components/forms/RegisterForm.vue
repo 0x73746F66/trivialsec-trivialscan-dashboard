@@ -7,14 +7,14 @@
     <TextInput
       placeholder="ACME Corp."
       id="registerUsername"
-      label="Username"
+      label="Organisation Name"
       :required="true"
       @change="handleName"
     />
     <EmaiInput
       placeholder="Primary contact email"
       id="id-email-2"
-      label="Email"
+      label="Login Email"
       :required="true"
       @change="handleEmail"
     />

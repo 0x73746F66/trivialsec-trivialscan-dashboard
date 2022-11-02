@@ -281,7 +281,8 @@
               </div>
               <div
                 v-if="
-                  member.account?.billing.product_name === 'Community Edition'
+                  member.account?.billing.product_name === 'Community Edition' ||
+                  member.account?.billing.product_name === 'Basics'
                 "
               >
                 <Modal id="upgradeModal" label="modal-upgrade-header">
@@ -584,6 +585,9 @@ export default {
 </script>
 
 <style lang="scss">
+.modal {
+  --bs-modal-width: 800px;
+}
 .profile {
   &-picture {
     border: 1px solid color("secondary");

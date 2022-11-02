@@ -63,7 +63,7 @@
           class="d-flex flex-column justify-content-center align-items-center w-100 padding-sm"
         >
           <span class="font-color-primary font-base-sb text-center w-100"
-            >USD $199 / Month
+            >USD $79 / Month
           </span>
         </div>
       </template>
@@ -104,15 +104,12 @@
         <span class="font-base font-color-light">On-demand (Managed)</span>
       </template>
       <template v-slot:col-3>
-        <span class="font-base w-100 text-center"
-          >All Hosts Initial Scan Free</span
-        >
-        <span class="font-base w-100 text-center"
-          >$15 / Month Unlimited Rescans</span
-        >
+        <span class="font-base w-80 text-center">All Hosts Initial Scan Free</span>
+        <span class="font-base w-80 text-center">$49 / Month Unlimited Rescans</span>
       </template>
       <template v-slot:col-4>
-        <span class="font-base w-100 text-center">500 / Day</span>
+        <span class="font-base w-80 text-center">Includes 500 / Day</span>
+        <span class="font-base w-80 text-center">$49 / Month Unlimited Rescans</span>
       </template>
       <template v-slot:col-5>
         <checkIcon color="1abb9c" class="pricing-checkmark" />
@@ -128,7 +125,6 @@
       </template>
       <template v-slot:col-3>
         <span class="font-base w-100 text-center">1 Free / Day</span>
-        <span class="font-base w-100 text-center">$3 / Month per Host</span>
       </template>
       <template v-slot:col-4>
         <span class="font-base w-100 text-center">10 / Day</span>
@@ -526,7 +522,7 @@
               Get the Professional plan upgrade to enable Active Scans.
               <br /><br />
               CE includes On-demand self-hosted Passive Scans or the managed
-              initial Scan for all hosts is Free (Add USD $15/Month for
+              initial Scan for all hosts is Free (Add USD $49/Month for
               Unlimited Rescans)
               <br /><br />
               CE has 1 Free / Day Continuous Monitoring, (Add USD $3/Month per
@@ -558,7 +554,7 @@
               class="font-base font-color-light d-flex d-flex flex-column font-color-primary align-items-start"
             >
               Professional (PRO)
-              <span class="text-xs font-color-primary">USD $199/Month</span>
+              <span class="text-xs font-color-primary">USD $79/Month</span>
             </div>
           </template>
           <template v-slot:content>
