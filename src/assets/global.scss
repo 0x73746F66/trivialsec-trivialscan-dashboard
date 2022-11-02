@@ -51,7 +51,7 @@
         font-weight: 300;
         font-family: Montserrat, sans-serif;
     }
-    
+
     .font-#{$name}-sb {
         font-size: $size;
         font-weight: 500;
@@ -104,7 +104,7 @@
         transition: 0.2s linear;
         &:hover {
             color: color("light");
-           
+
         }
     }
     .btn-outline-#{$name}-sm {
@@ -240,6 +240,14 @@ a {
 
 .max-w-100 {
     max-width: 100%;
+}
+
+.max-w-90 {
+    max-width: 90%;
+}
+
+.max-w-80 {
+    max-width: 80%;
 }
 
 .modal-backdrop {

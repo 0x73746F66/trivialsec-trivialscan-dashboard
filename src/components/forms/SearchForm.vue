@@ -116,7 +116,7 @@
                                 >
                                     ...
                                 </button>
-                                <div class="reports">
+                                <div class="reports max-w-90">
                                     <div class="d-flex border-bottom-light-60 justify-content-start mt-2 w-100">
                                         <span class="font-xxs font-color-light">{{result.reports.length}} Report(s):</span>
                                     </div>
@@ -125,7 +125,7 @@
                                         :href="`/result/${report}/detail`"
                                         class="font-xs font-color-light-60"
                                     >
-                                     {{index+1}}. Report <IconArrowPrimary color="f0f0f099" style="width:20px; height: 20px;" />
+                                     {{index+1}}. Report <IconArrowPrimary v-if="(index+1) < result.reports.length" color="f0f0f099" style="width:20px; height: 20px;" />
                                     </a>
                                 </div>
                             </div>
@@ -354,7 +354,7 @@ export default {
 }
 </script>
 <style lang="scss">
-    $searchBarHeight: 50px;
+$searchBarHeight: 50px;
 
     .search {
         &-bar {
@@ -433,6 +433,7 @@ export default {
             height: 25px;
         }
         &-btn {
+            min-width: max-content;
             border: none;
             color: color("dark");
 
