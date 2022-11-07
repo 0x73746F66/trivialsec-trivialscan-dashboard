@@ -255,6 +255,10 @@ a {
     width: 0;
 }
 
+.cursor-pointer {
+    cursor: pointer;
+}
+
 .word-break-all {
     word-break: break-all;
 }
@@ -276,4 +280,13 @@ a {
 
 .white-space-pre {
     white-space: pre;
+}
+
+.word-break {
+    word-break: break-word;
+}
+
+[title] {
+    cursor: help;
+    border-bottom: 1px dotted color('primary');
 }

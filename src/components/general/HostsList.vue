@@ -11,11 +11,7 @@
                 <IconChevron color="f0f0f0" />
             </button>
         </div>
-        <swiper :modules="modules" :slides-per-view="1" :space-between="10" :navigation="{
-            nextEl: '.target-swiper-button-next',
-            prevEl: '.target-swiper-button-prev'
-        }" :pagination="{ clickable: true }" :scrollbar="{ draggable: true }" :breakpoints="{
-}">
+        <swiper :modules="modules" :slides-per-view="1" :space-between="10" :navigation="{nextEl: '.target-swiper-button-next', prevEl: '.target-swiper-button-prev'}" :pagination="{ clickable: true }" :scrollbar="{ draggable: true }" :breakpoints="{}">
             <swiper-slide class="target-slide" v-for="(target, index) in slicedTargets" :key="index">
                 <div class="slide-target-item margin-bottom-sm" v-for="(t, i) in target" :key="i">
                     <a :href="`/hostname/${t.transport.hostname}/${t.transport.port}`"

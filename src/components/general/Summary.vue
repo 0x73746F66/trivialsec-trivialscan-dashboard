@@ -8,21 +8,18 @@
     <loadingComponent class="loading" v-if="loading"/>
     <div v-for="(summary, index) in summaries" :key="index" class="margin-bottom-sm" >
         <div v-if="summary" class="w-100 bg-dark-40 border-radius-sm d-flex flex-column padding-sm">
-            <span class="font-color-primary w-100 d-flex align-items-end justify-content-end text-right font-xs">{{summary?.generator}} {{summary?.version}}</span>
+            <div class="row margin-bottom-xs">
+                <span class="col-6 d-flex font-sm text-left"><span class="font-sm-sb margin-right-xxs">Scanned</span>{{summary.dateAgo}}</span>
+                <span class="col-6 d-flex font-color-primary justify-content-end align-items-end text-right font-xs">{{summary?.generator}} {{summary?.version}}</span>
+            </div>
             <div class="row">
                 <div class="col-6 d-flex flex-column justify-content-start align-items-start">
-                    <span class="font-sm"><span class="font-sm-sb margin-right-xxs">Scanned</span>{{summary.dateAgo}}</span>
                     <span v-if="summary?.project_name" class="font-base">
                         <span class="font-base-sb margin-right-xxs">Project:</span>{{summary?.project_name}}
                     </span>
-                    <span v-if="summary?.client_name" class="font-sm margin-top-xs">
-                        <span class="font-sm-sb margin-right-xxs">
-                            Client:
-                        </span>
-                        {{summary.client_name}}
-                        <span v-if="summary?.client" class="font-sm font-color-secondary">
-                            ({{ summary.client.operating_system }} {{ summary.client.architecture }})
-                        </span>
+                    <span v-for="(target, index) in summary.targets" :key="index">
+                        <IconTarget class="summary-icon-targets margin-right-xxs" color="e2c878" />
+                        <a :href="`/hostname/${target.split(':')[0]}/${target.split(':')[1]}`" class="font-color-secondary">{{target}}</a>
                     </span>
                     <div class="d-flex margin-top-sm">
                         <div v-if="summary?.results.fail > 0" class="summary-pill error">
@@ -48,13 +45,15 @@
                     </div>
                 </div>
                 <div class="col-6 d-flex flex-column justify-content-end align-items-end">
-                    <span v-if="summary?.targets.length > 0" class="margin-bottom-xxs font-xs">
-                        <IconTarget class="summary-icon-targets margin-right-xxs" color="e2c878" />
-                        {{summary.targets.length}} <span>Targets</span>
+                    <span v-if="summary?.client_name" class="font-sm margin-bottom-xs">
+                        <span v-if="summary?.client" class="font-sm font-color-secondary">
+                            {{ summary.client.operating_system }} {{ summary.client.architecture }}
+                        </span>
+                        {{summary.client_name}}
                     </span>
                     <span v-if="summary?.certificates.length > 0" class="margin-bottom-xxs font-xs">
                         <IconCertificate class="summary-icon-certificates margin-right-xxs" color="e2c878"/>
-                        {{summary.certificates.length}} <span>Certificates</span>
+                        {{summary.certificates.length}} <span>Certificate<span v-if="summary.certificates.length > 1">s</span></span>
                     </span>
                     <a :href="`/result/${summary?.report_id}/detail`" class="font-color-primary text-decoration-none"> Read More <IconArrowPrimary class="summary-icon-next mr-0" color="1abb9c" /></a>
                 </div>
