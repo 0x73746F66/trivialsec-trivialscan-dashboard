@@ -46,7 +46,6 @@ export default {
 <template>
   <main>
     <div v-if="loading" class="loading">Loading...</div>
-    {{ $log(host) }}
     <div v-if="error" class="error">{{ error }}</div>
 
     <div class="host">

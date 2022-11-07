@@ -36,7 +36,7 @@ export default {
   methods: {
     async fetchData() {
       this.loading = true;
-      const response = await Api.get(`/report/${this.$route.params.report_id}`).catch(error => {
+      const response = await Api.get(`/report/${this.$route.params.report_id}?full_certs=1&full_hosts=1`).catch(error => {
         this.message = error;
         this.messageType = "error";
         this.loading = false;
@@ -47,12 +47,14 @@ export default {
         this.loading = false;
         return;
       } else if (response.status !== 200) {
-        this.message = "An error occured";
+        this.message = "An error occured: Page couldn't be loaded";
         this.messageType = "error";
         this.loading = false;
         return;
       }
-      this.report = await response.json();
+      const data = await response.json()
+      data.evaluations = data.evaluations.sort((a, b) => a.rule_id.toLowerCase().localeCompare(b.rule_id.toLowerCase()))
+      this.report = data
       this.loading = false;
     },
   },
@@ -62,15 +64,15 @@ export default {
 <template>
   <main>
     <loadingComponent class="loading" :class="{ inactive: !loading }" />
-    {{ $log(report) }}
-
-    <div class="report">
+    <div class="container padding-top-xl">
       <ValidationMessage
         v-if="this.message.length > 0"
         class="justify-content-start"
         :message="this.message"
         :type="this.messageType"
       />
+    </div>
+    <div class="report">
       <ReportDetail v-bind="report" />
     </div>
   </main>

@@ -1,5 +1,13 @@
+<template>
+  <div class="container">
+    <div class="certificate padding-top-xl padding-bottom-xl">
+      <Certificate v-bind="certificate" />
+    </div>
+  </div>
+</template>
+
 <script setup>
-import CertificateDetail from "../components/CertificateDetail.vue";
+import Certificate from "@/components/general/Certificate.vue";
 </script>
 
 <script>
@@ -42,18 +50,6 @@ export default {
   },
 };
 </script>
-
-<template>
-  <main>
-    <div v-if="loading" class="loading">Loading...</div>
-    {{ $log(certificate) }}
-    <div v-if="error" class="error">{{ error }}</div>
-
-    <div class="certificate">
-      <CertificateDetail v-bind="certificate" />
-    </div>
-  </main>
-</template>
 
 <style scoped>
 .report {

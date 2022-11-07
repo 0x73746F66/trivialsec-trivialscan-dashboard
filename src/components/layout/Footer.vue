@@ -12,6 +12,13 @@
           <div
             class="footer-social margin-top-md padding-top-md d-flex align-items-center"
           >
+          <a
+              target="_blank"
+              href="https://discord.gg/BgqUw8Tu6a"
+              class="footer-social-link"
+            >
+              <IconDiscord color="1abb9c" />
+            </a>
             <a
               target="_blank"
               href="https://gitlab.com/trivialsec"
@@ -58,6 +65,11 @@
               class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none"
               >Support Request</RouterLink
             >
+            <a
+              class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none"
+              href="https://discord.gg/BgqUw8Tu6a"
+              target="_blank"
+              >Chat with a real person</a>
           </div>
         </div>
       </div>
@@ -68,6 +80,7 @@
 import { RouterLink, RouterView } from "vue-router";
 import IconTrivialSecurity from "../icons/IconTrivialSecurity.vue";
 import IconGitlab from "../icons/IconGitlab.vue";
+import IconDiscord from "../icons/IconDiscord.vue";
 import IconLinkedin from "../icons/IconLinkedin.vue";
 import IconTwitter from "../icons/IconTwitter.vue";
 
@@ -84,7 +97,7 @@ export default {
     this.member_email = localStorage.getItem("/member/email");
     this.logged_in = !!localStorage.getItem("/session/key");
   },
-  components: { IconTrivialSecurity, IconGitlab, IconLinkedin, IconTwitter },
+  components: { IconTrivialSecurity, IconGitlab, IconDiscord, IconLinkedin, IconTwitter },
 };
 </script>
 <style lang="scss">
