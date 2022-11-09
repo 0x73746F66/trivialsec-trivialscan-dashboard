@@ -20,17 +20,21 @@
                   <span
                     v-for="(cert, id) in chain"
                     :key="id"
-                    class="d-flex font-color-light align-items-center font-sm margin-bottom-xs report-item word-break"
+                    class="d-flex align-items-center font-sm margin-bottom-xs cursor-pointer word-break"
                     data-bs-toggle="modal"
                     :data-bs-target="`#cert_${cert.sha1_fingerprint}`"
-                  >
-                    <IconCertificate class="cert-icon" color="e2c878" />
-                    <customPill 
-                      class="margin-right-xxs margin-left-xxs"
-                      :label="cert.type" 
-                      :type="cert.type === 'leaf' ? 'danger' : cert.type === 'intermediate'? 'warning' : 'success'" 
-                    />
-                    <span class="truncate-ellipsis">{{cert.subject}}</span>
+                  > 
+                    <div class="d-flex">
+                      <customPill 
+                        class="margin-right-xxs margin-left-xxs"
+                        :label="cert.type" 
+                        :type="cert.type" 
+                      />
+                      <div class="d-flex flex-column">
+                        <span class="font-xs-sb font-color-light">{{cert.subject.split(',').filter(p=>p.trim().startsWith('CN=')).join('').replace(/CN=/g, '')}}</span>
+                        <span class="font-xs font-color-lighter-60">{{cert.subject.split(',').filter(p=>!p.trim().startsWith('CN=')).join(',')}}</span>
+                      </div>
+                    </div>
                   </span>
                 </div>
             </swiper-slide>
@@ -69,7 +73,7 @@
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import Certificate from "@/components/general/Certificate.vue"
-import IconCertificate from "@/components/icons/IconCertificate.vue";
+import CertificateIcon from "@/components/icons/CertificateIcon.vue";
 import IconChevron from "@/components/icons/IconChevron.vue";
 import IconArrowPrimary from "@/components/icons/IconArrowPrimary.vue";
 import slidingModal from "@/components/general/slidingModal.vue";
@@ -87,7 +91,7 @@ export default {
       Certificate,
       slidingModal,
       customPill,
-      IconCertificate,
+      CertificateIcon,
       IconChevron,
       IconArrowPrimary
   },

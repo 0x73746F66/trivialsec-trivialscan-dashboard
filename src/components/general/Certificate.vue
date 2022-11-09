@@ -6,7 +6,7 @@
                 <customPill 
                     class="margin-right-xxs margin-left-xxs"
                     :label="type" 
-                    :type="type === 'leaf' ? 'danger' : type === 'intermediate'? 'warning' : 'success'" 
+                    :type="type" 
                 />
             </span>
             {{ expiry_status }}

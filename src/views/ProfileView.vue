@@ -1,4 +1,5 @@
 <template>
+<main>
   <loadingComponent class="loading" :class="{ inactive: !loading }" />
 
   <div class="container padding-top-xl padding-bottom-xl">
@@ -360,6 +361,7 @@
       <Clients />
     </div>
   </div>
+</main>
 </template>
 <script setup>
 import { RouterLink } from "vue-router";

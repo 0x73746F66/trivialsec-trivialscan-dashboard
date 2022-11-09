@@ -1,4 +1,5 @@
 <template>
+<main>
   <div class="container font-color-light padding-top-xl padding-bottom-xl">
     <loadingComponent class="loading" v-if="loading"/>
 
@@ -145,9 +146,8 @@
       </template>
 
     </CollapseableSection>
-
-
   </div>
+</main>
 </template>
 
 <script>
