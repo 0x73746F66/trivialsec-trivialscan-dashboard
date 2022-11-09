@@ -55,7 +55,7 @@
             <template v-slot:content>
                 <div class="d-flex row">
                   <div class="col-lg-8 col-12 d-flex flex-column align-items-start margin-bottom-xs">
-                    <span class="font-xs">{{issue.description}}</span>
+                    <span class="font-xs pre-line">{{issue.description}}</span>
                   </div>
                   
                   <div class="col-lg-4 col-12 margin-bottom-sm">

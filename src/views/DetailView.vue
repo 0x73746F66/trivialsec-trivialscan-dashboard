@@ -1,3 +1,20 @@
+<template>
+  <main>
+    <loadingComponent class="loading" :class="{ inactive: !loading }" />
+    <div class="container padding-top-xl">
+      <ValidationMessage
+        v-if="this.message.length > 0"
+        class="justify-content-start"
+        :message="this.message"
+        :type="this.messageType"
+      />
+    </div>
+    <div class="report" v-if="Object.keys(report).length > 0">
+      <ReportDetail v-bind="report" />
+    </div>
+  </main>
+</template>
+
 <script setup>
 import ReportDetail from "@/components/ReportDetail.vue";
 import ReportSummary from "@/components/ReportSummary.vue";
@@ -60,23 +77,6 @@ export default {
   },
 };
 </script>
-
-<template>
-  <main>
-    <loadingComponent class="loading" :class="{ inactive: !loading }" />
-    <div class="container padding-top-xl">
-      <ValidationMessage
-        v-if="this.message.length > 0"
-        class="justify-content-start"
-        :message="this.message"
-        :type="this.messageType"
-      />
-    </div>
-    <div class="report">
-      <ReportDetail v-bind="report" />
-    </div>
-  </main>
-</template>
 
 <style scoped>
 

@@ -14,19 +14,37 @@
         <h3 class="font-color-light font-lg margin-top-sm">Hosts</h3>
         <div class="d-flex flex-column">
           <span
-            v-for="(target, id) in targets"
+            v-for="(t, id) in targets"
             :key="id"
             class="font-color-secondary cursor-pointer margin-bottom-xs d-flex align-items-center"
             data-bs-toggle="modal"
             :data-bs-target="`#target_${id}`"
           >
-            <IconTarget class="target-icon margin-right-xxs" color="e2c878" />
-            <customPill 
-              class="margin-right-xxs"
-              :label="target.scanning_status.monitoring === true ? 'Active' : 'Inactive' " 
-              :type="target.scanning_status.monitoring === true ? 'success' : 'danger' " 
-            />
-            {{target.transport.hostname}}
+          <span :href="`/hostname/${t.transport.hostname}/${t.transport.port}`"
+            class="text-decoration-none target-icon-link font-color-secondary w-100">
+            <div class="d-flex flex-column justify-content-between w-100">
+                <div class="">
+                    <div class="d-flex">  
+                      <customPill 
+                      class="margin-right-xxs d-flex align-items-center pb-0"
+                      :label="t.scanning_status.monitoring === true ? 'Active' : 'Inactive' " 
+                      :type="t.scanning_status.monitoring === true ? 'success' : 'danger' " 
+                      />
+                    </div>
+                    <div class="d-flex flex-column">
+                      <span v-for="(http, id) in t.http" :key="id" class="http-status mb-0"
+                      :class="{ 'font-color-primary': http.status_code === 200, 'font-color-danger': http.status_code !== 200 }">
+                      {{ http.title }}
+                    </span>
+                      <span class="d-block"><IconTarget class="margin-right-xxs target-icon" color="e2c878" />{{ t.transport.hostname }}:{{ t.transport.port }} <span class="font-color-light-20">{{ t.transport.peer_address }}</span></span>
+                      <span v-if="t.error" class="d-block font-color-tertiary">{{ t.error[0] }} {{t.error[1]}}</span>
+                    </div>
+                </div>
+                <div class="font-color-light-40">
+                    {{ t.timeago }}
+                </div>
+            </div>
+            </span>
           </span>
         </div>
         <slidingModal 
@@ -212,177 +230,225 @@
 
     <div class="row">
       <div class="col-12 margin-top-sm">
-        <Dropdown
-            v-for="(evaluation, evalIndex) in evaluations"
-            :id="`headingEvaluate${evalIndex}`"
-            :target="`collapseEvaluate${evalIndex}`"
-            parent="accordion"
-            :defaultShow=false
-            :defaultCollapsed=true
-            :key="`${evalIndex}`"
-            buttonClasses="font-lg text-left report-dropdown font-color-light w-100 d-flex justify-content-left border-none padding-xxs"
-            contentClasses=" bg-dark-20 report-dropdown-content tpadding-md font-color-light font-base"
-          >
-            <template v-slot:header class="w-100">
-              <div class="font-base d-flex flex-column justify-content-between  font-color-primary w-100 align-items-start">
-                  <div class="d-flex">
-                    <ThreatIcon />
-                    <div class="d-flex flex-column">
-                      <div class="d-flex align-items-center">
-                        <span class="margin-right-xxs font-sm-b font-color-secondary">
-                          {{evaluation?.rule_id}}
-                        </span>
-                        <span class="font-color-lighter font-xs-sb">
-                          {{evaluation?.name}}
-                        </span>
+        <div class="filter-results">
+          <div class="d-flex justify-content-start padding-left-sm">
+            <div class="d-flex align-items-center">
+              <input type="checkbox" id="checkPass" class="margin-right-sm custom-checkbox" v-model="resultsFilter.pass">
+              <label for="checkPass" class="margin-right-md font-xs font-color-light">Passes ({{results.pass}})</label>
+            </div>
+            <div class="d-flex align-items-center">
+              <input type="checkbox" id="checkFail" class="margin-right-sm custom-checkbox" v-model="resultsFilter.fail">
+              <label for="checkFail" class="margin-right-md font-xs font-color-light">Failures ({{results.fail}})</label>
+            </div>
+
+            <div class="d-flex align-items-center">            
+              <input type="checkbox" id="checkWarn" class="margin-right-sm custom-checkbox" v-model="resultsFilter.warn">
+              <label for="checkWarn" class="margin-right-md font-xs font-color-light">Warnings ({{results.warn}})</label>
+            </div>
+
+            <div class="d-flex align-items-center">            
+              <input type="checkbox" id="checkInfo" class="margin-right-sm custom-checkbox" v-model="resultsFilter.info">
+              <label for="checkInfo" class="margin-right-md font-xs font-color-light">Insights ({{results.info}})</label>
+            </div>
+
+          </div>
+          <div class="d-flex justify-content-start padding-left-sm">
+
+          </div>
+        </div>
+        <div v-for="(evaluation, evalIndex) in evaluations" :key="`${evalIndex}`">
+          <Dropdown
+              :id="`headingEvaluate${evalIndex}`"
+              :target="`collapseEvaluate${evalIndex}`"
+              parent="accordion"
+              :defaultShow=false
+              :defaultCollapsed=true
+              buttonClasses="font-lg text-left report-dropdown font-color-light w-100 d-flex justify-content-left border-none padding-xxs"
+              contentClasses=" bg-dark-20 report-dropdown-content tpadding-md font-color-light font-base"
+              v-if="
+                evaluation.result_level === (resultsFilter.pass ? 'pass' : '') || 
+                evaluation.result_level === (resultsFilter.warn ? 'warn' : '') ||
+                evaluation.result_level === (resultsFilter.fail ? 'fail' : '') ||
+                evaluation.result_level === (resultsFilter.info ? 'info' : '')
+                "
+              >
+                <template v-slot:header class="w-100" >
+                  <div class="font-base d-flex flex-column justify-content-between font-color-primary w-100 align-items-start">
+                      <div class="d-flex w-100">
+                        <ThreatIcon />
+                        <div class="d-flex flex-column">
+                          <div class="d-flex align-items-center">
+                            <span class="margin-right-xxs font-sm-b font-color-secondary">
+                              {{evaluation?.rule_id}}
+                            </span>
+                            <span class="font-color-lighter font-xs-sb">
+                              {{evaluation?.name}}
+                            </span>
+                          </div>
+                          <span
+                            class="font-xs"
+                            :class="{
+                              'font-color-warning': (evaluation?.result_level === 'warn'),
+                              'font-color-danger': (evaluation?.result_level === 'fail'),
+                              'font-color-primary': (evaluation?.result_level === 'pass'),
+                              'font-color-light-60': (evaluation?.result_level === 'info'),
+                            }"
+                          >
+                            {{evaluation?.result_label}}
+                          </span>
+                          <span class="font-sm" v-if="evaluation.transport">
+                            <a :href="`/hostname/${evaluation.transport.hostname}/${evaluation.transport.port}`" class="font-color-lighter-60 text-decoration-none">
+                              <IconTarget class="link-icon margin-right-xxs" color="e2c878"/>
+                              <span class="font-color-lighter-60">
+                                {{evaluation.transport.hostname}}:{{evaluation.transport.port}}
+                              </span>
+                            </a>
+                          </span>
+                          <span class="font-sm" v-if="evaluation?.metadata?.certificate_subject && evaluation?.metadata?.sha1_fingerprint">
+                            <a :href="`/certificate/${evaluation.metadata.sha1_fingerprint}`" class="font-color-lighter-60 text-decoration-none">
+                              <IconCertificate class="link-icon margin-right-xxs" color="e2c878"/>
+                              <span class="font-color-lighter-60">
+                                {{evaluation.metadata.certificate_subject}}
+                              </span>
+                            </a>
+                          </span>
+                        </div>
                       </div>
-                      <span
-                        class="font-xs"
-                        :class="{
-                          'font-color-warning': (evaluation?.result_level === 'warn'),
-                          'font-color-danger': (evaluation?.result_level === 'fail'),
-                          'font-color-primary': (evaluation?.result_level === 'pass'),
-                          'font-color-light-60': (evaluation?.result_level === 'info'),
-                        }"
-                      >
-                        {{evaluation?.result_label}}
+                    </div>
+                </template>
+                <template v-slot:content>
+                  <div class="row">
+                    <div class="col-12 col-lg-6 padding-top-sm">
+                      <span class="font-xs pre-line">
+                        {{evaluation?.description}}
                       </span>
                     </div>
-                  </div>
-                </div>
-            </template>
-            <template v-slot:content>
-              <div class="row">
-                <div class="col-12 col-lg-6 padding-top-sm">
-                  <span class="font-xs ">
-                    {{evaluation?.description}}
-                  </span>
-                </div>
-                <div class="col-12 col-lg-6 d-flex flex-column">
-                  <template v-if="evaluation?.references.length > 0">
-                    <span class="font-sm-sb font-color-light margin-top-sm">References</span>
-                    <span
-                      class="margin-top-xxs"
-                      v-for="(ev, index) in evaluation?.references"
-                      :key="index"
-                    >
-                      <IconLink color="1abb9c" class="link-icon margin-right-xxs" />
-                      <a
-                        target="_blank"
-                        :href="ev.url"
-                        class="font-xs-sb font-color-primary"
-                      >{{ev.name}}</a>
-                    </span>
-                  </template>
-                  <div class="col-12 col-lg-6 font-sm font-color-light d-flex flex-column margin-top-sm" v-if="evaluation?.metadata">
-                    <div class="d-flex" v-if="evaluation?.metadata?.reason">
-                      <span class="font-sm-sb margin-right-xxs">Reason:</span><span>{{evaluation?.metadata?.reason}}</span>
-                    </div>
-                    <div class="d-flex margin-top-sm" v-if="evaluation?.metadata?.certificate_version || evaluation?.metadata?.certificate_subject || evaluation?.metadata?.sha1_fingerprint">
-                      <span class="font-sm-sb margin-right-xxs">Certificate</span>
-                      <div class="d-flex margin-right-xxs" v-if="evaluation?.metadata?.certificate_version">
-                        <span>version {{evaluation?.metadata.certificate_version}}</span>
-                      </div>
-                    </div>
-                    <div class="d-flex" v-if="evaluation?.metadata?.public_key_size">
-                      <span class="font-sm-sb margin-right-xxs">Public Key:</span>{{evaluation?.metadata.public_key_type}}{{evaluation?.metadata.public_key_size}}
-                    </div>
-                  </div>
-                  <a
-                    v-if="evaluation?.metadata?.certificate_subject && evaluation?.metadata?.sha1_fingerprint"
-                    class="font-color-secondary font-sm word-break"
-                    :href="`/certificate/${evaluation?.metadata.sha1_fingerprint}`"
-                  >
-                    <IconCertificate color="e2c878" class="target-icon margin-right-xxs" />
-                    <span title="See Certificate details">
-                      {{evaluation?.metadata.certificate_subject}}
-                    </span>
-                  </a>
-                  <a
-                    v-else-if="evaluation?.metadata?.sha1_fingerprint"
-                    class="font-color-secondary font-sm word-break"
-                    :href="`/certificate/${evaluation?.metadata.sha1_fingerprint}`"
-                  >
-                    <IconCertificate color="e2c878" class="target-icon margin-right-xxs" />
-                    <span title="See Certificate details">
-                      {{evaluation?.metadata.sha1_fingerprint}}
-                    </span>
-                  </a>
-
-                </div>
-                <div
-                  class="col-12 d-flex flex-column padding-top-sm"
-                  v-if="evaluation?.compliance?.length > 0"
-                >
-                  <h3 class="font-base-sb font-color-light" v-if="evaluation?.compliance?.items">Compliance</h3>
-                  <div
-                    :id="`complianceSection${evaluation?.rule_id.replace(/\./g, '-')}`"
-                  >
-                    <div
-                      v-for="(compliance, index) in evaluation.compliance"
-                      :key="index"
-                      >
-                      <div v-if="compliance?.items?.length > 0">
-                        {{ compliance.compliance }} {{ compliance.version }}
-                        <div class="d-flex flex-wrap">
-                          <button
-                            v-for="(comp, compIndex) in compliance.items"
-                            class="pill w-auto margin-right-xxs font-xs-sb"
-                            data-bs-toggle="collapse"
-                            type="button"
-                            aria-expanded="false"
-                            :key="compIndex"
-                            :data-bs-target="`#multiCollapseCompliance${evaluation?.rule_id?.replace(/\./g, '-')}-${comp?.requirement?.replace(/\./g, '-')}`"
-                            :data-bs-parent="`#complianceSection${evaluation?.rule_id?.replace(/\./g, '-')}`"
-                            :aria-controls="`multiCollapseCompliance${evaluation?.rule_id?.replace(/\./g, '-')}-${comp?.requirement?.replace(/\./g, '-')}`"
-                          >
-                            Req: {{comp.requirement}}
-                          </button>
+                    <div class="col-12 col-lg-6 d-flex flex-column">
+                      <template v-if="evaluation?.references.length > 0">
+                        <span class="font-sm-sb font-color-light margin-top-sm">References</span>
+                        <span
+                          class="margin-top-xxs"
+                          v-for="(ev, index) in evaluation?.references"
+                          :key="index"
+                        >
+                          <IconLink color="1abb9c" class="link-icon margin-right-xxs" />
+                          <a
+                            target="_blank"
+                            :href="ev.url"
+                            class="font-xs-sb font-color-primary"
+                          >{{ev.name}}</a>
+                        </span>
+                      </template>
+                      <div class="col-12 col-lg-6 font-sm font-color-light d-flex flex-column margin-top-sm" v-if="evaluation?.metadata">
+                        <div class="d-flex" v-if="evaluation?.metadata?.reason">
+                          <span class="font-sm-sb margin-right-xxs">Reason:</span><span>{{evaluation?.metadata?.reason}}</span>
                         </div>
+                        <div class="d-flex margin-top-sm" v-if="evaluation?.metadata?.certificate_version || evaluation?.metadata?.certificate_subject || evaluation?.metadata?.sha1_fingerprint">
+                          <span class="font-sm-sb margin-right-xxs">Certificate</span>
+                          <div class="d-flex margin-right-xxs" v-if="evaluation?.metadata?.certificate_version">
+                            <span>version {{evaluation?.metadata.certificate_version}}</span>
+                          </div>
+                        </div>
+                        <div class="d-flex" v-if="evaluation?.metadata?.public_key_size">
+                          <span class="font-sm-sb margin-right-xxs">Public Key:</span>{{evaluation?.metadata.public_key_type}}{{evaluation?.metadata.public_key_size}}
+                        </div>
+                      </div>
+                      <a
+                        v-if="evaluation?.metadata?.certificate_subject && evaluation?.metadata?.sha1_fingerprint"
+                        class="font-color-secondary font-sm word-break"
+                        :href="`/certificate/${evaluation?.metadata.sha1_fingerprint}`"
+                      >
+                        <IconCertificate color="e2c878" class="target-icon margin-right-xxs" />
+                        <span title="See Certificate details">
+                          {{evaluation?.metadata.certificate_subject}}
+                        </span>
+                      </a>
+                      <a
+                        v-else-if="evaluation?.metadata?.sha1_fingerprint"
+                        class="font-color-secondary font-sm word-break"
+                        :href="`/certificate/${evaluation?.metadata.sha1_fingerprint}`"
+                      >
+                        <IconCertificate color="e2c878" class="target-icon margin-right-xxs" />
+                        <span title="See Certificate details">
+                          {{evaluation?.metadata.sha1_fingerprint}}
+                        </span>
+                      </a>
 
-                        <div class="row margin-bottom-sm">
-                          <div class="col">
-                            <div
-                            v-for="(comp, compIndex) in compliance.items"
-                            :key="compIndex"
-                            class="collapse multi-collapse"
-                            :id="`multiCollapseCompliance${evaluation?.rule_id?.replace(/\./g, '-')}-${comp?.requirement?.replace(/\./g, '-')}`"
-                            :data-bs-parent="`#complianceSection${evaluation?.rule_id?.replace(/\./g, '-')}`"
-                            >
-                              <div class="card card-body bg-dark-40 font-xs">
-                                {{comp.description}}
+                    </div>
+                    <div
+                      class="col-12 d-flex flex-column padding-top-sm"
+                      v-if="evaluation?.compliance?.length > 0"
+                    >
+                      <h3 class="font-base-sb font-color-light" v-if="evaluation?.compliance?.items">Compliance</h3>
+                      <div
+                        :id="`complianceSection${evaluation?.rule_id.replace(/\./g, '-')}`"
+                      >
+                        <div
+                          v-for="(compliance, index) in evaluation.compliance"
+                          :key="index"
+                          >
+                          <div v-if="compliance?.items?.length > 0">
+                            {{ compliance.compliance }} {{ compliance.version }}
+                            <div class="d-flex flex-wrap">
+                              <button
+                                v-for="(comp, compIndex) in compliance.items"
+                                class="pill w-auto margin-right-xxs font-xs-sb"
+                                data-bs-toggle="collapse"
+                                type="button"
+                                aria-expanded="false"
+                                :key="compIndex"
+                                :data-bs-target="`#multiCollapseCompliance${evaluation?.rule_id?.replace(/\./g, '-')}-${comp?.requirement?.replace(/\./g, '-')}`"
+                                :data-bs-parent="`#complianceSection${evaluation?.rule_id?.replace(/\./g, '-')}`"
+                                :aria-controls="`multiCollapseCompliance${evaluation?.rule_id?.replace(/\./g, '-')}-${comp?.requirement?.replace(/\./g, '-')}`"
+                              >
+                                Req: {{comp.requirement}}
+                              </button>
+                            </div>
+
+                            <div class="row margin-bottom-sm">
+                              <div class="col">
+                                <div
+                                v-for="(comp, compIndex) in compliance.items"
+                                :key="compIndex"
+                                class="collapse multi-collapse"
+                                :id="`multiCollapseCompliance${evaluation?.rule_id?.replace(/\./g, '-')}-${comp?.requirement?.replace(/\./g, '-')}`"
+                                :data-bs-parent="`#complianceSection${evaluation?.rule_id?.replace(/\./g, '-')}`"
+                                >
+                                  <div class="card card-body bg-dark-40 font-xs pre-line">
+                                    {{comp.description}}
+                                  </div>
+                                </div>
                               </div>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                    <div
+                      class="col-12 d-flex flex-column padding-top-sm"
+                      v-if="evaluation?.threats?.length > 0"
+                    >
+                      <h3 class="font-base-sb font-color-light margin-bottom-lg">Threats</h3>
+                        <div v-for="(threat, threatIndex) in evaluation.threats"
+                          class="d-flex flex-column"
+                          :key="threatIndex"
+                          >
+                          <div class="threat-item-container d-flex row padding-left-sm padding-right-sm">
+                            <threatItem :threat="threat" :evalIndex="evalIndex" :threatIndex="threatIndex" />
+                          </div>
+                          <div class="col-12 col-lg-4">
+                            <div class="threat-separator-container">
+                              <span class="threat-separator"></span>
                             </div>
                           </div>
                         </div>
-
-                      </div>
                     </div>
                   </div>
-
-                </div>
-                <div
-                  class="col-12 d-flex flex-column padding-top-sm"
-                  v-if="evaluation?.threats?.length > 0"
-                >
-                  <h3 class="font-base-sb font-color-light margin-bottom-lg">Threats</h3>
-                    <div v-for="(threat, threatIndex) in evaluation.threats"
-                      class="d-flex flex-column"
-                      :key="threatIndex"
-                      >
-                      <div class="threat-item-container d-flex row padding-left-sm padding-right-sm">
-                        <threatItem :threat="threat" :evalIndex="evalIndex" :threatIndex="threatIndex" />
-                      </div>
-                      <div class="col-12 col-lg-4">
-                        <div class="threat-separator-container">
-                          <span class="threat-separator"></span>
-                        </div>
-                      </div>
-                    </div>
-                </div>
-              </div>
-            </template>
+                </template>
           </Dropdown>
+        </div>
       </div>
     </div>
 
@@ -454,7 +520,13 @@ export default {
           errorMessage: '',
           errorMessageType: '',
           errorMessageScanHost: '',
-          errorMessageTypeScanHost: ''
+          errorMessageTypeScanHost: '',
+          resultsFilter: {
+            'pass': false,
+            'fail': true,
+            'warn': true,
+            'info': false,
+          }
       }
   },
   methods: {
@@ -464,11 +536,13 @@ export default {
               const response = await Api.get(`/scanner/monitor/${hostname}`).catch(error => {
                   this.errorMessageScanHost = error + " . Couldn't complete this action."
                   this.errorMessageTypeScanHost = "error"
+                  e.target.checked = false
               })
               if (response.status !== 200) {
                   this.errorMessageScanHost = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
                   this.errorMessageTypeScanHost = "error";
                   this.loading = false
+                  e.target.checked = false
                   return;
               }
               this.errorMessageScanHost = `Monitoring host.`
@@ -482,11 +556,13 @@ export default {
               const response = await Api.get(`/scanner/deactivate/${hostname}`).catch(error => {
                   this.errorMessageScanHost = error + " . Couldn't complete this action."
                   this.errorMessageTypeScanHost = "error"
+                  e.target.checked = false
               })
               if (response.status !== 200) {
                   this.errorMessageScanHost = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
                   this.errorMessageTypeScanHost = "error";
                   this.loading = false
+                  e.target.checked = false
                   return;
               }
               this.errorMessageScanHost = `No longer monitoring host.`
@@ -629,5 +705,42 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.filter-results {
+  background: color('dark-60');
+  backdrop-filter: blur(8px);
+  height: 60px;
+  // position: sticky;
+  // top: 65px;
+  display: flex;
+  justify-content: flex-start;
+  label {
+    cursor: pointer;
+  }
+}
+
+.custom-checkbox {
+  appearance: unset;
+  width: 15px;
+  height: 15px;
+  background: color('light-20');
+  transition: 0.2s linear;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:checked {
+    background: rgb(26, 187, 156);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:after {
+      content: "\2713";
+      color: color("dark");
+      line-height: 15px;
+      font-size: 10px;
+    }
+  }
 }
 </style>

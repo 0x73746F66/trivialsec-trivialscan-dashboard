@@ -42,8 +42,16 @@ export default {
         @extend .bg-primary;
     }
 
-    &-warning {
+    &-warning, &-root {
         @extend .bg-warning;
+    }
+
+    &-leaf {
+        @extend .bg-primary;
+    }
+
+    &-intermediate {
+        @extend .bg-secondary;
     }
 }
 </style>
