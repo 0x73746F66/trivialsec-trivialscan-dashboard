@@ -179,10 +179,8 @@ vite build (dev):
   script:
     - npm i
     - make -B ci-build
-  only:
-    refs:
-      - merge_request
-      - main
+  rules:
+    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "devel"'
   artifacts:
     name: dist
     paths:
@@ -198,9 +196,8 @@ tf:plan:dev:
   stage: pre-deploy
   script:
     - make init plan
-  only:
-    refs:
-      - devel
+  rules:
+    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "devel"'
   dependencies:
     - vite build (dev)
   artifacts:
@@ -221,9 +218,8 @@ tf:apply:dev:
   stage: deploy
   script:
     - make apply
-  only:
-    refs:
-      - devel
+  rules:
+    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "devel"'
   environment:
     name: aws
     url: https://sso.jumpcloud.com/saml2/aws1
