@@ -88,6 +88,7 @@ repo checks:
       do
         pre-commit run $i --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
       done
+  allow_failure: true
   only:
     refs:
       - merge_request

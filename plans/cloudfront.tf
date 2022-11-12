@@ -1,9 +1,9 @@
 resource "aws_cloudfront_origin_access_identity" "trivialscan_dashboard" {
-  comment = aws_s3_bucket.trivialscan_dashboard.id
+    comment = aws_s3_bucket.trivialscan_dashboard.id
 }
 
 resource "aws_cloudfront_response_headers_policy" "dashboard_security_headers_policy" {
-  name = "DashboardSecurityHeadersPolicy"
+    name = "DashboardSecurityHeadersPolicy${var.app_env}"
 
   cors_config {
     access_control_allow_credentials = true
@@ -24,7 +24,7 @@ resource "aws_cloudfront_response_headers_policy" "dashboard_security_headers_po
 
     access_control_allow_origins {
       items = [
-        "https://www.trivialsec.com"
+        "https://${var.app_env != "Prod" ? "dev" : "www"}.${local.apex_domain}"
       ]
     }
 
@@ -54,15 +54,16 @@ resource "aws_cloudfront_response_headers_policy" "dashboard_security_headers_po
         "frame-ancestors 'none'",
         "default-src 'self'",
         "img-src 'self' https://www.gravatar.com data:",
-        "script-src 'self' https://www.gstatic.com https://www.google.com",
+        "script-src 'self' 'unsafe-eval' https://www.gstatic.com https://www.google.com",
         "script-src-elem 'self' https://cdn.jsdelivr.net https://js.stripe.com",
         "font-src 'self' https://fonts.gstatic.com data:",
         "object-src 'none'",
         "form-action 'none'",
         "worker-src blob:",
+        "frame-src https://js.stripe.com",
         "style-src 'self' https://fonts.googleapis.com 'unsafe-inline'",
         "style-src-attr 'sha256-pILX+5FGCpLRHvNBgtABIdSMmytrYudGxJBUYXY1t0s=' 'sha256-wK4n87cEV+DaOorOySn50J1N+etqDZQSmu9zgJp4nu4='",
-        "connect-src 'self' ${local.api_domain}",
+        "connect-src 'self' ${var.app_env != "Prod" ? data.terraform_remote_state.dev_lambda_api.outputs.function_url : data.terraform_remote_state.prod_lambda_api.outputs.function_url}",
       ])
       override = true
     }
@@ -87,10 +88,7 @@ resource "aws_cloudfront_distribution" "trivialscan_dashboard" {
   enabled             = true
   is_ipv6_enabled     = true
   default_root_object = "index.html"
-  aliases = [
-    local.apex_domain,
-    "www.${local.apex_domain}"
-  ]
+  aliases             = var.app_env == "Prod" ? [local.apex_domain, "www.${local.apex_domain}"] : ["dev.${local.apex_domain}"]
 
   default_cache_behavior {
     allowed_methods  = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
@@ -121,12 +119,7 @@ resource "aws_cloudfront_distribution" "trivialscan_dashboard" {
     }
   }
 
-  tags = {
-    Name        = "Website"
-    Environment = "Prod"
-    Purpose     = "Deploy"
-    CostCenter  = "randd"
-  }
+  tags = local.tags
 
   viewer_certificate {
     acm_certificate_arn            = local.acm_arn

@@ -6,10 +6,10 @@
     >
       <h3 class="font-color-light font-lg-b modal-invite-header">Members</h3>
       <ValidationMessage
-        v-if="this.errorMessage.length > 0"
+        v-if="errorMessage.length > 0"
         class="justify-content-between"
-        :message="this.errorMessage"
-        :type="this.errorMessageType"
+        :message="errorMessage"
+        :type="errorMessageType"
       />
       <Modal id="inviteModal" label="modal-invite-header">
         <template v-slot:button="buttonProps">
@@ -25,10 +25,10 @@
         <template v-slot:modalContent>
           <form @submit.prevent="inviteMembers($event)">
             <ValidationMessage
-              v-if="this.inviteMessage.length > 0"
+              v-if="inviteMessage.length > 0"
               class="justify-content-between"
-              :message="this.inviteMessage"
-              :type="this.inviteMessageType"
+              :message="inviteMessage"
+              :type="inviteMessageType"
             />
             <EmaiInput
               placeholder="Who do you want to invite?"
@@ -47,10 +47,10 @@
     </div>
     <div class="d-flex w-100">
       <ValidationMessage
-        v-if="this.memberDeleteMessage.length > 0"
+        v-if="memberDeleteMessage.length > 0"
         class="justify-content-start"
-        :message="this.memberDeleteMessage"
-        :type="this.memberDeleteMessageType"
+        :message="memberDeleteMessage"
+        :type="memberDeleteMessageType"
       />
     </div>
     <div class="margin-top-sm">
@@ -203,68 +203,74 @@ export default {
     };
   },
   created() {
-    this.fetchMembers();
+    this.fetchMembers()
   },
-  mounted() {},
   methods: {
     async inviteMembers(event) {
-      this.loading = true;
-      const response = await Api.post("/member/invite", {
-        email: event.target.elements["InviteEmail"].value,
-      }).catch(error => {
-        this.error = error;
-        this.inviteMessage = "Something went wrong. E-mail wasn't sent.";
-        this.inviteMessageType = "error";
-        this.loading = false;
-      });
-      if (response.status !== 202) {
-        this.inviteMessage = `${response.status} ${response.statusText}`
-        this.inviteMessageType = "error";
-        this.loading = false;
-        return;
+      this.loading = true
+      try {
+        const response = await Api.post("/member/invite", {
+          email: event.target.elements["InviteEmail"].value
+        })
+        if (response.status !== 202) {
+          this.inviteMessage = `${response.status} ${response.statusText}`
+          this.inviteMessageType = "error"
+          this.loading = false
+          return;
+        }
+        this.inviteMessage = "Invited!"
+        this.inviteMessageType = "success"
+      } catch (error) {
+        this.inviteMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
+        this.inviteMessageType = "error"
       }
-      this.inviteMessage = "Invited!";
-      this.inviteMessageType = "success";
-      setTimeout(this.fetchMembers, 2000);
+      this.loading = false
     },
     async deleteMember(event) {
-      this.loading = true;
-      const response = await Api.delete(`/member/${event.target.elements["MemberEmail"].value}`)
-      if (response.status != 202) {
-        this.memberDeleteMessage = "Something went wrong. Member couldn't be deleted.";
-        this.memberDeleteMessageType = "error";
-        this.loading = false;
-        return;
+      this.loading = true
+      try {
+        const response = await Api.delete(`/member/${event.target.elements["MemberEmail"].value}`)
+        if (response.status != 202) {
+          this.memberDeleteMessage = "Something went wrong. Member couldn't be deleted."
+          this.memberDeleteMessageType = "error"
+          this.loading = false
+          return;
+        }
+        this.memberDeleteMessage = "This member was deleted"
+        this.memberDeleteMessageType = "success"
+      } catch (error) {
+        this.memberDeleteMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
+        this.memberDeleteMessageType = "error"
       }
-      this.memberDeleteMessage = "This member was deleted";
-      this.memberDeleteMessageType = "success";
-      setTimeout(this.fetchMembers, 2000);
+      this.loading = false
     },
     async fetchMembers() {
-      this.loading = true;
-      const response = await Api.get(`/members`).catch(error => {
-        this.errorMessage = error;
-        this.errorMessageType = "error";
-      });
-      if (response.status === 204) {
-        this.errorMessage = "Issue loading members";
-        this.errorMessageType = "error";
-        this.members = [];
-        this.loading = false;
-        return;
-      } else if (response.status !== 200) {
-        this.errorMessage = `${response.status} ${response.statusText}`;
-        this.errorMessageType = "error";
-        this.loading = false;
-        return;
+      this.loading = true
+      try {
+        const response = await Api.get(`/members`, { timeout: 30000 })
+        if (response.status === 204) {
+          this.errorMessage = "Issue loading members"
+          this.errorMessageType = "error"
+          this.members = []
+          this.loading = false
+          return;
+        } else if (response.status !== 200) {
+          this.errorMessage = `${response.status} ${response.statusText}`
+          this.errorMessageType = "error"
+          this.loading = false
+          return;
+        }
+        const data = await response.json()
+        this.members = data.map((member) => {
+          member.created = moment.utc(member.timestamp).fromNow()
+          member.status = member.confirmed ? "Confirmed" : "Pending Activation"
+          return member
+        })
+      } catch (error) {
+        this.errorMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
+        this.errorMessageType = "error"
       }
-      const data = await response.json();
-      this.members = data.map((member) => {
-        member.created = moment(member.timestamp).fromNow();
-        member.status = member.confirmed ? "Confirmed" : "Pending Activation";
-        return member;
-      });
-      this.loading = false;
+      this.loading = false
     },
   },
 };

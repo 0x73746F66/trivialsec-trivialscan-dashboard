@@ -2,12 +2,7 @@
   <main>
     <loadingComponent class="loading" :class="{ inactive: !loading }" />
     <div class="container padding-top-xl">
-      <ValidationMessage
-        v-if="this.message.length > 0"
-        class="justify-content-start"
-        :message="this.message"
-        :type="this.messageType"
-      />
+      <ValidationMessage :message="message" :type="messageType" class="justify-content-start" />
     </div>
     <div class="report" v-if="Object.keys(report).length > 0">
       <ReportDetail v-bind="report" />
@@ -52,27 +47,28 @@ export default {
   },
   methods: {
     async fetchData() {
-      this.loading = true;
-      const response = await Api.get(`/report/${this.$route.params.report_id}?full_certs=1&full_hosts=1`).catch(error => {
-        this.message = error;
-        this.messageType = "error";
-        this.loading = false;
-      });
-      if (response.status === 204) {
-        this.message = "No reports available";
-        this.messageType = "warning";
-        this.loading = false;
-        return;
-      } else if (response.status !== 200) {
-        this.message = "An error occured: Page couldn't be loaded";
-        this.messageType = "error";
-        this.loading = false;
-        return;
+      this.loading = true
+      try {
+        const response = await Api.get(`/report/${this.$route.params.report_id}?full_certs=1&full_hosts=1`, { timeout: 30000 })
+        if (response.status === 204) {
+          this.message = "No reports available"
+          this.messageType = "warning"
+          this.loading = false
+          return;
+        } else if (response.status !== 200) {
+          this.message = "An error occured: Page couldn't be loaded"
+          this.messageType = "error"
+          this.loading = false
+          return;
+        }
+        const data = await response.json()
+        data.evaluations = data.evaluations.sort((a, b) => a.rule_id.toLowerCase().localeCompare(b.rule_id.toLowerCase()))
+        this.report = data
+      } catch (error) {
+        this.errorMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
+        this.errorMessageType = "error"
       }
-      const data = await response.json()
-      data.evaluations = data.evaluations.sort((a, b) => a.rule_id.toLowerCase().localeCompare(b.rule_id.toLowerCase()))
-      this.report = data
-      this.loading = false;
+      this.loading = false
     },
   },
 };

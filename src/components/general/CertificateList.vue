@@ -43,7 +43,7 @@
           <template v-slot:header class="w-100">
             <div class="font-base d-flex flex-column justify-content-between  font-color-primary w-100 align-items-start">
                 <div class="d-flex">
-                  <CertificateIcon :critical="issue.result_level === 'fail'" /> 
+                  <CertificateIcon :critical="issue.result_level === 'fail'" />
                   <div class="d-flex flex-column">
                       <div class="margin-right-xxs font-sm-b font-color-secondary">{{issue.rule_id}}</div>
                       <span class="font-color-lighter font-xs-sb">{{issue.name}}</span>
@@ -86,12 +86,12 @@
                                 {{ref.name}}
                               </a>
                             </li>
-                          </ul>                  
+                          </ul>
                         </div>
                     </div>
                   </div>
                 </div>
-                  
+
                 <div class="d-flex justify-content-end align-items-end w-100 margin-top-sm">
                   <a target="_blank"
                     :href="'/certificate/'+issue.certificate.sha1_fingerprint"
@@ -159,21 +159,23 @@ export default {
   methods: {
     async fetchCertificates() {
       this.loading = true
-      const response = await Api.get(`/findings/certificate?limit=${this.limit}`).catch(error => {
-        this.errorMessage = error
+      try {
+        const response = await Api.get(`/findings/certificate?limit=${this.limit}`)
+        if (response.status !== 200) {
+          this.errorMessage = `${response.status} ${response.statusText}`
+          this.errorMessageType = "error"
+          this.loading = false
+          return;
+        }
+        const data = await response.json()
+        this.certificates = data.map(item => {
+          item.observed = moment.utc(item.observed_at).fromNow()
+          return item
+        })
+      } catch (error) {
+        this.errorMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
         this.errorMessageType = "error"
-      });
-      if (response.status !== 200) {
-        this.errorMessage = `${response.status} ${response.statusText}`
-        this.errorMessageType = "error";
-        this.loading = false
-        return;
       }
-      const data = await response.json();
-      this.certificates = data.map(item => {
-        item.observed =moment(item.observed_at).fromNow()
-        return item
-      })
       this.loading = false
     },
   },
@@ -204,7 +206,7 @@ export default {
     &-prev {
       transform: rotate(180deg);
     }
-    svg { 
+    svg {
       width: 25px;
       height: 25px;
     }

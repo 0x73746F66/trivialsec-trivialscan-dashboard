@@ -70,23 +70,24 @@ export default {
     },
     async sendSupport() {
       this.loading = true;
-      const response = await Api.post("/support", {
-        subject: this.subjectField,
-        message: this.contentField,
-      }).catch((error) => {
-        this.message = `Something went wrong, please try again later. Server responded with: ${error}`;
-        this.messageType = "error";
-        this.loading = false;
-      });
-      if (response.status === 202) {
-        this.message = "Your message was sent. Thank you!";
-        this.messageType = "success";
-        this.loading = false;
-        return;
+      try {
+        const response = await Api.post("/support", {
+          subject: this.subjectField,
+          message: this.contentField,
+        })
+        if (response.status !== 202) {
+          this.message = `Something went wrong, please try again later.`
+          this.messageType = "error"
+          this.loading = false
+          return;
+        }
+        this.message = "Your message was sent. Thank you!"
+        this.messageType = "success"
+      } catch (error) {
+        this.message = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
+        this.messageType = "error"
       }
-      this.message = `Something went wrong, please try again later.`;
-      this.messageType = "error";
-      this.loading = false;
+      this.loading = false
     },
   },
 };

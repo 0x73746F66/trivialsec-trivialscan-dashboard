@@ -1,6 +1,6 @@
 resource "aws_route53_record" "site_a" {
-    zone_id = local.hosted_zone
-    name    = "www.${local.apex_domain}"
+        zone_id = local.hosted_zone
+    name    = "${var.app_env != "Prod" ? "dev" : "www"}.${local.apex_domain}"
     type    = "A"
 
     alias {
@@ -11,8 +11,8 @@ resource "aws_route53_record" "site_a" {
 }
 
 resource "aws_route53_record" "site_aaaa" {
-    zone_id = local.hosted_zone
-    name    = "www.${local.apex_domain}"
+        zone_id = local.hosted_zone
+    name    = "${var.app_env != "Prod" ? "dev" : "www"}.${local.apex_domain}"
     type    = "AAAA"
 
     alias {

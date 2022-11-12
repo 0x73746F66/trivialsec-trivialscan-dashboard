@@ -99,21 +99,23 @@ export default {
     methods: {
         async fetchSummaries() {
             this.loading = true
-            const response = await Api.get(`/reports`).catch(error => {
-                this.errorMessage = error
+            try {
+                const response = await Api.get(`/reports`)
+                if (response.status !== 200) {
+                    this.errorMessage = `${response.status} ${response.statusText}`
+                    this.errorMessageType = "error"
+                    this.loading = false
+                    return;
+                }
+                const data = await response.json()
+                this.summaries = data.map(summary => {
+                    summary.dateAgo = moment.utc(summary.date).fromNow()
+                    return summary
+                })
+            } catch (error) {
+                this.errorMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
                 this.errorMessageType = "error"
-            });
-            if (response.status !== 200) {
-                this.errorMessage = `${response.status} ${response.statusText}`
-                this.errorMessageType = "error";
-                this.loading = false
-                return;
             }
-            const data = await response.json();
-            this.summaries = data.map(summary => {
-                summary.dateAgo = moment(summary.date).fromNow()
-                return summary
-            })
             this.loading = false
         },
     }

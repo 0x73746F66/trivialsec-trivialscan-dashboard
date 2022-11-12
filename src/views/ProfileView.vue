@@ -78,12 +78,6 @@
                   </template>
                 </EditableTextField>
               </div>
-              <ValidationMessage
-                v-if="emailUpdateMessage.length > 0"
-                class="justify-content-start"
-                :message="emailUpdateMessage"
-                :type="emailUpdateMessageType"
-              />
             </div>
           </div>
           <button
@@ -375,7 +369,9 @@
 <script setup>
 import { RouterLink } from "vue-router";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+import { defineAsyncComponent } from 'vue'
 import { Swiper, SwiperSlide } from "swiper/vue";
+
 import moment from "moment";
 import randomWords from 'random-words';
 import "swiper/css";
@@ -383,214 +379,252 @@ import IconPencil from "@/components/icons/IconPencil.vue";
 import IconCancel from "@/components/icons/IconCancel.vue";
 import IconTrash from "@/components/icons/IconTrash.vue";
 import checkIcon from "@/components/icons/checkIcon.vue";
-import Button from "@/components/general/Button.vue";
-import Toggle from "@/components/general/Toggle.vue";
-import Members from "@/components/general/Members.vue";
-import Clients from "@/components/general/Clients.vue";
-import EditableTextField from "@/components/inputs/EditableTextField.vue";
-import TextInput from "@/components/inputs/TextInput.vue";
-import EmaiInput from "@/components/inputs/EmaiInput.vue";
-import Modal from "@/components/general/Modal.vue";
-import ValidationMessage from "@/components/general/ValidationMessage.vue";
+import componentLoading from "@/components/general/componentLoading.vue";
 import loadingComponent from "@/components/general/loadingComponent.vue";
 </script>
+
 <script>
+const Button = defineAsyncComponent({
+    loader: () => import("../components/general/Button.vue"),
+    loadingComponent: componentLoading
+})
+const Toggle = defineAsyncComponent({
+    loader: () => import("../components/general/Toggle.vue"),
+    loadingComponent: componentLoading
+})
+const Members = defineAsyncComponent({
+    loader: () => import("../components/general/Members.vue"),
+    loadingComponent: componentLoading
+})
+const Clients = defineAsyncComponent({
+    loader: () => import("../components/general/Clients.vue"),
+    loadingComponent: componentLoading
+})
+const EditableTextField = defineAsyncComponent({
+    loader: () => import("../components/inputs/EditableTextField.vue"),
+    loadingComponent: componentLoading
+})
+const TextInput = defineAsyncComponent({
+    loader: () => import("../components/inputs/TextInput.vue"),
+    loadingComponent: componentLoading
+})
+const EmaiInput = defineAsyncComponent({
+    loader: () => import("../components/inputs/EmaiInput.vue"),
+    loadingComponent: componentLoading
+})
+const Modal = defineAsyncComponent({
+    loader: () => import("../components/general/Modal.vue"),
+    loadingComponent: componentLoading
+})
+const ValidationMessage = defineAsyncComponent({
+    loader: () => import("../components/general/ValidationMessage.vue"),
+    loadingComponent: componentLoading
+})
+
 export default {
-  components: {
-    IconPencil,
-    Button,
-    Swiper,
-    SwiperSlide,
-    Toggle,
-    EditableTextField,
-    TextInput,
-    IconCancel,
-    checkIcon,
-    IconTrash,
-    EmaiInput,
-    Modal,
-    ValidationMessage,
-    loadingComponent,
-    Members,
-    Clients,
-  },
-  data() {
-    return {
-      member: {},
-      editMode: false,
-      errorMessage: "",
-      errorMessageType: "",
-      email: "",
-      emailUpdateMessage: "",
-      emailUpdateMessageType: "",
-      primaryEmail: "",
-      billingEmail: "",
-      upgradeFormMessage: "",
-      upgradeFormMessageType: "",
-      editMessage: '',
-      editMessageType: '',
-      loading: false,
-    };
-  },
-  created() {
-    this.fetchProfile();
-  },
-  mounted() {
-    let stripeScript = document.createElement("script");
-    stripeScript.setAttribute(
-      "src",
-      "https://js.stripe.com/v3/pricing-table.js"
-    );
-    document.head.appendChild(stripeScript);
-  },
-  methods: {
-    toggleEditMode() {
-      this.editMode = !this.editMode;
-      this.emailUpdateMessage = "";
-      this.emailUpdateMessageType = "";
+    components: {
+        IconPencil,
+        Button,
+        Swiper,
+        SwiperSlide,
+        Toggle,
+        EditableTextField,
+        TextInput,
+        IconCancel,
+        checkIcon,
+        IconTrash,
+        EmaiInput,
+        Modal,
+        ValidationMessage,
+        loadingComponent,
+        Members,
+        Clients,
+        componentLoading,
     },
-    async fetchProfile() {
-      this.loading = true;
-      const response = await Api.get("/me").catch(error => {
-        this.errorMessage = error;
-        this.errorMessageType = "error";
-      });
-      if (response.status !== 200) {
-        this.errorMessage = `${response.status} ${response.statusText}`;
-        this.errorMessageType = "error";
-        this.loading = false;
-        return;
-      }
-      const data = await response.json();
-      this.member = data.member;
-      this.member.status = this.member.confirmed
-        ? "Confirmed"
-        : "Pending activation";
-      this.member.created = moment(this.member.timestamp).fromNow();
-      if (this.member.account?.billing.next_due) {
-        this.member.account.billing.next_payment = moment(
-          this.member.account.billing.next_due
-        ).fromNow();
-      }
-      this.loading = false;
+    data() {
+        return {
+            member: {},
+            editMode: false,
+            errorMessage: "",
+            errorMessageType: "",
+            editMessage: "",
+            editMessageType: "",
+            email: "",
+            primaryEmail: "",
+            billingEmail: "",
+            upgradeFormMessage: "",
+            upgradeFormMessageType: "",
+            loading: false,
+        };
     },
-    async updateEmail(event) {
-      this.loading = true;
-      const email = event.target.elements["Email"].value
-      const response = await Api.post("/member/email", {email}).catch(error => {
-        this.editMessage = error;
-        this.editMessageType = "error";
-        this.loading = false;
-      });
-      if (response.status !== 200) {
-        this.editMessage = `${response.status} ${response.statusText}`;
-        this.editMessageType = "error";
-        this.loading = false;
-        return;
-      }
-      const data = await response.json();
-      this.editMode = !this.editMode;
-      this.editMessage = "E-mail was updated!";
-      this.editMessageType = "success";
-      localStorage.setItem("/member/email", email);
-      localStorage.setItem(
-        "/member/email_md5",
-        data?.member?.email_md5 || localStorage.getItem("/member/email_md5")
-      );
-      setTimeout(this.fetchProfile, 2000)
+    created() {
+        this.fetchProfile();
     },
-    async updatePrimaryEmail(event) {
-      this.loading = true;
-      const email = event.target.elements["PrimaryEmail"].value;
-      const response = await Api.post("/account/email", { email }).catch(error => {
-        this.editMessage = error;
-        this.editMessageType = "error";
-        this.loading = false;
-      });
-      if (response.status !== 200) {
-        this.editMessage = `${response.status} ${response.statusText}`;
-        this.editMessageType = "error";
-        this.loading = false;
-        return;
-      }
-      this.editMode = !this.editMode;
-      this.editMessage = "E-mail was updated!";
-      this.editMessageType = "success";
-      setTimeout(this.fetchProfile, 2000)
+    mounted() {
+        let stripeScript = document.createElement("script");
+        stripeScript.setAttribute(
+            "src",
+            "https://js.stripe.com/v3/pricing-table.js"
+        );
+        document.head.appendChild(stripeScript);
     },
-    async updateBillingEmail(event) {
-      this.loading = true;
-      const email = event.target.elements["BillingEmail"].value;
-      const response = await Api.post("/billing/email", { email }).catch(error => {
-        this.editMessage = error;
-        this.editMessageType = "error";
-        this.loading = false;
-      });
-      if (response.status !== 200) {
-        this.editMessage = `${response.status} ${response.statusText}`;
-        this.editMessageType = "error";
-        this.loading = false;
-        return;
-      }
-      this.editMode = !this.editMode;
-      this.editMessage = "E-mail was updated!";
-      this.editMessageType = "success";
-      setTimeout(this.fetchProfile, 2000)
+    methods: {
+        toggleEditMode() {
+            this.editMode = !this.editMode;
+            this.editMessage = "";
+            this.editMessageType = "";
+        },
+        async fetchProfile() {
+            this.loading = true
+            try {
+                const response = await Api.get("/me")
+                if (response.status !== 200) {
+                    this.errorMessage = `${response.status} ${response.statusText}`
+                    this.errorMessageType = "error"
+                    this.loading = false
+                    return;
+                }
+                const data = await response.json()
+                this.member = data.member
+                this.member.status = this.member.confirmed ? "Confirmed" : "Pending activation"
+                this.member.created = moment.utc(this.member.timestamp).fromNow()
+                if (this.member.account?.billing.next_due) {
+                    this.member.account.billing.next_payment = moment.utc(this.member.account.billing.next_due).fromNow()
+                }
+            } catch (error) {
+                this.errorMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
+                this.errorMessageType = "error"
+            }
+            this.loading = false
+        },
+        async updateEmail(event) {
+            this.loading = true;
+            const email = event.target.elements["Email"].value
+            const response = await Api.post("/member/email", { email })
+            try {
+                if (response.status !== 200) {
+                    this.editMessage = `${response.status} ${response.statusText}`
+                    this.editMessageType = "error"
+                    this.loading = false
+                    return;
+                }
+                const data = await response.json()
+                this.editMode = !this.editMode
+                this.editMessage = "E-mail was updated!"
+                this.editMessageType = "success"
+                localStorage.setItem("/member/email", email)
+                localStorage.setItem("/member/email_md5", data?.member?.email_md5 || localStorage.getItem("/member/email_md5"))
+            } catch (error) {
+                this.editMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
+                this.editMessageType = "error"
+            }
+            this.loading = false
+        },
+        async updatePrimaryEmail(event) {
+            this.loading = true
+            try {
+                const email = event.target.elements["PrimaryEmail"].value
+                const response = await Api.post("/account/email", { email })
+                if (response.status !== 200) {
+                    this.editMessage = `${response.status} ${response.statusText}`
+                    this.editMessageType = "error"
+                    this.loading = false
+                    return;
+                }
+                this.editMode = !this.editMode
+                this.editMessage = "E-mail was updated!"
+                this.editMessageType = "success"
+            } catch (error) {
+                this.editMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
+                this.editMessageType = "error"
+            }
+            this.loading = false
+        },
+        async updateBillingEmail(event) {
+            this.loading = true;
+            const email = event.target.elements["BillingEmail"].value;
+            try {
+                const response = await Api.post("/billing/email", { email })
+                if (response.status !== 200) {
+                    this.editMessage = `${response.status} ${response.statusText}`
+                    this.editMessageType = "error"
+                    this.loading = false
+                    return;
+                }
+                this.editMode = !this.editMode;
+                this.editMessage = "E-mail was updated!"
+                this.editMessageType = "success"
+            } catch (error) {
+                this.editMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
+                this.editMessageType = "error"
+            }
+            this.loading = false
+        },
+        async updateAccountDisplay(event) {
+            const name = event.target.elements["AccountDisplay"].value;
+            this.loading = true
+            try {
+                const response = await Api.post(`/account/display`, { name })
+                if (response.status !== 202) {
+                    this.editMessage = `${response.status}: Something went wrong. Couldn't generate new credentials.`
+                    this.editMessageType = "error"
+                    this.loading = false
+                    return;
+                }
+                const data = await response.json()
+                this.editMessage = "Display Name was updated!"
+                this.editMessageType = "success"
+                localStorage.setItem("/account/display", data?.display || localStorage.getItem("/account/display"))
+                this.editMode = !this.editMode
+            } catch (error) {
+                this.editMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
+                this.editMessageType = "error"
+            }
+            this.loading = false
+        },
+        async upgradeForm(event) {
+            this.loading = true
+            const contact = event.target.elements.preferredMethodOfContact.value
+            try {
+                const response = await Api.post("/account/upgrade", { contact })
+                if (response.status === 202) {
+                    this.upgradeFormMessage = "Thank you for reaching out to us! We will be in contact soon."
+                    this.upgradeFormMessageType = "success"
+                    this.loading = false
+                    return;
+                }
+                this.upgradeFormMessage = `Something went wrong, your contact wasn't sent.`
+                this.upgradeFormMessageType = "error"
+            } catch (error) {
+                this.upgradeFormMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
+                this.upgradeFormMessageType = "error"
+            }
+            this.loading = false
+        },
+        async deleteAccount() {
+            console.log('delete account')
+        },
+        async generateClientCredential() {
+            const client_name = randomWords({ exactly: 2, join: '' })
+            this.loading = true
+            try {
+                const response = await Api.post(`/claim/${client_name}`, {})
+                if (response.status !== 201) {
+                    this.errorMessage = `${response.status}: ${response.statusText}. Something went wrong. Couldn't generate new credentials.`;
+                    this.errorMessageType = "error"
+                    this.loading = false
+                    return;
+                }
+                this.errorMessage = "New Credentials generated!"
+                this.errorMessageType = "success"
+            } catch (error) {
+                this.errorMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
+                this.errorMessageType = "error"
+            }
+            this.loading = false
+        },
     },
-    async updateAccountDisplay(event) {
-      const name = event.target.elements["AccountDisplay"].value;
-      this.loading = true;
-      const response = await Api.post(`/account/display`, {name});
-      if (response.status !== 202) {
-        this.editMessage = `${response.status}: Something went wrong. Couldn't generate new credentials.`;
-        this.editMessageType = "error";
-        this.loading = false;
-        return;
-      }
-      const data = await response.json()
-      this.editMessage = "Display Name was updated!";
-      this.editMessageType = "success";
-      this.loading = false;
-      localStorage.setItem(
-        "/account/display",
-        data?.display ||
-        localStorage.getItem("/account/display")
-      );
-      this.editMode = !this.editMode;
-    },
-    async upgradeForm(event) {
-      this.loading = true;
-      const contact = event.target.elements.preferredMethodOfContact.value;
-      const response = await Api.post("/account/upgrade", {contact});
-      if (response.status === 202) {
-        this.upgradeFormMessage = "Thank you for reaching out to us! We will be in contact soon.";
-        this.upgradeFormMessageType = "success";
-        this.loading = false;
-        return;
-      }
-      this.upgradeFormMessage = `Something went wrong, your contact wasn't sent.`;
-      this.upgradeFormMessageType = "error";
-      this.loading = false;
-    },
-    async deleteAccount() {
-        console.log('delete account')
-    },
-    async generateClientCredential() {
-      const client_name = randomWords({ exactly: 2, join: '' })
-      this.loading = true;
-      const response = await Api.post(`/claim/${client_name}`, {});
-      if (response.status !== 201) {
-        this.errorMessage = `${response.status}: ${response.statusText}. Something went wrong. Couldn't generate new credentials.`;
-        this.errorMessageType = "error";
-        this.loading = false;
-        return;
-      }
-      this.errorMessage = "New Credentials generated!";
-      this.errorMessageType = "success";
-      this.loading = false;
-    },
-  },
-};
+}
 </script>
 
 <style lang="scss">
