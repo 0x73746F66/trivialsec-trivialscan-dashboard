@@ -187,10 +187,10 @@ export default {
             return [...SAN]
         },
         notBefore() {
-            return moment(this.not_before).format('MMMM Do, YYYY')
+            return moment.utc(this.not_before).format('MMMM Do, YYYY')
         },
         notAfter() {
-            return moment(this.not_after).format('MMMM Do, YYYY')
+            return moment.utc(this.not_after).format('MMMM Do, YYYY')
         }
     }
 }

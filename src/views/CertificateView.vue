@@ -48,20 +48,21 @@ export default {
   },
   methods: {
     async fetchData() {
-      this.loading = true;
-      const response = await Api.get(`/certificate/${this.$route.params.sha1_fingerprint}`).catch(error => {
-        this.errorMessage = error;
-        this.errorMessageType = "error";
-        this.loading = false;
-      });
-      if (response.status !== 200) {
-        this.errorMessage = `${response.status}: ${response.statusText}`;
-        this.errorMessageType = "error";
-        this.loading = false;
-        return;
+      this.loading = true
+      try {
+        const response = await Api.get(`/certificate/${this.$route.params.sha1_fingerprint}`)
+        if (response.status !== 200) {
+          this.errorMessage = `${response.status}: ${response.statusText}`;
+          this.errorMessageType = "error";
+          this.loading = false
+          return;
+        }
+        this.certificate = await response.json()
+      } catch (error) {
+        this.message = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
+        this.messageType = "error"
       }
-      this.certificate = await response.json();
-      this.loading = false;
+      this.loading = false
     },
   },
 };

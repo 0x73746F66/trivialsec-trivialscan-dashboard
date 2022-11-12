@@ -8,3 +8,8 @@ variable "bucket_prefix" {
   type        = string
   default     = "trivialscan-dashboard"
 }
+variable "app_env" {
+  description = "default Dev"
+  type        = string
+  default     = "Dev"
+}

@@ -44,6 +44,7 @@ export default {
         .modal-content {
             height: 100%;
             overflow: auto;
+            background-color: #000000;
 
             &::-webkit-scrollbar {
                 width: .4em;

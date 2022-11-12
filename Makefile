@@ -57,8 +57,8 @@ env:
 	@echo -e $(bold)$(primary)CI_BUILD_REF$(clear) = $(CI_BUILD_REF)
 	@echo -e $(bold)$(primary)APP_ENV$(clear) = $(APP_ENV)
 
-init:  ## Runs tf init
-	terraform -chdir=plans init -reconfigure -upgrade=true
+init: env ## Runs tf init tf
+	terraform -chdir=plans init -backend-config=${APP_ENV}-backend.conf -reconfigure -upgrade=true
 
 refresh:  ## Runs tf refresh
 	terraform -chdir=plans refresh
@@ -81,11 +81,11 @@ test-local:  ## Prettier test outputs
 	pre-commit run --all-files
 	semgrep -q --strict --timeout=0 --config=p/terraform
 
-run-local: env  ## npm run dev
-	npm run dev
+run-local: env refresh  ## npm run dev
+	VITE_API_URL=$(shell terraform -chdir=plans output -raw api_function_url) npm run dev
 
-ci-build:  ## npm run build
-	npm run build
+ci-build: env init refresh  ## npm run build
+	VITE_API_URL=$(shell terraform -chdir=plans output -raw api_function_url) npm run build
 
 lint:  ## npm run lint
 	npm run lint

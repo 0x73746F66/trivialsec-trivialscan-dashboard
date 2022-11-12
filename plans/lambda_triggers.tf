@@ -1,5 +1,7 @@
 resource "aws_s3_bucket_notification" "bucket_notification" {
-  bucket = aws_s3_bucket.trivialscan_store_bucket.id
+  count = var.app_env == "Prod" ? 1 : 0
+
+  bucket = aws_s3_bucket.trivialscan_store_bucket[0].id
 
   lambda_function {
     lambda_function_arn = data.terraform_remote_state.prod_summaries.outputs.trivialscan_summaries_arn

@@ -6,10 +6,10 @@
     </div>
     <div class="d-flex w-100">
       <ValidationMessage
-        v-if="this.errorMessage.length > 0"
+        v-if="errorMessage.length > 0"
         class="justify-content-between"
-        :message="this.errorMessage"
-        :type="this.errorMessageType"
+        :message="errorMessage"
+        :type="errorMessageType"
       />
     </div>
     <div class="margin-top-sm">
@@ -114,99 +114,103 @@ export default {
   methods: {
     async inviteMembers(event) {
       this.loading = true;
-      const response = await Api.post("/member/invite", {
-        email: event.target.elements["InviteEmail"].value,
-      }).catch(error => {
-        this.error = error;
-        this.inviteMessage = "Something went wrong. E-mail wasn't sent.";
-        this.inviteMessageType = "error";
-        this.loading = false;
-      });
-      if (response.status !== 202) {
-        this.inviteMessage = `${response.status} ${response.statusText}`
-        this.inviteMessageType = "error";
-        this.loading = false;
-        return;
+      try {
+        const response = await Api.post("/member/invite", {
+          email: event.target.elements["InviteEmail"].value,
+        })
+        if (response.status !== 202) {
+          this.inviteMessage = `${response.status} ${response.statusText}`
+          this.inviteMessageType = "error"
+          this.loading = false
+          return;
+        }
+        this.inviteMessage = "Invited!";
+        this.inviteMessageType = "success";
+      } catch (error) {
+        this.inviteMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
+        this.inviteMessageType = "error"
       }
-      this.inviteMessage = "Invited!";
-      this.inviteMessageType = "success";
-      setTimeout(this.fetchMembers, 2000);
+      this.loading = false
     },
     async deleteMember(event) {
       this.loading = true;
-      const response = await Api.delete(`/member/${event.target.elements["MemberEmail"].value}`)
-      if (response.status != 202) {
-        this.memberDeleteMessage = "Something went wrong. Member couldn't be deleted.";
-        this.memberDeleteMessageType = "error";
-        this.loading = false;
-        return;
+      try {
+        const response = await Api.delete(`/member/${event.target.elements["MemberEmail"].value}`)
+        if (response.status != 202) {
+          this.memberDeleteMessage = "Something went wrong. Member couldn't be deleted."
+          this.memberDeleteMessageType = "error"
+          this.loading = false
+          return;
+        }
+        this.memberDeleteMessage = "This member was deleted"
+        this.memberDeleteMessageType = "success"
+      } catch (error) {
+        this.memberDeleteMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
+        this.memberDeleteMessageType = "error"
       }
-      this.memberDeleteMessage = "This member was deleted";
-      this.memberDeleteMessageType = "success";
-      setTimeout(this.fetchMembers, 2000);
+      this.loading = false
     },
     async fetchClients() {
-      this.loading = true;
-      const response = await Api.get(`/clients`).catch(error => {
-        this.errorMessage = error;
-        this.errorMessageType = "error";
-      });
-      if (response.status === 204) {
-        this.errorMessage = "No clients are registered";
-        this.errorMessageType = "warning";
-        this.clients = [];
-        this.loading = false;
-        return;
-      } else if (response.status !== 200) {
-        this.errorMessage = `${response.status} ${response.statusText}`;
-        this.errorMessageType = "error";
-        this.loading = false;
-        return;
+      this.loading = true
+      try {
+        const response = await Api.get(`/clients`, { timeout: 30000 })
+        if (response.status === 204) {
+          this.errorMessage = "No clients are registered"
+          this.errorMessageType = "warning"
+          this.clients = []
+          this.loading = false
+          return
+        } else if (response.status !== 200) {
+          this.errorMessage = `${response.status} ${response.statusText}`
+          this.errorMessageType = "error"
+          this.loading = false
+          return
+        }
+        const data = await response.json()
+        this.clients = data.map((client) => {
+          client.created = moment.utc(client.timestamp).fromNow()
+          return client
+        })
+      } catch (error) {
+        this.errorMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
+        this.errorMessageType = "error"
       }
-      const data = await response.json();
-      this.clients = data.map((client) => {
-        client.created = moment(client.timestamp).fromNow();
-        return client;
-      });
-      this.loading = false;
+      this.loading = false
     },
     async toggleClientFeed($event, client_name) {
-      const deactivate_url = `/deactived/${client_name}`;
-      const activate_url = `/activate/${client_name}`;
-      if ($event.target.checked === true) {
-        this.loading = true;
-        const response = await Api.get(activate_url).catch(error => {
-          this.errorMessage = error;
-          this.errorMessageType = "error";
-        });
-        if (response.status !== 200) {
-          this.errorMessage = `${response.status}: An error has occured, please try again.`;
-          this.errorMessageType = "error";
-          this.loading = false;
-          return;
+      const deactivate_url = `/deactived/${client_name}`
+      const activate_url = `/activate/${client_name}`
+      this.loading = true;
+      try {
+        if ($event.target.checked === true) {
+          const response = await Api.get(activate_url)
+          if (response.status !== 200) {
+            this.errorMessage = `${response.status}: An error has occured, please try again.`
+            this.errorMessageType = "error"
+            this.loading = false
+            return;
+          }
+          this.errorMessage = "Feed was enabled with success"
+          this.errorMessageType = "success"
+        } else {
+          const response = await Api.get(deactivate_url)
+          if (response.status !== 200) {
+            this.errorMessage = `${response.status}: An error has occured, please try again.`
+            this.errorMessageType = "error"
+            this.loading = false
+            return;
+          }
+          this.errorMessage = "Feed was disabled with success"
+          this.errorMessageType = "success"
         }
-        this.errorMessage = "Feed was enabled with success";
-        this.errorMessageType = "success";
-        this.loading = false;
-      } else {
-        this.loading = true;
-        const response = await Api.get(deactivate_url).catch(error => {
-          this.errorMessage = error;
-          this.errorMessageType = "error";
-        });
-        if (response.status !== 200) {
-          this.errorMessage = `${response.status}: An error has occured, please try again.`;
-          this.errorMessageType = "error";
-          this.loading = false;
-          return;
-        }
-        this.errorMessage = "Feed was disabled with success";
-        this.errorMessageType = "success";
-        this.loading = false;
+      } catch (error) {
+        this.errorMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
+        this.errorMessageType = "error"
       }
+      this.loading = false
     },
   },
-};
+}
 </script>
 <style lang="scss">
 .token {

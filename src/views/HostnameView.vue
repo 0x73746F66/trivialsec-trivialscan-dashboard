@@ -24,20 +24,21 @@ export default {
   },
   methods: {
     async fetchData() {
-      this.loading = true;
-      const response = await Api.get(`/host/${this.$route.params.hostname}?port=${this.$route.params.port}`).catch(error => {
-        this.message = error;
-        this.messageType = "error";
-        this.loading = false;
-      });
-      if (response.status !== 200) {
-        this.message = "Your message was sent. Thank you!";
-        this.messageType = "success";
-        this.loading = false;
-        return;
+      this.loading = true
+      try {
+        const response = await Api.get(`/host/${this.$route.params.hostname}?port=${this.$route.params.port}`)
+        if (response.status !== 200) {
+          this.errorMessage = "An error occured: Page couldn't be loaded"
+          this.errorMessageType = "error"
+          this.loading = false
+          return;
+        }
+        this.host = await response.json()
+      } catch (error) {
+        this.errorMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
+        this.errorMessageType = "error"
       }
-      this.host = await response.json();
-      this.loading = false;
+      this.loading = false
     },
   },
 };

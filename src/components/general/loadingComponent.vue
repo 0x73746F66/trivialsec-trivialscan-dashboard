@@ -2,7 +2,7 @@
   <div class="">
     <div class="loading-component-div">
       <span class="loading-component font-base-b font-color-light">
-        Loading...
+        {{innerMessage}}
       </span>
       <span 
         class="font-color-light text-center loading-message"
@@ -13,26 +13,29 @@
 </template>
 <script>
 export default {
-  props: {loading: Boolean},
+  props: {
+    loading: Boolean,
+  },
   data() {
     return {
+      innerMessage: "Loading...",
       message: "Please stay on this page until loading is finished.",
       messageShow: false,
-      timer: 10000
+      timer: 1000
     }
   },
   methods: {
     showMessage() {
       setTimeout(() => this.messageShow = true, this.timer);
-      setTimeout(() => this.messageShow = false, this.timer * 8);
-      setTimeout(() => this.message = "It seems we're dealing with a large data package, please wait a little longer.", this.timer * 8.1);
+      setTimeout(() => this.messageShow = false, this.timer * 5);
+      setTimeout(() => this.message = "It seems we're dealing with a large data package, please wait a little longer.", this.timer * 5.1);
       
-      setTimeout(() => this.messageShow = true, this.timer * 8.15);
-      setTimeout(() => this.messageShow = false, this.timer * 16);
-      setTimeout(() => this.message = "Sorry for the wait, we'll be finished soon!", this.timer * 16.1);
+      setTimeout(() => this.messageShow = true, this.timer * 5.15);
+      setTimeout(() => this.messageShow = false, this.timer * 10);
+      setTimeout(() => this.message = "Sorry for the wait, we'll be finished soon!", this.timer * 10.1);
       
-      setTimeout(() => this.messageShow = true, this.timer * 16.15);
-      setTimeout(() => this.messageShow = false, this.timer * 18.5);
+      setTimeout(() => this.messageShow = true, this.timer * 10.15);
+      setTimeout(() => this.messageShow = false, this.timer * 15);
     },
   },
   mounted(){

@@ -123,7 +123,7 @@
                                     <a
                                         v-for="(report, index) in result.reports" :key="index"
                                         :href="`/result/${report}/detail`"
-                                        class="font-xs font-color-light-60"
+                                        class="font-xs font-color-light-60 white-space-nowrap"
                                     >
                                      {{index+1}}. Report <IconArrowPrimary v-if="(index+1) < result.reports.length" color="f0f0f099" style="width:20px; height: 20px;" />
                                     </a>
@@ -259,29 +259,31 @@ export default {
 
             if (this.searchInput.length > 0) {
                 this.loading = true
-                const response = await Api.get(`/search/${this.searchType}/${this.searchInput}`).catch(error => {
-                    this.errorMessage = error + " . Couldn't complete search"
+                try {
+                    const response = await Api.get(`/search/${this.searchType}/${this.searchInput}`)
+                    if (response.status !== 200) {
+                        this.errorMessage = `${response.status} ${response.statusText}: Sorry, we couldn't find what you're looking for`
+                        this.errorMessageType = "error"
+                        this.loading = false
+                        return
+                    }
+                    const data = await response.json()
+                    this.searchResults.hosts = data.map(item => {
+                        if (item.last_scanned) {
+                            item.last_scanned_ago = moment.utc(item.last_scanned).fromNow()
+                        }
+                        if (item.queued_timestamp) {
+                            item.queued_timestamp_ago = moment.utc(item.queued_timestamp).fromNow()
+                        }
+                        return item
+                    })
+                    const allReports = []
+                    data.forEach(result => allReports.push(result.reports))
+                    this.searchResults.reports = allReports.flat(1)
+                } catch (error) {
+                    this.errorMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete search.`
                     this.errorMessageType = "error"
-                })
-                if (response.status !== 200) {
-                    this.errorMessage = `${response.status} ${response.statusText}: Sorry, we couldn't find what you're looking for`
-                    this.errorMessageType = "error"
-                    this.loading = false
-                    return
                 }
-                const data = await response.json()
-                this.searchResults.hosts = data.map(item => {
-                    if (item.last_scanned) {
-                        item.last_scanned_ago = moment(item.last_scanned).fromNow()
-                    }
-                    if (item.queued_timestamp) {
-                        item.queued_timestamp_ago = moment(item.queued_timestamp).fromNow()
-                    }
-                    return item
-                })
-                const allReports = []
-                data.forEach(result => allReports.push(result.reports))
-                this.searchResults.reports = allReports.flat(1)
                 this.loading = false
             } else {
                 this.searchActive = !this.searchActive
@@ -290,49 +292,49 @@ export default {
         },
         async scanHost(target) {
             this.loading = true;
-            const response = await Api.get(`/scanner/queue/${target}`).catch(error => {
-                this.loading = false;
-                this.errorMessageScanHost = error + " . Couldn't complete this action."
+            try {
+                const response = await Api.get(`/scanner/queue/${target}`)
+                if (response.status !== 200) {
+                    this.errorMessageScanHost = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
+                    this.errorMessageTypeScanHost = "error";
+                    this.loading = false
+                    return;
+                }
+                this.errorMessageScanHost = `Host was added to on-demand scanning.`
+                this.errorMessageTypeScanHost = "success";
+            } catch (error) {
+                this.errorMessageScanHost = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
                 this.errorMessageTypeScanHost = "error"
-            })
-            if (response.status !== 200) {
-                this.errorMessageScanHost = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
-                this.errorMessageTypeScanHost = "error";
-                this.loading = false
-                return;
             }
             this.loading = false;
-            this.errorMessageScanHost = `Host was added to on-demand scanning.`
-            this.errorMessageTypeScanHost = "success";
         },
         async hostToggleChange(e, target) {
             this.loading = true
-            if(e.target.checked === true) {
-                const response = await Api.get(`/scanner/monitor/${target}`).catch(error => {
-                    this.errorMessageScanHost = error + " . Couldn't complete this action."
-                    this.errorMessageTypeScanHost = "error"
-                })
-                if (response.status !== 200) {
-                    this.errorMessageScanHost = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
-                    this.errorMessageTypeScanHost = "error";
-                    this.loading = false
-                    return;
+            try {
+                if(e.target.checked === true) {
+                    const response = await Api.get(`/scanner/monitor/${target}`)
+                    if (response.status !== 200) {
+                        this.errorMessageScanHost = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
+                        this.errorMessageTypeScanHost = "error";
+                        this.loading = false
+                        return;
+                    }
+                    this.errorMessageScanHost = `Monitoring host.`
+                    this.errorMessageTypeScanHost = "success";
+                } else {
+                    const response = await Api.get(`/scanner/deactivate/${target}`)
+                    if (response.status !== 200) {
+                        this.errorMessageScanHost = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
+                        this.errorMessageTypeScanHost = "error";
+                        this.loading = false
+                        return;
+                    }
+                    this.errorMessageScanHost = `No longer monitoring host.`
+                    this.errorMessageTypeScanHost = "success";
                 }
-                this.errorMessageScanHost = `Monitoring host.`
-                this.errorMessageTypeScanHost = "success";
-            } else {
-                const response = await Api.get(`/scanner/deactivate/${target}`).catch(error => {
-                    this.errorMessageScanHost = error + " . Couldn't complete this action."
-                    this.errorMessageTypeScanHost = "error"
-                })
-                if (response.status !== 200) {
-                    this.errorMessageScanHost = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
-                    this.errorMessageTypeScanHost = "error";
-                    this.loading = false
-                    return;
-                }
-                this.errorMessageScanHost = `No longer monitoring host.`
-                this.errorMessageTypeScanHost = "success";
+            } catch (error) {
+                this.errorMessageScanHost = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
+                this.errorMessageTypeScanHost = "error"
             }
             this.loading = false
         },

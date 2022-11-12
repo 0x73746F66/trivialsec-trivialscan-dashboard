@@ -50,7 +50,7 @@
         </div>
     </div>
 </template>
-  
+
 <script>
 import IconTarget from "@/components/icons/IconTarget.vue";
 import IconChevron from "@/components/icons/IconChevron.vue";
@@ -91,21 +91,23 @@ export default {
     methods: {
         async fetchHosts() {
             this.loading = true
-            const response = await Api.get("/hosts?return_details=true").catch(error => {
-                this.errorMessage = error
+            try {
+                const response = await Api.get("/hosts?return_details=true", { timeout: 30000 })
+                if (response.status !== 200) {
+                    this.errorMessage = `${response.status} ${response.statusText}`
+                    this.errorMessageType = "error"
+                    this.loading = false
+                    return;
+                }
+                const data = await response.json()
+                this.targets = data.map(host => {
+                    host.timeago = moment.utc(host.last_updated).fromNow()
+                    return host
+                })
+            } catch (error) {
+                this.errorMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
                 this.errorMessageType = "error"
-            });
-            if (response.status !== 200) {
-                this.errorMessage = `${response.status} ${response.statusText}`
-                this.errorMessageType = "error";
-                this.loading = false
-                return;
             }
-            const data = await response.json();
-            this.targets = data.map(host => {
-                host.timeago = moment(host.last_updated).fromNow()
-                return host
-            })
             this.loading = false
         },
     },
@@ -120,7 +122,7 @@ export default {
     }
 }
 </script>
-  
+
 <style scoped lang="scss">
 .target-slide {
     display: flex;
@@ -200,4 +202,3 @@ export default {
     }
 }
 </style>
-  

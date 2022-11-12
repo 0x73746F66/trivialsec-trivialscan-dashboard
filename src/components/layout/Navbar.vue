@@ -12,7 +12,7 @@
           class="col-12 d-flex flex-lg-row flex-column justify-content-between"
         >
           <div class="d-flex justify-content-between">
-            <RouterLink to="/" class="text-decoration-none">
+            <RouterLink to="/" class="text-decoration-none d-flex align-items-center">
               <div class="d-flex align-items-center">
                 <IconTrivialSecurity
                   alt="Trivial Security"
@@ -53,9 +53,9 @@
             <RouterLink
               v-if="logged_in"
               to="/profile"
-              class="router-link d-flex align-items-end font-color-light text-decoration-none margin-right-md d-flex"
+              class="router-link d-flex font-color-light text-decoration-none margin-right-md d-flex nav-profile-router"
             >
-              <div class="d-flex flex-column margin-right-sm align-items-end">
+              <div class="d-flex flex-column align-items-end nav-profile-router-info">
                 <span class="font-base">{{ account_name }}</span>
                 <span class="font-sm">{{ member_email }}</span>
               </div>
@@ -172,6 +172,29 @@ header {
     width: 40px;
     height: 40px;
     border-radius: 50%;
+    &-router {
+      background: color("dark-60");
+      padding: spacers("xxs");
+      border-radius: radius("lg");
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      &-info {
+        overflow: hidden;
+        max-width: 0;
+        width: auto;
+        transition: 0.2s linear;
+      }
+      &:hover {
+        .nav-profile-router-info {
+          max-width: 500px;
+          overflow: visible;
+          @extend .margin-right-xs;
+          @extend .margin-left-sm;
+        }
+      }
+    }
   }
 
 

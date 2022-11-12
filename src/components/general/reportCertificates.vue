@@ -4,8 +4,8 @@
           <button class="d-block certificate-swiper-button-prev">
             <IconChevron class="cert-icon" color="f0f0f0" />
           </button>
-          
-          <swiper 
+
+          <swiper
             :modules="modules"
             :slides-per-view="1"
             :space-between="10"
@@ -23,15 +23,15 @@
                     class="d-flex align-items-center font-sm margin-bottom-xs cursor-pointer word-break"
                     data-bs-toggle="modal"
                     :data-bs-target="`#cert_${cert.sha1_fingerprint}`"
-                  > 
+                  >
                     <div class="d-flex">
-                      <customPill 
+                      <customPill
                         class="margin-right-xxs margin-left-xxs"
-                        :label="cert.type" 
-                        :type="cert.type" 
+                        :label="cert.type"
+                        :type="cert.type"
                       />
                       <div class="d-flex flex-column">
-                        <span class="font-xs-sb font-color-light">{{cert.subject.split(',').filter(p=>p.trim().startsWith('CN=')).join('').replace(/CN=/g, '')}}</span>
+                        <span class="font-xs-sb font-color-light">{{ commonNameFromSubject(cert.subject) }}</span>
                         <span class="font-xs font-color-lighter-60">{{cert.subject.split(',').filter(p=>!p.trim().startsWith('CN=')).join(',')}}</span>
                       </div>
                     </div>
@@ -44,9 +44,9 @@
             <IconChevron class="cert-icon" color="f0f0f0" />
           </button>
         </div>
-        <slidingModal 
+        <slidingModal
             v-for="(cert, certModalId) in certificates"
-            :key="certModalId" 
+            :key="certModalId"
             :id="`cert_${cert.sha1_fingerprint}`"
         >
           <template #header>
@@ -100,6 +100,14 @@ export default {
         modules: [Navigation, Pagination, Scrollbar, A11y],
     }
   },
+  methods: {
+      commonNameFromSubject(subject) {
+          if (typeof subject !== 'string' || subject.indexOf('CN=') === -1) {
+              return subject
+          }
+          return subject.split(',').filter(p => p.trim().startsWith('CN=')).join('').replace(/CN=/g, '')
+      },
+  },
   computed: {
     certificates(t) {
       const ret = new Set()
@@ -121,7 +129,7 @@ export default {
             height: 25px;
         }
     }
-    
+
     .swiper-button-disabled {
         filter: opacity(0.3);
     }

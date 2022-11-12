@@ -29,6 +29,9 @@ import Button from "../general/Button.vue";
 import ValidationMessage from "../general/ValidationMessage.vue";
 import loadingComponent from "../general/loadingComponent.vue";
 
+let apiUrl = import.meta.env.VITE_API_URL.trim()
+apiUrl = `${apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl}`
+
 export default {
   components: { EmaiInput, Button, ValidationMessage, loadingComponent },
   data() {
@@ -36,7 +39,6 @@ export default {
       emailField: "",
       message: "",
       messageType: "",
-      api_url: import.meta.env.VITE_API_URL,
       loading: false,
     };
   },
@@ -49,7 +51,7 @@ export default {
       const payload = JSON.stringify({
         email: this.emailField,
       });
-      const response = await fetch(`${this.api_url}/magic-link`, {
+      const response = await fetch(`${apiUrl}/magic-link`, {
         method: "POST",
         body: payload,
         headers: {

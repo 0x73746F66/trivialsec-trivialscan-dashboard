@@ -50,30 +50,32 @@ export default {
   methods: {
     async fetchDashboard() {
       this.loading = true
-      const response = await Api.get("/dashboard/compliance").catch(error => {
-        this.errorMessage = error
+      try {
+        const response = await Api.get("/dashboard/compliance")
+        if (response.status !== 200) {
+          this.errorMessage = `${response.status} ${response.statusText}`
+          this.errorMessageType = "error"
+          this.loading = false
+          return;
+        }
+        const data = await response.json()
+        this.chartSections = data.map(item => item.label)
+        this.compData = []
+        for (const comp of data) {
+          if (comp.data.week) {
+            comp.data.week = comp.data.week.sort((x, y) => x.timestamp - y.timestamp)
+          }
+          if (comp.data.month) {
+            comp.data.month = comp.data.month.sort((x, y) => x.timestamp - y.timestamp)
+          }
+          if (comp.data.year) {
+            comp.data.year = comp.data.year.sort((x, y) => x.timestamp - y.timestamp)
+          }
+          this.compData.push(comp)
+        }
+      } catch (error) {
+        this.errorMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
         this.errorMessageType = "error"
-      });
-      if (response.status !== 200) {
-        this.errorMessage = `${response.status} ${response.statusText}`
-        this.errorMessageType = "error";
-        this.loading = false
-        return;
-      }
-      const data = await response.json();
-      this.chartSections = data.map(item => item.label)
-      this.compData = []
-      for (const comp of data) {
-        if (comp.data.week) {
-          comp.data.week = comp.data.week.sort((x, y) => x.timestamp - y.timestamp)
-        }
-        if (comp.data.month) {
-          comp.data.month = comp.data.month.sort((x, y) => x.timestamp - y.timestamp)
-        }
-        if (comp.data.year) {
-          comp.data.year = comp.data.year.sort((x, y) => x.timestamp - y.timestamp)
-        }
-        this.compData.push(comp)
       }
       this.loading = false
     }

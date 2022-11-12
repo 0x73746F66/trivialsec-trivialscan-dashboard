@@ -57,7 +57,7 @@
                   <div class="col-lg-8 col-12 d-flex flex-column align-items-start margin-bottom-xs">
                     <span class="font-xs pre-line">{{issue.description}}</span>
                   </div>
-                  
+
                   <div class="col-lg-4 col-12 margin-bottom-sm">
                     <div class="bg-dark-40 border-radius-sm  d-flex flex-column align-items-start padding-sm">
                       <span class="font-sm-sb font-color-light margin-bottom-sm">
@@ -156,28 +156,30 @@ export default {
   methods: {
     async fetchFindings() {
       this.loading = true
-      const response = await Api.get(`/findings/latest?limit=${this.limit}`).catch(error => {
-        this.errorMessage = error
-        this.errorMessageType = "error"
-      });
-      if (response.status !== 200) {
-        this.errorMessage = `${response.status} ${response.statusText}`
-        this.errorMessageType = "error";
-        this.loading = false
-        return;
-      }
-      const data = await response.json();
-      this.issues = data.map(item => {
-        if (item.result_level === "fail") {
-          item.severity = "high"
-        } else if (item.result_level === "warn") {
-          item.severity = "medium"
-        } else if (item.result_level === "info") {
-          item.severity = "low"
+      try {
+        const response = await Api.get(`/findings/latest?limit=${this.limit}`)
+        if (response.status !== 200) {
+          this.errorMessage = `${response.status} ${response.statusText}`
+          this.errorMessageType = "error";
+          this.loading = false
+          return;
         }
-        item.observed =moment(item.observed_at).fromNow()
-        return item
-      })
+        const data = await response.json();
+        this.issues = data.map(item => {
+          if (item.result_level === "fail") {
+            item.severity = "high"
+          } else if (item.result_level === "warn") {
+            item.severity = "medium"
+          } else if (item.result_level === "info") {
+            item.severity = "low"
+          }
+          item.observed = moment.utc(item.observed_at).fromNow()
+          return item
+        })
+      } catch (error) {
+        this.errorMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}`
+        this.errorMessageType = "error"
+      }
       this.loading = false
     },
   },

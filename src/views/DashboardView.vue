@@ -5,7 +5,7 @@
 
     <div class="w-100 d-flex align-items-lg-center flex-column flex-lg-row justify-content-between margin-bottom-sm">
       <div class="d-inline-block w-100 position-relative">
-        <searchForm />
+        <SearchForm />
       </div>
     </div>
 
@@ -19,10 +19,6 @@
           <div class="w-100 margin-bottom-md position-relative compliance-section">
             <div class="d-flex">
               <h2 class="font-xl-sb margin-right-sm">Compliance History</h2>
-              <QuestionComponent
-                  label="question-compliance"
-                  content="something about compliance"
-                />
             </div>
             <div class="position-relative bg-dark-40 border-radius-sm padding-sm d-flex flex-lg-row flex-column justify-content-evenly">
               <ComplianceCharts />
@@ -150,29 +146,62 @@
 </main>
 </template>
 
-<script>
-import CollapseableSection from "@/components/general/CollapseableSection.vue";
-import Gauge from "@/components/general/Gauge.vue";
-import QuestionComponent from "@/components/general/QuestionComponent.vue";
-import ComplianceCharts from "@/components/general/ComplianceCharts.vue";
-import HostsList from "@/components/general/HostsList.vue";
-import IssuesList from "@/components/general/IssuesList.vue";
-import CertificateList from "@/components/general/CertificateList.vue";
-import ValidationMessage from "@/components/general/ValidationMessage.vue";
+<script setup>
 import loadingComponent from "@/components/general/loadingComponent.vue";
-import pieChart from "@/components/general/pieChart.vue";
-import searchForm from "@/components/forms/SearchForm.vue";
-import Summary from "@/components/general/Summary.vue"
+import componentLoading from "@/components/general/componentLoading.vue";
+import { defineAsyncComponent } from 'vue'
 
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/vue'
 
-import 'swiper/css';
+import 'swiper/css'
+</script>
+
+<script>
+const CollapseableSection = defineAsyncComponent({
+  loader: () => import("../components/general/CollapseableSection.vue"),
+  loadingComponent: componentLoading
+})
+const QuestionComponent = defineAsyncComponent({
+  loader: () => import("../components/general/QuestionComponent.vue"),
+  loadingComponent: componentLoading
+})
+const ComplianceCharts = defineAsyncComponent({
+  loader: () => import("../components/general/ComplianceCharts.vue"),
+  loadingComponent: componentLoading
+})
+const HostsList = defineAsyncComponent({
+  loader: () => import("../components/general/HostsList.vue"),
+  loadingComponent: componentLoading
+})
+const IssuesList = defineAsyncComponent({
+  loader: () => import("../components/general/IssuesList.vue"),
+  loadingComponent: componentLoading
+})
+const CertificateList = defineAsyncComponent({
+  loader: () => import("../components/general/CertificateList.vue"),
+  loadingComponent: componentLoading
+})
+const ValidationMessage = defineAsyncComponent({
+  loader: () => import("../components/general/ValidationMessage.vue"),
+  loadingComponent: componentLoading
+})
+const pieChart = defineAsyncComponent({
+  loader: () => import("../components/general/pieChart.vue"),
+  loadingComponent: componentLoading
+})
+const SearchForm = defineAsyncComponent({
+  loader: () => import("../components/forms/SearchForm.vue"),
+  loadingComponent: componentLoading
+})
+const Summary = defineAsyncComponent({
+  loader: () => import("../components/general/Summary.vue"),
+  loadingComponent: componentLoading
+})
 
 export default {
   components: {
     CollapseableSection,
-    Gauge,
     Swiper,
     SwiperSlide,
     QuestionComponent,
@@ -181,9 +210,9 @@ export default {
     IssuesList,
     CertificateList,
     ValidationMessage,
-    loadingComponent,
+    componentLoading,
     pieChart,
-    searchForm,
+    SearchForm,
     Summary
   },
   data() {
@@ -205,9 +234,9 @@ export default {
     this.fetchQuotas()
   },
   setup() {
-      return {
-          modules: [Navigation, Pagination, Scrollbar, A11y],
-      };
+    return {
+      modules: [Navigation, Pagination, Scrollbar, A11y],
+    }
   },
   methods: {
     showSection(section) {
@@ -220,38 +249,40 @@ export default {
     },
     async fetchQuotas() {
       this.loading = true
-      const response = await Api.get(`/dashboard/quotas`).catch(error => {
-        this.errorMessage = error
+      try {
+        const response = await Api.get(`/dashboard/quotas`, { timeout: 30000 })
+        if (response.status !== 200) {
+          this.errorMessage = `${response.status} ${response.statusText}`
+          this.errorMessageType = "error"
+          this.loading = false
+          return
+        }
+        const data = await response.json()
+        if (data.unlimited_monitoring === false && data.monitoring.total > 0) {
+          this.quotaSections.push("Monitoring")
+        }
+        if (data.unlimited_scans === false) {
+          if (data.passive.total > 0) {
+            this.quotaSections.push("Passive")
+          }
+          if (data.active.total > 0) {
+            this.quotaSections.push("Active")
+          }
+        }
+        if (data.monitoring.total > 0 && data.monitoring.used < data.monitoring.total) {
+          this.quotasTooltip = `Total Available: you could be monitoring ${data.monitoring.total - data.monitoring.used} more hosts`
+        } else if (this.quotaSections.length > 0) {
+          this.quotasTooltip = `Community Edition allows the used of self-managed scanners, and will perform one scan only when each new host it added`
+        } else if (this.unlimited_monitoring === true) {
+          this.quotasTooltip = `You have Unlimited host monitoring`
+        } else {
+          this.quotasTooltip = `This section shows how well you are utilizing Trivial Security`
+        }
+        this.quotas = data
+      } catch (error) {
+        this.errorMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
         this.errorMessageType = "error"
-      });
-      if (response.status !== 200) {
-        this.errorMessage = `${response.status} ${response.statusText}`
-        this.errorMessageType = "error";
-        this.loading = false
-        return;
       }
-      const data = await response.json();
-      if (data.unlimited_monitoring === false && data.monitoring.total > 0) {
-        this.quotaSections.push("Monitoring")
-      }
-      if (data.unlimited_scans === false) {
-        if (data.passive.total > 0) {
-          this.quotaSections.push("Passive")
-        }
-        if (data.active.total > 0) {
-          this.quotaSections.push("Active")
-        }
-      }
-      if (data.monitoring.total > 0 && data.monitoring.used < data.monitoring.total) {
-        this.quotasTooltip = `Total Available: you could be monitoring ${data.monitoring.total - data.monitoring.used} more hosts`
-      } else if (this.quotaSections.length > 0) {
-        this.quotasTooltip = `Community Edition allows the used of self-managed scanners, and will perform one scan only when each new host it added`
-      } else if (this.unlimited_monitoring === true) {
-        this.quotasTooltip = `You have Unlimited host monitoring`
-      } else {
-        this.quotasTooltip = `This section shows how well you are utilizing Trivial Security`
-      }
-      this.quotas = data
       this.loading = false
     },
   },

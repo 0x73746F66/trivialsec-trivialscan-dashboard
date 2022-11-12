@@ -1,5 +1,8 @@
 import HomeView from "@/views/HomeView.vue"
 
+let apiUrl = import.meta.env.VITE_API_URL.trim()
+apiUrl = `${apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl}`
+
 const routes = [
     {
         path: "/",
@@ -27,9 +30,7 @@ const routes = [
         path: "/login/:magic_link",
         name: "magic_link",
         beforeEnter: async (to) => {
-            const response = await fetch(
-                `${import.meta.env.VITE_API_URL}/magic-link/${to.params.magic_link}`
-            ).catch((errors) => {
+            const response = await fetch(`${apiUrl}/magic-link/${to.params.magic_link}`).catch((errors) => {
                 console.log("errors")
                 console.log(errors)
             })
@@ -68,9 +69,7 @@ const routes = [
         path: "/accept/:token",
         name: "accept_link",
         beforeEnter: async (to) => {
-            const response = await fetch(
-                `${import.meta.env.VITE_API_URL}/accept/${to.params.token}`
-            ).catch((errors) => {
+            const response = await fetch(`${apiUrl}/accept/${to.params.token}`).catch((errors) => {
                 console.log("errors")
                 console.log(errors)
             })

@@ -1,17 +1,14 @@
 resource "aws_s3_bucket" "trivialscan_archive_bucket" {
+  count = var.app_env == "Prod" ? 1 : 0
   bucket = "${var.bucket_prefix}-archive"
-  tags = {
-    CostCenter  = "randd"
-    Name        = "Website"
-    Environment = "Prod"
-    Purpose     = "Deploy"
-  }
+  tags = local.tags
 }
 
 data "aws_iam_policy_document" "trivialscan_archive_s3_policy" {
+  count = var.app_env == "Prod" ? 1 : 0
   statement {
     actions   = ["s3:GetObject"]
-    resources = ["arn:aws:s3:::${aws_s3_bucket.trivialscan_archive_bucket.id}/*"]
+    resources = ["arn:aws:s3:::${aws_s3_bucket.trivialscan_archive_bucket[0].id}/*"]
     principals {
       type        = "AWS"
       identifiers = ["arn:aws:iam::${local.aws_master_account_id}:root"]
@@ -19,7 +16,7 @@ data "aws_iam_policy_document" "trivialscan_archive_s3_policy" {
   }
   statement {
     actions   = ["s3:ListBucket"]
-    resources = ["arn:aws:s3:::${aws_s3_bucket.trivialscan_archive_bucket.id}"]
+    resources = ["arn:aws:s3:::${aws_s3_bucket.trivialscan_archive_bucket[0].id}"]
     principals {
       type        = "AWS"
       identifiers = ["arn:aws:iam::${local.aws_master_account_id}:root"]
@@ -28,12 +25,14 @@ data "aws_iam_policy_document" "trivialscan_archive_s3_policy" {
 }
 
 resource "aws_s3_bucket_policy" "archive_resource_policy" {
-  bucket = aws_s3_bucket.trivialscan_archive_bucket.id
-  policy = data.aws_iam_policy_document.trivialscan_archive_s3_policy.json
+  count = var.app_env == "Prod" ? 1 : 0
+  bucket = aws_s3_bucket.trivialscan_archive_bucket[0].id
+  policy = data.aws_iam_policy_document.trivialscan_archive_s3_policy[0].json
 }
 
 resource "aws_s3_bucket_public_access_block" "archive_resource_public_access_block" {
-  bucket                  = aws_s3_bucket.trivialscan_archive_bucket.id
+  count = var.app_env == "Prod" ? 1 : 0
+  bucket                  = aws_s3_bucket.trivialscan_archive_bucket[0].id
   restrict_public_buckets = true
   block_public_acls       = true
   ignore_public_acls      = true
@@ -41,14 +40,16 @@ resource "aws_s3_bucket_public_access_block" "archive_resource_public_access_blo
 }
 
 resource "aws_s3_bucket_versioning" "trivialscan_archive_versioning" {
-  bucket = aws_s3_bucket.trivialscan_archive_bucket.id
+  count = var.app_env == "Prod" ? 1 : 0
+  bucket = aws_s3_bucket.trivialscan_archive_bucket[0].id
   versioning_configuration {
     status = "Enabled"
   }
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "trivialscan_archive_lifecycle" {
-  bucket = aws_s3_bucket.trivialscan_archive_bucket.id
+  count = var.app_env == "Prod" ? 1 : 0
+  bucket = aws_s3_bucket.trivialscan_archive_bucket[0].id
 
   rule {
     id = "archive_noncurrent_version_expiration"

@@ -24,11 +24,11 @@
             class="text-decoration-none target-icon-link font-color-secondary w-100">
             <div class="d-flex flex-column justify-content-between w-100">
                 <div class="">
-                    <div class="d-flex">  
-                      <customPill 
+                    <div class="d-flex">
+                      <customPill
                       class="margin-right-xxs d-flex align-items-center pb-0"
-                      :label="t.scanning_status.monitoring === true ? 'Active' : 'Inactive' " 
-                      :type="t.scanning_status.monitoring === true ? 'success' : 'danger' " 
+                      :label="t.scanning_status.monitoring === true ? 'Active' : 'Inactive' "
+                      :type="t.scanning_status.monitoring === true ? 'success' : 'danger' "
                       />
                     </div>
                     <div class="d-flex flex-column">
@@ -47,9 +47,9 @@
             </span>
           </span>
         </div>
-        <slidingModal 
-          v-for="(target, targetModalId) in targets" 
-          :key="targetModalId" 
+        <slidingModal
+          v-for="(target, targetModalId) in targets"
+          :key="targetModalId"
           :id="`target_${targetModalId}`">
           <template #header>
             <div class="modal-header border-0 d-flex justify-content-start">
@@ -76,12 +76,11 @@
                   </p>
                 </span>
                 <p class="font-color-light">
-                  Updated {{moment(target.last_updated).fromNow()}}
+                  Updated {{moment.utc(target.last_updated).fromNow()}}
                 <br>
-                  Processing a moment ago
-                </p>
-                <p class="font-color-light" v-if="target.scanning_status.queue_status">
-                  {{ target.scanning_status.queue_status }} {{ moment(target.scanning_status.queued_timestamp).fromNow()}}
+                <span class="font-color-light" v-if="target.scanning_status.queue_status">
+                  {{ target.scanning_status.queue_status }} {{ moment.utc(target.scanning_status.queued_timestamp).fromNow()}}
+                </span>
                 </p>
                 <div class="d-flex flex-sm-row">
                   <div class="font-base font-color-light margin-bottom-md">
@@ -94,8 +93,8 @@
                     </div>
                     <customPill
                       class=""
-                      :label="target.scanning_status.monitoring === true ? 'Active' : 'Inactive' " 
-                      :type="target.scanning_status.monitoring === true ? 'success' : 'danger' " 
+                      :label="target.scanning_status.monitoring === true ? 'Active' : 'Inactive' "
+                      :type="target.scanning_status.monitoring === true ? 'success' : 'danger' "
                     />
                   </div>
                 </div>
@@ -106,13 +105,17 @@
                     Certificates
                   </h3>
                   <span
-                    v-for="(cert, certIndex) in target.tls.certificates"
+                    v-for="(sha1_fingerprint, certIndex) in uniqueCertificates(target.tls.certificates)"
                     :key=certIndex
                     class="font-color-secondary font-sm word-break"
-                    data-bs-toggle="modal"
-                    :data-bs-target="`#cert_${cert}`"
                   >
-                    <IconCertificate color="e2c878" class="cert-icon margin-right-sm" /><span title="See Certificate details">{{cert}}</span>
+                    <a
+                        target="_blank"
+                        class="text-decoration-none font-color-secondary"
+                        :href="`/certificate/${sha1_fingerprint}`"
+                    >
+                        <IconCertificate color="e2c878" class="cert-icon margin-right-sm" /><span title="See Certificate details">{{ commonNameFromSubject(getCertificate(sha1_fingerprint).subject) }}</span>
+                    </a>
                   </span>
                 </div>
                 <div class="col-6">
@@ -241,12 +244,12 @@
               <label for="checkFail" class="margin-right-md font-xs font-color-light">Failures ({{results.fail}})</label>
             </div>
 
-            <div class="d-flex align-items-center">            
+            <div class="d-flex align-items-center">
               <input type="checkbox" id="checkWarn" class="margin-right-sm custom-checkbox" v-model="resultsFilter.warn">
               <label for="checkWarn" class="margin-right-md font-xs font-color-light">Warnings ({{results.warn}})</label>
             </div>
 
-            <div class="d-flex align-items-center">            
+            <div class="d-flex align-items-center">
               <input type="checkbox" id="checkInfo" class="margin-right-sm custom-checkbox" v-model="resultsFilter.info">
               <label for="checkInfo" class="margin-right-md font-xs font-color-light">Insights ({{results.info}})</label>
             </div>
@@ -266,11 +269,11 @@
               buttonClasses="font-lg text-left report-dropdown font-color-light w-100 d-flex justify-content-left border-none padding-xxs"
               contentClasses=" bg-dark-20 report-dropdown-content tpadding-md font-color-light font-base"
               v-if="
-                evaluation.result_level === (resultsFilter.pass ? 'pass' : '') || 
-                evaluation.result_level === (resultsFilter.warn ? 'warn' : '') ||
-                evaluation.result_level === (resultsFilter.fail ? 'fail' : '') ||
-                evaluation.result_level === (resultsFilter.info ? 'info' : '')
-                "
+              evaluation.result_level === (resultsFilter.pass ? 'pass' : '') ||
+              evaluation.result_level === (resultsFilter.warn ? 'warn' : '') ||
+              evaluation.result_level === (resultsFilter.fail ? 'fail' : '') ||
+              evaluation.result_level === (resultsFilter.info ? 'info' : '')
+              "
               >
                 <template v-slot:header class="w-100" >
                   <div class="font-base d-flex flex-column justify-content-between font-color-primary w-100 align-items-start">
@@ -532,53 +535,63 @@ export default {
   methods: {
       async hostToggleChange(e, hostname) {
           this.loading = true
-          if (e.target.checked === true) {
-              const response = await Api.get(`/scanner/monitor/${hostname}`).catch(error => {
-                  this.errorMessageScanHost = error + " . Couldn't complete this action."
-                  this.errorMessageTypeScanHost = "error"
-                  e.target.checked = false
-              })
-              if (response.status !== 200) {
-                  this.errorMessageScanHost = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
-                  this.errorMessageTypeScanHost = "error";
-                  this.loading = false
-                  e.target.checked = false
-                  return;
-              }
-              this.errorMessageScanHost = `Monitoring host.`
-              this.errorMessageTypeScanHost = "success";
-              for (const target of this.targets) {
-                if (hostname === target.transport.hostname) {
-                  target.scanning_status.monitoring = true
+          try {
+            if (e.target.checked === true) {
+                const response = await Api.get(`/scanner/monitor/${hostname}`)
+                if (response.status !== 200) {
+                    this.errorMessageScanHost = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
+                    this.errorMessageTypeScanHost = "error";
+                    this.loading = false
+                    e.target.checked = false
+                    return;
                 }
-              }
-          } else {
-              const response = await Api.get(`/scanner/deactivate/${hostname}`).catch(error => {
-                  this.errorMessageScanHost = error + " . Couldn't complete this action."
-                  this.errorMessageTypeScanHost = "error"
-                  e.target.checked = false
-              })
-              if (response.status !== 200) {
-                  this.errorMessageScanHost = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
-                  this.errorMessageTypeScanHost = "error";
-                  this.loading = false
-                  e.target.checked = false
-                  return;
-              }
-              this.errorMessageScanHost = `No longer monitoring host.`
-              this.errorMessageTypeScanHost = "success";
-              for (const target of this.targets) {
-                if (hostname === target.transport.hostname) {
-                  target.scanning_status.monitoring = false
+                this.errorMessageScanHost = `Monitoring host.`
+                this.errorMessageTypeScanHost = "success";
+                for (const target of this.targets) {
+                  if (hostname === target.transport.hostname) {
+                    target.scanning_status.monitoring = true
+                  }
                 }
-              }
+            } else {
+                const response = await Api.get(`/scanner/deactivate/${hostname}`)
+                if (response.status !== 200) {
+                    this.errorMessageScanHost = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
+                    this.errorMessageTypeScanHost = "error";
+                    this.loading = false
+                    e.target.checked = false
+                    return;
+                }
+                this.errorMessageScanHost = `No longer monitoring host.`
+                this.errorMessageTypeScanHost = "success";
+                for (const target of this.targets) {
+                  if (hostname === target.transport.hostname) {
+                    target.scanning_status.monitoring = false
+                  }
+                }
+            }
+          } catch (error) {
+            this.errorMessageScanHost = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
+            this.errorMessageTypeScanHost = "error"
+            e.target.checked = false
           }
           this.loading = false
       },
       swiperNext(){
         this.$refs.certificateSwiper
-      }
-
+      },
+      commonNameFromSubject(subject) {
+          if (typeof subject !== 'string' || subject.indexOf('CN=') === -1) {
+              return subject
+          }
+          return subject.split(',').filter(p => p.trim().startsWith('CN=')).join('').replace(/CN=/g, '')
+      },
+      getCertificate(sha1_fingerprint) {
+          return this.certificates.filter(cert => cert.sha1_fingerprint === sha1_fingerprint).pop()
+      },
+      uniqueCertificates(sha1Fingerprints){
+          const uniq = new Set(sha1Fingerprints)
+          return [...uniq]
+      },
   },
   computed: {
     slicedCerts() {
@@ -605,7 +618,7 @@ export default {
       return certificate_chains
     },
     lastScan() {
-      return moment(this.date).fromNow();
+      return moment.utc(this.date).fromNow();
     },
     scanDuration(){
       return Math.floor(this.execution_duration_seconds);
