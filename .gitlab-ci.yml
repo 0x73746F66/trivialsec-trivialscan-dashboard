@@ -170,7 +170,7 @@ tf:apply:
 
 vite build (dev):
   variables:
-    NODE_ENV: development
+    NODE_ENV: production
     APP_ENV: Dev
     TF_VAR_app_env: Dev
   tags:
