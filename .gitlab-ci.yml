@@ -11,7 +11,7 @@ stages:
   - deploy
   - post-deploy
 
-vite build:
+vite build (prod):
   variables:
     APP_ENV: Prod
     TF_VAR_app_env: Prod
@@ -23,7 +23,6 @@ vite build:
     - make -B ci-build
   only:
     refs:
-      - merge_request
       - main
   artifacts:
     name: dist
