@@ -360,7 +360,7 @@
         class="profile-container bg-dark-40 border-radius-sm d-flex flex-column"
       >
         <Members />
-        <Clients />
+        <Clients v-bind:clients="clients" />
       </div>
     </div>
   </div>
@@ -444,6 +444,7 @@ export default {
     data() {
         return {
             member: {},
+            clients: [],
             editMode: false,
             errorMessage: "",
             errorMessageType: "",
@@ -457,10 +458,8 @@ export default {
             loading: false,
         };
     },
-    created() {
-        this.fetchProfile();
-    },
     mounted() {
+      this.fetchProfile();
         let stripeScript = document.createElement("script");
         stripeScript.setAttribute(
             "src",
@@ -617,6 +616,9 @@ export default {
                 }
                 this.errorMessage = "New Credentials generated!"
                 this.errorMessageType = "success"
+                const client = await response.json()
+                client.created = moment.utc(client.timestamp).fromNow()
+                this.clients.push(client)
             } catch (error) {
                 this.errorMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
                 this.errorMessageType = "error"

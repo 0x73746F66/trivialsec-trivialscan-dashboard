@@ -1,6 +1,6 @@
 <template>
   <loadingComponent class="loading" :class="{ inactive: !loading }" />
-  <div class="client-members-section d-flex flex-column margin-top-lg">
+  <div class="clients-section d-flex flex-column margin-top-lg">
     <div class="d-flex justify-content-between align-items-center">
       <h3 class="font-color-light font-lg-b">Clients</h3>
     </div>
@@ -90,6 +90,9 @@ import moment from "moment";
 
 <script>
 export default {
+  props: {
+    clients: Array,
+  },
   components: {
     Swiper,
     SwiperSlide,
@@ -102,62 +105,40 @@ export default {
     return {
       modules: [Navigation, Pagination, Scrollbar, A11y],
       loading: false,
-      clients: [],
       errorMessage: "",
       errorMessageType: "",
     };
   },
-  created() {
+  mounted() {
     this.fetchClients();
   },
-  mounted() {},
   methods: {
-    async inviteMembers(event) {
+    async deleteClient(event) {
       this.loading = true;
       try {
-        const response = await Api.post("/member/invite", {
-          email: event.target.elements["InviteEmail"].value,
-        })
-        if (response.status !== 202) {
-          this.inviteMessage = `${response.status} ${response.statusText}`
-          this.inviteMessageType = "error"
-          this.loading = false
-          return;
-        }
-        this.inviteMessage = "Invited!";
-        this.inviteMessageType = "success";
-      } catch (error) {
-        this.inviteMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
-        this.inviteMessageType = "error"
-      }
-      this.loading = false
-    },
-    async deleteMember(event) {
-      this.loading = true;
-      try {
-        const response = await Api.delete(`/member/${event.target.elements["MemberEmail"].value}`)
+        const response = await Api.delete(`/client/${event.target.elements["ClientName"].value}`)
         if (response.status != 202) {
-          this.memberDeleteMessage = "Something went wrong. Member couldn't be deleted."
-          this.memberDeleteMessageType = "error"
+          this.clientDeleteMessage = "Something went wrong. Client couldn't be deleted."
+          this.clientDeleteMessageType = "error"
           this.loading = false
           return;
         }
-        this.memberDeleteMessage = "This member was deleted"
-        this.memberDeleteMessageType = "success"
+        this.clientDeleteMessage = "This client was deleted"
+        this.clientDeleteMessageType = "success"
       } catch (error) {
-        this.memberDeleteMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
-        this.memberDeleteMessageType = "error"
+        this.clientDeleteMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
+        this.clientDeleteMessageType = "error"
       }
       this.loading = false
     },
     async fetchClients() {
+      console.log('fetchClients', this.clients)
       this.loading = true
       try {
         const response = await Api.get(`/clients`, { timeout: 30000 })
         if (response.status === 204) {
           this.errorMessage = "No clients are registered"
           this.errorMessageType = "warning"
-          this.clients = []
           this.loading = false
           return
         } else if (response.status !== 200) {
@@ -167,9 +148,9 @@ export default {
           return
         }
         const data = await response.json()
-        this.clients = data.map((client) => {
+        data.forEach(client => {
           client.created = moment.utc(client.timestamp).fromNow()
-          return client
+          this.clients.push(client)
         })
       } catch (error) {
         this.errorMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
