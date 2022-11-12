@@ -1,9 +1,13 @@
 <template>
-    <div class="d-flex flex-column">
-        <div class="question-mark" :class="`question-mark-${label}`" @click="displayContent()"><IconQuestion color="f0f0f0" /></div>
-        <div class="question-mark-content" :class="`question-mark-content-${label}`">
-            <button class="question-mark-content-close" @click="closeContent()"> &times; </button>
-            {{content}}
+    <div class="d-flex justify-content-start align-items-center margin-bottom-sm">
+        <div :class="`d-flex question-component question-component-${label}`">
+            <div class="question-mark" :class="`question-mark-${label}`" @click="displayContent()"><IconQuestion color="f0f0f0" /></div>
+            <div class="d-flex flex-column">
+                <button class="question-close" @click="closeContent()"> &times; </button>
+                <div class="question-component-content font-sm">
+                    {{content}}
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -18,45 +22,93 @@ export default {
     },
     methods: {
         displayContent() {
-            document.getElementsByClassName(`question-mark-content-${this.label}`)[0].classList.add('d-flex');
+            document.getElementsByClassName(`question-component-${this.label}`)[0].classList.add('display');
         },
         closeContent() {
-            document.getElementsByClassName(`question-mark-content-${this.label}`)[0].classList.remove('d-flex');
+            document.getElementsByClassName(`question-component-${this.label}`)[0].classList.remove('display');
         }
     }
 }
 </script>
 <style lang="scss">
-    .question-mark {
-        border-radius: 50%;
-        background: color('light-20');
-        // padding: spacers("sm");
-        width: 20px;
-        height: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
+.question-component {
+    max-width: 20px;
+    max-height: 20px;
+    position: relative;
+    border-radius: radius('md');
+    background: color('dark-20');
+    display: flex;
+    overflow: hidden;
+    transition: all 0.2s linear;
+    transition-property: width, height, border-radius;
 
-        &-content {
-            border: 1px solid color("primary");
-            background: color("dark-40");
-            padding: spacers("sm");
-            position: absolute;
-            backdrop-filter: blur(8px);
-            z-index: 15;
-            display: none;
-            flex-direction: column;
-            left: 15px;
-            right: 15px;
-            top: 15px;
+    &-content {
+        opacity: 0;
+        transition: 0.5s ease-in;
+        transition-delay: 1.2s;
+    }
 
-            &-close {
-                align-self: flex-end;
-                border: none;
-                background: none;
-                color: color("light");
-            }
+    &.display {
+        animation: click 0.3s linear, displayComponent 0.8s forwards;
+        animation-delay: 0s, 0.3s;
+
+        .question-mark {
+            opacity: 0;
+            cursor: default;
+        }
+        .question-component-content {
+            opacity: 1;
         }
     }
+
+    @keyframes click {
+        0% {
+            transform: scale(1);
+        }
+        25% {
+            transform: scale(0.2);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    @keyframes displayComponent {
+        0% {
+            width: 20px;
+            max-height: 20px;
+            border-radius: radius('md');
+        }
+        100% {
+            width: 100%;
+            max-width: 100%;
+            max-height: 1000px;
+            height: auto;
+            border-radius: radius("sm");
+            padding: spacers('sm');
+        }
+    }
+
+    .question-close {
+        align-self: flex-end;
+        border: none;
+        background: none;
+        color: color("light");
+        padding: 0 spacers("xs");
+    }
+
+    .question-mark {
+        width: 15px;
+        height: 15px;
+        cursor: pointer;
+        position: absolute;
+        display: flex;
+        top: 2.5px;
+        left: 2.5px;
+
+        svg {
+            height: 15px;
+        }
+    }
+}
 </style>

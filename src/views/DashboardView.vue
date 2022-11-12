@@ -27,10 +27,13 @@
           <div class="w-100 margin-bottom-md position-relative used-chart-section d-flex flex-column">
             <div class="d-flex">
               <h2 class="font-xl-sb margin-right-sm">Plan Quotas</h2>
-              <QuestionComponent
-                label="question-total-available"
-                :content="quotasTooltip"
-              />
+              <div class="w-75">
+                <QuestionComponent
+                  label="question-total-available"
+                  content="Compliance History Compliance History Compliance History Compliance HistoryCompliance History Compliance History Compliance History Compliance History"
+                />
+              </div>
+                <!-- :content="quotasTooltip" -->
             </div>
             <div class="d-flex flex-lg-row flex-column h-100 bg-dark-40 border-radius-sm padding-sm justify-content-around">
               <ValidationMessage
