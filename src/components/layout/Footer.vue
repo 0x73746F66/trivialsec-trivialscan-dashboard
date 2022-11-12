@@ -56,7 +56,7 @@
             >
             <a
               class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none"
-              href="https://prod-api.trivialsec.com/redoc"
+              :href="docsUrl"
               target="_blank"
               >API Reference</a>
             <RouterLink
@@ -83,6 +83,7 @@ import IconGitlab from "../icons/IconGitlab.vue";
 import IconDiscord from "../icons/IconDiscord.vue";
 import IconLinkedin from "../icons/IconLinkedin.vue";
 import IconTwitter from "../icons/IconTwitter.vue";
+const apiUrl = import.meta.env.VITE_API_URL.trim()
 
 export default {
   data() {
@@ -90,6 +91,7 @@ export default {
       logged_in: false,
       account_name: null,
       member_email: null,
+      docsUrl: `${apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl}/redoc`
     };
   },
   created() {
