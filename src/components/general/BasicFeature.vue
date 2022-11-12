@@ -7,16 +7,16 @@
     <div class="basic-feature h-100 w-100 text-center">
       <div class="padding-lg">
         <component :is="feature.icon" color="1ABB9C"></component>
-        <h3 class="font-xl-sb font-color-light margin-bottom-sm margin-top-lg">
+        <h3 class="font-base-sb font-color-light margin-bottom-sm margin-top-lg">
           {{ feature.header }}
         </h3>
-        <span class="font-base font-color-light">{{
+        <span class="font-xs font-color-light">{{
           feature.description
         }}</span>
       </div>
       <RouterLink
         :to="feature.href"
-        class="text-decoration-none font-color-dark basic-feature-read-more-link w-100 padding-sm"
+        class="text-decoration-none font-sm font-color-dark basic-feature-read-more-link w-100 padding-sm"
         :class="{ hidden: !showLink }"
         >
         Read More

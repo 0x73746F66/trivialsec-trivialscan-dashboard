@@ -1,7 +1,8 @@
 <template>
   <div class="custom-field">
-    <label :for="id">{{ this.label }}</label>
+    <label class="font-xs" :for="id">{{ this.label }}</label>
     <input
+      class="font-xs"
       type="email"
       :required="required"
       :id="id"

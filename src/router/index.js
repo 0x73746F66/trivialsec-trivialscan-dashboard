@@ -11,8 +11,8 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to) => {
-  const publicPages = ["/", "/docs", "/feature"]
-  const publicPrefixes = ["/accept", "/login"]
+  const publicPages = ["/", "/docs"]
+  const publicPrefixes = ["/accept", "/login", "/docs", "/feature"]
   const authRequired =
     !publicPages.includes(to.path) &&
     !publicPrefixes.map((i) => to.path.startsWith(i)).includes(true)

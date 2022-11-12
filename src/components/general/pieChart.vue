@@ -1,9 +1,9 @@
 <template>
-    <Responsive class="w-full pie-chart">
+    <Responsive class="w-100 pie-chart">
       <template #main="{ width }">
         <Chart
           direction="circular"
-          :size="{ width, height: 400 }"
+          :size="{ width: (width + 50), height: 400 }"
           :data="data"
           :margin="{
             left: Math.round((width - 360)/2),
@@ -18,8 +18,8 @@
           <template #layers>
             <Pie
               :dataKeys="['name', 'num']"
-              :pie-style="{ innerRadius: 150, padAngle: 0.05, colors: ['#1abb9c', '#e2c878'] }" />
-
+              :pie-style="{ innerRadius: 100, padAngle: 0.05, colors: ['#1abb9c', '#e2c878'] }"
+            />
           </template>
           <template #widgets>
             <Tooltip
@@ -62,6 +62,7 @@
 <style lang="scss">
     .pie-chart{
         position: relative;
+        width: 100%;
 
         .axis {
             display: none;

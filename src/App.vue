@@ -3,7 +3,11 @@
     <Navbar :isNavbarHidden="isNavbarHidden" />
   </header>
 
-  <RouterView />
+  <router-view v-slot="{ Component }">
+    <transition name="fade">
+      <component :is="Component" />
+    </transition>
+  </router-view>
 
   <Footer ref="footer" />
 </template>
@@ -46,4 +50,13 @@ export default {
 
 <style lang="scss">
 @import "./assets/forms";
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>

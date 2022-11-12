@@ -21,11 +21,11 @@
     </div>
 
     <div 
-        class="row margin-top-md h-100" 
+        class="margin-top-md h-100" 
         :class="specialClasses"
         v-if="section.length > 0"
     >
-        <div class="col-12">
+        <div class="">
             <div 
                 class="collapse multi-collapse h-100" 
                 v-for="(sect, index) in section" 

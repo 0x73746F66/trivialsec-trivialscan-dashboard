@@ -1,15 +1,17 @@
 <template>
   <div class="custom-field h-100">
-    <label :for="id">{{ this.label }}</label>
+    <label class="font-xs-b" :for="id">{{ this.label }}</label>
     <textarea
+      class="font-xs"
       :required="required"
       :id="id"
       :name="id"
       :placeholder="placeholder"
       @input="handleInput"
       maxlength="2000"
-      >{{ textDefault }}</textarea
-    >
+      >
+        {{ textDefault }}
+      </textarea>
   </div>
 </template>
 

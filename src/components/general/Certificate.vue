@@ -139,8 +139,8 @@ export default {
         IconCertificate,
         IconLink,
         Swiper,
-        customPill,
         SwiperSlide,
+        customPill,
     },
     props: [
         "authority_key_identifier",

@@ -153,6 +153,19 @@ body {
     background: color("primary-60");
 }
 
+.pre-line {
+    white-space: pre-line;
+}
+.pre-wrap {
+    white-space: pre-wrap;
+}
+.nowrap {
+    white-space: nowrap;
+}
+.break-spaces {
+    white-space: break-spaces;
+}
+
 a {
     &:hover {
         color: color("secondary");
@@ -232,6 +245,15 @@ main {
     }
 }
 
+.text {
+    &-right {
+        text-align: right;
+    }
+    &-left {
+        text-align: left;
+    }
+}
+
 .bg-none {
     background: none !important;
 }
@@ -291,4 +313,25 @@ main {
 [title] {
     cursor: help;
     border-bottom: 1px dotted color('primary');
+}
+
+.button-prev,
+.button-next {
+    height: auto;
+    background: none;
+    border: none;
+
+    .cert-icon {
+        width: 25px;
+        height: 25px;
+    }
+    &.swiper-button-disabled {
+        filter: opacity(0.5);
+    }
+}
+
+.button-prev {
+    .cert-icon {
+        transform: rotate(180deg);
+    }
 }
