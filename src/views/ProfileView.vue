@@ -1,265 +1,146 @@
 <template>
 <main>
-  <loadingComponent class="loading" :class="{ inactive: !loading }" />
+  <div>
+    <loadingComponent class="loading" :class="{ inactive: !loading }" />
 
-  <div class="container padding-top-xl padding-bottom-xl">
-    <div
-      class="profile-container bg-dark-40 border-radius-sm margin-bottom-lg d-flex flex-column"
-    >
-      <div class="d-flex justify-content-between align-items-start">
-        <div class="h-100 d-flex align-items-lg-center flex-column flex-lg-row">
-          <img
-            :src="`https://www.gravatar.com/avatar/${member.email_md5}`"
-            class="border-radius-round profile-picture margin-right-md margin-bottom-md mb-lg-0"
-            alt="{{member.account.display}}'s Profile Picture'"
-          />
-          <div class="d-flex flex-column justify-content-start">
-            <div class="d-flex flex-column justify-content-start">
-              <EditableTextField
-                :editMode="editMode"
-                class="margin-bottom-sm position-relative"
-              >
-                <template #staticField>
-                  <h1 class="font-xl-b font-color-light" v-if="member.account">
-                    {{ member.account.display }}
-                  </h1>
-                </template>
-                <template #inputField>
-                  <form
-                    class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm"
-                    @submit.prevent="updateAccountDisplay($event)"
-                  >
-                    <TextInput
-                      v-if="member.account"
-                      :placeholder="member.account.display"
-                      id="AccountDisplay"
-                      label="Display Name"
-                      :required="true"
-                    />
-                    <button type="submit" class="inline-custom-form-btn">
-                      <checkIcon class="profile-edit-icon" color="1abb9c" />
-                    </button>
-                  </form>
-                </template>
-              </EditableTextField>
-              <EditableTextField
-                :editMode="editMode"
-                class="margin-bottom-sm position-relative"
-              >
-                <template #staticField>
-                  <span class="font-base font-color-light">
-                    {{ member.email }}
-                  </span>
-                </template>
-                <template #inputField>
-                  <form
-                    class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm"
-                    @submit.prevent="updateEmail($event)"
-                  >
-                    <TextInput
-                      v-if="member.email"
-                      :placeholder="member.email"
-                      id="Email"
-                      label="Email"
-                      :required="true"
-                    />
-                    <button type="submit" class="inline-custom-form-btn">
-                      <checkIcon class="profile-edit-icon" color="1abb9c" />
-                    </button>
-                  </form>
-                </template>
-              </EditableTextField>
-            </div>
-            <ValidationMessage
-              v-if="emailUpdateMessage.length > 0"
-              class="justify-content-start"
-              :message="emailUpdateMessage"
-              :type="emailUpdateMessageType"
-            />
-          </div>
-        </div>
-        <button
-          class="edit-mode-btn"
-          v-if="!editMode"
-          @click="toggleEditMode()"
-        >
-          <IconPencil class="profile-edit-icon" />
-        </button>
-        <div v-else>
-          <button class="edit-mode-btn close" @click="toggleEditMode()">
-            <IconCancel class="profile-edit-icon" color="f45e5e" />
-          </button>
-        </div>
-      </div>
+    <div class="container padding-top-xl padding-bottom-xl">
+      <ValidationMessage
+        v-if="editMessage.length > 0"
+        class="justify-content-start"
+        :message="editMessage"
+        :type="editMessageType"
+      />
+
       <div
-        class="d-flex justify-content-between align-items-start flex-column flex-lg-row"
+        class="profile-container bg-dark-40 border-radius-sm margin-bottom-lg d-flex flex-column"
       >
-        <div
-          class="d-flex flex-column font-color-light align-items-start margin-top-md margin-bottom-sm"
-        >
-          <div class="d-flex margin-bottom-xs align-items-center">
-            <span class="font-base-sb margin-right-sm">Created:</span>
-            <span class="font-sm font-sm">{{ member.created }}</span>
-          </div>
-          <div class="d-flex margin-bottom-xs align-items-center">
-            <span class="font-base-sb margin-right-sm">Status:</span>
-            <span class="font-sm font-sm">{{ member.status }}</span>
-          </div>
-          <div
-            class="d-flex margin-bottom-xs align-items-center"
-            v-if="member.account"
-          >
-            <span class="font-base-sb margin-right-sm">Account Name:</span>
-            <span class="font-sm font-sm">{{ member.account.name }}</span>
-          </div>
-          <div
-            class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column"
-          >
-            <span class="font-base-sb margin-right-sm">Primary Contact:</span>
-            <EditableTextField :editMode="editMode" class="position-relative">
-              <template #staticField>
-                <span class="font-sm font-sm" v-if="member.account">{{
-                  member.account.primary_email
-                }}</span>
-              </template>
-              <template #inputField>
-                <span class="font-base font-color-light">
-                  <form
-                    class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm"
-                    @submit.prevent="updatePrimaryEmail($event)"
-                  >
-                    <TextInput
-                      v-if="member.account"
-                      :placeholder="member.account.primary_email"
-                      id="PrimaryEmail"
-                      label="Primary Email"
-                      :required="true"
-                    />
-                    <button type="submit" class="inline-custom-form-btn">
-                      <checkIcon class="profile-edit-icon" color="1abb9c" />
-                    </button>
-                  </form>
-                </span>
-              </template>
-            </EditableTextField>
-          </div>
-          <ValidationMessage
-            v-if="errorMessage.length > 0"
-            class="justify-content-start"
-            :message="errorMessage"
-            :type="errorMessageType"
-          />
-          <div
-            class="d-flex margin-bottom-sm align-items-lg-start d-flex flex-column"
-          >
-            <Button
-              class="btn-outline-primary-sm font-color-primary font-sm margin-bottom-sm"
-              text="Generate CLI Client Credential"
-              @click="generateClientCredential()"
+        <div class="d-flex justify-content-between align-items-start">
+          <div class="h-100 d-flex align-items-lg-center flex-column flex-lg-row">
+            <img
+              :src="`https://www.gravatar.com/avatar/${member.email_md5}`"
+              class="border-radius-round profile-picture margin-right-md margin-bottom-md mb-lg-0"
+              alt="{{member.account.display}}'s Profile Picture'"
             />
-            <Modal id="deleteAccountModal" label="modal-delete-account-header">
-              <template v-slot:button="buttonProps">
-                <button
-                  v-bind="buttonProps"
-                  class="btn-outline-danger-sm font-color-danger font-sm"
+            <div class="d-flex flex-column justify-content-start">
+              <div class="d-flex flex-column justify-content-start">
+                <EditableTextField
+                  :editMode="editMode"
+                  class="margin-bottom-sm position-relative"
                 >
-                  Permanantly Delete Account
-                </button>
-              </template>
-              <template v-slot:modalTitle>
-                <h5 class="font-base-b font-color-light">
-                  Are you sure you want to delete your account? This action is
-                  not reversible.
-                </h5>
-              </template>
-              <template v-slot:modalContent>
-                <Button
-                  class="btn-outline-danger-sm font-color-danger font-sm"
-                  text="Procced"
-                  @click="deleteAccount()"
-                />
-              </template>
-            </Modal>
+                  <template #staticField>
+                    <h1 class="font-xl-b font-color-light" v-if="member.account">
+                      {{ member.account.display }}
+                    </h1>
+                  </template>
+                  <template #inputField>
+                    <form
+                      class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm"
+                      @submit.prevent="updateAccountDisplay($event)"
+                    >
+                      <TextInput
+                        v-if="member.account"
+                        :placeholder="member.account.display"
+                        id="AccountDisplay"
+                        label="Display Name"
+                        :required="true"
+                      />
+                      <button type="submit" class="inline-custom-form-btn">
+                        <checkIcon class="profile-edit-icon" color="1abb9c" />
+                      </button>
+                    </form>
+                  </template>
+                </EditableTextField>
+                <EditableTextField
+                  :editMode="editMode"
+                  class="margin-bottom-sm position-relative"
+                >
+                  <template #staticField>
+                    <span class="font-base font-color-light">
+                      {{ member.email }}
+                    </span>
+                  </template>
+                  <template #inputField>
+                    <form
+                      class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm"
+                      @submit.prevent="updateEmail($event)"
+                    >
+                      <TextInput
+                        v-if="member.email"
+                        :placeholder="member.email"
+                        id="Email"
+                        label="Email"
+                        :required="true"
+                      />
+                      <button type="submit" class="inline-custom-form-btn">
+                        <checkIcon class="profile-edit-icon" color="1abb9c" />
+                      </button>
+                    </form>
+                  </template>
+                </EditableTextField>
+              </div>
+              <ValidationMessage
+                v-if="emailUpdateMessage.length > 0"
+                class="justify-content-start"
+                :message="emailUpdateMessage"
+                :type="emailUpdateMessageType"
+              />
+            </div>
+          </div>
+          <button
+            class="edit-mode-btn"
+            v-if="!editMode"
+            @click="toggleEditMode()"
+          >
+            <IconPencil class="profile-edit-icon" />
+          </button>
+          <div v-else>
+            <button class="edit-mode-btn close" @click="toggleEditMode()">
+              <IconCancel class="profile-edit-icon" color="f45e5e" />
+            </button>
           </div>
         </div>
         <div
-          class="d-flex flex-column bg-dark-60 padding-sm border-radius-sm font-color-light profile-plan-information"
+          class="d-flex justify-content-between align-items-start flex-column flex-lg-row"
         >
-          <div class="d-flex flex-column justify-content-between">
-            <div
-              class="d-flex flex-column flex-lg-row justify-content-between margin-bottom-sm"
-            >
-              <div
-                class="margin-right-lg d-flex flex-lg-row flex-column align-items-lg-center"
-              >
-                <span
-                  class="font-base-sb margin-right-sm margin-bottom-sm mb-lg-0"
-                  >Active Plan:</span
-                >
-                <span class="font-sm font-sm">{{
-                  member.account?.billing.product_name
-                }}</span>
-              </div>
-              <div>
-                <span class="font-color-primary font-lg-b"
-                  >{{ member.account?.billing.display_amount }}
-                </span>
-                <span
-                  v-if="member.account?.billing.display_period"
-                  class="font-lg-b"
-                  >/{{ member.account?.billing.display_period }}</span
-                >
-              </div>
+          <div
+            class="d-flex flex-column font-color-light align-items-start margin-top-md margin-bottom-sm"
+          >
+            <div class="d-flex margin-bottom-xs align-items-center">
+              <span class="font-base-sb margin-right-sm">Created:</span>
+              <span class="font-sm font-sm">{{ member.created }}</span>
+            </div>
+            <div class="d-flex margin-bottom-xs align-items-center">
+              <span class="font-base-sb margin-right-sm">Status:</span>
+              <span class="font-sm font-sm">{{ member.status }}</span>
             </div>
             <div
-              v-if="member.account?.billing.is_trial"
-              class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column"
+              class="d-flex margin-bottom-xs align-items-center"
+              v-if="member.account"
             >
-              <span class="font-sm font-color-primary"
-                >Trial ends {{ member.account?.billing.next_payment }}</span
-              >
-            </div>
-            <div
-              v-if="member.account?.billing.description"
-              class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column"
-            >
-              <span class="font-base-sb margin-right-sm">Payment Method:</span>
-              <span class="font-sm">{{
-                member.account?.billing.description
-              }}</span>
-            </div>
-            <div
-              v-if="
-                member.account?.billing.next_due &&
-                !member.account?.billing.is_trial
-              "
-              class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column"
-            >
-              <span class="font-base-sb margin-right-sm">Next Payment:</span>
-              <span class="font-sm">{{
-                member.account?.billing.next_payment
-              }}</span>
+              <span class="font-base-sb margin-right-sm">Account Name:</span>
+              <span class="font-sm font-sm">{{ member.account.name }}</span>
             </div>
             <div
               class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column"
             >
-              <span class="font-base-sb margin-right-sm">Billing Contact:</span>
+              <span class="font-base-sb margin-right-sm">Primary Contact:</span>
               <EditableTextField :editMode="editMode" class="position-relative">
                 <template #staticField>
-                  <span class="font-sm">{{
-                    member?.account?.billing_email
+                  <span class="font-sm font-sm" v-if="member.account">{{
+                    member.account.primary_email
                   }}</span>
                 </template>
                 <template #inputField>
                   <span class="font-base font-color-light">
                     <form
                       class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm"
-                      @submit.prevent="updateBillingEmail($event)"
+                      @submit.prevent="updatePrimaryEmail($event)"
                     >
                       <TextInput
-                        :placeholder="member?.account?.billing_email"
-                        id="BillingEmail"
-                        label="Billing Email"
+                        v-if="member.account"
+                        :placeholder="member.account.primary_email"
+                        id="PrimaryEmail"
+                        label="Primary Email"
                         :required="true"
                       />
                       <button type="submit" class="inline-custom-form-btn">
@@ -270,95 +151,223 @@
                 </template>
               </EditableTextField>
             </div>
-            <div class="d-flex flex-column">
-              <div class="d-flex margin-bottom-sm">
-                <a
-                  v-if="member.account?.billing.has_invoice"
-                  target="_blank"
-                  href="https://billing.stripe.com/p/login/8wMcQ27YKdPcbxSeUU"
-                  class="text-decoration-none d-flex align-items-center justify-content-center margin-bottom-sm mb-lg-0 btn-outline-primary-full font-color-primary font-sm"
-                  text="Billing Portal"
-                />
+            <ValidationMessage
+              v-if="errorMessage.length > 0"
+              class="justify-content-start"
+              :message="errorMessage"
+              :type="errorMessageType"
+            />
+            <div
+              class="d-flex margin-bottom-sm align-items-lg-start d-flex flex-column"
+            >
+              <Button
+                class="btn-outline-primary-sm font-color-primary font-sm margin-bottom-sm"
+                text="Generate CLI Client Credential"
+                @click="generateClientCredential()"
+              />
+              <Modal id="deleteAccountModal" label="modal-delete-account-header">
+                <template v-slot:button="buttonProps">
+                  <button
+                    v-bind="buttonProps"
+                    class="btn-outline-danger-sm font-color-danger font-sm"
+                  >
+                    Permanently Delete Account
+                  </button>
+                </template>
+                <template v-slot:modalTitle>
+                  <h5 class="font-base-b font-color-light">
+                    Are you sure you want to delete your account? This action is
+                    not reversible.
+                  </h5>
+                </template>
+                <template v-slot:modalContent>
+                  <Button
+                    class="btn-outline-danger-sm font-color-danger font-sm"
+                    text="Procced"
+                    @click="deleteAccount()"
+                  />
+                </template>
+              </Modal>
+            </div>
+          </div>
+          <div
+            class="d-flex flex-column bg-dark-60 padding-sm border-radius-sm font-color-light profile-plan-information"
+          >
+            <div class="d-flex flex-column justify-content-between">
+              <div
+                class="d-flex flex-column flex-lg-row justify-content-between margin-bottom-sm"
+              >
+                <div
+                  class="margin-right-lg d-flex flex-lg-row flex-column align-items-lg-center"
+                >
+                  <span
+                    class="font-base-sb margin-right-sm margin-bottom-sm mb-lg-0"
+                    >Active Plan:</span
+                  >
+                  <span class="font-sm font-sm">{{
+                    member.account?.billing.product_name
+                  }}</span>
+                </div>
+                <div>
+                  <span class="font-color-primary font-lg-b"
+                    >{{ member.account?.billing.display_amount }}
+                  </span>
+                  <span
+                    v-if="member.account?.billing.display_period"
+                    class="font-lg-b"
+                    >/{{ member.account?.billing.display_period }}</span
+                  >
+                </div>
+              </div>
+              <div
+                v-if="member.account?.billing.is_trial"
+                class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column"
+              >
+                <span class="font-sm font-color-primary"
+                  >Trial ends {{ member.account?.billing.next_payment }}</span
+                >
+              </div>
+              <div
+                v-if="member.account?.billing.description"
+                class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column"
+              >
+                <span class="font-base-sb margin-right-sm">Payment Method:</span>
+                <span class="font-sm">{{
+                  member.account?.billing.description
+                }}</span>
               </div>
               <div
                 v-if="
-                  member.account?.billing.product_name === 'Community Edition' ||
-                  member.account?.billing.product_name === 'Basics'
+                  member.account?.billing.next_due &&
+                  !member.account?.billing.is_trial
                 "
+                class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column"
               >
-                <Modal id="upgradeModal" label="modal-upgrade-header">
-                  <template v-slot:button="buttonProps">
-                    <Button
-                      v-bind="buttonProps"
-                      class="btn-fill-primary-full font-color-light font-sm"
-                      text="Upgrade"
-                    />
-                  </template>
-                  <template v-slot:modalTitle> </template>
-                  <template v-slot:modalContent>
-                    <stripe-pricing-table
-                      pricing-table-id="prctbl_1LtVOcGZtHTgMn6lK07ldv8B"
-                      publishable-key="pk_live_51HTJBRGZtHTgMn6l6LdsX1xQYlEwDSFR2aUpjzooo0wIiRTvxJZC4Op6aSeceg5JLGPy9qeam7s1AKVBXoSNjY8R00Qi76Bera"
-                    >
-                    </stripe-pricing-table>
-                  </template>
-                </Modal>
+                <span class="font-base-sb margin-right-sm">Next Payment:</span>
+                <span class="font-sm">{{
+                  member.account?.billing.next_payment
+                }}</span>
               </div>
               <div
-                v-if="member.account?.billing.product_name === 'Professional'"
+                class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column"
               >
-                <Modal id="upgradeModal" label="modal-upgrade-header">
-                  <template v-slot:button="buttonProps">
-                    <Button
-                      v-bind="buttonProps"
-                      class="btn-fill-primary-full font-color-light font-sm"
-                      text="Upgrade"
-                    />
+                <span class="font-base-sb margin-right-sm">Billing Contact:</span>
+                <EditableTextField :editMode="editMode" class="position-relative">
+                  <template #staticField>
+                    <span class="font-sm">{{
+                      member?.account?.billing_email
+                    }}</span>
                   </template>
-                  <template v-slot:modalTitle>
-                    <h3 class="font-light font-lg-sb">
-                      Do you wish to upgrade your account type?
-                    </h3>
-                  </template>
-                  <template v-slot:modalContent>
-                    <ValidationMessage
-                      v-if="upgradeFormMessage.length > 0"
-                      class="justify-content-between"
-                      :message="upgradeFormMessage"
-                      :type="upgradeFormMessageType"
-                    />
-                    <p class="font-sm font-light">
-                      Please provide us with your preferred method of contact
-                      (i.e. Phone number, e-mail)
-                    </p>
-                    <form @submit.prevent="upgradeForm($event)">
-                      <TextInput
-                        :placeholder="member.account.primary_email"
-                        id="preferredMethodOfContact"
-                        label="Contact"
-                        :required="true"
-                        :textDefault="member.account.primary_email"
-                      />
-                      <button
-                        type="submit"
-                        class="btn-fill-primary-full font-color-light font-sm"
+                  <template #inputField>
+                    <span class="font-base font-color-light">
+                      <form
+                        class="d-flex align-items-center justify-content-center inline-custom-form mt-lg-0 margin-top-sm"
+                        @submit.prevent="updateBillingEmail($event)"
                       >
-                        Submit
-                      </button>
-                    </form>
+                        <TextInput
+                          :placeholder="member?.account?.billing_email"
+                          id="BillingEmail"
+                          label="Billing Email"
+                          :required="true"
+                        />
+                        <button type="submit" class="inline-custom-form-btn">
+                          <checkIcon class="profile-edit-icon" color="1abb9c" />
+                        </button>
+                      </form>
+                    </span>
                   </template>
-                </Modal>
+                </EditableTextField>
+              </div>
+              <div class="d-flex flex-column">
+                <div class="d-flex margin-bottom-sm">
+                  <a
+                    v-if="member.account?.billing.has_invoice"
+                    target="_blank"
+                    href="https://billing.stripe.com/p/login/8wMcQ27YKdPcbxSeUU"
+                    class="text-decoration-none d-flex align-items-center justify-content-center margin-bottom-sm mb-lg-0 btn-outline-primary-full font-color-primary font-sm"
+                    text="Billing Portal"
+                  />
+                </div>
+                <div
+                  v-if="
+                    member.account?.billing.product_name === 'Community Edition' ||
+                    member.account?.billing.product_name === 'Basics'
+                  "
+                >
+                  <Modal id="upgradeModal" label="modal-upgrade-header">
+                    <template v-slot:button="buttonProps">
+                      <Button
+                        v-bind="buttonProps"
+                        class="btn-fill-primary-full font-color-light font-sm"
+                        text="Upgrade"
+                      />
+                    </template>
+                    <template v-slot:modalTitle> </template>
+                    <template v-slot:modalContent>
+                      <stripe-pricing-table
+                        pricing-table-id="prctbl_1LtVOcGZtHTgMn6lK07ldv8B"
+                        publishable-key="pk_live_51HTJBRGZtHTgMn6l6LdsX1xQYlEwDSFR2aUpjzooo0wIiRTvxJZC4Op6aSeceg5JLGPy9qeam7s1AKVBXoSNjY8R00Qi76Bera"
+                      >
+                      </stripe-pricing-table>
+                    </template>
+                  </Modal>
+                </div>
+                <div
+                  v-if="member.account?.billing.product_name === 'Professional'"
+                >
+                  <Modal id="upgradeModal" label="modal-upgrade-header">
+                    <template v-slot:button="buttonProps">
+                      <Button
+                        v-bind="buttonProps"
+                        class="btn-fill-primary-full font-color-light font-sm"
+                        text="Upgrade"
+                      />
+                    </template>
+                    <template v-slot:modalTitle>
+                      <h3 class="font-light font-lg-sb">
+                        Do you wish to upgrade your account type?
+                      </h3>
+                    </template>
+                    <template v-slot:modalContent>
+                      <ValidationMessage
+                        v-if="upgradeFormMessage.length > 0"
+                        class="justify-content-between"
+                        :message="upgradeFormMessage"
+                        :type="upgradeFormMessageType"
+                      />
+                      <p class="font-sm font-light">
+                        Please provide us with your preferred method of contact
+                        (i.e. Phone number, e-mail)
+                      </p>
+                      <form @submit.prevent="upgradeForm($event)">
+                        <TextInput
+                          :placeholder="member.account.primary_email"
+                          id="preferredMethodOfContact"
+                          label="Contact"
+                          :required="true"
+                          :textDefault="member.account.primary_email"
+                        />
+                        <button
+                          type="submit"
+                          class="btn-fill-primary-full font-color-light font-sm"
+                        >
+                          Submit
+                        </button>
+                      </form>
+                    </template>
+                  </Modal>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div
-      class="profile-container bg-dark-40 border-radius-sm d-flex flex-column"
-    >
-      <Members />
-      <Clients />
+      <div
+        class="profile-container bg-dark-40 border-radius-sm d-flex flex-column"
+      >
+        <Members />
+        <Clients />
+      </div>
     </div>
   </div>
 </main>
@@ -415,13 +424,11 @@ export default {
       emailUpdateMessage: "",
       emailUpdateMessageType: "",
       primaryEmail: "",
-      primaryEmailUpdateMessage: "",
-      primaryEmailUpdateMessageType: "",
       billingEmail: "",
-      billingEmailUpdateMessage: "",
-      billingEmailUpdateMessageType: "",
       upgradeFormMessage: "",
       upgradeFormMessageType: "",
+      editMessage: '',
+      editMessageType: '',
       loading: false,
     };
   },
@@ -471,20 +478,20 @@ export default {
       this.loading = true;
       const email = event.target.elements["Email"].value
       const response = await Api.post("/member/email", {email}).catch(error => {
-        this.emailUpdateMessage = error;
-        this.emailUpdateMessageType = "error";
+        this.editMessage = error;
+        this.editMessageType = "error";
         this.loading = false;
       });
       if (response.status !== 200) {
-        this.emailUpdateMessage = `${response.status} ${response.statusText}`;
-        this.emailUpdateMessageType = "error";
+        this.editMessage = `${response.status} ${response.statusText}`;
+        this.editMessageType = "error";
         this.loading = false;
         return;
       }
       const data = await response.json();
       this.editMode = !this.editMode;
-      this.emailUpdateMessage = "E-mail was updated!";
-      this.emailUpdateMessageType = "success";
+      this.editMessage = "E-mail was updated!";
+      this.editMessageType = "success";
       localStorage.setItem("/member/email", email);
       localStorage.setItem(
         "/member/email_md5",
@@ -496,38 +503,38 @@ export default {
       this.loading = true;
       const email = event.target.elements["PrimaryEmail"].value;
       const response = await Api.post("/account/email", { email }).catch(error => {
-        this.primaryEmailUpdateMessage = error;
-        this.primaryEmailUpdateMessageType = "error";
+        this.editMessage = error;
+        this.editMessageType = "error";
         this.loading = false;
       });
       if (response.status !== 200) {
-        this.primaryEmailUpdateMessage = `${response.status} ${response.statusText}`;
-        this.primaryEmailUpdateMessageType = "error";
+        this.editMessage = `${response.status} ${response.statusText}`;
+        this.editMessageType = "error";
         this.loading = false;
         return;
       }
       this.editMode = !this.editMode;
-      this.primaryEmailUpdateMessage = "E-mail was updated!";
-      this.primaryEmailUpdateMessageType = "success";
+      this.editMessage = "E-mail was updated!";
+      this.editMessageType = "success";
       setTimeout(this.fetchProfile, 2000)
     },
     async updateBillingEmail(event) {
       this.loading = true;
       const email = event.target.elements["BillingEmail"].value;
       const response = await Api.post("/billing/email", { email }).catch(error => {
-        this.primaryEmailUpdateMessage = error;
-        this.primaryEmailUpdateMessageType = "error";
+        this.editMessage = error;
+        this.editMessageType = "error";
         this.loading = false;
       });
       if (response.status !== 200) {
-        this.primaryEmailUpdateMessage = `${response.status} ${response.statusText}`;
-        this.primaryEmailUpdateMessageType = "error";
+        this.editMessage = `${response.status} ${response.statusText}`;
+        this.editMessageType = "error";
         this.loading = false;
         return;
       }
       this.editMode = !this.editMode;
-      this.primaryEmailUpdateMessage = "E-mail was updated!";
-      this.primaryEmailUpdateMessageType = "success";
+      this.editMessage = "E-mail was updated!";
+      this.editMessageType = "success";
       setTimeout(this.fetchProfile, 2000)
     },
     async updateAccountDisplay(event) {
@@ -535,14 +542,14 @@ export default {
       this.loading = true;
       const response = await Api.post(`/account/display`, {name});
       if (response.status !== 202) {
-        this.errorMessage = `${response.status}: Something went wrong. Couldn't generate new credentials.`;
-        this.errorMessageType = "error";
+        this.editMessage = `${response.status}: Something went wrong. Couldn't generate new credentials.`;
+        this.editMessageType = "error";
         this.loading = false;
         return;
       }
       const data = await response.json()
-      this.errorMessage = "Display Name was updated!";
-      this.errorMessageType = "success";
+      this.editMessage = "Display Name was updated!";
+      this.editMessageType = "success";
       this.loading = false;
       localStorage.setItem(
         "/account/display",

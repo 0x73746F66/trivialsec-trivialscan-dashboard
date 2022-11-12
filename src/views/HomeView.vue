@@ -1,73 +1,37 @@
 <template>
-  <div class="hero-container">
-    <Hero :class="{ 'hero-scrolled': heroScrolled }" />
-  </div>
-
-  <div
-    class="container basic-feature-container padding-bottom-md padding-top-md"
-  >
-    <div class="row padding-top-lg padding-bottom-lg">
-      <BasicFeature
-        v-for="basicFeature in basicFeatures"
-        :key="basicFeature.id"
-        :feature="basicFeature"
-      />
+  <div>
+    <div class="hero-container">
+      <Hero :class="{ 'hero-scrolled': heroScrolled }" />
     </div>
-  </div>
 
-  <div
-    class="container-fluid padding-top-xl padding-bottom-md bg-dark-20 pricing-container px-0"
-    ref="pricingContainer"
-  >
-    <div class="container">
-      <PricingComponent />
-      <span class="margin-top-sm d-block font-xs font-color-light"
-        >* Self-managed refers to Trivial Scanner running on your self-hosted
-        and on-prem servers, your cloud, or your client computers, and
-        connecting to Trivial Security SaaS services.</span
-      >
-    </div>
-  </div>
-
-  <div class="container padding-bottom-xl padding-top-xl">
     <div
-      class="login-register-section d-flex flex-lg-row flex-column align-items-center justify-content-start"
+      class="container basic-feature-container padding-bottom-md padding-top-md"
     >
-      <Modal id="loginModal" label="modal-login-header">
-        <template v-slot:button="buttonProps">
-          <button
-            v-bind="buttonProps"
-            class="btn-fill-primary-full font-base font-color-light border-0"
-          >
-            Login
-          </button>
-        </template>
-        <template v-slot:modalTitle>
-          <h5 class="font-base-b font-color-light">Login</h5>
-        </template>
-        <template v-slot:modalContent>
-          <LoginForm />
-        </template>
-      </Modal>
+      <div class="row padding-top-lg padding-bottom-lg">
+        <BasicFeature
+          v-for="basicFeature in basicFeatures"
+          :key="basicFeature.id"
+          :feature="basicFeature"
+        />
+      </div>
+    </div>
 
-      <span class="font-base-sb font-color-light margin-md">OR</span>
+    <div
+      class="container-fluid padding-top-xl padding-bottom-md bg-dark-20 pricing-container px-0"
+      ref="pricingContainer"
+    >
+      <div class="container">
+        <PricingComponent />
+        <span class="margin-top-sm d-block font-xxs font-color-light"
+          >* Self-managed refers to Trivial Scanner running on your self-hosted
+          and on-prem servers, your cloud, or your client computers, and
+          connecting to Trivial Security SaaS services.</span
+        >
+      </div>
+    </div>
 
-      <Modal id="registerModal" label="modal-register-header">
-        <template v-slot:button="buttonProps">
-          <button
-            v-bind="buttonProps"
-            class="btn-fill-primary-full font-base font-color-light border-0"
-          >
-            Register
-          </button>
-        </template>
-        <template v-slot:modalTitle>
-          <h5 class="font-base-b font-color-light">Register</h5>
-        </template>
-        <template v-slot:modalContent>
-          <RegisterForm />
-        </template>
-      </Modal>
+    <div class="container padding-bottom-xl padding-top-xl">
+      <LoginOrRegister loginModalId="homeLogin" registerModalId="homeRegister" />
     </div>
   </div>
 </template>
@@ -96,6 +60,7 @@ import Dropdown from "@/components/general/Dropdown.vue";
 import Modal from "@/components/general/Modal.vue";
 import ContactForm from "@/components/forms/ContactForm.vue";
 import loadingComponent from "@/components/general/loadingComponent.vue";
+import LoginOrRegister from "@/components/general/LoginOrRegister.vue";
 
 const IconNotificationLight = shallowRef(cIconNotificationLight);
 const IconData = shallowRef(cIconData);
@@ -121,6 +86,7 @@ export default {
     Modal,
     ContactForm,
     loadingComponent,
+    LoginOrRegister
   },
   data() {
     return {
@@ -185,8 +151,8 @@ export default {
         // {
         //   id: 9,
         //   icon: IconGlobeLight,
-        //   href: "/feature/research",
-        //   header: "Research",
+        //   href: "/feature/researchers",
+        //   header: "Security Researchers",
         //   description: "We have a vast database of the public internet, compiled from the authoritative list of every registered domain using zone files (and not IP address probing)",
         // },
         // {
@@ -206,7 +172,7 @@ export default {
         {
           id: 12,
           icon: IconData,
-          href: "/feature/data-sovereignty",
+          href: "/feature/interoperability",
           header: "Interoperability",
           description: "We adhere to open standards. You control your data, and we enable you with a growing list of supported data exchange formats so you can access and control your data at all times",
         },

@@ -36,14 +36,13 @@
           </div>
 
           <div
-            class="d-flex flex-column flex-lg-row align-items-center nav-transition nav-content"
-            :class="{ 'nav-hidden': navbarHidden }"
+            class="d-lg-flex d-none flex-column flex-lg-row align-items-center nav-content"
           >
-          <RouterLink
-              v-if="logged_in"
-              to="/dashboard"
-              class="router-link font-base font-color-light text-decoration-none margin-right-md"
-              >Dashboard</RouterLink
+            <RouterLink
+                v-if="logged_in"
+                to="/dashboard"
+                class="router-link font-base font-color-light text-decoration-none margin-right-md"
+                >Dashboard</RouterLink
             >
             <RouterLink
               v-if="logged_in"
@@ -66,17 +65,58 @@
                 class="font-xs nav-profile"
               />
             </RouterLink>
+              <div class="padding-sm w-100 p-lg-0" v-if="!logged_in">
+                <LoginOrRegister loginModalId="headerLogin" registerModalId="headerRegister" />
+              </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <div
+      class="d-flex d-lg-none flex-column flex-lg-row align-items-center w-100 nav-transition nav-content"
+      :class="{ 'nav-hidden': navbarHidden }"
+    >
+      <RouterLink
+          v-if="logged_in"
+          to="/dashboard"
+          class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+          >Dashboard</RouterLink
+      >
+      <RouterLink
+        v-if="logged_in"
+        to="/logout"
+        class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+        >Logout</RouterLink
+      >
+      <RouterLink
+        v-if="logged_in"
+        to="/profile"
+        class="router-link d-flex margin-top-xs margin-bottom-xs align-items-end font-color-light text-decoration-none margin-right-md d-flex"
+      >
+        <div class="d-flex flex-column margin-right-sm align-items-end">
+          <span class="font-base">{{ account_name }}</span>
+          <span class="font-sm">{{ member_email }}</span>
+        </div>
+        <img
+          :src="`https://www.gravatar.com/avatar/${email_md5}`"
+          :alt="`${account_name} Profile Picture`"
+          class="font-xs nav-profile"
+        />
+      </RouterLink>
+      <div v-if="!logged_in">
+        <div class="padding-sm p-lg-0">
+          <LoginOrRegister loginModalId="headerResponsiveLogin" registerModalId="headerResponsiveRegister" />
+        </div>
+      </div>
+    </div>
 </template>
 <script>
 import IconTrivialSecurity from "@/components/icons/IconTrivialSecurity.vue";
+import LoginOrRegister from "@/components/general/LoginOrRegister.vue";
 
 export default {
-  components: { IconTrivialSecurity },
+  components: { IconTrivialSecurity, LoginOrRegister },
   props: {
     isNavbarHidden: Boolean,
   },
@@ -119,7 +159,7 @@ header {
   @extend .padding-md;
   width: 100%;
   z-index: 100;
-  background: rgb(26 22 22 / 80%);
+  background: color("dark-40");
   backdrop-filter: blur(8px);
   position: fixed;
   transition: 0.2s linear;
@@ -134,29 +174,29 @@ header {
     border-radius: 50%;
   }
 
-  &-animate-hidden {
-    animation: hideNavbar 1s forwards;
-  }
 
-  @keyframes hideNavbar {
-    0% {
-      top: 0;
-    }
-    99% {
-      top: -300%;
-    }
-    100% {
-      position: absolute;
-      top: 0;
+  &-transition {
+    position: fixed;
+    top: 65px;
+    transition: 0.5s linear;
+
+    @media (max-width: $breakpoint-lg) {
+      max-height: 600px;
     }
   }
 
-  @keyframes showNavbar {
-    0% {
-      top: -300%;
+  &-hidden {
+    @media (max-width: $breakpoint-lg) {
+      max-height: 0px;
+      overflow: hidden;
     }
-    100% {
-      top: 0;
+  }
+
+  &-content {
+    @media (max-width: $breakpoint-lg) {
+      background: color("dark-40");
+      backdrop-filter: blur(8px);
+      z-index: 100;
     }
   }
 
@@ -169,26 +209,6 @@ header {
   .router-link-active {
     @extend .font-color-primary;
     @extend .font-base-b;
-  }
-
-  &-transition {
-    transition: 0.2s linear;
-  }
-
-  &-content {
-    @media (max-width: $breakpoint-lg) {
-      background: rgb(26 22 22);
-      backdrop-filter: blur(8px);
-      z-index: 100;
-      // padding: spacers("sm");s
-    }
-  }
-
-  &-hidden {
-    @media (max-width: $breakpoint-lg) {
-      height: 0px;
-      overflow: hidden;
-    }
   }
 }
 </style>

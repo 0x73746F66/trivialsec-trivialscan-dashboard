@@ -5,7 +5,7 @@
     width: 100%;
 
     label {
-        @extend .font-base-sb;
+        @extend .font-xs-sb;
         position: absolute;
         top: spacers("xs");
         color: color("light");

@@ -14,7 +14,7 @@
       <template v-slot:col-3>
         <div class="d-flex flex-column w-100">
           <h3
-            class="font-xl-b padding-top-lg padding-bottom-sm font-color-light text-center"
+            class="font-base-b padding-top-lg padding-bottom-sm font-color-light text-center"
           >
             Community Edition
           </h3>
@@ -27,7 +27,7 @@
                         Recommended
                     </span> -->
           <h3
-            class="font-xl-b padding-top-lg padding-bottom-sm font-color-light text-center"
+            class="font-base-b padding-top-lg padding-bottom-sm font-color-light text-center"
           >
             Professional
           </h3>
@@ -36,7 +36,7 @@
       <template v-slot:col-5>
         <div class="d-flex flex-column w-100">
           <h3
-            class="font-xl-b padding-top-lg padding-bottom-sm font-color-light text-center"
+            class="font-base-b padding-top-lg padding-bottom-sm font-color-light text-center"
           >
             Enterprise
           </h3>
@@ -53,7 +53,7 @@
         <div
           class="d-flex flex-column justify-content-center align-items-center w-100 padding-sm"
         >
-          <span class="font-color-primary font-base-sb text-center w-100"
+          <span class="font-color-primary font-sm-sb text-center w-100"
             >Free</span
           >
         </div>
@@ -62,7 +62,7 @@
         <div
           class="d-flex flex-column justify-content-center align-items-center w-100 padding-sm"
         >
-          <span class="font-color-primary font-base-sb text-center w-100"
+          <span class="font-color-primary font-sm-sb text-center w-100"
             >USD $79 / Month
           </span>
         </div>
@@ -71,7 +71,7 @@
         <div
           class="d-flex flex-column justify-content-center align-items-center w-100 padding-sm"
         >
-          <span class="font-color-primary font-base-sb text-center w-100"
+          <span class="font-color-primary font-sm-sb text-center w-100"
             >Contact Us</span
           >
         </div>
@@ -80,12 +80,12 @@
 
     <PricingComponentRow class="padding-sm font-color-light pricing-table">
       <template v-slot:col-1>
-        <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">
+        <h4 class="font-base-sb padding-top-sm padding-bottom-sm font-color-light">
           Passive Scans
         </h4>
       </template>
       <template v-slot:col-2>
-        <span class="font-base font-color-light">On-demand (Self-managed)</span>
+        <span class="font-xs font-color-light">On-demand (Self-managed)</span>
       </template>
       <template v-slot:col-3>
         <checkIcon color="1abb9c" class="pricing-checkmark" />
@@ -101,15 +101,15 @@
     <PricingComponentRow class="padding-sm font-color-light pricing-table">
       <template v-slot:col-1> </template>
       <template v-slot:col-2>
-        <span class="font-base font-color-light">On-demand (Managed)</span>
+        <span class="font-xs font-color-light">On-demand (Managed)</span>
       </template>
       <template v-slot:col-3>
-        <span class="font-base w-80 text-center">All Hosts Initial Scan Free</span>
-        <span class="font-base w-80 text-center">$49 / Month Unlimited Rescans</span>
+        <span class="font-xs w-80 text-center">All Hosts Initial Scan Free</span>
+        <span class="font-xs w-80 text-center">$49 / Month Unlimited Rescans</span>
       </template>
       <template v-slot:col-4>
-        <span class="font-base w-80 text-center">Includes 500 / Day</span>
-        <span class="font-base w-80 text-center">$49 / Month Unlimited Rescans</span>
+        <span class="font-xs w-80 text-center">Includes 500 / Day</span>
+        <span class="font-xs w-80 text-center">$49 / Month Unlimited Rescans</span>
       </template>
       <template v-slot:col-5>
         <checkIcon color="1abb9c" class="pricing-checkmark" />
@@ -121,13 +121,13 @@
     >
       <template v-slot:col-1> </template>
       <template v-slot:col-2>
-        <span class="font-base font-color-light">Continuous Monitoring</span>
+        <span class="font-xs font-color-light">Continuous Monitoring</span>
       </template>
       <template v-slot:col-3>
-        <span class="font-base w-100 text-center">1 Free / Day</span>
+        <span class="font-xs w-100 text-center">1 Free / Day</span>
       </template>
       <template v-slot:col-4>
-        <span class="font-base w-100 text-center">10 / Day</span>
+        <span class="font-xs w-100 text-center">10 / Day</span>
       </template>
       <template v-slot:col-5>
         <checkIcon color="1abb9c" class="pricing-checkmark" />
@@ -136,18 +136,18 @@
 
     <PricingComponentRow class="padding-sm font-color-light pricing-table">
       <template v-slot:col-1>
-        <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">
+        <h4 class="font-base-sb padding-top-sm padding-bottom-sm font-color-light">
           Active Scans
         </h4>
       </template>
       <template v-slot:col-2>
-        <span class="font-base font-color-light">On-demand (Managed)</span>
+        <span class="font-xs font-color-light">On-demand (Managed)</span>
       </template>
       <template v-slot:col-3>
-        <span class="font-base w-100 text-center font-color-tertiary">X</span>
+        <span class="font-xs w-100 text-center font-color-tertiary">X</span>
       </template>
       <template v-slot:col-4>
-        <span class="font-base w-100 text-center">50 / Day</span>
+        <span class="font-xs w-100 text-center">50 / Day</span>
       </template>
       <template v-slot:col-5>
         <checkIcon color="1abb9c" class="pricing-checkmark" />
@@ -159,13 +159,13 @@
     >
       <template v-slot:col-1> </template>
       <template v-slot:col-2>
-        <span class="font-base font-color-light">Continuous Monitoring</span>
+        <span class="font-xs font-color-light">Continuous Monitoring</span>
       </template>
       <template v-slot:col-3>
-        <span class="font-base w-100 text-center font-color-tertiary">X</span>
+        <span class="font-xs w-100 text-center font-color-tertiary">X</span>
       </template>
       <template v-slot:col-4>
-        <span class="font-base w-100 text-center">10 / Day</span>
+        <span class="font-xs w-100 text-center">10 / Day</span>
       </template>
       <template v-slot:col-5>
         <checkIcon color="1abb9c" class="pricing-checkmark" />
@@ -176,12 +176,12 @@
       class="padding-sm font-color-light pricing-table border-bottom-primary"
     >
       <template v-slot:col-1>
-        <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">
+        <h4 class="font-base-sb padding-top-sm padding-bottom-sm font-color-light">
           Trivial exposures
         </h4>
       </template>
       <template v-slot:col-2>
-        <span class="font-base font-color-light">Web/API</span>
+        <span class="font-xs font-color-light">Web/API</span>
       </template>
       <template v-slot:col-3>
         <checkIcon color="1abb9c" class="pricing-checkmark" />
@@ -198,15 +198,15 @@
       class="padding-sm font-color-light pricing-table border-bottom-primary"
     >
       <template v-slot:col-1>
-        <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">
+        <h4 class="font-base-sb padding-top-sm padding-bottom-sm font-color-light">
           Vulnerable Software
         </h4>
       </template>
       <template v-slot:col-2>
-        <span class="font-base font-color-light">CVE/GSD</span>
+        <span class="font-xs font-color-light">CVE/GSD</span>
       </template>
       <template v-slot:col-3>
-        <span class="font-base w-100 text-center font-color-tertiary">X</span>
+        <span class="font-xs w-100 text-center font-color-tertiary">X</span>
       </template>
       <template v-slot:col-4>
         <checkIcon color="1abb9c" class="pricing-checkmark" />
@@ -218,15 +218,15 @@
 
     <PricingComponentRow class="padding-sm font-color-light pricing-table">
       <template v-slot:col-1>
-        <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">
+        <h4 class="font-base-sb padding-top-sm padding-bottom-sm font-color-light">
           Alert Delivery
         </h4>
       </template>
       <template v-slot:col-2>
-        <span class="font-base font-color-light">Email</span>
+        <span class="font-xs font-color-light">Email</span>
       </template>
       <template v-slot:col-3>
-        <span class="font-base w-100 text-center font-color-tertiary">X</span>
+        <span class="font-xs w-100 text-center font-color-tertiary">X</span>
       </template>
       <template v-slot:col-4>
         <checkIcon color="1abb9c" class="pricing-checkmark" />
@@ -241,10 +241,10 @@
     >
       <template v-slot:col-1> </template>
       <template v-slot:col-2>
-        <span class="font-base font-color-light">Service Integrations</span>
+        <span class="font-xs font-color-light">Service Integrations</span>
       </template>
       <template v-slot:col-3>
-        <span class="font-base w-100 text-center font-color-tertiary">X</span>
+        <span class="font-xs w-100 text-center font-color-tertiary">X</span>
       </template>
       <template v-slot:col-4>
         <checkIcon color="1abb9c" class="pricing-checkmark" />
@@ -258,12 +258,12 @@
       class="padding-sm font-color-light pricing-table border-bottom-primary"
     >
       <template v-slot:col-1>
-        <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">
+        <h4 class="font-base-sb padding-top-sm padding-bottom-sm font-color-light">
           Auto-remediation
         </h4>
       </template>
       <template v-slot:col-2>
-        <span class="font-base font-color-light">Webhook</span>
+        <span class="font-xs font-color-light">Webhook</span>
       </template>
       <template v-slot:col-3>
         <checkIcon color="1abb9c" class="pricing-checkmark" />
@@ -278,15 +278,15 @@
 
     <PricingComponentRow class="padding-sm font-color-light pricing-table">
       <template v-slot:col-1>
-        <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">
+        <h4 class="font-base-sb padding-top-sm padding-bottom-sm font-color-light">
           Trivial Threats
         </h4>
       </template>
       <template v-slot:col-2>
-        <span class="font-base font-color-light">Threat Intel Feed</span>
+        <span class="font-xs font-color-light">Threat Intel Feed</span>
       </template>
       <template v-slot:col-3>
-        <span class="font-base w-100 text-center font-color-tertiary">X</span>
+        <span class="font-xs w-100 text-center font-color-tertiary">X</span>
       </template>
       <template v-slot:col-4>
         <checkIcon color="1abb9c" class="pricing-checkmark" />
@@ -299,10 +299,10 @@
     <PricingComponentRow class="padding-sm font-color-light pricing-table">
       <template v-slot:col-1> </template>
       <template v-slot:col-2>
-        <span class="font-base font-color-light">Indicators of Compromise</span>
+        <span class="font-xs font-color-light">Indicators of Compromise</span>
       </template>
       <template v-slot:col-3>
-        <span class="font-base w-100 text-center font-color-tertiary">X</span>
+        <span class="font-xs w-100 text-center font-color-tertiary">X</span>
       </template>
       <template v-slot:col-4>
         <checkIcon color="1abb9c" class="pricing-checkmark" />
@@ -315,12 +315,12 @@
     <PricingComponentRow class="padding-sm font-color-light pricing-table">
       <template v-slot:col-1> </template>
       <template v-slot:col-2>
-        <span class="font-base font-color-light"
+        <span class="font-xs font-color-light"
           >Brand protection<br />Typosquatting</span
         >
       </template>
       <template v-slot:col-3>
-        <span class="font-base w-100 text-center font-color-tertiary">X</span>
+        <span class="font-xs w-100 text-center font-color-tertiary">X</span>
       </template>
       <template v-slot:col-4>
         <checkIcon color="1abb9c" class="pricing-checkmark" />
@@ -335,7 +335,7 @@
     >
       <template v-slot:col-1> </template>
       <template v-slot:col-2>
-        <span class="font-base font-color-light">MITRE ATT&CK mappings </span>
+        <span class="font-xs font-color-light">MITRE ATT&CK mappings </span>
       </template>
       <template v-slot:col-3>
         <checkIcon color="1abb9c" class="pricing-checkmark" />
@@ -350,12 +350,12 @@
 
     <PricingComponentRow class="padding-sm font-color-light pricing-table">
       <template v-slot:col-1>
-        <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">
+        <h4 class="font-base-sb padding-top-sm padding-bottom-sm font-color-light">
           Compliance
         </h4>
       </template>
       <template v-slot:col-2>
-        <span class="font-base font-color-light">PCI DSS (v3.2.1, 4.0)</span>
+        <span class="font-xs font-color-light">PCI DSS (v3.2.1, 4.0)</span>
       </template>
       <template v-slot:col-3>
         <checkIcon color="1abb9c" class="pricing-checkmark" />
@@ -371,7 +371,7 @@
     <PricingComponentRow class="padding-sm font-color-light pricing-tabley">
       <template v-slot:col-1> </template>
       <template v-slot:col-2>
-        <span class="font-base font-color-light">NIST SP800-131A</span>
+        <span class="font-xs font-color-light">NIST SP800-131A</span>
       </template>
       <template v-slot:col-3>
         <checkIcon color="1abb9c" class="pricing-checkmark" />
@@ -387,7 +387,7 @@
     <PricingComponentRow class="padding-sm font-color-light pricing-table">
       <template v-slot:col-1> </template>
       <template v-slot:col-2>
-        <span class="font-base font-color-light">FIPS 140-2</span>
+        <span class="font-xs font-color-light">FIPS 140-2</span>
       </template>
       <template v-slot:col-3>
         <checkIcon color="1abb9c" class="pricing-checkmark" />
@@ -405,13 +405,13 @@
     >
       <template v-slot:col-1> </template>
       <template v-slot:col-2>
-        <span class="font-base font-color-light">Branded Reports</span>
+        <span class="font-xs font-color-light">Branded Reports</span>
       </template>
       <template v-slot:col-3>
-        <span class="font-base w-100 text-center font-color-tertiary">X</span>
+        <span class="font-xs w-100 text-center font-color-tertiary">X</span>
       </template>
       <template v-slot:col-4>
-        <span class="font-base w-100 text-center font-color-tertiary">X</span>
+        <span class="font-xs w-100 text-center font-color-tertiary">X</span>
       </template>
       <template v-slot:col-5>
         <checkIcon color="1abb9c" class="pricing-checkmark" />
@@ -422,18 +422,18 @@
       class="padding-sm font-color-light pricing-table border-bottom-primary"
     >
       <template v-slot:col-1>
-        <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">
+        <h4 class="font-base-sb padding-top-sm padding-bottom-sm font-color-light">
           Access
         </h4>
       </template>
       <template v-slot:col-2>
-        <span class="font-base font-color-light">SAML SSO</span>
+        <span class="font-xs font-color-light">SAML SSO</span>
       </template>
       <template v-slot:col-3>
-        <span class="font-base w-100 text-center font-color-tertiary">X</span>
+        <span class="font-xs w-100 text-center font-color-tertiary">X</span>
       </template>
       <template v-slot:col-4>
-        <span class="font-base w-100 text-center font-color-tertiary">X</span>
+        <span class="font-xs w-100 text-center font-color-tertiary">X</span>
       </template>
       <template v-slot:col-5>
         <checkIcon color="1abb9c" class="pricing-checkmark" />
@@ -442,12 +442,12 @@
 
     <PricingComponentRow class="padding-sm font-color-light pricing-table">
       <template v-slot:col-1>
-        <h4 class="font-xl padding-top-sm padding-bottom-sm font-color-light">
+        <h4 class="font-base-sb padding-top-sm padding-bottom-sm font-color-light">
           Support
         </h4>
       </template>
       <template v-slot:col-2>
-        <span class="font-base font-color-light">Open Source Issues</span>
+        <span class="font-xs font-color-light">Open Source Issues</span>
       </template>
       <template v-slot:col-3>
         <checkIcon color="1abb9c" class="pricing-checkmark" />
@@ -463,12 +463,12 @@
     <PricingComponentRow class="padding-sm font-color-light pricing-table">
       <template v-slot:col-1> </template>
       <template v-slot:col-2>
-        <span class="font-base font-color-light"
+        <span class="font-xs font-color-light"
           >5 Business Days Resolution</span
         >
       </template>
       <template v-slot:col-3>
-        <span class="font-base w-100 text-center font-color-tertiary">X</span>
+        <span class="font-xs w-100 text-center font-color-tertiary">X</span>
       </template>
       <template v-slot:col-4>
         <checkIcon color="1abb9c" class="pricing-checkmark" />
@@ -483,13 +483,13 @@
     >
       <template v-slot:col-1> </template>
       <template v-slot:col-2>
-        <span class="font-base font-color-light">48 Hours Resolution</span>
+        <span class="font-xs font-color-light">48 Hours Resolution</span>
       </template>
       <template v-slot:col-3>
-        <span class="font-base w-100 text-center font-color-tertiary">X</span>
+        <span class="font-xs w-100 text-center font-color-tertiary">X</span>
       </template>
       <template v-slot:col-4>
-        <span class="font-base w-100 text-center font-color-tertiary">X</span>
+        <span class="font-xs w-100 text-center font-color-tertiary">X</span>
       </template>
       <template v-slot:col-5>
         <checkIcon color="1abb9c" class="pricing-checkmark" />
@@ -518,7 +518,7 @@
             </div>
           </template>
           <template v-slot:content>
-            <div class="d-flex flex-column align-items-start">
+            <div class="d-flex flex-column align-items-start font-xs">
               Get the Professional plan upgrade to enable Active Scans.
               <br /><br />
               CE includes On-demand self-hosted Passive Scans or the managed
@@ -558,7 +558,7 @@
             </div>
           </template>
           <template v-slot:content>
-            <div class="d-flex flex-column align-items-start">
+            <div class="d-flex flex-column align-items-start font-xs">
               All Community Edition inclusions plus; 500/Day On-demand managed
               Passive Scans, 50/Day Active Scans, and 10/Day Continuous
               Monitoring for both.
@@ -590,7 +590,7 @@
             </div>
           </template>
           <template v-slot:content>
-            <div class="d-flex flex-column align-items-start">
+            <div class="d-flex flex-column align-items-start font-xs">
               All Professional Edition inclusions plus; Restriction free,
               Unlimited, Active and Passive Scans both Managed On-demand and
               Continuous Monitoring

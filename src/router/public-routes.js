@@ -83,65 +83,65 @@ const routes = [
             }
         },
     },
-    {
-        path: "/feature/patch-alert",
-        name: "feature-patch-alert",
-        component: () => import("@/views/seo/FeaturePage.vue"),
-    },
+    // {
+    //     path: "/feature/patch-alert",
+    //     name: "feature-patch-alert",
+    //     component: () => import("@/views/seo/PatchAlert.vue"),
+    // },
     {
         path: "/feature/passive-scan",
         name: "feature-passive-scan",
-        component: () => import("@/views/seo/FeaturePage.vue"),
+        component: () => import("@/views/seo/PassiveScanner.vue"),
     },
     {
         path: "/feature/active-scan",
         name: "feature-active-scan",
-        component: () => import("@/views/seo/FeaturePage.vue"),
+        component: () => import("@/views/seo/ActiveScanner.vue"),
     },
-    {
-        path: "/feature/trivial-attacks",
-        name: "feature-trivial-attacks",
-        component: () => import("@/views/seo/FeaturePage.vue"),
-    },
-    {
-        path: "/feature/threat-intel",
-        name: "feature-threat-intel",
-        component: () => import("@/views/seo/FeaturePage.vue"),
-    },
-    {
-        path: "/feature/security-feeds",
-        name: "feature-security-feeds",
-        component: () => import("@/views/seo/FeaturePage.vue"),
-    },
+    // {
+    //     path: "/feature/trivial-attacks",
+    //     name: "feature-trivial-attacks",
+    //     component: () => import("@/views/seo/TrivialAttacks.vue"),
+    // },
+    // {
+    //     path: "/feature/threat-intel",
+    //     name: "feature-threat-intel",
+    //     component: () => import("@/views/seo/ThreatIntel.vue"),
+    // },
+    // {
+    //     path: "/feature/security-feeds",
+    //     name: "feature-security-feeds",
+    //     component: () => import("@/views/seo/SecurityFeeds.vue"),
+    // },
     {
         path: "/feature/webhooks",
         name: "feature-webhooks",
-        component: () => import("@/views/seo/FeaturePage.vue"),
+        component: () => import("@/views/seo/Firehose.vue"),
     },
     {
         path: "/feature/trivialscan",
         name: "feature-trivialscan",
-        component: () => import("@/views/seo/FeaturePage.vue"),
+        component: () => import("@/views/seo/CLI.vue"),
     },
-    {
-        path: "/feature/research",
-        name: "feature-research",
-        component: () => import("@/views/seo/FeaturePage.vue"),
-    },
-    {
-        path: "/feature/phishing-alerts",
-        name: "feature-phishing-alerts",
-        component: () => import("@/views/seo/FeaturePage.vue"),
-    },
+    // {
+    //     path: "/feature/researchers",
+    //     name: "feature-researchers",
+    //     component: () => import("@/views/seo/SecurityResearchers.vue"),
+    // },
+    // {
+    //     path: "/feature/phishing-alerts",
+    //     name: "feature-phishing-alerts",
+    //     component: () => import("@/views/seo/PhishingAlerts.vue"),
+    // },
     {
         path: "/feature/open-source",
         name: "feature-open-source",
-        component: () => import("@/views/seo/FeaturePage.vue"),
+        component: () => import("@/views/seo/OpenSource.vue"),
     },
     {
-        path: "/feature/data-sovereignty",
-        name: "feature-data-sovereignty",
-        component: () => import("@/views/seo/FeaturePage.vue"),
+        path: "/feature/interoperability",
+        name: "feature-interoperability",
+        component: () => import("@/views/seo/Interoperability.vue"),
     },
 ]
 

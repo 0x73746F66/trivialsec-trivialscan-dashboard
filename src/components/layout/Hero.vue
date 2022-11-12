@@ -10,11 +10,11 @@
         Trivial Security
       </h1>
       <div class="font-color-light text-center margin-bottom-md">
-        <h2 class="font-xl-b">
+        <h2 class="font-base-b">
           Stay informed of your attack surface. We track the hacker exploits so you don't
           have to.
         </h2>
-        <h3 class="font-lg">
+        <h3 class="font-sm">
           Free service to identify your trivial to exploit vulnerabilities, raising the
           Cybersecurity poverty line.
         </h3>
