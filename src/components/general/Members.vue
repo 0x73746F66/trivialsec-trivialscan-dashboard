@@ -220,6 +220,10 @@ export default {
         }
         this.inviteMessage = "Invited!"
         this.inviteMessageType = "success"
+        const member = await response.json()
+        member.created = moment.utc(member.timestamp).fromNow()
+        member.status = "Pending Activation"
+        this.members.push(member)
       } catch (error) {
         this.inviteMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
         this.inviteMessageType = "error"
@@ -229,7 +233,8 @@ export default {
     async deleteMember(event) {
       this.loading = true
       try {
-        const response = await Api.delete(`/member/${event.target.elements["MemberEmail"].value}`)
+        const memberEmail = event.target.elements["MemberEmail"].value
+        const response = await Api.delete(`/member/${memberEmail}`)
         if (response.status != 202) {
           this.memberDeleteMessage = "Something went wrong. Member couldn't be deleted."
           this.memberDeleteMessageType = "error"
@@ -238,6 +243,12 @@ export default {
         }
         this.memberDeleteMessage = "This member was deleted"
         this.memberDeleteMessageType = "success"
+        for (const [index, member] of this.members.entries()) {
+          if (member.email === memberEmail) {
+            this.members.splice(index, 1)
+            break
+          }
+        }
       } catch (error) {
         this.memberDeleteMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
         this.memberDeleteMessageType = "error"

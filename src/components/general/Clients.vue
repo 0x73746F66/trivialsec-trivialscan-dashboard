@@ -132,7 +132,6 @@ export default {
       this.loading = false
     },
     async fetchClients() {
-      console.log('fetchClients', this.clients)
       this.loading = true
       try {
         const response = await Api.get(`/clients`, { timeout: 30000 })
