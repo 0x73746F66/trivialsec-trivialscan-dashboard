@@ -1,8 +1,6 @@
 variables:
   NODE_ENV: development
   BUILD_ENV: ci
-  APP_ENV: Prod
-  TF_VAR_app_env: Prod
   TF_VAR_app_name: trivialscan-dashboard
   TF_LOG: WARN
   SOURCE_FILES: dist/
@@ -14,7 +12,9 @@ stages:
   - post-deploy
 
 vite build:
-  retry: 2
+  variables:
+    APP_ENV: Prod
+    TF_VAR_app_env: Prod
   tags:
     - dashboard
   stage: test
@@ -32,6 +32,8 @@ vite build:
       - $SOURCE_FILES
 
 terraform validate:
+  variables:
+    TF_VAR_app_env: Prod
   stage: test
   tags:
     - dashboard
@@ -88,7 +90,6 @@ repo checks:
       do
         pre-commit run $i --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
       done
-  allow_failure: true
   only:
     refs:
       - merge_request
@@ -126,7 +127,9 @@ yaml json py linting:
       - merge_request
 
 tf:plan:
-  retry: 2
+  variables:
+    APP_ENV: Prod
+    TF_VAR_app_env: Prod
   tags:
     - dashboard
   stage: pre-deploy
@@ -134,7 +137,6 @@ tf:plan:
     - make init plan
   only:
     refs:
-      - merge_request
       - main
   dependencies:
     - vite build
@@ -148,7 +150,9 @@ tf:plan:
       terraform: tfplan.json
 
 tf:apply:
-  retry: 2
+  variables:
+    APP_ENV: Prod
+    TF_VAR_app_env: Prod
   tags:
     - dashboard
   stage: deploy
@@ -165,8 +169,73 @@ tf:apply:
     - vite build
     - tf:plan
 
+vite build (dev):
+  variables:
+    APP_ENV: Dev
+    TF_VAR_app_env: Dev
+  tags:
+    - dashboard
+  stage: test
+  script:
+    - npm i
+    - make -B ci-build
+  only:
+    refs:
+      - merge_request
+      - main
+  artifacts:
+    name: dist
+    paths:
+      - node_modules/
+      - $SOURCE_FILES
+
+tf:plan:dev:
+  variables:
+    APP_ENV: Dev
+    TF_VAR_app_env: Dev
+  tags:
+    - dashboard
+  stage: pre-deploy
+  script:
+    - make init plan
+  only:
+    refs:
+      - devel
+  dependencies:
+    - vite build (dev)
+  artifacts:
+    name: tfplan
+    paths:
+      - plans/.tfplan
+      - plans/.terraform.lock.hcl
+      - plans/.terraform
+    reports:
+      terraform: tfplan.json
+
+tf:apply:dev:
+  variables:
+    APP_ENV: Dev
+    TF_VAR_app_env: Dev
+  tags:
+    - dashboard
+  stage: deploy
+  script:
+    - make apply
+  only:
+    refs:
+      - devel
+  environment:
+    name: aws
+    url: https://sso.jumpcloud.com/saml2/aws1
+    on_stop: tf:destroy
+  dependencies:
+    - vite build (dev)
+    - tf:plan:dev
+
 tf:destroy:
-  retry: 2
+  variables:
+    APP_ENV: Prod
+    TF_VAR_app_env: Prod
   stage: post-deploy
   variables:
     GIT_STRATEGY: none
@@ -186,6 +255,8 @@ tf:destroy:
       terraform: plans/tfdestroy.json
 
 clear cdn cache:
+  variables:
+    TF_VAR_app_env: Prod
   stage: post-deploy
   tags:
     - dashboard

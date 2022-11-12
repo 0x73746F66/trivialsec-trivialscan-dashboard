@@ -123,7 +123,7 @@
                                     <a
                                         v-for="(report, index) in result.reports" :key="index"
                                         :href="`/result/${report}/detail`"
-                                        class="font-xs font-color-light-60 white-space-nowrap"
+                                        class="font-xs font-color-light-60 nowrap"
                                     >
                                      {{index+1}}. Report <IconArrowPrimary v-if="(index+1) < result.reports.length" color="f0f0f099" style="width:20px; height: 20px;" />
                                     </a>
