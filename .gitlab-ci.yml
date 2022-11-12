@@ -1,23 +1,22 @@
 variables:
-  NODE_ENV: development
   BUILD_ENV: ci
   TF_VAR_app_name: trivialscan-dashboard
   TF_LOG: WARN
   SOURCE_FILES: dist/
 
 stages:
-  - test
   - pre-deploy
   - deploy
   - post-deploy
 
 vite build (prod):
   variables:
+    NODE_ENV: production
     APP_ENV: Prod
     TF_VAR_app_env: Prod
   tags:
     - dashboard
-  stage: test
+  stage: pre-deploy
   script:
     - npm i
     - make -B ci-build
@@ -33,7 +32,7 @@ vite build (prod):
 terraform validate:
   variables:
     TF_VAR_app_env: Prod
-  stage: test
+  stage: pre-deploy
   tags:
     - dashboard
   script:
@@ -49,7 +48,7 @@ terraform validate:
       - main
 
 sca npm:
-  stage: test
+  stage: pre-deploy
   tags:
     - dashboard
   allow_failure: true
@@ -62,7 +61,7 @@ sca npm:
         - package.json
 
 secrets scanning:
-  stage: test
+  stage: pre-deploy
   tags:
     - dashboard
   script:
@@ -77,7 +76,7 @@ secrets scanning:
       - merge_request
 
 repo checks:
-  stage: test
+  stage: pre-deploy
   tags:
     - dashboard
   script:
@@ -94,7 +93,7 @@ repo checks:
       - merge_request
 
 whitespace:
-  stage: test
+  stage: pre-deploy
   tags:
     - dashboard
   allow_failure: true
@@ -110,7 +109,7 @@ whitespace:
       - merge_request
 
 yaml json py linting:
-  stage: test
+  stage: pre-deploy
   tags:
     - dashboard
   allow_failure: true
@@ -170,11 +169,12 @@ tf:apply:
 
 vite build (dev):
   variables:
+    NODE_ENV: development
     APP_ENV: Dev
     TF_VAR_app_env: Dev
   tags:
     - dashboard
-  stage: test
+  stage: pre-deploy
   script:
     - npm i
     - make -B ci-build
