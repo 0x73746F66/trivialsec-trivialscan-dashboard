@@ -5,6 +5,7 @@ variables:
   SOURCE_FILES: dist/
 
 stages:
+  - build
   - pre-deploy
   - deploy
   - post-deploy
@@ -16,7 +17,7 @@ vite build (prod):
     TF_VAR_app_env: Prod
   tags:
     - dashboard
-  stage: pre-deploy
+  stage: build
   script:
     - npm i
     - make -B ci-build
@@ -32,7 +33,7 @@ vite build (prod):
 terraform validate:
   variables:
     TF_VAR_app_env: Prod
-  stage: pre-deploy
+  stage: build
   tags:
     - dashboard
   script:
@@ -48,7 +49,7 @@ terraform validate:
       - main
 
 sca npm:
-  stage: pre-deploy
+  stage: build
   tags:
     - dashboard
   allow_failure: true
@@ -61,7 +62,7 @@ sca npm:
         - package.json
 
 secrets scanning:
-  stage: pre-deploy
+  stage: build
   tags:
     - dashboard
   script:
@@ -76,7 +77,7 @@ secrets scanning:
       - merge_request
 
 repo checks:
-  stage: pre-deploy
+  stage: build
   tags:
     - dashboard
   script:
@@ -93,7 +94,7 @@ repo checks:
       - merge_request
 
 whitespace:
-  stage: pre-deploy
+  stage: build
   tags:
     - dashboard
   allow_failure: true
@@ -109,7 +110,7 @@ whitespace:
       - merge_request
 
 yaml json py linting:
-  stage: pre-deploy
+  stage: build
   tags:
     - dashboard
   allow_failure: true
@@ -174,7 +175,7 @@ vite build (dev):
     TF_VAR_app_env: Dev
   tags:
     - dashboard
-  stage: pre-deploy
+  stage: build
   script:
     - npm i
     - make -B ci-build

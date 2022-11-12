@@ -5,17 +5,17 @@ bold := '\033[1m'
 clear := '\033[0m'
 
 -include .env
-export $(shell sed 's/=.*//' .env)
+export $(shell sed 's/=.*//' .env 2>/dev/null)
 ifndef CI_BUILD_REF
 CI_BUILD_REF=local
 endif
 ifeq ($(CI_BUILD_REF), local)
 -include .env.local
-export $(shell sed 's/=.*//' .env.local)
+export $(shell sed 's/=.*//' .env.local 2>/dev/null)
 -include .env.development
-export $(shell sed 's/=.*//' .env.development)
+export $(shell sed 's/=.*//' .env.development 2>/dev/null)
 -include .env.development.local
-export $(shell sed 's/=.*//' .env.development.local)
+export $(shell sed 's/=.*//' .env.development.local 2>/dev/null)
 endif
 
 ifndef RUNNER_NAME
