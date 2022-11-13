@@ -1,5 +1,5 @@
 <template>
-  <loadingComponent class="loading" :class="{ inactive: !loading }" />
+  <loadingComponent class="modal-loading loading" :class="{ inactive: !loading }" />
 
   <form class="register-form" @submit.prevent="register">
     <ValidationMessage :message="message" :type="messageType" />

@@ -1,6 +1,6 @@
 <template>
-  <loadingComponent class="loading" :class="{ inactive: !loading }" />
-
+  <loadingComponent class="modal-loading loading" :class="{ inactive: !loading }" />
+  
   <form class="login-form" @submit.prevent="login">
     <ValidationMessage
       class="justify-content-between"

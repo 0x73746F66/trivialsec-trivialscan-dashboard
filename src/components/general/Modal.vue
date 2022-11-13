@@ -50,4 +50,7 @@ export default {
 .modal-content {
   background-color: #000000;
 }
+.modal-loading {
+  position: absolute!important;  
+} 
 </style>
