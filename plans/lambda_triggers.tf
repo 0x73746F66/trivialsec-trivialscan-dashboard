@@ -44,7 +44,7 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
   }
 
   lambda_function {
-    lambda_function_arn = data.terraform_remote_state.prod_scanner_ondemand.outputs.dashboard_compliance_graphs_arn
+    lambda_function_arn = data.terraform_remote_state.prod_scanner_ondemand.outputs.trivialscan_ondemand_arn
     events              = [
       "s3:ObjectCreated:*",
     ]
@@ -53,7 +53,7 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
   }
 
   lambda_function {
-    lambda_function_arn = data.terraform_remote_state.dev_scanner_ondemand.outputs.dashboard_compliance_graphs_arn
+    lambda_function_arn = data.terraform_remote_state.dev_scanner_ondemand.outputs.trivialscan_ondemand_arn
     events              = [
       "s3:ObjectCreated:*",
     ]
