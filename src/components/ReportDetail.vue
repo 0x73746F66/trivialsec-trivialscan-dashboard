@@ -282,7 +282,7 @@
                         <div class="d-flex flex-column">
                           <div class="d-flex align-items-center">
                             <span class="margin-right-xxs font-sm-b font-color-secondary">
-                              {{evaluation?.rule_id}}
+                              {{evaluation?.group_id}}.{{evaluation?.rule_id}}
                             </span>
                             <span class="font-color-lighter font-xs-sb">
                               {{evaluation?.name}}
@@ -384,7 +384,7 @@
                     >
                       <h3 class="font-base-sb font-color-light" v-if="evaluation?.compliance?.items">Compliance</h3>
                       <div
-                        :id="`complianceSection${evaluation?.rule_id.replace(/\./g, '-')}`"
+                        :id="`complianceSection${evaluation?.key}`"
                       >
                         <div
                           v-for="(compliance, index) in evaluation.compliance"
@@ -400,9 +400,9 @@
                                 type="button"
                                 aria-expanded="false"
                                 :key="compIndex"
-                                :data-bs-target="`#multiCollapseCompliance${evaluation?.rule_id?.replace(/\./g, '-')}-${comp?.requirement?.replace(/\./g, '-')}`"
-                                :data-bs-parent="`#complianceSection${evaluation?.rule_id?.replace(/\./g, '-')}`"
-                                :aria-controls="`multiCollapseCompliance${evaluation?.rule_id?.replace(/\./g, '-')}-${comp?.requirement?.replace(/\./g, '-')}`"
+                                :data-bs-target="`#multiCollapseCompliance${evaluation?.key}-${comp?.requirement?.replace(/\./g, '-')}`"
+                                :data-bs-parent="`#complianceSection${evaluation?.key}`"
+                                :aria-controls="`multiCollapseCompliance${evaluation?.key}-${comp?.requirement?.replace(/\./g, '-')}`"
                               >
                                 Req: {{comp.requirement}}
                               </button>
@@ -414,8 +414,8 @@
                                 v-for="(comp, compIndex) in compliance.items"
                                 :key="compIndex"
                                 class="collapse multi-collapse"
-                                :id="`multiCollapseCompliance${evaluation?.rule_id?.replace(/\./g, '-')}-${comp?.requirement?.replace(/\./g, '-')}`"
-                                :data-bs-parent="`#complianceSection${evaluation?.rule_id?.replace(/\./g, '-')}`"
+                                :id="`multiCollapseCompliance${evaluation?.key}-${comp?.requirement?.replace(/\./g, '-')}`"
+                                :data-bs-parent="`#complianceSection${evaluation?.key}`"
                                 >
                                   <div class="card card-body bg-dark-40 font-xs pre-line">
                                     {{comp.description}}
