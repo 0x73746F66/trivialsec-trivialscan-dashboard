@@ -1,14 +1,21 @@
-<script setup>
-import HostDetail from "../components/HostDetail.vue";
-</script>
+<template>
+  <div class="container margin-top-xl margin-bottom-xl">
+      <HostDetailView :host="host"/>
+  </div>
+</template>
 
 <script>
+import HostDetailView from '../components/general/HostDetailView.vue';
+
 export default {
   data() {
     return {
       loading: false,
       host: {},
     };
+  },
+  components: {
+    HostDetailView
   },
   created() {
     // watch the params of the route to fetch the data again
@@ -34,38 +41,17 @@ export default {
           return;
         }
         this.host = await response.json()
+        console.log(this.host);
       } catch (error) {
         this.errorMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
         this.errorMessageType = "error"
       }
       this.loading = false
-    },
-  },
+    }
+  }
 };
 </script>
 
-<template>
-  <main>
-    <div v-if="loading" class="loading">Loading...</div>
-    <div v-if="error" class="error">{{ error }}</div>
 
-    <div class="host">
-      <HostDetail v-bind="host" />
-    </div>
-  </main>
-</template>
-
-<style scoped>
-.host {
-  margin: 0 auto;
-}
-
-@media (min-width: 1024px) {
-  .host {
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--color-text);
-    line-height: 1.5rem;
-  }
-}
+<style>
 </style>
