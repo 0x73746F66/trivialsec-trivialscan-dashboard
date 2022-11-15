@@ -62,7 +62,11 @@ export default {
           return;
         }
         const data = await response.json()
-        data.evaluations = data.evaluations.sort((a, b) => a.rule_id.toLowerCase().localeCompare(b.rule_id.toLowerCase()))
+        data.evaluations = data.evaluations.sort((a, b) => {
+          aRule = `${a.group_id}.${a.rule_id}`
+          bRule = `${b.group_id}.${b.rule_id}`
+          return aRule.toLowerCase().localeCompare(bRule.toLowerCase())
+        })
         this.report = data
       } catch (error) {
         this.errorMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`

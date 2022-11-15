@@ -45,7 +45,7 @@
                 <div class="d-flex">
                   <CertificateIcon :critical="issue.result_level === 'fail'" />
                   <div class="d-flex flex-column">
-                      <div class="margin-right-xxs font-sm-b font-color-secondary">{{issue.rule_id}}</div>
+                      <div class="margin-right-xxs font-sm-b font-color-secondary">{{issue.group_id}}.{{issue.rule_id}}</div>
                       <span class="font-color-lighter font-xs-sb">{{issue.name}}</span>
                       <span class="font-xs font-color-light-40">{{issue.certificate.subject}}</span>
                     </div>
