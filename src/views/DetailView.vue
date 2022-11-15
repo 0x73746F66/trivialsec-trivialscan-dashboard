@@ -49,7 +49,7 @@ export default {
     async fetchData() {
       this.loading = true
       try {
-        const response = await Api.get(`/report/${this.$route.params.report_id}?full_certs=1&full_hosts=1`, { timeout: 30000 })
+        const response = await Api.get(`/report/${this.$route.params.report_id}`, { timeout: 30000 })
         if (response.status === 204) {
           this.message = "No reports available"
           this.messageType = "warning"
@@ -63,9 +63,9 @@ export default {
         }
         const data = await response.json()
         data.evaluations = data.evaluations.sort((a, b) => {
-          aRule = `${a.group_id}.${a.rule_id}`
-          bRule = `${b.group_id}.${b.rule_id}`
-          return aRule.toLowerCase().localeCompare(bRule.toLowerCase())
+          const aRule = `${a.group_id.toString().padStart(3, '0')}.${a.rule_id.toString().padStart(4, '0')}`
+          const bRule = `${b.group_id.toString().padStart(3, '0')}.${b.rule_id.toString().padStart(4, '0')}`
+          return aRule.localeCompare(bRule)
         })
         this.report = data
       } catch (error) {

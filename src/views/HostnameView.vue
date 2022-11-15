@@ -41,7 +41,6 @@ export default {
           return;
         }
         this.host = await response.json()
-        console.log(this.host);
       } catch (error) {
         this.errorMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
         this.errorMessageType = "error"

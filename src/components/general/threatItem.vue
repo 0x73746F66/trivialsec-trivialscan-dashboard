@@ -4,7 +4,7 @@
             <div class="h-100 d-flex align-items-center justify-content-center w-100">
                 <div 
                     class="d-flex flex-column threat-item threat-item-has-description align-items-center justify-content-center" 
-                    :class="{'threat-item-has-description': threatDescription.length > 0, 'threat-item-has-description-and-subtech': threat?.sub_technique_description?.length > 0 }"
+                    :class="{'threat-item-has-description': threatDescription?.length > 0, 'threat-item-has-description-and-subtech': threat?.sub_technique_description?.length > 0 }"
                     v-if="threatId"
                 >
                     <span class="font-xxs-sb threat-standard">{{threat?.standard}} {{threat?.version}}</span>
@@ -71,7 +71,7 @@
             <div class="h-100 d-flex align-items-center justify-content-center w-100">
                 <div 
                     class="d-flex flex-column threat-item threat-item-has-description align-items-center justify-content-center" 
-                    :class="{'threat-item-has-description': threatDescription.length > 0, 'threat-item-has-description-and-subtech': threat?.sub_technique_description?.length > 0 }"
+                    :class="{'threat-item-has-description': threatDescription?.length > 0, 'threat-item-has-description-and-subtech': threat?.sub_technique_description?.length > 0 }"
                     v-if="threatId"
                     data-bs-toggle="modal" 
                     :data-bs-target="`#threat${evalIndex}${threatIndex}${threatId}`"
@@ -116,7 +116,7 @@
             </div>
         </div>
         <div 
-            v-if="threatDescription.length > 0"
+            v-if="threatDescription?.length > 0"
             class="modal fade"
             :id="`threat${evalIndex}${threatIndex}${threatId}`"
             tabindex="-1" 

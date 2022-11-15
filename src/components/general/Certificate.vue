@@ -9,7 +9,8 @@
                     :type="type" 
                 />
             </span>
-            {{ expiry_status }}
+            <span v-if="expired" class="font-color-danger">{{ expiry_status }}</span>
+            <span v-else class="font-color-primary">{{ expiry_status }}</span>
         </div>
         <div class="row">
             <div class="col-6 d-flex flex-column">
@@ -104,6 +105,7 @@
                 <h3 class="font-color-secondary font-base-b margin-top-sm">
                     Public Key
                 </h3>
+                <span v-if="known_compromise" class="font-color-danger margin-bottom-xxs">Private Key Compromised</span>
                 <span class="font-color-light margin-bottom-xxs" v-if="public_key_type">
                     <span class="font-base-sb margin-right-xxs">Type:</span>
                     <span class="font-base word-break">{{ public_key_type }}</span>

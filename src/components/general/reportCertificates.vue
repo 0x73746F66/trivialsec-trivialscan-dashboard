@@ -24,14 +24,20 @@
                     data-bs-toggle="modal"
                     :data-bs-target="`#cert_${cert.sha1_fingerprint}`"
                   >
-                    <div class="d-flex">
+                    <div class="d-flex w-100">
                       <customPill
                         class="margin-right-xxs margin-left-xxs"
                         :label="cert.type"
                         :type="cert.type"
                       />
-                      <div class="d-flex flex-column">
-                        <span class="font-xs-sb font-color-light">{{ commonNameFromSubject(cert.subject) }}</span>
+                      <div class="d-flex flex-column w-100">
+                        <span class="font-xs-sb d-flex w-100 justify-content-start">
+                          <span class="font-color-light nowrap">{{ commonNameFromSubject(cert.subject) }}</span>
+                          <span class="d-flex justify-content-end w-100">
+                            <span v-if="cert.expired" class="font-color-danger margin-left-xxs">Expired</span>
+                            <span v-if="cert.known_compromised" class="font-color-danger margin-left-xxs">Compromised</span>
+                          </span>
+                        </span>
                         <span class="font-xs font-color-lighter-60">{{cert.subject.split(',').filter(p=>!p.trim().startsWith('CN=')).join(',')}}</span>
                       </div>
                     </div>
