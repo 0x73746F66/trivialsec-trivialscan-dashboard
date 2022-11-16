@@ -79,13 +79,6 @@ export default {
     },
   },
   computed: {
-    slicedIssues() {
-      var arrays = [];
-      while(this.issues.length > 0) {
-        arrays.push(this.issues.splice(0, 10));
-      }
-      return arrays;
-    },
     results() {
       return {
         'pass': this.issues.filter(item => item.result_level === 'pass').length,

@@ -34,10 +34,10 @@
             buttonClasses="font-lg text-left report-dropdown font-color-light w-100 d-flex justify-content-left border-none padding-xxs"
             contentClasses=" bg-dark-20 report-dropdown-content tpadding-md font-color-light font-base"
             v-if="
-            evaluation.result_level === (resultsFilter.pass ? 'pass' : '') ||
-            evaluation.result_level === (resultsFilter.warn ? 'warn' : '') ||
-            evaluation.result_level === (resultsFilter.fail ? 'fail' : '') ||
-            evaluation.result_level === (resultsFilter.info ? 'info' : '')
+                evaluation.result_level === (resultsFilter.pass ? 'pass' : '') ||
+                evaluation.result_level === (resultsFilter.warn ? 'warn' : '') ||
+                evaluation.result_level === (resultsFilter.fail ? 'fail' : '') ||
+                evaluation.result_level === (resultsFilter.info ? 'info' : '')
             "
             >
             <template v-slot:header class="w-100" >
@@ -240,12 +240,61 @@ export default {
         ThreatIcon,
         IconCertificate,
     },
-
     props: [
         "evaluations",
         "results",
         "resultsFilter",
     ],
+    data() {
+        return {
+            metadata: [
+                'certificate_subject',
+                'sha1_fingerprint',
+                'subject_key_identifier',
+                'authority_key_identifier',
+                'expiry_status',
+                'certificate_version',
+                'reason',
+                'public_key_type',
+                'public_key_size',
+                'signature_algorithm',
+                'abuse.sh',
+                'spki_fingerprint',
+                'revocation_ocsp_status',
+                'revocation_ocsp_time',
+                'revocation_ocsp_response',
+                'revocation_ocsp_reason',
+                'public_key_exponent',
+                'certificate_transparency_status',
+                'certificate_transparency_description',
+                'common_name',
+                'not_before',
+                'crime_cbc',
+                'missing_paths',
+                'offered_cbc_ciphers',
+                'negotiated_cipher',
+                'negotiated_cipher_bits',
+                'offered_weak_ciphers',
+                'long_handshake_intolerance_versions',
+                'offered_strong_ciphers',
+                'offered_rc4_ciphers',
+                'tls_robot',
+                'key_usage',
+                'extended_key_usage',
+                'chain_validation_result',
+                'tls_version_interference_versions',
+                'tls_version_intolerance_versions',
+                'FIPS 140-2 Annex A non-compliance ciphers',
+                'FIPS 140-2 Annex A violations',
+                'NIST SP800-131A (strict mode) non-compliant ciphers',
+                'NIST SP800-131A (strict mode) violations',
+                'FIPS 140-2 (NIST SP800-131A transition mode) non-compliant ciphers',
+                'FIPS 140-2 (NIST SP800-131A transition mode) violations',
+                'PCI DSS 3.2.1 violations',
+                'PCI DSS 4.0 violations',
+            ]
+        }
+    },
     methods: {
         slicedThreats(evaluation) {
             if (!evaluation.threats || evaluation.threats.length === 0) {

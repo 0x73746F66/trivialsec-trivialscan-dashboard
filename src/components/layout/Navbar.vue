@@ -55,7 +55,7 @@
               to="/profile"
               class="router-link d-flex font-color-light text-decoration-none margin-right-md d-flex nav-profile-router"
             >
-              <div class="d-flex flex-column align-items-end nav-profile-router-info">
+              <div class="d-flex flex-column align-items-end nav-profile-router-info nowrap">
                 <span class="font-base">{{ account_name }}</span>
                 <span class="font-sm">{{ member_email }}</span>
               </div>
@@ -179,7 +179,7 @@ header {
       display: flex;
       align-items: center;
       justify-content: center;
-      
+
       &-info {
         overflow: hidden;
         max-width: 0;

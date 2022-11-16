@@ -49,7 +49,7 @@ export default {
     async fetchData() {
       this.loading = true
       try {
-        const response = await Api.get(`/report/${this.$route.params.report_id}`, { timeout: 30000 })
+        const response = await Api.get(`/report/${this.$route.params.report_id}`, { timeout: 60000 })
         if (response.status === 204) {
           this.message = "No reports available"
           this.messageType = "warning"
