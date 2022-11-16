@@ -1,5 +1,5 @@
 <template>
-    <loadingComponent class="loading" :class="{ inactive: !loading }" />
+    <LoadingComponent class="loading" :class="{ inactive: !loading }" />
     <ValidationMessage
         v-if="errorMessage.length > 0"
         class="justify-content-start"
@@ -26,14 +26,14 @@
 import CollapseableSection from "@/components/general/CollapseableSection.vue";
 import TimeScaleCustomChart from "@/components/general/TimeScaleCustomChart.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";
-import loadingComponent from "@/components/general/loadingComponent.vue";
+import LoadingComponent from "@/components/general/LoadingComponent.vue";
 
 export default {
   components: {
     CollapseableSection,
     TimeScaleCustomChart,
     ValidationMessage,
-    loadingComponent,
+    LoadingComponent,
   },
   data() {
     return {

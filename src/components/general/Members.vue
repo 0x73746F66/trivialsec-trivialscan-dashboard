@@ -1,5 +1,5 @@
 <template>
-  <loadingComponent class="loading" :class="{ inactive: !loading }" />
+  <LoadingComponent class="loading" :class="{ inactive: !loading }" />
   <div class="profile-members-section d-flex flex-column">
     <div
       class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center"
@@ -172,7 +172,7 @@ import Toggle from "@/components/general/Toggle.vue";
 import EmaiInput from "@/components/inputs/EmaiInput.vue";
 import Modal from "@/components/general/Modal.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";
-import loadingComponent from "@/components/general/loadingComponent.vue";
+import LoadingComponent from "@/components/general/LoadingComponent.vue";
 import moment from "moment";
 </script>
 
@@ -187,7 +187,7 @@ export default {
     EmaiInput,
     Modal,
     ValidationMessage,
-    loadingComponent,
+    LoadingComponent,
   },
   data() {
     return {

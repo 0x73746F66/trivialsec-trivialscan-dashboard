@@ -25,7 +25,7 @@
                     :data-bs-target="`#cert_${cert.sha1_fingerprint}`"
                   >
                     <div class="d-flex w-100">
-                      <customPill
+                      <CustomPill
                         class="margin-right-xxs margin-left-xxs"
                         :label="cert.type"
                         :type="cert.type"
@@ -50,7 +50,7 @@
             <IconChevron class="cert-icon" color="f0f0f0" />
           </button>
         </div>
-        <slidingModal
+        <SlidingModal
             v-for="(cert, certModalId) in certificates"
             :key="certModalId"
             :id="`cert_${cert.sha1_fingerprint}`"
@@ -72,7 +72,7 @@
               <Certificate v-bind="cert" />
             </div>
           </template>
-        </slidingModal>
+        </SlidingModal>
     </div>
 </template>
 <script>
@@ -82,8 +82,8 @@ import Certificate from "@/components/general/Certificate.vue"
 import CertificateIcon from "@/components/icons/CertificateIcon.vue";
 import IconChevron from "@/components/icons/IconChevron.vue";
 import IconArrowPrimary from "@/components/icons/IconArrowPrimary.vue";
-import slidingModal from "@/components/general/slidingModal.vue";
-import customPill from "@/components/general/customPill.vue";
+import SlidingModal from "@/components/general/SlidingModal.vue";
+import CustomPill from "@/components/general/CustomPill.vue";
 
 import 'swiper/css';
 
@@ -95,8 +95,8 @@ export default {
       Swiper,
       SwiperSlide,
       Certificate,
-      slidingModal,
-      customPill,
+      SlidingModal,
+      CustomPill,
       CertificateIcon,
       IconChevron,
       IconArrowPrimary

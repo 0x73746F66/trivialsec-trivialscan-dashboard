@@ -3,7 +3,7 @@
         <div class="d-flex justify-content-between align-items-center margin-bottom-sm">
             <span class="d-flex">
                 <IconCertificate class="cert-icon margin-right-xxs" color="e2c878" />
-                <customPill
+                <CustomPill
                     class="margin-right-xxs margin-left-xxs"
                     :label="type"
                     :type="type"
@@ -132,7 +132,7 @@ import moment from "moment"
 import IconCertificate from "../icons/IconCertificate.vue";
 import IconLink from "../icons/IconLink.vue";
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
-import customPill from "./customPill.vue";
+import CustomPill from "./CustomPill.vue";
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/css';
 
@@ -142,7 +142,7 @@ export default {
         IconLink,
         Swiper,
         SwiperSlide,
-        customPill,
+        CustomPill,
     },
     props: [
         "authority_key_identifier",

@@ -8,7 +8,7 @@
           <span class="font-color-primary">{{generator}}({{version}})</span>
           , {{lastScan}} ({{scanDuration}}s)
         </span>
-        <reportScoreResults :results="results" v-if="results"/>
+        <ReportScoreResults :results="results" v-if="results"/>
       </div>
       <div class="col-12 col-lg-6" v-if="targets">
         <h3 class="font-color-light font-lg margin-top-sm">Hosts</h3>
@@ -25,7 +25,7 @@
             <div class="d-flex flex-column justify-content-between w-100">
                 <div class="">
                     <div class="d-flex">
-                      <customPill
+                      <CustomPill
                       class="margin-right-xxs d-flex align-items-center pb-0"
                       :label="t.scanning_status.monitoring === true ? 'Active' : 'Inactive' "
                       :type="t.scanning_status.monitoring === true ? 'success' : 'danger' "
@@ -47,7 +47,7 @@
             </span>
           </span>
         </div>
-        <slidingModal
+        <SlidingModal
           v-for="(target, targetModalId) in targets"
           :key="targetModalId"
           :id="`target_${targetModalId}`">
@@ -65,7 +65,7 @@
           </template>
           <template #content>
             <div class="modal-body">
-              <loadingComponent class="loading" :class="{ inactive: !loading }" :active="loading" />
+              <LoadingComponent class="loading" :class="{ inactive: !loading }" :active="loading" />
               <ValidationMessage :message='errorMessageScanHost' :type="errorMessageTypeScanHost" />
               <div class="d-flex flex-column flex-lg-row justify-content-between">
                 <span class="font-color-secondary font-base-b">
@@ -91,7 +91,7 @@
                       @change="hostToggleChange($event, target.transport.hostname)"
                       />
                     </div>
-                    <customPill
+                    <CustomPill
                       class=""
                       :label="target.scanning_status.monitoring === true ? 'Active' : 'Inactive' "
                       :type="target.scanning_status.monitoring === true ? 'success' : 'danger' "
@@ -218,10 +218,10 @@
               </div>
             </div>
           </template>
-        </slidingModal>
+        </SlidingModal>
       </div>
       <div class="col-12 col-lg-6" v-if="certificates">
-        <reportCertificates :slicedCerts="slicedCerts" />
+        <ReportCertificates :slicedCerts="slicedCerts" />
       </div>
       <div class="col-12 col-lg-6" v-else>
         <h3 class="font-color-light font-lg margin-top-sm">Certificates</h3>
@@ -440,7 +440,7 @@
                           :key="threatIndex"
                           >
                           <div class="threat-item-container d-flex row padding-left-sm padding-right-sm">
-                            <threatItem :threat="threatItem" :evalIndex="evalIndex" :threatIndex="threatIndex" />
+                            <ThreatItem :threat="threatItem" :evalIndex="evalIndex" :threatIndex="threatIndex" />
                           </div>
                           <div class="col-12 col-lg-4">
                             <div class="threat-separator-container">
@@ -463,21 +463,21 @@
 import moment from "moment";
 import IconLink from "@/components/icons/IconLink.vue";
 import IconTarget from "@/components/icons/IconTarget.vue";
-import reportScoreResults from "@/components/general/reportScoreResults.vue";
+import ReportScoreResults from "@/components/general/ReportScoreResults.vue";
 import ExpandSection from "@/components/general/ExpandSection.vue";
 import Dropdown from "@/components/general/Dropdown.vue"
-import threatItem from "@/components/general/threatItem.vue"
+import ThreatItem from "@/components/mitre/ThreatItem.vue"
 import IconClose from "@/components/icons/IconClose.vue";
 import ThreatIcon from "@/components/icons/ThreatIcon.vue";
 import IconCertificate from "@/components/icons/IconCertificate.vue";
 import Toggle from "@/components/general/Toggle.vue"
 import ValidationMessage from "@/components/general/ValidationMessage.vue"
-import loadingComponent from "@/components/general/loadingComponent.vue"
+import LoadingComponent from "@/components/general/LoadingComponent.vue"
 import IconArrowPrimary from "@/components/icons/IconArrowPrimary.vue";
 import IconChevron from "@/components/icons/IconChevron.vue"
-import customPill from "@/components/general/customPill.vue";
-import slidingModal from "@/components/general/slidingModal.vue";
-import reportCertificates from "@/components/general/reportCertificates.vue"
+import CustomPill from "@/components/general/CustomPill.vue";
+import SlidingModal from "@/components/general/SlidingModal.vue";
+import ReportCertificates from "@/components/general/ReportCertificates.vue"
 </script>
 
 <script>
@@ -485,21 +485,21 @@ export default {
     components: {
         IconLink,
         IconTarget,
-        reportScoreResults,
+        ReportScoreResults,
         ExpandSection,
         Dropdown,
-        threatItem,
+        ThreatItem,
         IconClose,
         ThreatIcon,
         IconCertificate,
         Toggle,
         ValidationMessage,
-        loadingComponent,
+        LoadingComponent,
         IconArrowPrimary,
-        customPill,
-        slidingModal,
+        CustomPill,
+        SlidingModal,
         IconChevron,
-        reportCertificates
+        ReportCertificates
     },
 
     props: [

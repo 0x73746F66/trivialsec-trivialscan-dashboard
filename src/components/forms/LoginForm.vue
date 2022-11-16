@@ -1,5 +1,5 @@
 <template>
-  <loadingComponent class="modal-loading loading" :class="{ inactive: !loading }" />
+  <LoadingComponent class="modal-loading loading" :class="{ inactive: !loading }" />
   
   <form class="login-form" @submit.prevent="login">
     <ValidationMessage
@@ -27,13 +27,13 @@
 import EmaiInput from "../inputs/EmaiInput.vue";
 import Button from "../general/Button.vue";
 import ValidationMessage from "../general/ValidationMessage.vue";
-import loadingComponent from "../general/loadingComponent.vue";
+import LoadingComponent from "../general/LoadingComponent.vue";
 
 let apiUrl = import.meta.env.VITE_API_URL.trim()
 apiUrl = `${apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl}`
 
 export default {
-  components: { EmaiInput, Button, ValidationMessage, loadingComponent },
+  components: { EmaiInput, Button, ValidationMessage, LoadingComponent },
   data() {
     return {
       emailField: "",

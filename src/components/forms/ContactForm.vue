@@ -1,5 +1,5 @@
 <template>
-  <loadingComponent class="loading" :class="{ inactive: !loading }" />
+  <LoadingComponent class="loading" :class="{ inactive: !loading }" />
 
   <form class="contact-form" @submit.prevent="sendSupport">
     <ValidationMessage :message="message" :type="messageType" />
@@ -37,7 +37,7 @@
 import TextInput from "../inputs/TextInput.vue";
 import TextArea from "../inputs/TextArea.vue";
 import Button from "../general/Button.vue";
-import loadingComponent from "../general/loadingComponent.vue";
+import LoadingComponent from "../general/LoadingComponent.vue";
 import ValidationMessage from "../general/ValidationMessage.vue";
 
 export default {
@@ -46,7 +46,7 @@ export default {
     TextArea,
     Button,
     ValidationMessage,
-    loadingComponent,
+    LoadingComponent,
   },
   props: {
     SubjectFieldDefault: String,

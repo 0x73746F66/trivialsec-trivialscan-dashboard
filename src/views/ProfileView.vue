@@ -1,7 +1,7 @@
 <template>
 <main>
   <div>
-    <loadingComponent class="loading" :class="{ inactive: !loading }" />
+    <LoadingComponent class="loading" :class="{ inactive: !loading }" />
 
     <div class="container padding-top-xl padding-bottom-xl">
       <ValidationMessage
@@ -369,7 +369,6 @@
 <script setup>
 import { RouterLink } from "vue-router";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
-import { defineAsyncComponent } from 'vue'
 import { Swiper, SwiperSlide } from "swiper/vue";
 
 import moment from "moment";
@@ -379,47 +378,19 @@ import IconPencil from "@/components/icons/IconPencil.vue";
 import IconCancel from "@/components/icons/IconCancel.vue";
 import IconTrash from "@/components/icons/IconTrash.vue";
 import checkIcon from "@/components/icons/checkIcon.vue";
-import componentLoading from "@/components/general/componentLoading.vue";
-import loadingComponent from "@/components/general/loadingComponent.vue";
+import LoadingComponent from "@/components/general/LoadingComponent.vue";
+import Button from "@/components/general/Button.vue"
+import Toggle from "@/components/general/Toggle.vue"
+import Members from "@/components/general/Members.vue"
+import Clients from "@/components/general/Clients.vue"
+import EditableTextField from "@/components/inputs/EditableTextField.vue"
+import TextInput from "@/components/inputs/TextInput.vue"
+import EmaiInput from "@/components/inputs/EmaiInput.vue"
+import Modal from "@/components/general/Modal.vue"
+import ValidationMessage from "@/components/general/ValidationMessage.vue"
 </script>
 
 <script>
-const Button = defineAsyncComponent({
-    loader: () => import("../components/general/Button.vue"),
-    loadingComponent: componentLoading
-})
-const Toggle = defineAsyncComponent({
-    loader: () => import("../components/general/Toggle.vue"),
-    loadingComponent: componentLoading
-})
-const Members = defineAsyncComponent({
-    loader: () => import("../components/general/Members.vue"),
-    loadingComponent: componentLoading
-})
-const Clients = defineAsyncComponent({
-    loader: () => import("../components/general/Clients.vue"),
-    loadingComponent: componentLoading
-})
-const EditableTextField = defineAsyncComponent({
-    loader: () => import("../components/inputs/EditableTextField.vue"),
-    loadingComponent: componentLoading
-})
-const TextInput = defineAsyncComponent({
-    loader: () => import("../components/inputs/TextInput.vue"),
-    loadingComponent: componentLoading
-})
-const EmaiInput = defineAsyncComponent({
-    loader: () => import("../components/inputs/EmaiInput.vue"),
-    loadingComponent: componentLoading
-})
-const Modal = defineAsyncComponent({
-    loader: () => import("../components/general/Modal.vue"),
-    loadingComponent: componentLoading
-})
-const ValidationMessage = defineAsyncComponent({
-    loader: () => import("../components/general/ValidationMessage.vue"),
-    loadingComponent: componentLoading
-})
 
 export default {
     components: {
@@ -436,10 +407,9 @@ export default {
         EmaiInput,
         Modal,
         ValidationMessage,
-        loadingComponent,
+        LoadingComponent,
         Members,
         Clients,
-        componentLoading,
     },
     data() {
         return {

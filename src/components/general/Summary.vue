@@ -5,7 +5,7 @@
         :message="errorMessage"
         :type="errorMessageType"
     />
-    <loadingComponent class="loading" v-if="loading"/>
+    <LoadingComponent class="loading" v-if="loading"/>
     <div v-for="(summary, index) in summaries" :key="index" class="margin-bottom-sm" >
         <div v-if="summary" class="w-100 bg-dark-40 border-radius-sm d-flex flex-column padding-sm">
             <div class="row margin-bottom-xs">
@@ -69,7 +69,7 @@ import IconInfo from "../icons/IconInfo.vue"
 import IconTarget from "../icons/IconTarget.vue"
 import IconCertificate from "../icons/IconCertificate.vue"
 import IconArrowPrimary from "../icons/IconArrowPrimary.vue"
-import loadingComponent from "@/components/general/loadingComponent.vue";
+import LoadingComponent from "@/components/general/LoadingComponent.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";
 import moment from "moment";
 
@@ -82,7 +82,7 @@ export default {
         IconTarget,
         IconCertificate,
         IconArrowPrimary,
-        loadingComponent,
+        LoadingComponent,
         ValidationMessage,
     },
     data() {

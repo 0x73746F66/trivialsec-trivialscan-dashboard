@@ -1,6 +1,6 @@
 <template>
   <main>
-    <loadingComponent class="loading" :class="{ inactive: !loading }" />
+    <LoadingComponent class="loading" :class="{ inactive: !loading }" />
     <div class="container padding-top-xl">
       <ValidationMessage :message="message" :type="messageType" class="justify-content-start" />
     </div>
@@ -14,7 +14,7 @@
 import ReportDetail from "@/components/ReportDetail.vue";
 import ReportSummary from "@/components/ReportSummary.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";
-import loadingComponent from "@/components/general/loadingComponent.vue";
+import LoadingComponent from "@/components/general/LoadingComponent.vue";
 </script>
 
 <script>
@@ -23,7 +23,7 @@ export default {
     ReportSummary,
     ReportDetail,
     ValidationMessage,
-    loadingComponent,
+    LoadingComponent,
   },
   data() {
     return {

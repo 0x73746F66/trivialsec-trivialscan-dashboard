@@ -1,6 +1,6 @@
 <template>
     <div class="d-flex flex-row align-items-center justify-content-center">
-        <loadingComponent class="loading" :class="{ inactive: !loading }" />
+        <LoadingComponent class="loading" :class="{ inactive: !loading }" />
         <div v-if="errorMessage.length > 0" class="d-flex flex-column w-100">
             <ValidationMessage class="justify-content-start" :message="errorMessage" :type="errorMessageType" />
             <span class="font-xl font-color-light-80 text-center w-100 bg-dark-40 border-radius-sm d-block">No data to
@@ -55,7 +55,7 @@
 import IconTarget from "@/components/icons/IconTarget.vue";
 import IconChevron from "@/components/icons/IconChevron.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";
-import loadingComponent from "@/components/general/loadingComponent.vue";
+import LoadingComponent from "@/components/general/LoadingComponent.vue";
 import moment from "moment"
 
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
@@ -70,7 +70,7 @@ export default {
         IconTarget,
         IconChevron,
         ValidationMessage,
-        loadingComponent,
+        LoadingComponent,
     },
     data() {
         return {

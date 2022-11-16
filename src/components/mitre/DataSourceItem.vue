@@ -7,7 +7,7 @@
                     :class="{'threat-item-has-description': threatDescription?.length > 0, 'threat-item-has-description-and-subtech': threat?.sub_technique_description?.length > 0 }"
                     v-if="threatId"
                 >
-                    <span class="font-xxs-sb threat-standard">{{threat?.standard}} {{threat?.version}}</span>
+                    <span class="font-xxs-sb threat-standard">{{threatType}}</span>
                     <span class="font-xs-b text-center" v-if="threatLabel">
                         {{threatLabel}}
                         <a
@@ -56,7 +56,7 @@
                     v-html="threatDescription">
                 </div>
             </div>
-            <span style="height:15px"></span>
+            <span style="min-height:15px"></span>
             <!-- subtech section -->
             <div class="h-100 d-flex align-items-center justify-content-center w-100" v-if="threat?.sub_technique_description">
                 <div class="threat-description font-xs text-center w-100 pre-line" v-html="threat?.sub_technique_description"></div>
@@ -73,7 +73,7 @@
                     data-bs-toggle="modal"
                     :data-bs-target="`#threat${evalIndex}${threatIndex}${threatId}`"
                 >
-                    <span class="font-xxs-sb threat-standard">{{threat?.standard}} {{threat?.version}}</span>
+                    <span class="font-xxs-sb threat-standard">{{threatType}}</span>
                     <span class="font-xs-b text-center" id="threat-label" v-if="threatLabel">
                         {{threatLabel}}
                         <a
@@ -210,6 +210,17 @@ export default {
                 label = this.threat.technique
             } else if (this.threat.tactic) {
                 label = this.threat.tactic
+            }
+            return label;
+        },
+        threatType() {
+            let label;
+            if(this.threat.data_source) {
+                label = "Data Source"
+            } else if (this.threat.technique) {
+                label = "Technique"
+            } else if (this.threat.tactic) {
+                label = "Tactic"
             }
             return label;
         },

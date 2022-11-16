@@ -3,7 +3,7 @@
         <div class="d-flex flex-column flex-lg-row justify-content-between">
             <span class="font-color-secondary font-sm-b">
                 <div class="d-flex flex-column">
-                    <customPill
+                    <CustomPill
                         class="margin-bottom-xs"
                         :label="host?.scanning_status?.monitoring === true ? 'Active' : 'Inactive' "
                         :type="host?.scanning_status?.monitoring === true ? 'success' : 'danger' "
@@ -151,14 +151,14 @@
     import IconTarget from "@/components/icons/IconTarget.vue";
     import IconCertificate from "@/components/icons/IconCertificate.vue";
     import Toggle from "@/components/general/Toggle.vue"
-    import customPill from "@/components/general/customPill.vue";
+    import CustomPill from "@/components/general/CustomPill.vue";
 
     export default {
         components: {
             IconTarget,
             IconCertificate,
             Toggle,
-            customPill,
+            CustomPill,
         },
         props: [
             'host'

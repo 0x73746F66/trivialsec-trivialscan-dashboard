@@ -51,9 +51,17 @@ import cIconCliLight from "@/components/icons/IconCliLight.vue";
 import cIconGlobeLight from "@/components/icons/IconGlobeLight.vue";
 import cIconFishLight from "@/components/icons/IconFishLight.vue";
 import cIconTuneLight from "@/components/icons/IconTuneLight.vue";
-import loadingComponent from "@/components/general/loadingComponent.vue";
-import componentLoading from "@/components/general/componentLoading.vue";
-import { defineAsyncComponent } from 'vue'
+import LoadingComponent from "@/components/general/LoadingComponent.vue";
+import Hero from "@/components/layout/Hero.vue"
+import LoginForm from "@/components/forms/LoginForm.vue"
+import RegisterForm from "@/components/forms/RegisterForm.vue"
+import BasicFeature from "@/components/general/BasicFeature.vue"
+import PricingComponent from "@/components/general/PricingComponent.vue"
+import Dropdown from "@/components/general/Dropdown.vue"
+import Modal from "@/components/general/Modal.vue"
+import ContactForm from "@/components/forms/ContactForm.vue"
+import LoginOrRegister from "@/components/general/LoginOrRegister.vue"
+
 
 const IconNotificationLight = shallowRef(cIconNotificationLight);
 const IconData = shallowRef(cIconData);
@@ -68,44 +76,6 @@ const IconGlobeLight = shallowRef(cIconGlobeLight);
 const IconFishLight = shallowRef(cIconFishLight);
 const IconTuneLight = shallowRef(cIconTuneLight);
 
-const Hero = defineAsyncComponent({ 
-  loader: () => import("../components/layout/Hero.vue"),
-  loadingComponent: componentLoading
-})
-const LoginForm = defineAsyncComponent({ 
-  loader: () => import("../components/forms/LoginForm.vue"),
-  loadingComponent: componentLoading
-})
-const RegisterForm = defineAsyncComponent({ 
-  loader: () => import("../components/forms/RegisterForm.vue"),
-  loadingComponent: componentLoading
-})
-const BasicFeature = defineAsyncComponent({ 
-  loader: () => import("../components/general/BasicFeature.vue"),
-  loadingComponent: componentLoading
-})
-const PricingComponent = defineAsyncComponent({ 
-  loader: () => import("../components/general/PricingComponent.vue"),
-  loadingComponent: componentLoading
-})
-const Dropdown = defineAsyncComponent({ 
-  loader: () => import("../components/general/Dropdown.vue"),
-  loadingComponent: componentLoading
-})
-const Modal = defineAsyncComponent({ 
-  loader: () => import("../components/general/Modal.vue"),
-  loadingComponent: componentLoading
-})
-const ContactForm = defineAsyncComponent({ 
-  loader: () => import("../components/forms/ContactForm.vue"),
-  loadingComponent: componentLoading
-})
-const LoginOrRegister = defineAsyncComponent({ 
-  loader: () => import("../components/general/LoginOrRegister.vue"),
-  loadingComponent: componentLoading
-})
-
-
 export default {
   components: {
     Hero,
@@ -116,8 +86,7 @@ export default {
     Dropdown,
     Modal,
     ContactForm,
-    loadingComponent,
-    componentLoading,
+    LoadingComponent,
     LoginOrRegister,
   },
   data() {

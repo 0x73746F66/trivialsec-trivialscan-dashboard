@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex flex-row align-items-center justify-content-center">
-    <loadingComponent class="loading" :class="{ inactive: !loading }" />
+    <LoadingComponent class="loading" :class="{ inactive: !loading }" />
     <div v-if="errorMessage.length > 0" class="d-flex flex-column w-100">
       <ValidationMessage
           class="justify-content-start"
@@ -120,7 +120,7 @@ import CertificateIcon from "@/components/icons/CertificateIcon.vue";
 import IconChevron from "@/components/icons/IconChevron.vue";
 import IconArrowPrimary from "@/components/icons/IconArrowPrimary.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";
-import loadingComponent from "@/components/general/loadingComponent.vue";
+import LoadingComponent from "@/components/general/LoadingComponent.vue";
 import moment from "moment";
 
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
@@ -137,7 +137,7 @@ export default {
     IconChevron,
     IconArrowPrimary,
     ValidationMessage,
-    loadingComponent,
+    LoadingComponent,
   },
   data() {
     return {

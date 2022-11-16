@@ -1,5 +1,5 @@
 <template>
-  <loadingComponent class="loading" :class="{ inactive: !loading }" />
+  <LoadingComponent class="loading" :class="{ inactive: !loading }" />
   <div class="clients-section d-flex flex-column margin-top-lg">
     <div class="d-flex justify-content-between align-items-center">
       <h3 class="font-color-light font-lg-b">Clients</h3>
@@ -119,7 +119,7 @@ import Modal from "@/components/general/Modal.vue";
 import Toggle from "@/components/general/Toggle.vue";
 import EmaiInput from "@/components/inputs/EmaiInput.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";
-import loadingComponent from "@/components/general/loadingComponent.vue";
+import LoadingComponent from "@/components/general/LoadingComponent.vue";
 import moment from "moment";
 </script>
 
@@ -134,7 +134,7 @@ export default {
     Toggle,
     EmaiInput,
     ValidationMessage,
-    loadingComponent,
+    LoadingComponent,
   },
   data() {
     return {

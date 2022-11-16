@@ -1,7 +1,7 @@
 <template>
 <main>
   <div class="container">
-    <loadingComponent class="loading" v-if="loading"/>
+    <LoadingComponent class="loading" v-if="loading"/>
     <ValidationMessage
         v-if="errorMessage.length > 0"
         class="justify-content-start"
@@ -18,14 +18,14 @@
 <script setup>
 import Certificate from "@/components/general/Certificate.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";
-import loadingComponent from "@/components/general/loadingComponent.vue";
+import LoadingComponent from "@/components/general/LoadingComponent.vue";
 </script>
 
 <script>
 export default {
   components: {
     ValidationMessage,
-    loadingComponent,
+    LoadingComponent,
   },
   data() {
     return {

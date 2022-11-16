@@ -1,7 +1,7 @@
 <template>
 <main>
   <div class="container font-color-light padding-top-xl padding-bottom-xl">
-    <loadingComponent class="loading" v-if="loading"/>
+    <LoadingComponent class="loading" v-if="loading"/>
 
     <div class="w-100 d-flex align-items-lg-center flex-column flex-lg-row justify-content-between margin-bottom-sm">
       <div class="d-inline-block w-100 position-relative">
@@ -50,7 +50,7 @@
                 :column-style=true
               >
                 <template v-slot:Monitoring>
-                  <pieChart
+                  <PieChart
                     :inUse="quotas?.monitoring.used"
                     :available="quotas?.monitoring.total"
                     v-if="quotas.monitoring.total>0"
@@ -67,7 +67,7 @@
                 </template>
 
                 <template v-slot:Active>
-                  <pieChart
+                  <PieChart
                     :inUse="quotas?.active.used"
                     :available="quotas?.active.total"
                     v-if="quotas.active.total>0"
@@ -84,7 +84,7 @@
                 </template>
 
                 <template v-slot:Passive>
-                  <pieChart
+                  <PieChart
                     :inUse="quotas?.passive.used"
                     :available="quotas?.passive.total"
                     v-if="quotas.passive.total>0"
@@ -150,9 +150,17 @@
 </template>
 
 <script setup>
-import loadingComponent from "@/components/general/loadingComponent.vue";
-import componentLoading from "@/components/general/componentLoading.vue";
-import { defineAsyncComponent } from 'vue'
+import LoadingComponent from "@/components/general/LoadingComponent.vue"
+import CollapseableSection from "@/components/general/CollapseableSection.vue"
+import QuestionComponent from "@/components/general/QuestionComponent.vue"
+import ComplianceCharts from "@/components/general/ComplianceCharts.vue"
+import HostsList from "@/components/general/HostsList.vue"
+import IssuesList from "@/components/general/IssuesList.vue"
+import CertificateList from "@/components/general/CertificateList.vue"
+import ValidationMessage from "@/components/general/ValidationMessage.vue"
+import PieChart from "@/components/general/PieChart.vue"
+import SearchForm from "@/components/forms/SearchForm.vue"
+import Summary from "@/components/general/Summary.vue"
 
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/vue'
@@ -161,47 +169,6 @@ import 'swiper/css'
 </script>
 
 <script>
-const CollapseableSection = defineAsyncComponent({
-  loader: () => import("../components/general/CollapseableSection.vue"),
-  loadingComponent: componentLoading
-})
-const QuestionComponent = defineAsyncComponent({
-  loader: () => import("../components/general/QuestionComponent.vue"),
-  loadingComponent: componentLoading
-})
-const ComplianceCharts = defineAsyncComponent({
-  loader: () => import("../components/general/ComplianceCharts.vue"),
-  loadingComponent: componentLoading
-})
-const HostsList = defineAsyncComponent({
-  loader: () => import("../components/general/HostsList.vue"),
-  loadingComponent: componentLoading
-})
-const IssuesList = defineAsyncComponent({
-  loader: () => import("../components/general/IssuesList.vue"),
-  loadingComponent: componentLoading
-})
-const CertificateList = defineAsyncComponent({
-  loader: () => import("../components/general/CertificateList.vue"),
-  loadingComponent: componentLoading
-})
-const ValidationMessage = defineAsyncComponent({
-  loader: () => import("../components/general/ValidationMessage.vue"),
-  loadingComponent: componentLoading
-})
-const pieChart = defineAsyncComponent({
-  loader: () => import("../components/general/pieChart.vue"),
-  loadingComponent: componentLoading
-})
-const SearchForm = defineAsyncComponent({
-  loader: () => import("../components/forms/SearchForm.vue"),
-  loadingComponent: componentLoading
-})
-const Summary = defineAsyncComponent({
-  loader: () => import("../components/general/Summary.vue"),
-  loadingComponent: componentLoading
-})
-
 export default {
   components: {
     CollapseableSection,
@@ -213,8 +180,8 @@ export default {
     IssuesList,
     CertificateList,
     ValidationMessage,
-    componentLoading,
-    pieChart,
+    LoadingComponent,
+    PieChart,
     SearchForm,
     Summary
   },

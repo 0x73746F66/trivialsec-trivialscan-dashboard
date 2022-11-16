@@ -1,5 +1,5 @@
 <template>
-  <loadingComponent class="modal-loading loading" :class="{ inactive: !loading }" />
+  <LoadingComponent class="modal-loading loading" :class="{ inactive: !loading }" />
 
   <form class="register-form" @submit.prevent="register">
     <ValidationMessage :message="message" :type="messageType" />
@@ -29,7 +29,7 @@ import TextInput from "../inputs/TextInput.vue";
 import EmaiInput from "../inputs/EmaiInput.vue";
 import Button from "../general/Button.vue";
 import ValidationMessage from "../general/ValidationMessage.vue";
-import loadingComponent from "../general/loadingComponent.vue";
+import LoadingComponent from "../general/LoadingComponent.vue";
 
 let apiUrl = import.meta.env.VITE_API_URL.trim()
 apiUrl = `${apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl}`
@@ -40,7 +40,7 @@ export default {
     EmaiInput,
     Button,
     ValidationMessage,
-    loadingComponent,
+    LoadingComponent,
   },
   data() {
     return {

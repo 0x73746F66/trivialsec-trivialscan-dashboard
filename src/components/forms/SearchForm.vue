@@ -1,5 +1,5 @@
 <template>
-    <loadingComponent class="loading" :class="{ inactive: !loading }" :active="loading" />
+    <LoadingComponent class="loading" :class="{ inactive: !loading }" :active="loading" />
 
     <div class="d-flex position-relative">
         <select
@@ -208,7 +208,7 @@ import IconDocumentation from "../icons/IconDocumentation.vue"
 import IconGlobeLight from "../icons/IconGlobeLight.vue"
 import Toggle from "../general/Toggle.vue"
 import ValidationMessage from "../general/ValidationMessage.vue"
-import loadingComponent from "../general/loadingComponent.vue"
+import LoadingComponent from "../general/LoadingComponent.vue"
 import moment from "moment"
 
 export default {
@@ -222,7 +222,7 @@ export default {
         IconDocumentation,
         Toggle,
         ValidationMessage,
-        loadingComponent
+        LoadingComponent
     },
     data() {
         return {
