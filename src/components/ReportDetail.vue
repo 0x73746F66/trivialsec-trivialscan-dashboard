@@ -322,9 +322,7 @@
                 <template v-slot:content>
                   <div class="row">
                     <div class="col-12 col-lg-6 padding-top-sm">
-                      <span class="font-xs pre-line">
-                        {{evaluation?.description}}
-                      </span>
+                      <span class="font-xs pre-line" v-html="evaluation?.description"></span>
                     </div>
                     <div class="col-12 col-lg-6 d-flex flex-column">
                       <template v-if="evaluation?.references.length > 0">
@@ -390,22 +388,27 @@
                           v-for="(compliance, index) in evaluation.compliance"
                           :key="index"
                           >
-                          <div v-if="compliance?.items?.length > 0">
+                          <div>
                             {{ compliance.compliance }} {{ compliance.version }}
                             <div class="d-flex flex-wrap">
-                              <button
+                              <div class="w-100 font-sm-sb margin-bottom-xs" v-if="compliance?.items?.length > 0">Requiements</div>
+                              <template
                                 v-for="(comp, compIndex) in compliance.items"
-                                class="pill w-auto margin-right-xxs font-xs-sb"
-                                data-bs-toggle="collapse"
-                                type="button"
-                                aria-expanded="false"
                                 :key="compIndex"
-                                :data-bs-target="`#multiCollapseCompliance${evaluation?.key}-${comp?.requirement?.replace(/\./g, '-')}`"
-                                :data-bs-parent="`#complianceSection${evaluation?.key}`"
-                                :aria-controls="`multiCollapseCompliance${evaluation?.key}-${comp?.requirement?.replace(/\./g, '-')}`"
                               >
-                                Req: {{comp.requirement}}
-                              </button>
+                                <button
+                                  class="pill w-auto margin-right-xxs font-xs-sb"
+                                  data-bs-toggle="collapse"
+                                  type="button"
+                                  aria-expanded="false"
+                                  :data-bs-target="`#multiCollapseCompliance${evaluation?.key}-${comp?.requirement?.replace(/\./g, '-')}`"
+                                  :data-bs-parent="`#complianceSection${evaluation?.key}`"
+                                  :aria-controls="`multiCollapseCompliance${evaluation?.key}-${comp?.requirement?.replace(/\./g, '-')}`"
+                                  v-if="comp.requirement"
+                                >
+                                  {{comp.requirement}}
+                                </button>
+                              </template>
                             </div>
 
                             <div class="row margin-bottom-sm">
@@ -417,9 +420,7 @@
                                 :id="`multiCollapseCompliance${evaluation?.key}-${comp?.requirement?.replace(/\./g, '-')}`"
                                 :data-bs-parent="`#complianceSection${evaluation?.key}`"
                                 >
-                                  <div class="card card-body bg-dark-40 font-xs pre-line">
-                                    {{comp.description}}
-                                  </div>
+                                  <div v-if="comp.description" class="card card-body bg-dark-40 font-xs" v-html="comp.description"></div>
                                 </div>
                               </div>
                             </div>
@@ -429,17 +430,17 @@
                       </div>
 
                     </div>
-                    <div
-                      class="col-12 d-flex flex-column padding-top-sm"
-                      v-if="evaluation?.threats?.length > 0"
-                    >
-                      <h3 class="font-base-sb font-color-light margin-bottom-lg">Threats</h3>
-                        <div v-for="(threat, threatIndex) in evaluation.threats"
+                    <div class="col-12 d-flex flex-column padding-top-sm">
+                      <div v-for="(group, groupIndex) in slicedThreats(evaluation)"
+                        :key="groupIndex"
+                      >
+                        <h3 class="font-base font-color-light margin-bottom-lg">{{group.standard}} {{group.version}}</h3>
+                        <div v-for="(threatItem, threatIndex) in group.items"
                           class="d-flex flex-column"
                           :key="threatIndex"
                           >
                           <div class="threat-item-container d-flex row padding-left-sm padding-right-sm">
-                            <threatItem :threat="threat" :evalIndex="evalIndex" :threatIndex="threatIndex" />
+                            <threatItem :threat="threatItem" :evalIndex="evalIndex" :threatIndex="threatIndex" />
                           </div>
                           <div class="col-12 col-lg-4">
                             <div class="threat-separator-container">
@@ -447,6 +448,7 @@
                             </div>
                           </div>
                         </div>
+                      </div>
                     </div>
                   </div>
                 </template>
@@ -480,150 +482,177 @@ import reportCertificates from "@/components/general/reportCertificates.vue"
 
 <script>
 export default {
-  components: {
-    IconLink,
-    IconTarget,
-    reportScoreResults,
-    ExpandSection,
-    Dropdown,
-    threatItem,
-    IconClose,
-    ThreatIcon,
-    IconCertificate,
-    Toggle,
-    ValidationMessage,
-    loadingComponent,
-    IconArrowPrimary,
-    customPill,
-    slidingModal,
-    IconChevron,
-    reportCertificates
-  },
+    components: {
+        IconLink,
+        IconTarget,
+        reportScoreResults,
+        ExpandSection,
+        Dropdown,
+        threatItem,
+        IconClose,
+        ThreatIcon,
+        IconCertificate,
+        Toggle,
+        ValidationMessage,
+        loadingComponent,
+        IconArrowPrimary,
+        customPill,
+        slidingModal,
+        IconChevron,
+        reportCertificates
+    },
 
-  props: [
-    "generator",
-    "version",
-    "account_name",
-    "client_name",
-    "project_name",
-    "targets",
-    "date",
-    "execution_duration_seconds",
-    "score",
-    "results",
-    "certificates",
-    "results_uri",
-    "config",
-    "flags",
-    "evaluations",
-  ],
-  data() {
-      return {
-          loading: false,
-          errorMessage: '',
-          errorMessageType: '',
-          errorMessageScanHost: '',
-          errorMessageTypeScanHost: '',
-          resultsFilter: {
-            'pass': false,
-            'fail': true,
-            'warn': true,
-            'info': false,
-          }
-      }
-  },
-  methods: {
-      async hostToggleChange(e, hostname) {
-          this.loading = true
-          try {
-            if (e.target.checked === true) {
-                const response = await Api.get(`/scanner/monitor/${hostname}`)
-                if (response.status !== 200) {
-                    this.errorMessageScanHost = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
-                    this.errorMessageTypeScanHost = "error";
-                    this.loading = false
-                    e.target.checked = false
-                    return;
-                }
-                this.errorMessageScanHost = `Monitoring host.`
-                this.errorMessageTypeScanHost = "success";
-                for (const target of this.targets) {
-                  if (hostname === target.transport.hostname) {
-                    target.scanning_status.monitoring = true
-                  }
-                }
-            } else {
-                const response = await Api.get(`/scanner/deactivate/${hostname}`)
-                if (response.status !== 200) {
-                    this.errorMessageScanHost = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
-                    this.errorMessageTypeScanHost = "error";
-                    this.loading = false
-                    e.target.checked = false
-                    return;
-                }
-                this.errorMessageScanHost = `No longer monitoring host.`
-                this.errorMessageTypeScanHost = "success";
-                for (const target of this.targets) {
-                  if (hostname === target.transport.hostname) {
-                    target.scanning_status.monitoring = false
-                  }
-                }
+    props: [
+        "generator",
+        "version",
+        "account_name",
+        "client_name",
+        "project_name",
+        "targets",
+        "date",
+        "execution_duration_seconds",
+        "score",
+        "results",
+        "certificates",
+        "results_uri",
+        "config",
+        "flags",
+        "evaluations",
+    ],
+    data() {
+        return {
+            loading: false,
+            errorMessage: '',
+            errorMessageType: '',
+            errorMessageScanHost: '',
+            errorMessageTypeScanHost: '',
+            resultsFilter: {
+                'pass': false,
+                'fail': true,
+                'warn': true,
+                'info': false,
             }
-          } catch (error) {
-            this.errorMessageScanHost = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
-            this.errorMessageTypeScanHost = "error"
-            e.target.checked = false
-          }
-          this.loading = false
-      },
-      swiperNext(){
-        this.$refs.certificateSwiper
-      },
-      commonNameFromSubject(subject) {
-          if (typeof subject !== 'string' || subject.indexOf('CN=') === -1) {
-              return subject
-          }
-          return subject.split(',').filter(p => p.trim().startsWith('CN=')).join('').replace(/CN=/g, '')
-      },
-      getCertificate(sha1_fingerprint) {
-          return this.certificates.filter(cert => cert.sha1_fingerprint === sha1_fingerprint).pop()
-      },
-      uniqueCertificates(sha1Fingerprints){
-          const uniq = new Set(sha1Fingerprints)
-          return [...uniq]
-      },
-  },
-  computed: {
-    slicedCerts() {
-      let certificate_chains = []
-      function next_certs(SKI, arr) {
-          for (const cert of cert_list) {
-            if (cert.authority_key_identifier === SKI) {
-                // console.log(cert.type, cert.subject_key_identifier, cert.subject)
-                arr.push(cert)
-                next_certs(cert.subject_key_identifier, arr)
-            }
-          }
-      }
-      let cert_list = this.certificates.slice()
-      for (const cert of cert_list) {
-        if (cert.type === "root") {
-            let chain = [cert]
-            cert_list = cert_list.filter(item => item !== cert)
-            // console.log(cert.type, cert.subject_key_identifier, cert.subject)
-            next_certs(cert.subject_key_identifier, chain)
-            certificate_chains.push(chain.reverse())
         }
-      }
-      return certificate_chains
     },
-    lastScan() {
-      return moment.utc(this.date).fromNow();
+    methods: {
+        async hostToggleChange(e, hostname) {
+            this.loading = true
+            try {
+                if (e.target.checked === true) {
+                    const response = await Api.get(`/scanner/monitor/${hostname}`)
+                    if (response.status !== 200) {
+                        this.errorMessageScanHost = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
+                        this.errorMessageTypeScanHost = "error";
+                        this.loading = false
+                        e.target.checked = false
+                        return;
+                    }
+                    this.errorMessageScanHost = `Monitoring host.`
+                    this.errorMessageTypeScanHost = "success";
+                    for (const target of this.targets) {
+                        if (hostname === target.transport.hostname) {
+                            target.scanning_status.monitoring = true
+                        }
+                    }
+                } else {
+                    const response = await Api.get(`/scanner/deactivate/${hostname}`)
+                    if (response.status !== 200) {
+                        this.errorMessageScanHost = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
+                        this.errorMessageTypeScanHost = "error";
+                        this.loading = false
+                        e.target.checked = false
+                        return;
+                    }
+                    this.errorMessageScanHost = `No longer monitoring host.`
+                    this.errorMessageTypeScanHost = "success";
+                    for (const target of this.targets) {
+                        if (hostname === target.transport.hostname) {
+                            target.scanning_status.monitoring = false
+                        }
+                    }
+                }
+            } catch (error) {
+                this.errorMessageScanHost = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
+                this.errorMessageTypeScanHost = "error"
+                e.target.checked = false
+            }
+            this.loading = false
+        },
+        swiperNext() {
+            this.$refs.certificateSwiper
+        },
+        commonNameFromSubject(subject) {
+            if (typeof subject !== 'string' || subject.indexOf('CN=') === -1) {
+                return subject
+            }
+            return subject.split(',').filter(p => p.trim().startsWith('CN=')).join('').replace(/CN=/g, '')
+        },
+        getCertificate(sha1_fingerprint) {
+            return this.certificates.filter(cert => cert.sha1_fingerprint === sha1_fingerprint).pop()
+        },
+        uniqueCertificates(sha1Fingerprints) {
+            const uniq = new Set(sha1Fingerprints)
+            return [...uniq]
+        },
+        slicedThreats(evaluation) {
+            if (!evaluation.threats || evaluation.threats.length === 0) {
+                return []
+            }
+            let groups = new Set()
+            for (const threat of evaluation.threats) {
+                groups.add([threat.standard, threat.version].toString())
+            }
+            let threatGroups = []
+            for (const group of [...groups]) {
+                console.log('group', group)
+                const threatGroup = {
+                    standard: group.split(',')[0],
+                    version: group.split(',')[1],
+                    items: [],
+                }
+                for (const threat of evaluation.threats) {
+                    if (group == [threat.standard, threat.version]) {
+                        threatGroup.items.push(threat)
+                    }
+                }
+                if (threatGroup.items.length > 0) {
+                    threatGroups.push(threatGroup)
+                }
+            }
+            return [...threatGroups]
+        },
     },
-    scanDuration(){
-      return Math.floor(this.execution_duration_seconds);
+    computed: {
+        slicedCerts() {
+            let certificate_chains = []
+            function next_certs(SKI, arr) {
+                for (const cert of cert_list) {
+                    if (cert.authority_key_identifier === SKI) {
+                        // console.log(cert.type, cert.subject_key_identifier, cert.subject)
+                        arr.push(cert)
+                        next_certs(cert.subject_key_identifier, arr)
+                    }
+                }
+            }
+            let cert_list = this.certificates.slice()
+            for (const cert of cert_list) {
+                if (cert.type === "root") {
+                    let chain = [cert]
+                    cert_list = cert_list.filter(item => item !== cert)
+                    // console.log(cert.type, cert.subject_key_identifier, cert.subject)
+                    next_certs(cert.subject_key_identifier, chain)
+                    certificate_chains.push(chain.reverse())
+                }
+            }
+            return certificate_chains
+        },
+        lastScan() {
+            return moment.utc(this.date).fromNow();
+        },
+        scanDuration() {
+            return Math.floor(this.execution_duration_seconds);
+        }
     }
-  }
 };
 </script>
 
@@ -755,5 +784,9 @@ export default {
       font-size: 10px;
     }
   }
+}
+
+.pre-line {
+  p { margin-bottom: 0; }
 }
 </style>

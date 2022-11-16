@@ -3,10 +3,10 @@
         <div class="d-flex justify-content-between align-items-center margin-bottom-sm">
             <span class="d-flex">
                 <IconCertificate class="cert-icon margin-right-xxs" color="e2c878" />
-                <customPill 
+                <customPill
                     class="margin-right-xxs margin-left-xxs"
-                    :label="type" 
-                    :type="type" 
+                    :label="type"
+                    :type="type"
                 />
             </span>
             <span v-if="expired" class="font-color-danger">{{ expiry_status }}</span>
@@ -105,7 +105,7 @@
                 <h3 class="font-color-secondary font-base-b margin-top-sm">
                     Public Key
                 </h3>
-                <span v-if="known_compromise" class="font-color-danger margin-bottom-xxs">Private Key Compromised</span>
+                <span v-if="known_compromised" class="font-color-danger margin-bottom-xxs">Private Key Compromised</span>
                 <span class="font-color-light margin-bottom-xxs" v-if="public_key_type">
                     <span class="font-base-sb margin-right-xxs">Type:</span>
                     <span class="font-base word-break">{{ public_key_type }}</span>
