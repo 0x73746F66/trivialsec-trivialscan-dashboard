@@ -604,7 +604,6 @@ export default {
             }
             let threatGroups = []
             for (const group of [...groups]) {
-                console.log('group', group)
                 const threatGroup = {
                     standard: group.split(',')[0],
                     version: group.split(',')[1],
