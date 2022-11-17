@@ -25,6 +25,7 @@
 
     </div>
     <div v-for="(evaluation, evalIndex) in evaluations" :key="`${evalIndex}`">
+        <input type="hidden" :value="evaluation.result_level" />
         <Dropdown
             :id="`headingEvaluate${evalIndex}`"
             :target="`collapseEvaluate${evalIndex}`"
@@ -105,40 +106,231 @@
                         >{{ev.name}}</a>
                     </span>
                     </template>
-                    <div class="col-12 col-lg-6 font-sm font-color-light d-flex flex-column margin-top-sm" v-if="evaluation?.metadata">
-                    <div class="d-flex" v-if="evaluation?.metadata?.reason">
-                        <span class="font-sm-sb margin-right-xxs">Reason:</span><span>{{evaluation?.metadata?.reason}}</span>
-                    </div>
-                    <div class="d-flex margin-top-sm" v-if="evaluation?.metadata?.certificate_version || evaluation?.metadata?.certificate_subject || evaluation?.metadata?.sha1_fingerprint">
-                        <span class="font-sm-sb margin-right-xxs">Certificate</span>
-                        <div class="d-flex margin-right-xxs" v-if="evaluation?.metadata?.certificate_version">
-                        <span>version {{evaluation?.metadata.certificate_version}}</span>
+                    <template v-if="evaluation?.metadata">
+                        <div class="col-12 col-lg-6 font-sm font-color-light d-flex flex-column margin-top-sm">
+                            <div class="d-flex" v-if="evaluation.metadata['abuse.sh']">
+                                <span class="font-sm-sb margin-right-xxs nowrap">abuse.sh </span><span>{{evaluation.metadata['abuse.sh']}}</span>
+                            </div>
+                            <div class="d-flex" v-if="evaluation.metadata.reason">
+                                <span class="font-sm-sb margin-right-xxs nowrap">Reason:</span><span>{{evaluation.metadata.reason}}</span>
+                            </div>
+                            <div class="d-flex" v-if="evaluation.metadata.crime_cbc">
+                                <span class="font-sm-sb margin-right-xxs nowrap">Results:</span><span>{{evaluation.metadata.crime_cbc}}</span>
+                            </div>
+                            <div class="d-flex" v-if="evaluation.metadata.tls_robot">
+                                <span class="font-sm-sb margin-right-xxs nowrap">Results:</span><span>{{evaluation.metadata.tls_robot}}</span>
+                            </div>
+                            <div class="d-flex" v-if="evaluation.metadata.chain_validation_result">
+                                <span class="font-sm-sb margin-right-xxs nowrap">Results:</span><span>{{evaluation.metadata.chain_validation_result}}</span>
+                            </div>
+                            <div class="d-flex" v-if="evaluation.metadata.key_usage">
+                                <span class="font-sm-sb margin-right-xxs nowrap">Key Usage:</span><span>{{evaluation.metadata.key_usage.join(', ')}}</span>
+                            </div>
+                            <div class="d-flex" v-if="evaluation.metadata.extended_key_usage">
+                                <span class="font-sm-sb margin-right-xxs nowrap">Extended Key Usage:</span><span>{{evaluation.metadata.extended_key_usage.join(', ')}}</span>
+                            </div>
+                            <div v-if="evaluation.metadata.offered_strong_ciphers">
+                                <div class="font-sm-sb margin-bottom-xxs nowrap">Offered Not known 'weak' Ciphers:</div>
+                                <ul>
+                                    <li v-for="(cipher, cipherIndex) in evaluation.metadata.offered_strong_ciphers.split(' ')" :key="cipherIndex">
+                                        <span class="font-color-light">{{ cipher }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div v-if="evaluation.metadata.offered_weak_ciphers">
+                                <div class="font-sm-sb margin-bottom-xxs nowrap">Offered 'Weak' Ciphers:</div>
+                                <ul>
+                                    <li v-for="(cipher, cipherIndex) in evaluation.metadata.offered_weak_ciphers.split(' ')" :key="cipherIndex">
+                                        <span class="font-color-light">{{ cipher }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div v-if="evaluation.metadata.offered_cbc_ciphers">
+                                <div class="font-sm-sb margin-bottom-xxs nowrap">Offered CBC Ciphers:</div>
+                                <ul>
+                                    <li v-for="(cipher, cipherIndex) in evaluation.metadata.offered_cbc_ciphers.split(' ')" :key="cipherIndex">
+                                        <span class="font-color-light">{{ cipher }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div v-if="evaluation.metadata.offered_rc4_ciphers">
+                                <div class="font-sm-sb margin-bottom-xxs nowrap">Offered RC4 Ciphers:</div>
+                                <ul>
+                                    <li v-for="(cipher, cipherIndex) in evaluation.metadata.offered_rc4_ciphers.split(' ')" :key="cipherIndex">
+                                        <span class="font-color-light">{{ cipher }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="margin-top-sm" v-if="evaluation.metadata.negotiated_cipher">
+                                <div class="font-sm-b margin-right-xxs">TLS Negotiated</div>
+                                <div class="margin-right-xxs nowrap" v-if="evaluation.metadata.negotiated_cipher">
+                                    <span class="font-sm-sb margin-right-xxs">Cipher:</span><span>{{evaluation.metadata.negotiated_cipher}}</span>
+                                </div>
+                                <div class="margin-right-xxs nowrap" v-if="evaluation.metadata.negotiated_cipher_bits">
+                                    <span class="font-sm-sb margin-right-xxs">Cipher bits:</span><span>{{evaluation.metadata.negotiated_cipher_bits}}</span>
+                                </div>
+                            </div>
+                            <div v-if="evaluation.metadata.missing_paths">
+                                <div class="font-sm-sb margin-bottom-xxs nowrap">HTTP paths missing the header:</div>
+                                <ul>
+                                    <li v-for="(http_path, pathIndex) in evaluation.metadata.missing_paths" :key="pathIndex">
+                                        <a
+                                            class="font-color-primary font-sm word-break text-decoration-none"
+                                            :href="`https://${evaluation.transport.hostname}:${evaluation.transport.port}${http_path}`"
+                                            target="_blank"
+                                        >
+                                            {{ http_path }}
+                                        </a><span class="margin-left-sm" v-if="http_path === '/'"> (root path)</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="d-flex margin-top-sm" v-if="evaluation.metadata.certificate_version || evaluation.metadata.certificate_subject || evaluation.metadata.sha1_fingerprint">
+                                <span class="font-sm-b margin-right-xxs">Certificate</span>
+                                <div class="d-flex margin-right-xxs nowrap" v-if="evaluation.metadata.certificate_version">
+                                    <span>version {{evaluation.metadata.certificate_version}}</span>
+                                </div>
+                            </div>
+                            <div class="d-flex" v-if="evaluation.metadata.public_key_size">
+                                <span class="font-sm-sb margin-right-xxs nowrap">Public Key:</span>{{evaluation.metadata.public_key_type}}{{evaluation.metadata.public_key_size}}
+                            </div>
+                            <div class="d-flex" v-if="evaluation.metadata.expiry_status">
+                                <span>{{evaluation.metadata.expiry_status}}</span>
+                            </div>
+                            <a
+                                v-if="evaluation.metadata.certificate_subject && evaluation.metadata.sha1_fingerprint"
+                                class="font-color-secondary font-sm word-break"
+                                :href="`/certificate/${evaluation.metadata.sha1_fingerprint}`"
+                            >
+                                <IconCertificate color="e2c878" class="cert-icon margin-right-xxs" />
+                                <span title="See Certificate details">
+                                    {{evaluation.metadata.certificate_subject}}
+                                </span>
+                            </a>
+                            <a
+                                v-else-if="evaluation.metadata.sha1_fingerprint"
+                                class="font-color-secondary font-sm word-break"
+                                :href="`/certificate/${evaluation.metadata.sha1_fingerprint}`"
+                            >
+                                <IconCertificate color="e2c878" class="cert-icon margin-right-xxs" />
+                                <span title="See Certificate details">
+                                    {{evaluation.metadata.sha1_fingerprint}}
+                                </span>
+                            </a>
+                            <div class="margin-top-sm" v-if="evaluation.metadata.revocation_ocsp_status">
+                                <div class="font-sm-b margin-right-xxs">Revocation</div>
+                                <div class="margin-right-xxs nowrap" v-if="evaluation.metadata.revocation_ocsp_status">
+                                    <span class="font-sm-sb margin-right-xxs">OCSP Status:</span><span>{{evaluation.metadata.revocation_ocsp_status}}</span>
+                                </div>
+                                <div class="margin-right-xxs nowrap" v-if="evaluation.metadata.revocation_ocsp_response">
+                                    <span class="font-sm-sb margin-right-xxs">OCSP Response:</span><span>{{evaluation.metadata.revocation_ocsp_response}}</span>
+                                </div>
+                                <div class="margin-right-xxs nowrap" v-if="evaluation.metadata.revocation_ocsp_reason">
+                                    <span class="font-sm-sb margin-right-xxs">OCSP Reason:</span><span>{{evaluation.metadata.revocation_ocsp_reason}}</span>
+                                </div>
+                                <div class="margin-right-xxs nowrap" v-if="evaluation.metadata.revocation_ocsp_time">
+                                    <span class="font-sm-sb margin-right-xxs">OCSP Time:</span><span>{{evaluation.metadata.revocation_ocsp_time}}</span>
+                                </div>
+                            </div>
+                            <div class="margin-top-sm" v-if="evaluation.metadata.certificate_transparency_status">
+                                <div class="font-sm-b margin-right-xxs">Certificate Transparency</div>
+                                <div class="margin-right-xxs nowrap" v-if="evaluation.metadata.certificate_transparency_status">
+                                    <span class="font-sm-sb margin-right-xxs">Status:</span><span>{{evaluation.metadata.certificate_transparency_status}}</span>
+                                </div>
+                                <div class="margin-right-xxs nowrap" v-if="evaluation.metadata.certificate_transparency_description">
+                                    <span class="font-sm-sb margin-right-xxs">Description:</span><span>{{evaluation.metadata.certificate_transparency_description}}</span>
+                                </div>
+                            </div>
+                            <div v-if="evaluation.metadata.long_handshake_intolerance_versions?.length > 0">
+                                <div class="font-sm-sb margin-bottom-xxs nowrap">Long handshake intolerance:</div>
+                                <ul>
+                                    <li v-for="(version, versionIndex) in evaluation.metadata.long_handshake_intolerance_versions" :key="versionIndex">
+                                        <span class="font-color-light">{{ version }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div v-if="evaluation.metadata.tls_version_interference_versions?.length > 0">
+                                <div class="font-sm-sb margin-bottom-xxs nowrap">TLS Interference:</div>
+                                <ul>
+                                    <li v-for="(version, versionIndex) in evaluation.metadata.tls_version_interference_versions" :key="versionIndex">
+                                        <span class="font-color-light">{{ version }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div v-if="evaluation.metadata.tls_version_intolerance_versions?.length > 0">
+                                <div class="font-sm-sb margin-bottom-xxs nowrap">TLS Version Intolerance:</div>
+                                <ul>
+                                    <li v-for="(version, versionIndex) in evaluation.metadata.tls_version_intolerance_versions" :key="versionIndex">
+                                        <span class="font-color-light">{{ version }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div v-if="evaluation.metadata['FIPS 140-2 Annex A violations']?.length > 0">
+                                <div class="font-sm-sb margin-bottom-xxs nowrap">Compliance violations:</div>
+                                <ul>
+                                    <li v-for="(violation, violationIndex) in evaluation.metadata['FIPS 140-2 Annex A violations']" :key="violationIndex">
+                                        <span class="font-color-light">{{ violation }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div v-if="evaluation.metadata['FIPS 140-2 Annex A non-compliance ciphers']?.length > 0">
+                                <div class="font-sm-sb margin-bottom-xxs nowrap">Non-compliance ciphers:</div>
+                                <ul>
+                                    <li v-for="(cipher, cipherIndex) in evaluation.metadata['FIPS 140-2 Annex A non-compliance ciphers']" :key="cipherIndex">
+                                        <span class="font-color-light">{{ cipher }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div v-if="evaluation.metadata['NIST SP800-131A (strict mode) violations']?.length > 0">
+                                <div class="font-sm-sb margin-bottom-xxs nowrap">Compliance violations:</div>
+                                <ul>
+                                    <li v-for="(violation, violationIndex) in evaluation.metadata['NIST SP800-131A (strict mode) violations']" :key="violationIndex">
+                                        <span class="font-color-light">{{ violation }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div v-if="evaluation.metadata['NIST SP800-131A (strict mode) non-compliant ciphers']?.length > 0">
+                                <div class="font-sm-sb margin-bottom-xxs nowrap">Non-compliance ciphers:</div>
+                                <ul>
+                                    <li v-for="(cipher, cipherIndex) in evaluation.metadata['NIST SP800-131A (strict mode) non-compliant ciphers']" :key="cipherIndex">
+                                        <span class="font-color-light">{{ cipher }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div v-if="evaluation.metadata['FIPS 140-2 (NIST SP800-131A transition mode) violations']?.length > 0">
+                                <div class="font-sm-sb margin-bottom-xxs nowrap">Compliance violations:</div>
+                                <ul>
+                                    <li v-for="(violation, violationIndex) in evaluation.metadata['FIPS 140-2 (NIST SP800-131A transition mode) violations']" :key="violationIndex">
+                                        <span class="font-color-light">{{ violation }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div v-if="evaluation.metadata['FIPS 140-2 (NIST SP800-131A transition mode) non-compliant ciphers']?.length > 0">
+                                <div class="font-sm-sb margin-bottom-xxs nowrap">Non-compliance ciphers:</div>
+                                <ul>
+                                    <li v-for="(cipher, cipherIndex) in evaluation.metadata['FIPS 140-2 (NIST SP800-131A transition mode) non-compliant ciphers']" :key="cipherIndex">
+                                        <span class="font-color-light">{{ cipher }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div v-if="evaluation.metadata['PCI DSS 3.2.1 violations']?.length > 0">
+                                <div class="font-sm-sb margin-bottom-xxs nowrap">Impacted requirements:</div>
+                                <ul>
+                                    <li v-for="(violation, violationIndex) in evaluation.metadata['PCI DSS 3.2.1 violations']" :key="violationIndex">
+                                        <span class="font-color-light">{{ violation }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div v-if="evaluation.metadata['PCI DSS 4.0 violations']?.length > 0">
+                                <div class="font-sm-sb margin-bottom-xxs nowrap">Impacted requirements:</div>
+                                <ul>
+                                    <li v-for="(violation, violationIndex) in evaluation.metadata['PCI DSS 4.0 violations']" :key="violationIndex">
+                                        <span class="font-color-light">{{ violation }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+
                         </div>
-                    </div>
-                    <div class="d-flex" v-if="evaluation?.metadata?.public_key_size">
-                        <span class="font-sm-sb margin-right-xxs">Public Key:</span>{{evaluation?.metadata.public_key_type}}{{evaluation?.metadata.public_key_size}}
-                    </div>
-                    </div>
-                    <a
-                    v-if="evaluation?.metadata?.certificate_subject && evaluation?.metadata?.sha1_fingerprint"
-                    class="font-color-secondary font-sm word-break"
-                    :href="`/certificate/${evaluation?.metadata.sha1_fingerprint}`"
-                    >
-                    <IconCertificate color="e2c878" class="cert-icon margin-right-xxs" />
-                    <span title="See Certificate details">
-                        {{evaluation?.metadata.certificate_subject}}
-                    </span>
-                    </a>
-                    <a
-                    v-else-if="evaluation?.metadata?.sha1_fingerprint"
-                    class="font-color-secondary font-sm word-break"
-                    :href="`/certificate/${evaluation?.metadata.sha1_fingerprint}`"
-                    >
-                    <IconCertificate color="e2c878" class="cert-icon margin-right-xxs" />
-                    <span title="See Certificate details">
-                        {{evaluation?.metadata.sha1_fingerprint}}
-                    </span>
-                    </a>
+                    </template>
 
                 </div>
                 <div
@@ -245,57 +437,18 @@ export default {
         "results",
         "resultsFilter",
     ],
-    data() {
-        return {
-            metadata: [
-                'certificate_subject',
-                'sha1_fingerprint',
-                'subject_key_identifier',
-                'authority_key_identifier',
-                'expiry_status',
-                'certificate_version',
-                'reason',
-                'public_key_type',
-                'public_key_size',
-                'signature_algorithm',
-                'abuse.sh',
-                'spki_fingerprint',
-                'revocation_ocsp_status',
-                'revocation_ocsp_time',
-                'revocation_ocsp_response',
-                'revocation_ocsp_reason',
-                'public_key_exponent',
-                'certificate_transparency_status',
-                'certificate_transparency_description',
-                'common_name',
-                'not_before',
-                'crime_cbc',
-                'missing_paths',
-                'offered_cbc_ciphers',
-                'negotiated_cipher',
-                'negotiated_cipher_bits',
-                'offered_weak_ciphers',
-                'long_handshake_intolerance_versions',
-                'offered_strong_ciphers',
-                'offered_rc4_ciphers',
-                'tls_robot',
-                'key_usage',
-                'extended_key_usage',
-                'chain_validation_result',
-                'tls_version_interference_versions',
-                'tls_version_intolerance_versions',
-                'FIPS 140-2 Annex A non-compliance ciphers',
-                'FIPS 140-2 Annex A violations',
-                'NIST SP800-131A (strict mode) non-compliant ciphers',
-                'NIST SP800-131A (strict mode) violations',
-                'FIPS 140-2 (NIST SP800-131A transition mode) non-compliant ciphers',
-                'FIPS 140-2 (NIST SP800-131A transition mode) violations',
-                'PCI DSS 3.2.1 violations',
-                'PCI DSS 4.0 violations',
-            ]
-        }
-    },
     methods: {
+        getMetadataKeyValues(evaluation) {
+            console.log('evaluation.metadata', typeof evaluation.metadata)
+            if (!evaluation.metadata) {
+                return
+            }
+            return evaluation.metadata.filter((key, value) => {
+                if (key === 'missing_paths') {
+
+                }
+            })
+        },
         slicedThreats(evaluation) {
             if (!evaluation.threats || evaluation.threats.length === 0) {
                 return []
