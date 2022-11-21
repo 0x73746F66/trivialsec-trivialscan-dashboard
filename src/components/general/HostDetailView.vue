@@ -238,6 +238,7 @@
   height: 60px;
   // position: sticky;
   // top: 65px;
+  z-index: 10;
   display: flex;
   justify-content: flex-start;
   label {

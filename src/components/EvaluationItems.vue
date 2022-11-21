@@ -392,17 +392,15 @@
                     :key="groupIndex"
                     >
                     <h3 class="font-base font-color-light margin-bottom-lg">{{group.standard}} {{group.version}}</h3>
-                    <div v-for="(threatItem, threatIndex) in group.items"
-                        class="d-flex flex-column"
-                        :key="threatIndex"
-                        >
-                        <div class="threat-item-container d-flex row padding-left-sm padding-right-sm">
-                        <ThreatItem :threat="threatItem" :evalIndex="evalIndex" :threatIndex="threatIndex" />
-                        </div>
-                        <div class="col-12 col-lg-4">
-                        <div class="threat-separator-container">
-                            <span class="threat-separator"></span>
-                        </div>
+                    <div class="d-flex flex-row flex-wrap hexagon-main">
+                        <div class="hexagon-container">
+                            <ThreatItem 
+                                v-for="(threatItem, threatIndex) in group.items"
+                                :key="threatIndex"
+                                :threat="threatItem"
+                                :evalIndex="evalIndex"
+                                :threatIndex="threatIndex" 
+                            />
                         </div>
                     </div>
                     </div>
@@ -536,11 +534,15 @@ export default {
   backdrop-filter: blur(8px);
   height: 60px;
   position: sticky;
-  top: 65px;
+  z-index: 10;
   display: flex;
   justify-content: flex-start;
+  top: 85px;
   label {
     cursor: pointer;
+  }
+  @media (max-width: $breakpoint-lg){
+    top: 65px;
   }
 }
 
