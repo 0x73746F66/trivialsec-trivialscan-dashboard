@@ -17,13 +17,16 @@
     >
       <div class="row margin-bottom-xs">
         <span class="col-6 d-flex font-sm text-left"
-          ><span class="font-sm-sb margin-right-xxs">Scanned</span
+          ><span class="font-sm-sb margin-right-xxs">{{
+            summary?.category
+          }}</span
           >{{ summary.dateAgo }}</span
         >
         <span
           class="col-6 d-flex font-color-primary justify-content-end align-items-end text-right font-xs"
-          >{{ summary?.generator }} {{ summary?.version }}</span
         >
+          {{ summary?.type }} v{{ summary?.version }}
+        </span>
       </div>
       <div class="row">
         <div

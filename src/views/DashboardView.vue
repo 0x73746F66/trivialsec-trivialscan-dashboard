@@ -62,12 +62,20 @@
                   <template v-slot:Monitoring>
                     <PieChart
                       :inUse="quotas?.monitoring.used"
-                      :available="quotas?.monitoring.total"
-                      v-if="quotas.monitoring.total > 0"
+                      :available="
+                        Math.max(quotas?.active.total - quotas?.active.used, 0)
+                      "
+                      v-if="
+                        quotas.monitoring.used > 0 ||
+                        quotas.monitoring.total > 0
+                      "
                     />
                     <div
                       class="pie-chart-legend font-color-light"
-                      v-if="quotas.monitoring.total > 0"
+                      v-if="
+                        quotas.monitoring.used > 0 ||
+                        quotas.monitoring.total > 0
+                      "
                     >
                       <span class="font-base font-color-light">Monitoring</span>
                       <span
@@ -89,12 +97,14 @@
                   <template v-slot:Active>
                     <PieChart
                       :inUse="quotas?.active.used"
-                      :available="quotas?.active.total"
-                      v-if="quotas.active.total > 0"
+                      :available="
+                        Math.max(quotas?.active.total - quotas?.active.used, 0)
+                      "
+                      v-if="quotas.active.used > 0 || quotas.active.total > 0"
                     />
                     <div
                       class="pie-chart-legend font-color-light"
-                      v-if="quotas.active.total > 0"
+                      v-if="quotas.active.used > 0 || quotas.active.total > 0"
                     >
                       <span class="font-base font-color-light">Active</span>
                       <span
@@ -108,7 +118,12 @@
                       >
                         <span class="square secondary margin-right-xs"></span>
                         Available:
-                        {{ quotas?.active.total - quotas?.active.used }}
+                        {{
+                          Math.max(
+                            quotas?.active.total - quotas?.active.used,
+                            0
+                          )
+                        }}
                       </span>
                     </div>
                   </template>
@@ -116,12 +131,17 @@
                   <template v-slot:Passive>
                     <PieChart
                       :inUse="quotas?.passive.used"
-                      :available="quotas?.passive.total"
-                      v-if="quotas.passive.total > 0"
+                      :available="
+                        Math.max(
+                          quotas?.passive.total - quotas?.passive.used,
+                          0
+                        )
+                      "
+                      v-if="quotas.passive.used > 0 || quotas.passive.total > 0"
                     />
                     <div
                       class="pie-chart-legend font-color-light"
-                      v-if="quotas.passive.total > 0"
+                      v-if="quotas.passive.used > 0 || quotas.passive.total > 0"
                     >
                       <span class="font-base font-color-light">Passive</span>
                       <span
@@ -135,7 +155,12 @@
                       >
                         <span class="square secondary margin-right-xs"></span>
                         Available:
-                        {{ quotas?.passive.total - quotas?.passive.used }}
+                        {{
+                          Math.max(
+                            quotas?.passive.total - quotas?.passive.used,
+                            0
+                          )
+                        }}
                       </span>
                     </div>
                   </template>
