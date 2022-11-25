@@ -54,7 +54,7 @@ sca npm:
     - dashboard
   allow_failure: true
   script:
-    -  pre-commit run license-check-npm --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
+    - pre-commit run license-check-npm --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
   dependencies:
     - vite build (prod)
   rules:
@@ -232,9 +232,8 @@ tf:destroy:
   variables:
     APP_ENV: Prod
     TF_VAR_app_env: Prod
-  stage: post-deploy
-  variables:
     GIT_STRATEGY: none
+  stage: post-deploy
   tags:
     - dashboard
   script:

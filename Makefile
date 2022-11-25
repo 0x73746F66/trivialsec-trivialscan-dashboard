@@ -9,13 +9,28 @@ export $(shell sed 's/=.*//' .env 2>/dev/null)
 ifndef CI_BUILD_REF
 CI_BUILD_REF=local
 endif
+
 ifeq ($(CI_BUILD_REF), local)
 -include .env.local
 export $(shell sed 's/=.*//' .env.local 2>/dev/null)
+endif
+
+ifeq ($(NODE_ENV), development)
 -include .env.development
 export $(shell sed 's/=.*//' .env.development 2>/dev/null)
+ifeq ($(CI_BUILD_REF), local)
 -include .env.development.local
 export $(shell sed 's/=.*//' .env.development.local 2>/dev/null)
+endif
+endif
+
+ifeq ($(NODE_ENV), production)
+-include .env.production
+export $(shell sed 's/=.*//' .env.production 2>/dev/null)
+ifeq ($(CI_BUILD_REF), local)
+-include .env.production.local
+export $(shell sed 's/=.*//' .env.production.local 2>/dev/null)
+endif
 endif
 
 ifndef RUNNER_NAME
