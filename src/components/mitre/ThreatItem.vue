@@ -1,26 +1,28 @@
 <template>
     <div class="threat-item" v-if="threatId">
-        <div class="hexa-container" 
+        <div 
+            class="hexa-container"
+            :class="{'hexa-container-with-sub' : threat.sub_technique  }" 
             data-bs-toggle="modal"
             :data-bs-target="`#threat${evalIndex}${threatIndex}${threatId}`"
         >
             <span class="threat-index">{{threatIndex+1}}</span>
             <span class="font-xxs-sb threat-standard">{{threatType}}</span>
-            <span class="font-xs-b text-center" v-if="threatLabel">
+            <span class="font-xs-b text-center line-clamp-2" v-if="threatLabel">
                 {{threatLabel}}
             </span>
             <a v-if="threatId" :href="threaturl" class="font-color-secondary font-xxs">
                 ({{threatId}})
             </a>
         </div>
-    </div>
-    <div class="threat-subtech-item" v-if="threat?.sub_technique">
-        <div class="hexa-container" data-bs-toggle="modal" :data-bs-target="`#subthreat${evalIndex}${threatIndex}${threatId}`">
-            <span class="font-xxs-sb threat-standard">Subtechnique</span>
-            <span class="font-xxs-b"><span class="text-center">{{threat?.sub_technique}}</span></span>
-            <a v-if="threat?.sub_technique_id" :href="threat?.sub_technique_url" class="font-color-light font-xxs-b">
-                ({{threat?.sub_technique_id}})
-            </a>
+        <div class="threat-subtech-item" v-if="threat?.sub_technique">
+            <div class="hexa-container" data-bs-toggle="modal" :data-bs-target="`#subthreat${evalIndex}${threatIndex}${threatId}`">
+                <span class="font-xxs-sb threat-standard font-color-dark">Subtechnique</span>
+                <span class="font-xxs-b"><span class="font-color-dark text-center line-clamp-2">{{threat?.sub_technique}}</span></span>
+                <a v-if="threat?.sub_technique_id" :href="threat?.sub_technique_url" class="font-color-dark font-xxs-b">
+                    ({{threat?.sub_technique_id}})
+                </a>
+            </div>
         </div>
     </div>
     <div
@@ -161,9 +163,16 @@ export default {
 </script>
 
 <style lang="scss">
-$size: 150px;
+$size: 200px;
 $margin: spacers("xs");
 $f: calc($size * 1.732 + 4 * $margin - 1px);
+
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
+}
 
 .modal-icon-close {
     width: 25px;
@@ -212,6 +221,12 @@ $f: calc($size * 1.732 + 4 * $margin - 1px);
         height: calc($size * 1.1547 - 10px);
         width: calc($size - 10px);
     }
+    &-with-sub {
+        padding-top: calc(($size/5) * 1.1547 - 10px);
+        text-align: center;
+        display: flex;
+        justify-content: flex-start;
+    }
 }
 
 .threat {
@@ -255,7 +270,26 @@ $f: calc($size * 1.732 + 4 * $margin - 1px);
     }
 
     &-subtech-item {
-        background: color("secondary");
+        background: color("dark-20");
+        position: absolute;
+        width: calc($size/2);
+        height: calc(($size * 1.1547)/2);
+        right: calc(($size/5)) ;
+        bottom: calc((($size * 1.1547)/2)/2 - 20px);
+        transition: 0.2s linear;
+        .hexa-container {
+            background: color("secondary");
+            height: calc(($size/2) * 1.1547 );
+            width: calc(($size/2) );
+
+            &:hover {
+                height: calc(($size/2) * 1.1547 - 10px);
+                width: calc(($size/2) - 10px);
+            }
+        }
+        .threat-standard {
+            background: color("dark-20");
+        }
     }
 
     &-separator {
