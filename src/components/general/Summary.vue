@@ -42,6 +42,7 @@
               color="e2c878"
             />
             <a
+              target="_blank"
               :href="`/hostname/${target.transport.hostname}/${target.transport.port}`"
               class="font-color-secondary"
               >{{ target.transport.hostname }}:{{ target.transport.port }}</a
