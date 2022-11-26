@@ -29,7 +29,7 @@
   </div>
 </template>
 <script setup>
-import IconArrowPrimary from "../icons/IconArrowPrimary.vue";
+import IconArrowPrimary from "@/components/icons/IconArrowPrimary.vue";
 </script>
 
 <script>

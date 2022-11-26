@@ -28,7 +28,7 @@
   </div>
 </template>
 <script>
-import IconExpandPrimary from "../icons/IconExpandPrimary.vue";
+import IconExpandPrimary from "@/components/icons/IconExpandPrimary.vue";
 
 export default {
   components: { IconExpandPrimary },

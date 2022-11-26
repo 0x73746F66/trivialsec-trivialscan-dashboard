@@ -610,12 +610,12 @@
 </template>
 
 <script>
-import checkIcon from "../icons/checkIcon.vue";
-import IconStarLight from "../icons/IconStartLight.vue";
-import IconStarPrimary from "../icons/IconStartPrimary.vue";
-import IconArrowPrimary from "../icons/IconArrowPrimary.vue";
-import PricingComponentRow from "./PricingComponentRow.vue";
-import Dropdown from "./Dropdown.vue";
+import checkIcon from "@/components/icons/checkIcon.vue";
+import IconStarLight from "@/components/icons/IconStartLight.vue";
+import IconStarPrimary from "@/components/icons/IconStartPrimary.vue";
+import IconArrowPrimary from "@/components/icons/IconArrowPrimary.vue";
+import PricingComponentRow from "@/components/general/PricingComponentRow.vue";
+import Dropdown from "@/components/general/Dropdown.vue";
 
 export default {
   components: {

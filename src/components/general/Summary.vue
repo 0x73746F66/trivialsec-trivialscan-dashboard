@@ -109,13 +109,13 @@
   </div>
 </template>
 <script>
-import checkIcon from "../icons/checkIcon.vue";
-import IconError from "../icons/IconError.vue";
-import IconWarning from "../icons/IconWarning.vue";
-import IconInfo from "../icons/IconInfo.vue";
-import IconTarget from "../icons/IconTarget.vue";
-import IconCertificate from "../icons/IconCertificate.vue";
-import IconArrowPrimary from "../icons/IconArrowPrimary.vue";
+import checkIcon from "@/components/icons/checkIcon.vue";
+import IconError from "@/components/icons/IconError.vue";
+import IconWarning from "@/components/icons/IconWarning.vue";
+import IconInfo from "@/components/icons/IconInfo.vue";
+import IconTarget from "@/components/icons/IconTarget.vue";
+import IconCertificate from "@/components/icons/IconCertificate.vue";
+import IconArrowPrimary from "@/components/icons/IconArrowPrimary.vue";
 import LoadingComponent from "@/components/general/LoadingComponent.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";
 import moment from "moment";

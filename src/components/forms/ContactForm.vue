@@ -34,11 +34,11 @@
   </form>
 </template>
 <script>
-import TextInput from "../inputs/TextInput.vue";
-import TextArea from "../inputs/TextArea.vue";
-import Button from "../general/Button.vue";
-import LoadingComponent from "../general/LoadingComponent.vue";
-import ValidationMessage from "../general/ValidationMessage.vue";
+import TextInput from "@/components/inputs/TextInput.vue";
+import TextArea from "@/components/inputs/TextArea.vue";
+import Button from "@/components/general/Button.vue";
+import LoadingComponent from "@/components/general/LoadingComponent.vue";
+import ValidationMessage from "@/components/general/ValidationMessage.vue";
 
 export default {
   components: {

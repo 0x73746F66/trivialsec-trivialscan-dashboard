@@ -100,12 +100,12 @@
 </template>
 <script>
 import { RouterLink, RouterView } from "vue-router";
-import IconTrivialSecurity from "../icons/IconTrivialSecurity.vue";
-import IconGitlab from "../icons/IconGitlab.vue";
-import IconDiscord from "../icons/IconDiscord.vue";
-import IconMastodon from "../icons/IconMastodon.vue";
-import IconLinkedin from "../icons/IconLinkedin.vue";
-import IconTwitter from "../icons/IconTwitter.vue";
+import IconTrivialSecurity from "@/components/icons/IconTrivialSecurity.vue";
+import IconGitlab from "@/components/icons/IconGitlab.vue";
+import IconDiscord from "@/components/icons/IconDiscord.vue";
+import IconMastodon from "@/components/icons/IconMastodon.vue";
+import IconLinkedin from "@/components/icons/IconLinkedin.vue";
+import IconTwitter from "@/components/icons/IconTwitter.vue";
 const apiUrl = import.meta.env.VITE_API_URL.trim();
 
 export default {

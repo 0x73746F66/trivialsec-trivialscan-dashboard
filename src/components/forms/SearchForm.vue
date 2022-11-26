@@ -290,16 +290,16 @@
 </template>
 
 <script>
-import IconSearch from "../icons/IconSearch.vue";
-import IconArrowPrimary from "../icons/IconArrowPrimary.vue";
-import IconClose from "../icons/IconClose.vue";
-import IconError from "../icons/IconError.vue";
-import IconCertificate from "../icons/IconCertificate.vue";
-import IconDocumentation from "../icons/IconDocumentation.vue";
-import IconGlobeLight from "../icons/IconGlobeLight.vue";
-import Toggle from "../general/Toggle.vue";
-import ValidationMessage from "../general/ValidationMessage.vue";
-import LoadingComponent from "../general/LoadingComponent.vue";
+import IconSearch from "@/components/icons/IconSearch.vue";
+import IconArrowPrimary from "@/components/icons/IconArrowPrimary.vue";
+import IconClose from "@/components/icons/IconClose.vue";
+import IconError from "@/components/icons/IconError.vue";
+import IconCertificate from "@/components/icons/IconCertificate.vue";
+import IconDocumentation from "@/components/icons/IconDocumentation.vue";
+import IconGlobeLight from "@/components/icons/IconGlobeLight.vue";
+import Toggle from "@/components/general/Toggle.vue";
+import ValidationMessage from "@/components/general/ValidationMessage.vue";
+import LoadingComponent from "@/components/general/LoadingComponent.vue";
 import moment from "moment";
 
 export default {

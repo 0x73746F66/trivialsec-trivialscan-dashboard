@@ -14,9 +14,9 @@
   </div>
 </template>
 <script>
-import checkIcon from "../icons/checkIcon.vue";
-import IconError from "../icons/IconError.vue";
-import IconWarning from "../icons/IconWarning.vue";
+import checkIcon from "@/components/icons/checkIcon.vue";
+import IconError from "@/components/icons/IconError.vue";
+import IconWarning from "@/components/icons/IconWarning.vue";
 
 export default {
   props: {

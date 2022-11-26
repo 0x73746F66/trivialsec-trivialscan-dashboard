@@ -1,6 +1,6 @@
 <template>
   <LoadingComponent class="modal-loading loading" :class="{ inactive: !loading }" />
-  
+
   <form class="login-form" @submit.prevent="login">
     <ValidationMessage
       class="justify-content-between"
@@ -24,10 +24,10 @@
   </form>
 </template>
 <script>
-import EmaiInput from "../inputs/EmaiInput.vue";
-import Button from "../general/Button.vue";
-import ValidationMessage from "../general/ValidationMessage.vue";
-import LoadingComponent from "../general/LoadingComponent.vue";
+import EmaiInput from "@/components/inputs/EmaiInput.vue";
+import Button from "@/components/general/Button.vue";
+import ValidationMessage from "@/components/general/ValidationMessage.vue";
+import LoadingComponent from "@/components/general/LoadingComponent.vue";
 
 let apiUrl = import.meta.env.VITE_API_URL.trim()
 apiUrl = `${apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl}`

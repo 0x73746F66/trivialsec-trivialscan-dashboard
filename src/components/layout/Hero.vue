@@ -29,7 +29,7 @@
   </div>
 </template>
 <script>
-import IconTrivialSecurity from "../icons/IconTrivialSecurity.vue";
+import IconTrivialSecurity from "@/components/icons/IconTrivialSecurity.vue";
 
 export default {
   components: { IconTrivialSecurity },

@@ -129,10 +129,10 @@
 
 <script>
 import moment from "moment"
-import IconCertificate from "../icons/IconCertificate.vue";
-import IconLink from "../icons/IconLink.vue";
+import IconCertificate from "@/components/icons/IconCertificate.vue";
+import IconLink from "@/components/icons/IconLink.vue";
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
-import CustomPill from "./CustomPill.vue";
+import CustomPill from "@/components/general/CustomPill.vue";
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/css';
 

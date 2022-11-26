@@ -38,9 +38,9 @@
     </div>
 </template>
 <script>
-import Modal from "../general/Modal.vue";
-import RegisterForm from "../forms/RegisterForm.vue";
-import LoginForm from "../forms/LoginForm.vue";
+import Modal from "@/components/general/Modal.vue";
+import RegisterForm from "@/components/forms/RegisterForm.vue";
+import LoginForm from "@/components/forms/LoginForm.vue";
 
 export default {
     components: {

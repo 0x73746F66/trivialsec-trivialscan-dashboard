@@ -12,7 +12,7 @@
     </div>
 </template>
 <script>
-import IconQuestion from "../icons/IconQuestion.vue";
+import IconQuestion from "@/components/icons/IconQuestion.vue";
 
 export default {
     components: {IconQuestion},

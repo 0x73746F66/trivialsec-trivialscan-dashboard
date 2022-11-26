@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import HostDetailView from '../components/general/HostDetailView.vue';
+import HostDetailView from '@/components/general/HostDetailView.vue';
 
 export default {
   data() {
