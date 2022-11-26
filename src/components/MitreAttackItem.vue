@@ -1,5 +1,5 @@
 <template>
-    <div class="threat-item" v-if="threatId">
+    <div :class="`${threatClass} threat-item`" v-if="threatId">
         <div 
             class="hexa-container"
             :class="{'hexa-container-with-sub' : threat.sub_technique  }" 
@@ -11,16 +11,16 @@
             <span class="font-xs-b text-center line-clamp-2" v-if="threatLabel">
                 {{threatLabel}}
             </span>
-            <a v-if="threatId" :href="threaturl" class="font-color-secondary font-xxs">
-                ({{threatId}})
+            <a v-if="threatId" :href="threatUrl" class="font-color-secondary font-xxs" target="_blank">
+                <IconLink color="e2c878" class="link-icon margin-right-xxs" />{{threatId}}
             </a>
         </div>
         <div class="threat-subtech-item" v-if="threat?.sub_technique">
             <div class="hexa-container" data-bs-toggle="modal" :data-bs-target="`#subthreat${evalIndex}${threatIndex}${threatId}`">
                 <span class="font-xxs-sb threat-standard font-color-dark">Subtechnique</span>
                 <span class="font-xxs-b"><span class="font-color-dark text-center line-clamp-2">{{threat?.sub_technique}}</span></span>
-                <a v-if="threat?.sub_technique_id" :href="threat?.sub_technique_url" class="font-color-dark font-xxs-b">
-                    ({{threat?.sub_technique_id}})
+                <a v-if="threat?.sub_technique_id" :href="threat?.sub_technique_url" class="font-color-dark font-xxs-b" target="_blank">
+                    <IconLink color="2b2525" class="link-icon margin-right-xxs" />{{threat?.sub_technique_id}}
                 </a>
             </div>
         </div>
@@ -42,15 +42,15 @@
                     data-bs-dismiss="modal"
                     aria-label="Close"
                 >
-                    <iconCancel color="ffffff" class='modal-icon-close' />
+                    <IconCancel color="ffffff" class='modal-icon-close' />
                 </button>
                 </div>
                 <div class="modal-body d-flex flex-column">
                     <span v-html="threatType" class="font-color-secondary font-sm"></span>
                     <div class="d-flex align-items-center justify-content-start margin-bottom-sm">    
                         <span class="font-base margin-right-xs">{{threatLabel}}</span>
-                        <a v-if="threatId" :href="threaturl" class="font-color-secondary font-xxs">
-                            ({{threatId}})
+                        <a v-if="threatId" :href="threatUrl" class="font-color-secondary font-xs" target="_blank">
+                            <IconLink color="e2c878" class="link-icon margin-right-xxs" />{{threatId}}
                         </a>
                     </div>
                     <span class="font-color-light font-sm pre-line" v-html="threatDescription"></span>
@@ -75,12 +75,12 @@
                     data-bs-dismiss="modal"
                     aria-label="Close"
                 >
-                    <iconCancel color="ffffff" class='modal-icon-close' />
+                    <IconCancel color="ffffff" class='modal-icon-close' />
                 </button>
                 </div>
                 <div class="modal-body d-flex flex-column">
-                    <a v-if="threat?.sub_technique_id" :href="threat?.sub_technique_url" class="font-color-secondary font-xxs-b">
-                        ({{threat?.sub_technique_id}})
+                    <a v-if="threat?.sub_technique_id" :href="threat?.sub_technique_url" class="font-color-secondary font-xs-b" target="_blank">
+                        <IconLink color="e2c878" class="link-icon margin-right-xxs" />{{threat?.sub_technique_id}}
                     </a>
                     <span v-html="threat?.sub_technique" class="font-base margin-bottom-sm"></span>
                     <span class="font-color-light font-sm pre-line" v-html="threat?.sub_technique_description"></span>
@@ -90,17 +90,18 @@
     </div>
 </template>
 <script>
-import iconCancel from "../icons/IconCancel.vue";
+import IconCancel from "@/components/icons/IconCancel.vue";
+import IconLink from "@/components/icons/IconLink.vue";
 
 export default {
     components: {
-        iconCancel
+        IconCancel,
+        IconLink
     },
     props: {
         threat: Object,
         threatIndex: Number,
-        evalIndex: Number,
-        threatIndex: Number
+        evalIndex: Number
     },
     computed: {
         threatId() {
@@ -114,7 +115,7 @@ export default {
             }
             return id;
         },
-        threaturl() {
+        threatUrl() {
             let url;
             if(this.threat.tactic_url) {
                 url = this.threat.tactic_url
@@ -146,6 +147,17 @@ export default {
                 label = "Tactic"
             }
             return label;
+        },
+        threatClass() {
+            let className;
+            if(this.threat.data_source) {
+                className = "data-source"
+            } else if (this.threat.technique) {
+                className = "technique"
+            } else if (this.threat.tactic) {
+                className = "tactic"
+            }
+            return className;
         },
         threatDescription() {
             let desc;
@@ -227,8 +239,20 @@ $f: calc($size * 1.732 + 4 * $margin - 1px);
         display: flex;
         justify-content: flex-start;
     }
+    .link-icon {
+        height: 12px;
+        width: 15px;
+    }
 }
-
+.data-source.threat-item {
+    background: color("tertiary");
+}
+.tactic.threat-item {
+    background: color("secondary");
+}
+.technique.threat-item {
+    background: color("primary");
+}
 .threat {
     &-index {
         position: absolute;
@@ -257,7 +281,6 @@ $f: calc($size * 1.732 + 4 * $margin - 1px);
         font-size: initial;
         clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
         margin-bottom: calc($margin - $size * 0.2886); 
-        background: color("primary");
         text-align: center;
         position: relative;
     }

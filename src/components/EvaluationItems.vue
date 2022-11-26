@@ -67,7 +67,7 @@
         :defaultShow="false"
         :defaultCollapsed="true"
         buttonClasses="font-lg text-left report-dropdown font-color-light w-100 d-flex justify-content-left border-none padding-xxs"
-        contentClasses=" bg-dark-20 report-dropdown-content tpadding-md font-color-light font-base"
+        contentClasses=" bg-dark-20 report-dropdown-content padding-sm font-color-light font-base"
         v-if="
           evaluation.result_level === (resultsFilter.pass ? 'pass' : '') ||
           evaluation.result_level === (resultsFilter.warn ? 'warn' : '') ||
@@ -764,7 +764,7 @@
                 </h3>
                 <div class="d-flex flex-row flex-wrap hexagon-main">
                   <div class="hexagon-container">
-                    <ThreatItem
+                    <MitreAttackItem
                       v-for="(threatItem, threatIndex) in group.items"
                       :key="threatIndex"
                       :threat="threatItem"
@@ -785,7 +785,7 @@
 import IconLink from "@/components/icons/IconLink.vue";
 import IconTarget from "@/components/icons/IconTarget.vue";
 import Dropdown from "@/components/general/Dropdown.vue";
-import ThreatItem from "@/components/mitre/ThreatItem.vue";
+import MitreAttackItem from "@/components/MitreAttackItem.vue";
 import ThreatIcon from "@/components/icons/ThreatIcon.vue";
 import IconCertificate from "@/components/icons/IconCertificate.vue";
 </script>
@@ -796,7 +796,7 @@ export default {
     IconLink,
     IconTarget,
     Dropdown,
-    ThreatItem,
+    MitreAttackItem,
     ThreatIcon,
     IconCertificate,
   },

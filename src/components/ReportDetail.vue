@@ -330,7 +330,6 @@ import IconTarget from "@/components/icons/IconTarget.vue";
 import ReportScoreResults from "@/components/general/ReportScoreResults.vue";
 import ExpandSection from "@/components/general/ExpandSection.vue";
 import Dropdown from "@/components/general/Dropdown.vue";
-import ThreatItem from "@/components/mitre/ThreatItem.vue";
 import IconClose from "@/components/icons/IconClose.vue";
 import ThreatIcon from "@/components/icons/ThreatIcon.vue";
 import IconCertificate from "@/components/icons/IconCertificate.vue";
@@ -353,7 +352,6 @@ export default {
     ReportScoreResults,
     ExpandSection,
     Dropdown,
-    ThreatItem,
     IconClose,
     ThreatIcon,
     IconCertificate,
