@@ -289,7 +289,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import IconSearch from "@/components/icons/IconSearch.vue";
 import IconArrowPrimary from "@/components/icons/IconArrowPrimary.vue";
 import IconClose from "@/components/icons/IconClose.vue";
@@ -301,7 +301,9 @@ import Toggle from "@/components/general/Toggle.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";
 import LoadingComponent from "@/components/general/LoadingComponent.vue";
 import moment from "moment";
+</script>
 
+<script>
 export default {
   components: {
     IconSearch,

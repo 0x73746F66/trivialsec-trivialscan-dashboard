@@ -131,10 +131,9 @@
 import moment from "moment"
 import IconCertificate from "@/components/icons/IconCertificate.vue";
 import IconLink from "@/components/icons/IconLink.vue";
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
+import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/vue";
 import CustomPill from "@/components/general/CustomPill.vue";
-import { Swiper, SwiperSlide } from 'swiper/vue';
-import 'swiper/css';
 
 export default {
     components: {
@@ -197,8 +196,11 @@ export default {
     }
 }
 </script>
-
 <style scoped lang="scss">
+@import "@swiper/navigation/navigation";
+@import "@swiper/scrollbar/scrollbar";
+@import "@swiper/a11y/a11y";
+@import "@swiper/pagination/pagination";
 .cert-icon {
     height: 25px;
     width: 25px;

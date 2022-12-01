@@ -27,6 +27,9 @@
     </div>
   </div>
 </template>
+<script setup>
+import { Collapse } from 'bootstrap'
+</script>
 <script>
 import IconExpandPrimary from "@/components/icons/IconExpandPrimary.vue";
 

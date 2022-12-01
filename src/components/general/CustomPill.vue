@@ -35,23 +35,23 @@ export default {
     justify-content: center;
     
     &-danger {
-        @extend .bg-danger;
+        background-color: color('danger');
     }
 
     &-success {
-        @extend .bg-primary;
+        background-color: color('primary');
     }
 
     &-warning, &-root {
-        @extend .bg-warning;
+        background-color: color('secondary');
     }
 
     &-leaf {
-        @extend .bg-primary;
+        background-color: color('primary');
     }
 
     &-intermediate {
-        @extend .bg-secondary;
+        background-color: color('secondary-80');
     }
 }
 </style>

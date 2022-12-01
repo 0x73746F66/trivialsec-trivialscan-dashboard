@@ -12,7 +12,6 @@
 
 <script setup>
 import ReportDetail from "@/components/ReportDetail.vue";
-import ReportSummary from "@/components/ReportSummary.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";
 import LoadingComponent from "@/components/general/LoadingComponent.vue";
 </script>
@@ -20,7 +19,6 @@ import LoadingComponent from "@/components/general/LoadingComponent.vue";
 <script>
 export default {
   components: {
-    ReportSummary,
     ReportDetail,
     ValidationMessage,
     LoadingComponent,

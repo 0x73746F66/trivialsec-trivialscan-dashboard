@@ -142,7 +142,6 @@
 <script setup>
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
-import "swiper/css";
 import IconTrash from "@/components/icons/IconTrash.vue";
 import Modal from "@/components/general/Modal.vue";
 import Toggle from "@/components/general/Toggle.vue";
@@ -285,6 +284,12 @@ export default {
   },
 };
 </script>
+<style scoped lang="scss">
+@import "@swiper/navigation/navigation";
+@import "@swiper/scrollbar/scrollbar";
+@import "@swiper/a11y/a11y";
+@import "@swiper/pagination/pagination";
+</style>
 <style lang="scss">
 .token {
   word-wrap: break-word;

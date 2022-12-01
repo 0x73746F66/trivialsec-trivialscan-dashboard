@@ -1,10 +1,8 @@
+@import "../node_modules/swiper/swiper";
+@import "@bootstrap/bootstrap";
 @import "./variables";
 @import "./fonts";
 @import "./forms";
-
-@import "../node_modules/bootstrap/scss/mixins";
-@import "../node_modules/bootstrap/scss/functions";
-@import "../node_modules/bootstrap/scss/variables";
 
 @each $name, $spacer in $spacers {
     .margin-#{$name} {

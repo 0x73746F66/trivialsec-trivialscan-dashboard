@@ -109,8 +109,6 @@ import moment from "moment";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
 
-import "swiper/css";
-
 export default {
   components: {
     Swiper,
@@ -175,8 +173,11 @@ export default {
   },
 };
 </script>
-
 <style scoped lang="scss">
+@import "@swiper/navigation/navigation";
+@import "@swiper/scrollbar/scrollbar";
+@import "@swiper/a11y/a11y";
+@import "@swiper/pagination/pagination";
 .target-slide {
   display: flex;
   flex-wrap: wrap;

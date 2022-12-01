@@ -234,11 +234,8 @@ import ValidationMessage from "@/components/general/ValidationMessage.vue";
 import PieChart from "@/components/general/PieChart.vue";
 import SearchForm from "@/components/forms/SearchForm.vue";
 import Summary from "@/components/general/Summary.vue";
-
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
-
-import "swiper/css";
 </script>
 
 <script>
@@ -339,7 +336,12 @@ export default {
   },
 };
 </script>
-
+<style scoped lang="scss">
+@import "@swiper/navigation/navigation";
+@import "@swiper/scrollbar/scrollbar";
+@import "@swiper/a11y/a11y";
+@import "@swiper/pagination/pagination";
+</style>
 <style lang="scss">
 .chart {
   svg {

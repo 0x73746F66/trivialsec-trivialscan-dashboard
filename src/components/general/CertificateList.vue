@@ -122,11 +122,8 @@ import IconArrowPrimary from "@/components/icons/IconArrowPrimary.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";
 import LoadingComponent from "@/components/general/LoadingComponent.vue";
 import moment from "moment";
-
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/vue';
-
-import 'swiper/css';
+import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/vue";
 
 export default {
   components: {
@@ -190,9 +187,12 @@ export default {
   }
 }
 </script>
-
 <style scoped lang="scss">
-  .certificate-swiper-button {
+@import "@swiper/navigation/navigation";
+@import "@swiper/scrollbar/scrollbar";
+@import "@swiper/a11y/a11y";
+@import "@swiper/pagination/pagination";
+.certificate-swiper-button {
     position: relative;
     border-radius: radius('sm');
     padding: padding('xs');
@@ -204,11 +204,11 @@ export default {
     transition: 0.2s linear;
     border: none;
     &-prev {
-      transform: rotate(180deg);
+        transform: rotate(180deg);
     }
     svg {
-      width: 25px;
-      height: 25px;
+        width: 25px;
+        height: 25px;
     }
     &:hover {
         color: color('secondary');
@@ -218,9 +218,9 @@ export default {
         background: none;
         display: none;
     }
-  }
-  .target-dropdown-icon {
+}
+.target-dropdown-icon {
     width: 15px;
     height: 15px;
-  }
+}
 </style>

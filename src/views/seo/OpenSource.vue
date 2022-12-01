@@ -52,40 +52,44 @@
           </div>
           <div class="col-12 col-lg-6 sendgrid-embed">
               <iframe
-                frameborder="0"
-                scrolling="no"
+                title="Sendgrid contact form"
                 seamless="seamless"
                 height="100%"
                 src="https://cdn.forms-content.sg-form.com/05ba6de3-5bd7-11ed-9441-a2114a0392f3"
               />
           </div>
           <div class="col-12 col-lg-6 contact-us margin-bottom-lg">
-              <h3 class="font-color-light font-base-sb">Additional Resources</h3>
-              <span class="font-color-light">
-                  <ul>
-                      <li><a class="text-decoration-none font-color-primary font-sm" href="#">Trivial Scanner vs ImmuniWeb vs Qualys SSL Labs</a></li>
-                      <li><a class="text-decoration-none font-color-primary font-sm" href="#">Trivial Scanner vs SSLyze vs testssl.sh</a></li>
-                      <li><a class="text-decoration-none font-color-primary font-sm" href="#">How most SSL/TLS scanners are more harmful than helpful</a></li>
-                  </ul>
-              </span>
+            <div class="container padding-bottom-xl padding-top-xl" v-if="!logged_in">
+              <LoginOrRegister loginModalId="loginModal" registerModalId="registerLogin" />
+            </div>
+            <h3 class="font-color-light font-base-sb">Additional Resources</h3>
+            <span class="font-color-light">
+                <ul>
+                    <li><a class="text-decoration-none font-color-primary font-sm" href="#">Trivial Scanner vs ImmuniWeb vs Qualys SSL Labs</a></li>
+                    <li><a class="text-decoration-none font-color-primary font-sm" href="#">Trivial Scanner vs SSLyze vs testssl.sh</a></li>
+                    <li><a class="text-decoration-none font-color-primary font-sm" href="#">How most SSL/TLS scanners are more harmful than helpful</a></li>
+                </ul>
+            </span>
           </div>
       </div>
   </div>
-  </template>
-  
-  <script setup>
-    import Dropdown from "@/components/general/Dropdown.vue"
-    import FeatureSlider from "@/components/general/FeatureSlider.vue"
-  </script>
-  
-  <script>
-  export default {
+</template>
+
+<script setup>
+  import Dropdown from "@/components/general/Dropdown.vue"
+  import FeatureSlider from "@/components/general/FeatureSlider.vue"
+import LoginOrRegister from "@/components/general/LoginOrRegister.vue"
+</script>
+
+<script>
+export default {
     components: {
       Dropdown,
       FeatureSlider
     },
     data() {
       return {
+        logged_in: false,
         FAQs: [
           {
             question: "What is SSL/TLS?",
@@ -105,6 +109,9 @@
           }
         ]
       }
+    },
+    created() {
+      this.logged_in = !!localStorage.getItem("/session/key");
     }
   };
   </script>
@@ -148,7 +155,8 @@
         padding: 0;
         margin: 0;
         width: 100%;
-        height: 500px;
+        height: 550px;
+        border-bottom: none;
       }
     }
     </style>

@@ -342,6 +342,8 @@ import CustomPill from "@/components/general/CustomPill.vue";
 import SlidingModal from "@/components/general/SlidingModal.vue";
 import ReportCertificates from "@/components/general/ReportCertificates.vue";
 import EvaluationItems from "@/components/EvaluationItems.vue";
+import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/vue";
 </script>
 
 <script>
@@ -365,7 +367,6 @@ export default {
     ReportCertificates,
     EvaluationItems,
   },
-
   props: [
     "generator",
     "version",
@@ -396,6 +397,11 @@ export default {
         warn: true,
         info: false,
       },
+    };
+  },
+  setup() {
+    return {
+      modules: [Navigation, Pagination, Scrollbar, A11y],
     };
   },
   methods: {
@@ -501,7 +507,12 @@ export default {
   },
 };
 </script>
-
+<style scoped lang="scss">
+@import "@swiper/navigation/navigation";
+@import "@swiper/scrollbar/scrollbar";
+@import "@swiper/a11y/a11y";
+@import "@swiper/pagination/pagination";
+</style>
 <style lang="scss">
 .report-item {
   cursor: pointer;

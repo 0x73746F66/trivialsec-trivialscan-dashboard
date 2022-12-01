@@ -144,14 +144,14 @@
           </div>
         </template>
         <template v-slot:content>
-          <div class="row">
+          <div class="row padding-right-sm">
             <div class="col-12 col-lg-6 padding-top-sm">
               <span
                 class="font-xs pre-line"
                 v-html="evaluation?.description"
               ></span>
             </div>
-            <div class="col-12 col-lg-6 d-flex flex-column">
+            <div class="col-12 col-lg-6 d-flex flex-column bg-dark-40 border-radius-sm padding-sm evaluation-item-aside">
               <template v-if="evaluation?.references.length > 0">
                 <span class="font-sm-sb font-color-light margin-top-sm"
                   >References</span
@@ -181,7 +181,6 @@
             >
               <h3
                 class="font-base-sb font-color-light"
-                v-if="evaluation?.compliance?.items"
               >
                 Compliance
               </h3>
@@ -191,13 +190,13 @@
                   :key="index"
                 >
                   <div>
-                    {{ compliance.compliance }} {{ compliance.version }}
+                    {{ index+1 }}. {{ compliance.compliance }}<span class="font-color-secondary"> v{{ compliance.version }}</span>
                     <div class="d-flex flex-wrap">
                       <div
                         class="w-100 font-sm-sb margin-bottom-xs"
                         v-if="compliance?.items?.length > 0"
                       >
-                        Requiements
+                        Requirements
                       </div>
                       <template
                         v-for="(comp, compIndex) in compliance.items"
@@ -246,22 +245,29 @@
               </div>
             </div>
             <div class="col-12 d-flex flex-column padding-top-sm">
+              <h3 class="font-lg-sb font-color-light margin-bottom-sm" v-if="evaluation.threats.length > 0">
+                Threat Vectors
+              </h3>
               <div
                 v-for="(group, groupIndex) in slicedThreats(evaluation)"
                 :key="groupIndex"
               >
                 <h3 class="font-base font-color-light margin-bottom-lg">
-                  {{ group.standard }} {{ group.version }}
+                  {{ group.standard }}<span class="font-color-secondary" v-if="group.standard === 'MITRE ATT&CK'"> v{{ group.version }}</span>
                 </h3>
                 <div class="d-flex flex-row flex-wrap hexagon-main">
                   <div class="hexagon-container">
-                    <MitreAttackItem
-                      v-for="(threatItem, threatIndex) in group.items"
-                      :key="threatIndex"
-                      :threat="threatItem"
-                      :evalIndex="evalIndex"
-                      :threatIndex="threatIndex"
-                    />
+                    <template
+                        v-for="(threatItem, threatIndex) in group.items"
+                        :key="threatIndex"
+                    >
+                        <MitreAttackItem
+                          v-if="threatItem.standard === 'MITRE ATT&CK'"
+                          :threat="threatItem"
+                          :evalIndex="evalIndex"
+                          :threatIndex="threatIndex"
+                        />
+                    </template>
                   </div>
                 </div>
               </div>
@@ -273,13 +279,13 @@
   </div>
 </template>
 <script setup>
-import IconLink from "@/components/icons/IconLink.vue";
-import IconTarget from "@/components/icons/IconTarget.vue";
-import Dropdown from "@/components/general/Dropdown.vue";
-import MitreAttackItem from "@/components/MitreAttackItem.vue";
-import EvaluationMetadata from "@/components/EvaluationMetadata.vue";
-import ThreatIcon from "@/components/icons/ThreatIcon.vue";
-import IconCertificate from "@/components/icons/IconCertificate.vue";
+import IconLink from "@/components/icons/IconLink.vue"
+import IconTarget from "@/components/icons/IconTarget.vue"
+import Dropdown from "@/components/general/Dropdown.vue"
+import MitreAttackItem from "@/components/MitreAttackItem.vue"
+import EvaluationMetadata from "@/components/EvaluationMetadata.vue"
+import ThreatIcon from "@/components/icons/ThreatIcon.vue"
+import IconCertificate from "@/components/icons/IconCertificate.vue"
 </script>
 
 <script>
@@ -324,7 +330,37 @@ export default {
   },
 };
 </script>
-
+<style scoped lang="scss">
+@media (min-width: $breakpoint-sm) {
+  .evaluation-item-aside {
+    max-height: 30vh;
+    overflow-y: scroll;
+    &::-webkit-scrollbar {
+        width: .2em;
+    }
+    &::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 6px color("primary-20");
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: color("primary");
+        outline: 1px solid color("primary");
+    }
+  }
+}
+@media (max-width: $breakpoint-sm) {
+  .evaluation-item-aside {
+    margin-top: 30px;
+  }
+  .filter-results {
+    padding-top: 10px;
+  }
+  .filter-results > div {
+    flex-wrap: wrap;
+    flex: 1 1 50%;
+    flex-direction: column;
+  }
+}
+</style>
 <style lang="scss">
 .report-item {
   cursor: pointer;

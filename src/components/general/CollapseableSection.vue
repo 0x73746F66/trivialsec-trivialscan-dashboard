@@ -82,7 +82,7 @@ export default {
     }
 
     .pill.active {
-        background: color("primary") !important;
+        background: color("primary");
         color: color("light");
     }
 

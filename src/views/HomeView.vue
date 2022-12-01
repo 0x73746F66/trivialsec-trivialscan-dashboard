@@ -30,15 +30,14 @@
       </div>
     </div>
 
-    <div class="container padding-bottom-xl padding-top-xl">
-      <LoginOrRegister loginModalId="homeLogin" registerModalId="homeRegister" />
+    <div class="container padding-bottom-xl padding-top-xl" v-if="!logged_in">
+      <LoginOrRegister loginModalId="loginModal" registerModalId="registerLogin" />
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
 import { shallowRef } from "vue";
-
 import cIconNotificationLight from "@/components/icons/IconNotificationLight.vue";
 import cIconData from "@/components/icons/IconData.vue";
 import cIconScan2Light from "@/components/icons/IconScan2Light.vue";
@@ -61,8 +60,9 @@ import Dropdown from "@/components/general/Dropdown.vue"
 import Modal from "@/components/general/Modal.vue"
 import ContactForm from "@/components/forms/ContactForm.vue"
 import LoginOrRegister from "@/components/general/LoginOrRegister.vue"
+</script>
 
-
+<script>
 const IconNotificationLight = shallowRef(cIconNotificationLight);
 const IconData = shallowRef(cIconData);
 const IconScan2Light = shallowRef(cIconScan2Light);
@@ -91,6 +91,7 @@ export default {
   },
   data() {
     return {
+      logged_in: false,
       heroScrolled: false,
       basicFeatures: [
         // {
@@ -182,6 +183,7 @@ export default {
   },
   created() {
     window.addEventListener("scroll", this.handleScroll);
+    this.logged_in = !!localStorage.getItem("/session/key");
   },
   unmounted() {
     window.removeEventListener("scroll", this.handleScroll);

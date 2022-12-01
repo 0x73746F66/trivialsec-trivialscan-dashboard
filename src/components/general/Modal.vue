@@ -38,6 +38,9 @@
     </div>
   </div>
 </template>
+<script setup>
+import { Modal } from 'bootstrap'
+</script>
 <script>
 export default {
   props: {
@@ -48,7 +51,7 @@ export default {
 </script>
 <style lang="scss">
 .modal-content {
-  background-color: #000000;
+  background-color: #000 !important;
 }
 .modal-loading {
   position: absolute!important;  

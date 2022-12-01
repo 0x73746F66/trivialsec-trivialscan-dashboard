@@ -65,9 +65,13 @@
                 class="font-xs nav-profile"
               />
             </RouterLink>
-              <div class="padding-sm w-100 p-lg-0" v-if="!logged_in">
-                <LoginOrRegister loginModalId="headerLogin" registerModalId="headerRegister" />
+            <div class="padding-sm w-100 p-lg-0" v-if="!logged_in">
+              <div class="login-register-section d-flex flex-lg-row flex-column align-items-center justify-content-start">
+                <button type="button" data-bs-toggle="modal" data-bs-target="#loginModal" class="btn-fill-primary-full font-xs font-color-light border-0"> Login </button>
+                <span class="font-xs-sb font-color-light margin-right-md margin-left-md margin-top-sm margin-bottom-sm my-lg-0">OR</span>
+                <button type="button" data-bs-toggle="modal" data-bs-target="#registerLogin" class="btn-fill-primary-full font-xs font-color-light border-0"> Register </button>
               </div>
+            </div>
           </div>
         </div>
       </div>
@@ -106,17 +110,20 @@
       </RouterLink>
       <div v-if="!logged_in">
         <div class="padding-sm p-lg-0">
-          <LoginOrRegister loginModalId="headerResponsiveLogin" registerModalId="headerResponsiveRegister" />
+          <div class="login-register-section d-flex flex-lg-row flex-column align-items-center justify-content-start">
+            <button type="button" data-bs-toggle="modal" data-bs-target="#loginModal" class="btn-fill-primary-full font-xs font-color-light border-0"> Login </button>
+            <span class="font-xs-sb font-color-light margin-right-md margin-left-md margin-top-sm margin-bottom-sm my-lg-0">OR</span>
+            <button type="button" data-bs-toggle="modal" data-bs-target="#registerLogin" class="btn-fill-primary-full font-xs font-color-light border-0"> Register </button>
+          </div>
         </div>
       </div>
     </div>
 </template>
 <script>
 import IconTrivialSecurity from "@/components/icons/IconTrivialSecurity.vue";
-import LoginOrRegister from "@/components/general/LoginOrRegister.vue";
 
 export default {
-  components: { IconTrivialSecurity, LoginOrRegister },
+  components: { IconTrivialSecurity },
   props: {
     isNavbarHidden: Boolean,
   },

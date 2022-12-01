@@ -24,29 +24,31 @@
         <IconChevron class="cert-icon" color="f0f0f0" />
     </button>
 </template>
-<script>
-    import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
-    import { Swiper, SwiperSlide } from 'swiper/vue';
-    import IconChevron from "@/components/icons/IconChevron.vue"
-
-    import 'swiper/css';
-    
-    export default {
-        props: {
-            length: Number
-        },
-        components: {
-            Swiper, 
-            SwiperSlide,
-            IconChevron
-        },
-        setup(){
-            return {
-                modules: [Navigation, Pagination, Scrollbar, A11y],
-            }
-        }    
-    }
+<script setup>
+import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import IconChevron from "@/components/icons/IconChevron.vue"
 </script>
-<style lang="">
-    
+<script>
+export default {
+    props: {
+        length: Number
+    },
+    components: {
+        Swiper, 
+        SwiperSlide,
+        IconChevron
+    },
+    setup(){
+        return {
+            modules: [Navigation, Pagination, Scrollbar, A11y],
+        }
+    }    
+}
+</script>
+<style scoped lang="scss">
+@import "@swiper/navigation/navigation";
+@import "@swiper/scrollbar/scrollbar";
+@import "@swiper/a11y/a11y";
+@import "@swiper/pagination/pagination";
 </style>

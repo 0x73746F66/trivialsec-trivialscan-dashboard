@@ -370,10 +370,8 @@
 import { RouterLink } from "vue-router";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
-
 import moment from "moment";
 import randomWords from 'random-words';
-import "swiper/css";
 import IconPencil from "@/components/icons/IconPencil.vue";
 import IconCancel from "@/components/icons/IconCancel.vue";
 import IconTrash from "@/components/icons/IconTrash.vue";
@@ -391,7 +389,6 @@ import ValidationMessage from "@/components/general/ValidationMessage.vue"
 </script>
 
 <script>
-
 export default {
     components: {
         IconPencil,
@@ -598,7 +595,12 @@ export default {
     },
 }
 </script>
-
+<style scoped lang="scss">
+@import "@swiper/navigation/navigation";
+@import "@swiper/scrollbar/scrollbar";
+@import "@swiper/a11y/a11y";
+@import "@swiper/pagination/pagination";
+</style>
 <style lang="scss">
 .modal {
   --bs-modal-width: 800px;

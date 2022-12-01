@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "@/views/HomeView.vue";
 import privateRoutes from '@/router/public-routes.js'
 import protectedRoutes from '@/router/protected-routes.js'
 

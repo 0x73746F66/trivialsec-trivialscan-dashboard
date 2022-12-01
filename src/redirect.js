@@ -1,0 +1,1 @@
+if (window.location.hostname == "trivialsec.com") window.location.href = `https://www.trivialsec.com${window.location.pathname}`;
