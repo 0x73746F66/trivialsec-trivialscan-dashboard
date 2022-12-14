@@ -18,7 +18,7 @@
         <div v-if="results?.info > 0" class="summary-pill info">
             <IconInfo class="summary-icon" color="" />
             <span class="font-color-dark">{{results?.info}}</span>
-            <span class="summary-pill-legend margin-left-xxs">Insights</span>
+            <span class="summary-pill-legend margin-left-xxs">Informational</span>
         </div>
     </div>
 </template>

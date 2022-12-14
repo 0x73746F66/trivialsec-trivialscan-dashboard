@@ -1,3 +1,4 @@
+if (window.location.hostname == "trivialsec.com") window.location.href = `https://www.trivialsec.com${window.location.pathname}`;
 import { createApp } from "vue"
 import App from "./App.vue"
 import router from "./router"
@@ -8,6 +9,14 @@ const app = createApp(App)
 app.config.globalProperties.$log = console.log
 app.use(router)
 router.isReady().then(() => app.mount("#app"))
+
+const clearState = () => {
+  localStorage.setItem("/account/name", "")
+  localStorage.setItem("/account/display", "")
+  localStorage.setItem("/member/email", "")
+  localStorage.setItem("/member/email_md5", "")
+  localStorage.setItem("/session/key", "")
+}
 
 const apiUrl = import.meta.env.VITE_API_URL.trim()
 window.Api = {
@@ -32,6 +41,7 @@ window.Api = {
       signal: controller.signal,
     })
     clearTimeout(id)
+    if (response.status === 401) clearState();
     return response
   },
   post: async(uriPath, data, options = {}) => {
@@ -61,9 +71,11 @@ window.Api = {
       signal: controller.signal,
     })
     clearTimeout(id)
+    if (response.status === 401) clearState();
     return response
   },
-  delete: async uriPath => {
+  delete: async(uriPath, options = {}) => {
+    const { timeout = 15000 } = options
     const urlPath = `${apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl}${uriPath}`
     const ts = moment().utc().unix()
     const url = new URL(urlPath)
@@ -75,9 +87,19 @@ window.Api = {
     hash.update(canonical_string)
     const mac = hash.finalize()
     const Authorization = `HMAC id="${localStorage.getItem("/member/email")}", mac="${mac}", ts="${ts}"`
-    return fetch(urlPath, {
-      method: "DELETE",
-      headers: { Authorization }
+    const controller = new AbortController()
+    const id = setTimeout(() => controller.abort(), timeout)
+    options.headers = Object.assign(options.headers||{}, {
+      "Content-Type": "application/json;charset=UTF-8",
+      Authorization
     })
+    const response = await fetch(urlPath, {
+      ...options,
+      method: "DELETE",
+      signal: controller.signal,
+    })
+    clearTimeout(id)
+    if (response.status === 401) clearState();
+    return response
   },
 }

@@ -2,7 +2,6 @@
   <div
     class="nav"
     :class="{
-      'nav-animate-hidden': isNavbarHidden,
       'nav-logged-in': logged_in,
     }"
   >
@@ -45,10 +44,16 @@
                 >Dashboard</RouterLink
             >
             <RouterLink
-              v-if="logged_in"
-              to="/logout"
-              class="router-link font-base font-color-light text-decoration-none margin-right-md"
-              >Logout</RouterLink
+                v-if="logged_in"
+                to="/logout"
+                class="router-link font-base font-color-light text-decoration-none margin-right-md"
+                >Logout</RouterLink
+            >
+            <RouterLink
+                v-if="!logged_in"
+                to="/pricing"
+                class="router-link font-base font-color-light text-decoration-none margin-right-md"
+                >Pricing</RouterLink
             >
             <RouterLink
               v-if="logged_in"
@@ -67,8 +72,8 @@
             </RouterLink>
             <div class="padding-sm w-100 p-lg-0" v-if="!logged_in">
               <div class="login-register-section d-flex flex-lg-row flex-column align-items-center justify-content-start">
-                <button type="button" data-bs-toggle="modal" data-bs-target="#loginModal" class="btn-fill-primary-full font-xs font-color-light border-0"> Login </button>
-                <span class="font-xs-sb font-color-light margin-right-md margin-left-md margin-top-sm margin-bottom-sm my-lg-0">OR</span>
+                <button type="button" data-bs-toggle="modal" data-bs-target="#loginModal" class="btn-fill-primary-full font-xs font-color-light border-0 margin-right-md"> Login </button>
+                <div class="nav-sep"></div>
                 <button type="button" data-bs-toggle="modal" data-bs-target="#registerLogin" class="btn-fill-primary-full font-xs font-color-light border-0"> Register </button>
               </div>
             </div>
@@ -79,7 +84,7 @@
   </div>
   <div
       class="d-flex d-lg-none flex-column flex-lg-row align-items-center w-100 nav-transition nav-content"
-      :class="{ 'nav-hidden': navbarHidden }"
+      :class="{ 'nav-hidden': isNavbarHidden }"
     >
       <RouterLink
           v-if="logged_in"
@@ -112,7 +117,7 @@
         <div class="padding-sm p-lg-0">
           <div class="login-register-section d-flex flex-lg-row flex-column align-items-center justify-content-start">
             <button type="button" data-bs-toggle="modal" data-bs-target="#loginModal" class="btn-fill-primary-full font-xs font-color-light border-0"> Login </button>
-            <span class="font-xs-sb font-color-light margin-right-md margin-left-md margin-top-sm margin-bottom-sm my-lg-0">OR</span>
+            <span class="font-xs-sb font-color-light margin-right-md margin-left-md margin-top-sm margin-bottom-sm my-lg-0"></span>
             <button type="button" data-bs-toggle="modal" data-bs-target="#registerLogin" class="btn-fill-primary-full font-xs font-color-light border-0"> Register </button>
           </div>
         </div>
@@ -124,12 +129,9 @@ import IconTrivialSecurity from "@/components/icons/IconTrivialSecurity.vue";
 
 export default {
   components: { IconTrivialSecurity },
-  props: {
-    isNavbarHidden: Boolean,
-  },
   data() {
     return {
-      navbarHidden: true,
+      isNavbarHidden: true,
       logged_in: false,
       account_name: null,
       member_email: null,
@@ -143,7 +145,7 @@ export default {
   },
   methods: {
     toggleNavbar() {
-      this.navbarHidden = !this.navbarHidden;
+      this.isNavbarHidden = !this.isNavbarHidden;
     },
   },
 };
@@ -160,7 +162,8 @@ header {
     }
   }
 }
-
+</style>
+<style scoped lang="scss">
 .nav {
   @extend .bg-dark-40;
   @extend .padding-md;
@@ -204,6 +207,11 @@ header {
     }
   }
 
+  &-sep {
+    border-left: solid 2px color('primary');
+    height: 30px;
+    margin-right: 20px;
+  }
 
   &-transition {
     position: fixed;
@@ -239,6 +247,29 @@ header {
   .router-link-active {
     @extend .font-color-primary;
     @extend .font-base-b;
+  }
+}
+.login-register {
+  &-section {
+    position: relative;
+  }
+
+  &-sep {
+    background: color("dark");
+    padding: padding("sm");
+
+    @media (min-width: $breakpoint-lg) {
+      &:before {
+        content: "";
+        z-index: -1;
+        background: color("light");
+        top: 25px;
+        left: 50%;
+        bottom: 25px;
+        width: 1px;
+        position: absolute;
+      }
+    }
   }
 }
 </style>

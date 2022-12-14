@@ -67,7 +67,7 @@
             <div v-if="summary?.results.info > 0" class="summary-pill info">
               <IconInfo class="summary-icon" color="" />
               <span class="font-color-dark">{{ summary.results.info }}</span>
-              <span class="summary-pill-legend margin-left-xxs">Insights</span>
+              <span class="summary-pill-legend margin-left-xxs">Informational</span>
             </div>
           </div>
         </div>
@@ -108,7 +108,7 @@
     </div>
   </div>
 </template>
-<script>
+<script setup>
 import checkIcon from "@/components/icons/checkIcon.vue";
 import IconError from "@/components/icons/IconError.vue";
 import IconWarning from "@/components/icons/IconWarning.vue";
@@ -119,7 +119,9 @@ import IconArrowPrimary from "@/components/icons/IconArrowPrimary.vue";
 import LoadingComponent from "@/components/general/LoadingComponent.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";
 import moment from "moment";
+</script>
 
+<script>
 export default {
   components: {
     checkIcon,

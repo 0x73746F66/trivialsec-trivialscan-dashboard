@@ -17,7 +17,9 @@
         </template>
       </Modal>
 
-      <span class="font-xs-sb font-color-light margin-right-md margin-left-md margin-top-sm margin-bottom-sm my-lg-0">OR</span>
+      <slot name="seperator">
+        <span class="font-xs-sb font-color-light margin-right-md margin-left-md margin-top-sm margin-bottom-sm my-lg-0">OR</span>
+      </slot>
 
       <Modal :id="registerModalId" label="modal-register-header">
         <template v-slot:button="buttonProps">
@@ -54,8 +56,31 @@ export default {
     }
 }
 </script>
-<style lang="scss">
-    .modal {
-        overflow: initial;
+<style scoped lang="scss">
+.modal {
+    overflow: initial;
+}
+.login-register {
+  &-section {
+    position: relative;
+  }
+
+  &-sep {
+    background: color("dark");
+    padding: padding("sm");
+
+    @media (min-width: $breakpoint-lg) {
+      &:before {
+        content: "";
+        z-index: -1;
+        background: color("light");
+        top: 25px;
+        left: 50%;
+        bottom: 25px;
+        width: 1px;
+        position: absolute;
+      }
     }
+  }
+}
 </style>

@@ -97,10 +97,13 @@ test-local:  ## Prettier test outputs
 	semgrep -q --strict --timeout=0 --config=p/terraform
 
 run-local: env refresh  ## npm run dev
-	VITE_API_URL=$(shell terraform -chdir=plans output -raw api_function_url) npm run dev
+	VITE_API_URL=$(shell terraform -chdir=plans output -raw api_function_url) npx vite --host
 
 ci-build: env init refresh  ## npm run build
-	VITE_API_URL=$(shell terraform -chdir=plans output -raw api_function_url) npm run build
+	VITE_API_URL=$(shell terraform -chdir=plans output -raw api_function_url) npx vite build --force
+
+preview: env init refresh  ## npm run build
+	VITE_API_URL=$(shell terraform -chdir=plans output -raw api_function_url) npx vite preview --host
 
 lint:  ## npm run lint
 	npm run lint

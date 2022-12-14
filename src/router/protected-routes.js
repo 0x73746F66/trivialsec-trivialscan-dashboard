@@ -5,6 +5,26 @@ const routes = [
         component: () => import("@/views/DashboardView.vue"),
     },
     {
+        path: "/reports",
+        name: "reports",
+        component: () => import("@/views/ReportsView.vue"),
+    },
+    {
+        path: "/hosts",
+        name: "hosts",
+        component: () => import("@/views/HostsView.vue"),
+    },
+    {
+        path: "/findings",
+        name: "findings",
+        component: () => import("@/views/FindingsView.vue"),
+    },
+    {
+        path: "/certificate-issues",
+        name: "certificate-issues",
+        component: () => import("@/views/CertificateIssuesView.vue"),
+    },
+    {
         path: "/result/:report_id",
         name: "result",
         redirect: (to) => {

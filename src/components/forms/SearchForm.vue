@@ -39,6 +39,7 @@
       id="search-bar"
       v-model="searchInput"
       @keydown.enter="submitSearch()"
+      placeholder="Enter a search term to start a scan"
     />
     <div
       class="button-container"
@@ -320,7 +321,7 @@ export default {
   data() {
     return {
       loading: false,
-      searchActive: false,
+      searchActive: true,
       searchInput: "",
       searchType: "host",
       searchResults: {

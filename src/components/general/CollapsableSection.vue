@@ -14,7 +14,7 @@
             aria-expanded="false" 
             :aria-controls="sect"
             :key="index"
-            @click="toggleCollapseable($event, `${label}-${sect}`)"
+            @click="toggleCollapsable($event, `${label}-${sect}`)"
         >
             {{sect}}
         </button>
@@ -52,7 +52,7 @@ export default {
         columnStyle: Boolean
     },
     methods: {
-        toggleCollapseable(e, collapseable) {
+        toggleCollapsable(e, collapsable) {
             this.$emit('section-change', e.target.textContent);
             Array.from(document.getElementsByClassName(`collapsible-${this.label}-pill`)).forEach(
                 function(el) {
@@ -67,7 +67,7 @@ export default {
                     el.classList.remove("show");
                 }
             )
-            document.getElementById(`${collapseable}`).classList.add("show");
+            document.getElementById(`${collapsable}`).classList.add("show");
         }
     }
 }

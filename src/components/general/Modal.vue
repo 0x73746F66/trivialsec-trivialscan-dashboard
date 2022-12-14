@@ -16,7 +16,7 @@
     aria-hidden="true"
   >
     <div
-      class="modal-dialog modal-dialog-centered border-radius-sm"
+      :class="dialogClasses"
       role="document"
     >
       <div class="modal-content">
@@ -46,7 +46,13 @@ export default {
   props: {
     id: String,
     label: String,
+    dialogClass: String,
   },
+  computed: {
+    dialogClasses() {
+      return `${this.dialogClass} modal-dialog modal-dialog-centered border-radius-sm`
+    } 
+  }
 };
 </script>
 <style lang="scss">

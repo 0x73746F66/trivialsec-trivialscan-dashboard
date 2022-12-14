@@ -16,20 +16,6 @@
       </div>
     </div>
 
-    <div
-      class="container-fluid padding-top-xl padding-bottom-md bg-dark-20 pricing-container px-0"
-      ref="pricingContainer"
-    >
-      <div class="container">
-        <PricingComponent />
-        <span class="margin-top-sm d-block font-xxs font-color-light"
-          >* Self-managed refers to Trivial Scanner running on your self-hosted
-          and on-prem servers, your cloud, or your client computers, and
-          connecting to Trivial Security SaaS services.</span
-        >
-      </div>
-    </div>
-
     <div class="container padding-bottom-xl padding-top-xl" v-if="!logged_in">
       <LoginOrRegister loginModalId="loginModal" registerModalId="registerLogin" />
     </div>
@@ -38,55 +24,41 @@
 
 <script setup>
 import { shallowRef } from "vue";
-import cIconNotificationLight from "@/components/icons/IconNotificationLight.vue";
+// import cIconNotificationLight from "@/components/icons/IconNotificationLight.vue";
 import cIconData from "@/components/icons/IconData.vue";
 import cIconScan2Light from "@/components/icons/IconScan2Light.vue";
 import cIconScan1Light from "@/components/icons/IconScan1Light.vue";
-import cIconLightningLight from "@/components/icons/IconLightningLight.vue";
-import cIconIntLight from "@/components/icons/IconIntLight.vue";
-import cIconFeedLight from "@/components/icons/IconFeedLight.vue";
+// import cIconLightningLight from "@/components/icons/IconLightningLight.vue";
+// import cIconIntLight from "@/components/icons/IconIntLight.vue";
+// import cIconFeedLight from "@/components/icons/IconFeedLight.vue";
 import cIconIntegrationLight from "@/components/icons/IconIntegrationLight.vue";
 import cIconCliLight from "@/components/icons/IconCliLight.vue";
-import cIconGlobeLight from "@/components/icons/IconGlobeLight.vue";
-import cIconFishLight from "@/components/icons/IconFishLight.vue";
+// import cIconGlobeLight from "@/components/icons/IconGlobeLight.vue";
+// import cIconFishLight from "@/components/icons/IconFishLight.vue";
 import cIconTuneLight from "@/components/icons/IconTuneLight.vue";
-import LoadingComponent from "@/components/general/LoadingComponent.vue";
 import Hero from "@/components/layout/Hero.vue"
-import LoginForm from "@/components/forms/LoginForm.vue"
-import RegisterForm from "@/components/forms/RegisterForm.vue"
 import BasicFeature from "@/components/general/BasicFeature.vue"
-import PricingComponent from "@/components/general/PricingComponent.vue"
-import Dropdown from "@/components/general/Dropdown.vue"
-import Modal from "@/components/general/Modal.vue"
-import ContactForm from "@/components/forms/ContactForm.vue"
 import LoginOrRegister from "@/components/general/LoginOrRegister.vue"
 </script>
 
 <script>
-const IconNotificationLight = shallowRef(cIconNotificationLight);
+// const IconNotificationLight = shallowRef(cIconNotificationLight);
 const IconData = shallowRef(cIconData);
 const IconScan2Light = shallowRef(cIconScan2Light);
 const IconScan1Light = shallowRef(cIconScan1Light);
-const IconLightningLight = shallowRef(cIconLightningLight);
-const IconIntLight = shallowRef(cIconIntLight);
-const IconFeedLight = shallowRef(cIconFeedLight);
+// const IconLightningLight = shallowRef(cIconLightningLight);
+// const IconIntLight = shallowRef(cIconIntLight);
+// const IconFeedLight = shallowRef(cIconFeedLight);
 const IconIntegrationLight = shallowRef(cIconIntegrationLight);
 const IconCliLight = shallowRef(cIconCliLight);
-const IconGlobeLight = shallowRef(cIconGlobeLight);
-const IconFishLight = shallowRef(cIconFishLight);
+// const IconGlobeLight = shallowRef(cIconGlobeLight);
+// const IconFishLight = shallowRef(cIconFishLight);
 const IconTuneLight = shallowRef(cIconTuneLight);
 
 export default {
   components: {
     Hero,
-    LoginForm,
-    RegisterForm,
     BasicFeature,
-    PricingComponent,
-    Dropdown,
-    Modal,
-    ContactForm,
-    LoadingComponent,
     LoginOrRegister,
   },
   data() {
@@ -203,26 +175,5 @@ export default {
 <style scoped lang="scss">
 .hero-container {
   height: calc(100vh - 80px);
-}
-.login-register {
-  &-section {
-    position: relative;
-  }
-  &-sep {
-    background: color("dark");
-    padding: padding("sm");
-    @media (min-width: $breakpoint-lg) {
-      &:before {
-        content: "";
-        z-index: -1;
-        background: color("light");
-        top: 25px;
-        left: 50%;
-        bottom: 25px;
-        width: 1px;
-        position: absolute;
-      }
-    }
-  }
 }
 </style>

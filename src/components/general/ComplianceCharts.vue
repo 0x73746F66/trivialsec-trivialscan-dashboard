@@ -6,7 +6,7 @@
         :message="errorMessage"
         :type="errorMessageType"
     />
-    <CollapseableSection
+    <CollapsableSection
       :section="chartSections"
       label="complicance-chart"
       special-classes="w-lg-75"
@@ -19,18 +19,18 @@
             :chartData="comp.data"
         />
         </template>
-    </CollapseableSection>
+    </CollapsableSection>
 </template>
 
 <script>
-import CollapseableSection from "@/components/general/CollapseableSection.vue";
+import CollapsableSection from "@/components/general/CollapsableSection.vue";
 import TimeScaleCustomChart from "@/components/general/TimeScaleCustomChart.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";
 import LoadingComponent from "@/components/general/LoadingComponent.vue";
 
 export default {
   components: {
-    CollapseableSection,
+    CollapsableSection,
     TimeScaleCustomChart,
     ValidationMessage,
     LoadingComponent,

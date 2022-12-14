@@ -53,7 +53,7 @@
           <label
             for="checkInfo"
             class="margin-right-md font-xs font-color-light"
-            >Insights ({{ results.info }})</label
+            >Informational ({{ results.info }})</label
           >
         </div>
       </div>
