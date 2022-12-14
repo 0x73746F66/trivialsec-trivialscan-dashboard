@@ -151,22 +151,38 @@
                 v-html="evaluation?.description"
               ></span>
             </div>
-            <div class="col-12 col-lg-6 d-flex flex-column bg-dark-40 border-radius-sm padding-sm evaluation-item-aside">
+            <div
+              class="col-12 col-lg-6 d-flex flex-column bg-dark-40 border-radius-sm padding-sm evaluation-item-aside"
+            >
               <template v-if="evaluation?.references.length > 0">
                 <span class="font-sm-sb font-color-light margin-top-sm"
                   >References</span
                 >
                 <span
                   class="margin-top-xxs"
-                  v-for="(ev, index) in evaluation?.references"
+                  v-for="(reference, index) in evaluation?.references"
                   :key="index"
                 >
-                  <IconLink color="1abb9c" class="link-icon margin-right-xxs" />
+                  <IconJsonFile
+                    color="e2c878"
+                    class="link-icon margin-right-xxs"
+                    v-if="reference.type === 'json'"
+                  />
+                  <IconLink
+                    color="1abb9c"
+                    class="link-icon margin-right-xxs"
+                    v-else
+                  />
                   <a
+                    :title="
+                      reference.type === 'json'
+                        ? 'Download data (JSON format)'
+                        : 'Open the link in a new tab'
+                    "
                     target="_blank"
-                    :href="ev.url"
-                    class="font-xs-sb font-color-primary"
-                    >{{ ev.name }}</a
+                    :href="reference.url"
+                    class="font-xs-sb font-color-primary text-decoration-none"
+                    >{{ reference.name }}</a
                   >
                 </span>
               </template>
@@ -179,18 +195,17 @@
               class="col-12 d-flex flex-column padding-top-sm"
               v-if="evaluation?.compliance?.length > 0"
             >
-              <h3
-                class="font-base-sb font-color-light"
-              >
-                Compliance
-              </h3>
+              <h3 class="font-base-sb font-color-light">Compliance</h3>
               <div :id="`complianceSection${evaluation?.key}`">
                 <div
                   v-for="(compliance, index) in evaluation.compliance"
                   :key="index"
                 >
                   <div>
-                    {{ index+1 }}. {{ compliance.compliance }}<span class="font-color-secondary"> v{{ compliance.version }}</span>
+                    {{ index + 1 }}. {{ compliance.compliance
+                    }}<span class="font-color-secondary">
+                      v{{ compliance.version }}</span
+                    >
                     <div class="d-flex flex-wrap">
                       <div
                         class="w-100 font-sm-sb margin-bottom-xs"
@@ -245,7 +260,10 @@
               </div>
             </div>
             <div class="col-12 d-flex flex-column padding-top-sm">
-              <h3 class="font-lg-sb font-color-light margin-bottom-sm" v-if="evaluation.threats.length > 0">
+              <h3
+                class="font-lg-sb font-color-light margin-bottom-sm"
+                v-if="evaluation.threats.length > 0"
+              >
                 Threat Vectors
               </h3>
               <div
@@ -253,20 +271,26 @@
                 :key="groupIndex"
               >
                 <h3 class="font-base font-color-light margin-bottom-lg">
-                  {{ group.standard }}<span class="font-color-secondary" v-if="group.standard === 'MITRE ATT&CK'"> v{{ group.version }}</span>
+                  {{ group.standard
+                  }}<span
+                    class="font-color-secondary"
+                    v-if="group.standard === 'MITRE ATT&CK'"
+                  >
+                    v{{ group.version }}</span
+                  >
                 </h3>
                 <div class="d-flex flex-row flex-wrap hexagon-main">
                   <div class="hexagon-container">
                     <template
-                        v-for="(threatItem, threatIndex) in group.items"
-                        :key="threatIndex"
+                      v-for="(threatItem, threatIndex) in group.items"
+                      :key="threatIndex"
                     >
-                        <MitreAttackItem
-                          v-if="threatItem.standard === 'MITRE ATT&CK'"
-                          :threat="threatItem"
-                          :evalIndex="evalIndex"
-                          :threatIndex="threatIndex"
-                        />
+                      <MitreAttackItem
+                        v-if="threatItem.standard === 'MITRE ATT&CK'"
+                        :threat="threatItem"
+                        :evalIndex="evalIndex"
+                        :threatIndex="threatIndex"
+                      />
                     </template>
                   </div>
                 </div>
@@ -279,19 +303,21 @@
   </div>
 </template>
 <script setup>
-import IconLink from "@/components/icons/IconLink.vue"
-import IconTarget from "@/components/icons/IconTarget.vue"
-import Dropdown from "@/components/general/Dropdown.vue"
-import MitreAttackItem from "@/components/MitreAttackItem.vue"
-import EvaluationMetadata from "@/components/EvaluationMetadata.vue"
-import ThreatIcon from "@/components/icons/ThreatIcon.vue"
-import IconCertificate from "@/components/icons/IconCertificate.vue"
+import IconLink from "@/components/icons/IconLink.vue";
+import IconJsonFile from "@/components/icons/IconJsonFile.vue";
+import IconTarget from "@/components/icons/IconTarget.vue";
+import Dropdown from "@/components/general/Dropdown.vue";
+import MitreAttackItem from "@/components/MitreAttackItem.vue";
+import EvaluationMetadata from "@/components/EvaluationMetadata.vue";
+import ThreatIcon from "@/components/icons/ThreatIcon.vue";
+import IconCertificate from "@/components/icons/IconCertificate.vue";
 </script>
 
 <script>
 export default {
   components: {
     IconLink,
+    IconJsonFile,
     IconTarget,
     Dropdown,
     MitreAttackItem,
@@ -336,14 +362,14 @@ export default {
     max-height: 30vh;
     overflow-y: scroll;
     &::-webkit-scrollbar {
-        width: .2em;
+      width: 0.2em;
     }
     &::-webkit-scrollbar-track {
-        box-shadow: inset 0 0 6px color("primary-20");
+      box-shadow: inset 0 0 6px color("primary-20");
     }
     &::-webkit-scrollbar-thumb {
-        background-color: color("primary");
-        outline: 1px solid color("primary");
+      background-color: color("primary");
+      outline: 1px solid color("primary");
     }
   }
 }
