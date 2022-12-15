@@ -321,7 +321,10 @@ export default {
   data() {
     return {
       loading: false,
-      searchActive: true,
+      searchActive:
+        localStorage.getItem("/component/search/visibility") === "false"
+          ? false
+          : true,
       searchInput: "",
       searchType: "host",
       searchResults: {
@@ -387,8 +390,8 @@ export default {
         }
         this.loading = false;
       } else {
-        this.searchActive = !this.searchActive;
-        this.clearSearchInput();
+        this.searchActive = true;
+        localStorage.setItem("/component/search/visibility", "true");
       }
     },
     async scanHost(target) {
@@ -447,6 +450,7 @@ export default {
     },
     closeSearchBtn() {
       this.searchActive = false;
+      localStorage.setItem("/component/search/visibility", "false");
       this.clearSearchInput();
     },
     expandIPAddress(e, target) {
