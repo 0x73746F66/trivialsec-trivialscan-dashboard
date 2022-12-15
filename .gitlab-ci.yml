@@ -16,7 +16,7 @@ vite build (prod):
     APP_ENV: Prod
     TF_VAR_app_env: Prod
   tags:
-    - dashboard
+    - jager
   stage: build
   script:
     - npm i
@@ -35,7 +35,7 @@ terraform validate:
     TF_VAR_app_env: Prod
   stage: build
   tags:
-    - dashboard
+    - jager
   script:
     - |+
       TOOLS="terraform_checkov terraform_validate"
@@ -51,7 +51,7 @@ terraform validate:
 sca npm:
   stage: build
   tags:
-    - dashboard
+    - jager
   allow_failure: true
   script:
     - pre-commit run license-check-npm --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
@@ -64,7 +64,7 @@ sca npm:
 secrets scanning:
   stage: build
   tags:
-    - dashboard
+    - jager
   script:
     - |+
       TOOLS="detect-private-key detect-secrets"
@@ -79,7 +79,7 @@ secrets scanning:
 repo checks:
   stage: build
   tags:
-    - dashboard
+    - jager
   script:
     - echo $CI_COMMIT_MESSAGE > commit-msg.txt
     - pre-commit run conventional-pre-commit --hook-stage commit-msg --commit-msg-filename commit-msg.txt --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
@@ -96,7 +96,7 @@ repo checks:
 whitespace:
   stage: build
   tags:
-    - dashboard
+    - jager
   allow_failure: true
   script:
     - |+
@@ -112,7 +112,7 @@ whitespace:
 yaml json py linting:
   stage: build
   tags:
-    - dashboard
+    - jager
   allow_failure: true
   script:
     - |+
@@ -130,7 +130,7 @@ tf:plan:
     APP_ENV: Prod
     TF_VAR_app_env: Prod
   tags:
-    - dashboard
+    - jager
   stage: pre-deploy
   script:
     - make init plan
@@ -153,7 +153,7 @@ tf:apply:
     APP_ENV: Prod
     TF_VAR_app_env: Prod
   tags:
-    - dashboard
+    - jager
   stage: deploy
   script:
     - make apply
@@ -174,7 +174,7 @@ vite build (dev):
     APP_ENV: Dev
     TF_VAR_app_env: Dev
   tags:
-    - dashboard
+    - jager
   stage: build
   script:
     - npm i
@@ -192,7 +192,7 @@ tf:plan:dev:
     APP_ENV: Dev
     TF_VAR_app_env: Dev
   tags:
-    - dashboard
+    - jager
   stage: pre-deploy
   script:
     - make init plan
@@ -214,7 +214,7 @@ tf:apply:dev:
     APP_ENV: Dev
     TF_VAR_app_env: Dev
   tags:
-    - dashboard
+    - jager
   stage: deploy
   script:
     - make apply
@@ -235,7 +235,7 @@ tf:destroy:
     GIT_STRATEGY: none
   stage: post-deploy
   tags:
-    - dashboard
+    - jager
   script:
     - make destroy
   when: manual
@@ -254,7 +254,7 @@ clear cdn cache:
     TF_VAR_app_env: Prod
   stage: post-deploy
   tags:
-    - dashboard
+    - jager
   script:
     - CF_DISTRIBUTION_ID=$(terraform -chdir=plans output -raw cloudfront_trivialscan_dashboard)
     - echo CF_DISTRIBUTION_ID=${CF_DISTRIBUTION_ID}
