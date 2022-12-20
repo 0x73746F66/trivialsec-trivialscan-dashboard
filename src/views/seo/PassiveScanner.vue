@@ -271,13 +271,13 @@ export default {
 
 .feature {
   &-parra {
-    @extend .margin-top-lg;
-    @extend .margin-bottom-lg;
+    margin-top: spacers("lg");
+    margin-bottom: spacers("lg");
   }
 
   &-image-container {
-    @extend .margin-top-lg;
-    @extend .margin-bottom-lg;
+    margin-top: spacers("lg");
+    margin-bottom: spacers("lg");
   }
 
   &-image {
@@ -285,15 +285,15 @@ export default {
     width: 100%;
     z-index: -1;
 
-    @media (min-width: $breakpoint-lg) and (max-width: $breakpoint-xl) {
+    @media (min-width: breakpoints("lg")) and (max-width: breakpoints("xl")) {
       min-width: 700px;
     }
 
-    @media (min-width: $breakpoint-xl) and (max-width: $breakpoint-xxl) {
+    @media (min-width: breakpoints("xl")) and (max-width: breakpoints("xxl")) {
       min-width: 850px;
     }
 
-    @media (min-width: $breakpoint-xxl) {
+    @media (min-width: breakpoints("xxl")) {
       min-width: 950px;
     }
   }

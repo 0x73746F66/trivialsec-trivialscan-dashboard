@@ -259,7 +259,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-12 d-flex flex-column padding-top-sm">
+            <div class="col-12 flex-column padding-top-sm hide-sm">
               <h3
                 class="font-lg-sb font-color-light margin-bottom-sm"
                 v-if="evaluation.threats.length > 0"
@@ -357,7 +357,7 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-@media (min-width: $breakpoint-sm) {
+@media (min-width: breakpoints("sm")) {
   .evaluation-item-aside {
     max-height: 30vh;
     overflow-y: scroll;
@@ -373,7 +373,7 @@ export default {
     }
   }
 }
-@media (max-width: $breakpoint-sm) {
+@media (max-width: breakpoints("sm")) {
   .evaluation-item-aside {
     margin-top: 30px;
   }
@@ -451,7 +451,7 @@ export default {
   label {
     cursor: pointer;
   }
-  @media (max-width: $breakpoint-lg) {
+  @media (max-width: breakpoints("lg")) {
     top: 65px;
   }
 }

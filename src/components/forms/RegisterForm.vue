@@ -1,5 +1,8 @@
 <template>
-  <LoadingComponent class="modal-loading loading" :class="{ inactive: !loading }" />
+  <LoadingComponent
+    class="modal-loading loading"
+    :class="{ inactive: !loading }"
+  />
 
   <form class="register-form" @submit.prevent="register">
     <ValidationMessage :message="message" :type="messageType" />
@@ -11,7 +14,7 @@
       :required="true"
       @change="handleName"
     />
-    <EmaiInput
+    <EmailInput
       placeholder="Primary contact email"
       id="id-email-2"
       label="Login Email"
@@ -26,18 +29,18 @@
 </template>
 <script>
 import TextInput from "@/components/inputs/TextInput.vue";
-import EmaiInput from "@/components/inputs/EmaiInput.vue";
+import EmailInput from "@/components/inputs/EmailInput.vue";
 import Button from "@/components/general/Button.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";
 import LoadingComponent from "@/components/general/LoadingComponent.vue";
 
-let apiUrl = import.meta.env.VITE_API_URL.trim()
-apiUrl = `${apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl}`
+let apiUrl = import.meta.env.VITE_API_URL.trim();
+apiUrl = `${apiUrl.endsWith("/") ? apiUrl.slice(0, -1) : apiUrl}`;
 
 export default {
   components: {
     TextInput,
-    EmaiInput,
+    EmailInput,
     Button,
     ValidationMessage,
     LoadingComponent,
@@ -77,7 +80,8 @@ export default {
         this.loading = false;
       });
       if (response.status === 201) {
-        this.message = "Account registered with success.\r\nPlease check your e-mail inbox.";
+        this.message =
+          "Account registered with success.\r\nPlease check your e-mail inbox.";
         this.messageType = "success";
         this.loading = false;
       } else if (response.status === 409) {

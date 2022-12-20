@@ -29,14 +29,10 @@
                     <CustomPill
                       class="margin-right-xxs d-flex align-items-center pb-0"
                       :label="
-                        t.scanning_status.monitoring === true
-                          ? 'Active'
-                          : 'Inactive'
+                        t.monitoring_enabled === true ? 'Active' : 'Inactive'
                       "
                       :type="
-                        t.scanning_status.monitoring === true
-                          ? 'success'
-                          : 'danger'
+                        t.monitoring_enabled === true ? 'success' : 'danger'
                       "
                     />
                   </div>
@@ -116,18 +112,6 @@
                 </span>
                 <p class="font-color-light">
                   Updated {{ moment.utc(target.last_updated).fromNow() }}
-                  <br />
-                  <span
-                    class="font-color-light"
-                    v-if="target.scanning_status.queue_status"
-                  >
-                    {{ target.scanning_status.queue_status }}
-                    {{
-                      moment
-                        .utc(target.scanning_status.queued_timestamp)
-                        .fromNow()
-                    }}
-                  </span>
                 </p>
                 <div class="d-flex flex-sm-row">
                   <div class="font-base font-color-light margin-bottom-md">
@@ -137,7 +121,7 @@
                         >Monitoring</span
                       >
                       <Toggle
-                        :defaultChecked="target.scanning_status.monitoring"
+                        :defaultChecked="target.monitoring_enabled"
                         @change="
                           hostToggleChange($event, target.transport.hostname)
                         "
@@ -146,12 +130,12 @@
                     <CustomPill
                       class=""
                       :label="
-                        target.scanning_status.monitoring === true
+                        target.monitoring_enabled === true
                           ? 'Active'
                           : 'Inactive'
                       "
                       :type="
-                        target.scanning_status.monitoring === true
+                        target.monitoring_enabled === true
                           ? 'success'
                           : 'danger'
                       "
@@ -421,7 +405,7 @@ export default {
           this.errorMessageTypeScanHost = "success";
           for (const target of this.targets) {
             if (hostname === target.transport.hostname) {
-              target.scanning_status.monitoring = true;
+              target.monitoring_enabled = true;
             }
           }
         } else {
@@ -437,7 +421,7 @@ export default {
           this.errorMessageTypeScanHost = "success";
           for (const target of this.targets) {
             if (hostname === target.transport.hostname) {
-              target.scanning_status.monitoring = false;
+              target.monitoring_enabled = false;
             }
           }
         }
@@ -507,12 +491,6 @@ export default {
   },
 };
 </script>
-<style scoped lang="scss">
-@import "@swiper/navigation/navigation";
-@import "@swiper/scrollbar/scrollbar";
-@import "@swiper/a11y/a11y";
-@import "@swiper/pagination/pagination";
-</style>
 <style lang="scss">
 .report-item {
   cursor: pointer;
@@ -534,7 +512,7 @@ export default {
 .custom-swiper-button {
   position: relative;
   border-radius: radius("sm");
-  padding: 0 padding("xs");
+  padding: 0 spacers("xs");
   background: color("dark-60");
   color: color(light);
   display: flex;

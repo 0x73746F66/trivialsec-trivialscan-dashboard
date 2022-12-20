@@ -30,7 +30,7 @@
               :message="inviteMessage"
               :type="inviteMessageType"
             />
-            <EmaiInput
+            <EmailInput
               placeholder="Who do you want to invite?"
               id="InviteEmail"
               label="E-mail"
@@ -107,7 +107,11 @@
             </p>
             <p v-else class="mb-0 font-sm">Invited {{ member.created }}</p>
             <div class="d-flex justify-content-end delete-member-modal">
-              <Modal v-if="!member.current" :id="`deleteMember${index}`" label="delete-member-header">
+              <Modal
+                v-if="!member.current"
+                :id="`deleteMember${index}`"
+                label="delete-member-header"
+              >
                 <template v-slot:button="buttonProps">
                   <button class="edit-mode-btn delete" v-bind="buttonProps">
                     <IconTrash class="profile-edit-icon" />
@@ -167,7 +171,7 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import IconTrash from "@/components/icons/IconTrash.vue";
 import Button from "@/components/general/Button.vue";
 import Toggle from "@/components/general/Toggle.vue";
-import EmaiInput from "@/components/inputs/EmaiInput.vue";
+import EmailInput from "@/components/inputs/EmailInput.vue";
 import Modal from "@/components/general/Modal.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";
 import LoadingComponent from "@/components/general/LoadingComponent.vue";
@@ -182,7 +186,7 @@ export default {
     SwiperSlide,
     Toggle,
     IconTrash,
-    EmaiInput,
+    EmailInput,
     Modal,
     ValidationMessage,
     LoadingComponent,
@@ -201,95 +205,99 @@ export default {
     };
   },
   created() {
-    this.fetchMembers()
+    this.fetchMembers();
   },
   methods: {
     async inviteMembers(event) {
-      this.loading = true
+      this.loading = true;
       try {
         const response = await Api.post("/member/invite", {
-          email: event.target.elements["InviteEmail"].value
-        })
+          email: event.target.elements["InviteEmail"].value,
+        });
         if (response.status !== 202) {
-          this.inviteMessage = `${response.status} ${response.statusText}`
-          this.inviteMessageType = "error"
-          this.loading = false
+          this.inviteMessage = `${response.status} ${response.statusText}`;
+          this.inviteMessageType = "error";
+          this.loading = false;
           return;
         }
-        this.inviteMessage = "Invited!"
-        this.inviteMessageType = "success"
-        const member = await response.json()
-        member.created = moment.utc(member.timestamp).fromNow()
-        member.status = "Pending Activation"
-        this.members.push(member)
+        this.inviteMessage = "Invited!";
+        this.inviteMessageType = "success";
+        const member = await response.json();
+        member.created = moment.utc(member.timestamp).fromNow();
+        member.status = "Pending Activation";
+        this.members.push(member);
       } catch (error) {
-        this.inviteMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
-        this.inviteMessageType = "error"
+        this.inviteMessage =
+          error.name === "AbortError"
+            ? "Request timed out, please try refreshing the page."
+            : `${error.name} ${error.message}. Couldn't complete this action.`;
+        this.inviteMessageType = "error";
       }
-      this.loading = false
+      this.loading = false;
     },
     async deleteMember(event) {
-      this.loading = true
+      this.loading = true;
       try {
-        const memberEmail = event.target.elements["MemberEmail"].value
-        const response = await Api.delete(`/member/${memberEmail}`)
+        const memberEmail = event.target.elements["MemberEmail"].value;
+        const response = await Api.delete(`/member/${memberEmail}`);
         if (response.status != 202) {
-          this.memberDeleteMessage = "Something went wrong. Member couldn't be deleted."
-          this.memberDeleteMessageType = "error"
-          this.loading = false
+          this.memberDeleteMessage =
+            "Something went wrong. Member couldn't be deleted.";
+          this.memberDeleteMessageType = "error";
+          this.loading = false;
           return;
         }
-        this.memberDeleteMessage = "This member was deleted"
-        this.memberDeleteMessageType = "success"
+        this.memberDeleteMessage = "This member was deleted";
+        this.memberDeleteMessageType = "success";
         for (const [index, member] of this.members.entries()) {
           if (member.email === memberEmail) {
-            this.members.splice(index, 1)
-            break
+            this.members.splice(index, 1);
+            break;
           }
         }
       } catch (error) {
-        this.memberDeleteMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
-        this.memberDeleteMessageType = "error"
+        this.memberDeleteMessage =
+          error.name === "AbortError"
+            ? "Request timed out, please try refreshing the page."
+            : `${error.name} ${error.message}. Couldn't complete this action.`;
+        this.memberDeleteMessageType = "error";
       }
-      this.loading = false
+      this.loading = false;
     },
     async fetchMembers() {
-      this.loading = true
+      this.loading = true;
       try {
-        const response = await Api.get(`/members`, { timeout: 30000 })
+        const response = await Api.get(`/members`, { timeout: 30000 });
         if (response.status === 204) {
-          this.errorMessage = "Issue loading members"
-          this.errorMessageType = "error"
-          this.members = []
-          this.loading = false
+          this.errorMessage = "Issue loading members";
+          this.errorMessageType = "error";
+          this.members = [];
+          this.loading = false;
           return;
         } else if (response.status !== 200) {
-          this.errorMessage = `${response.status} ${response.statusText}`
-          this.errorMessageType = "error"
-          this.loading = false
+          this.errorMessage = `${response.status} ${response.statusText}`;
+          this.errorMessageType = "error";
+          this.loading = false;
           return;
         }
-        const data = await response.json()
+        const data = await response.json();
         this.members = data.map((member) => {
-          member.created = moment.utc(member.timestamp).fromNow()
-          member.status = member.confirmed ? "Confirmed" : "Pending Activation"
-          return member
-        })
+          member.created = moment.utc(member.timestamp).fromNow();
+          member.status = member.confirmed ? "Confirmed" : "Pending Activation";
+          return member;
+        });
       } catch (error) {
-        this.errorMessage = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
-        this.errorMessageType = "error"
+        this.errorMessage =
+          error.name === "AbortError"
+            ? "Request timed out, please try refreshing the page."
+            : `${error.name} ${error.message}. Couldn't complete this action.`;
+        this.errorMessageType = "error";
       }
-      this.loading = false
+      this.loading = false;
     },
   },
 };
 </script>
-<style scoped lang="scss">
-@import "@swiper/navigation/navigation";
-@import "@swiper/scrollbar/scrollbar";
-@import "@swiper/a11y/a11y";
-@import "@swiper/pagination/pagination";
-</style>
 <style lang="scss">
 .delete-member-modal {
   .modal {

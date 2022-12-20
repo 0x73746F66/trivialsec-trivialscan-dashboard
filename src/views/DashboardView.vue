@@ -11,35 +11,35 @@
         </div>
       </div>
 
-      <div class="d-flex flex-wrap router-link-container">
+      <div class="d-flex router-link-container">
         <RouterLink
-            to="/dashboard"
-            class="pill font-color-light margin-right-sm text-decoration-none"
-            >
+          to="/dashboard"
+          class="pill font-color-light margin-right-sm text-decoration-none"
+        >
           Dashboard
         </RouterLink>
         <RouterLink
-            to="/reports"
-            class="pill font-color-light margin-right-sm text-decoration-none"
-            >
+          to="/reports"
+          class="pill font-color-light margin-right-sm text-decoration-none"
+        >
           Reports
         </RouterLink>
         <RouterLink
-            to="/hosts"
-            class="pill font-color-light margin-right-sm text-decoration-none"
-            >
+          to="/hosts"
+          class="pill font-color-light margin-right-sm text-decoration-none"
+        >
           Hosts
         </RouterLink>
         <RouterLink
-            to="/findings"
-            class="pill font-color-light margin-right-sm text-decoration-none"
-            >
+          to="/findings"
+          class="pill font-color-light margin-right-sm text-decoration-none"
+        >
           Findings
         </RouterLink>
         <RouterLink
-            to="/certificate-issues"
-            class="pill font-color-light margin-right-sm text-decoration-none"
-            >
+          to="/certificate-issues"
+          class="pill font-color-light margin-right-sm text-decoration-none"
+        >
           Certificates
         </RouterLink>
       </div>
@@ -68,7 +68,6 @@
                 content="Compliance History Compliance History Compliance History Compliance HistoryCompliance History Compliance History Compliance History Compliance History"
               />
             </div>
-
           </div>
           <div
             class="d-flex flex-lg-row flex-column h-100 bg-dark-40 border-radius-sm padding-sm justify-content-around"
@@ -80,7 +79,7 @@
               :type="errorMessageType"
             />
 
-            <CollapsableSection
+            <CollapsibleSection
               :section="quotaSections"
               label="used-chart"
               special-classes="w-lg-75 w-100"
@@ -93,23 +92,21 @@
                     Math.max(quotas?.active.total - quotas?.active.used, 0)
                   "
                   v-if="
-                    quotas.monitoring.used > 0 ||
-                    quotas.monitoring.total > 0
+                    quotas.monitoring.used > 0 || quotas.monitoring.total > 0
                   "
                 />
                 <div
                   class="pie-chart-legend font-color-light"
                   v-if="
-                    quotas.monitoring.used > 0 ||
-                    quotas.monitoring.total > 0
+                    quotas.monitoring.used > 0 || quotas.monitoring.total > 0
                   "
                 >
                   <span class="font-base font-color-light">Monitoring</span>
                   <span
                     class="font-xs font-color-light d-flex align-items-center"
                   >
-                    <span class="square primary margin-right-xs"></span> In
-                    Use: {{ quotas?.monitoring.used }}
+                    <span class="square primary margin-right-xs"></span> In Use:
+                    {{ quotas?.monitoring.used }}
                   </span>
                   <span
                     class="font-xs font-color-light d-flex align-items-center"
@@ -137,8 +134,8 @@
                   <span
                     class="font-xs font-color-light d-flex align-items-center"
                   >
-                    <span class="square primary margin-right-xs"></span> In
-                    Use: {{ quotas?.active.used }}
+                    <span class="square primary margin-right-xs"></span> In Use:
+                    {{ quotas?.active.used }}
                   </span>
                   <span
                     class="font-xs font-color-light d-flex align-items-center"
@@ -146,10 +143,7 @@
                     <span class="square secondary margin-right-xs"></span>
                     Available:
                     {{
-                      Math.max(
-                        quotas?.active.total - quotas?.active.used,
-                        0
-                      )
+                      Math.max(quotas?.active.total - quotas?.active.used, 0)
                     }}
                   </span>
                 </div>
@@ -159,10 +153,7 @@
                 <PieChart
                   :inUse="quotas?.passive.used"
                   :available="
-                    Math.max(
-                      quotas?.passive.total - quotas?.passive.used,
-                      0
-                    )
+                    Math.max(quotas?.passive.total - quotas?.passive.used, 0)
                   "
                   v-if="quotas.passive.used > 0 || quotas.passive.total > 0"
                 />
@@ -174,8 +165,8 @@
                   <span
                     class="font-xs font-color-light d-flex align-items-center"
                   >
-                    <span class="square primary margin-right-xs"></span> In
-                    Use: {{ quotas?.passive.used }}
+                    <span class="square primary margin-right-xs"></span> In Use:
+                    {{ quotas?.passive.used }}
                   </span>
                   <span
                     class="font-xs font-color-light d-flex align-items-center"
@@ -183,26 +174,22 @@
                     <span class="square secondary margin-right-xs"></span>
                     Available:
                     {{
-                      Math.max(
-                        quotas?.passive.total - quotas?.passive.used,
-                        0
-                      )
+                      Math.max(quotas?.passive.total - quotas?.passive.used, 0)
                     }}
                   </span>
                 </div>
               </template>
-            </CollapsableSection>
+            </CollapsibleSection>
           </div>
         </div>
       </div>
-    
     </div>
   </main>
 </template>
 
 <script setup>
 import LoadingComponent from "@/components/general/LoadingComponent.vue";
-import CollapsableSection from "@/components/general/CollapsableSection.vue";
+import CollapsibleSection from "@/components/general/CollapsableSection.vue";
 import QuestionComponent from "@/components/general/QuestionComponent.vue";
 import ComplianceCharts from "@/components/general/ComplianceCharts.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";
@@ -213,7 +200,7 @@ import SearchForm from "@/components/forms/SearchForm.vue";
 <script>
 export default {
   components: {
-    CollapsableSection,
+    CollapsibleSection,
     QuestionComponent,
     ComplianceCharts,
     ValidationMessage,
@@ -297,8 +284,8 @@ export default {
   bottom: spacers("sm");
   display: flex;
   flex-direction: column;
-  @extend .font-xs;
-  @extend .font-color-light;
+  font-size: sizes("xs");
+  color: color("light");
   .square {
     width: 15px;
     height: 15px;
@@ -313,7 +300,7 @@ export default {
   }
 }
 .router-link-container {
-  @extend .font-xs;
+  font-size: sizes("xs");
   .pill {
     background: transparent;
     border: 1px solid color("primary");
@@ -322,6 +309,12 @@ export default {
     &-active {
       background: color("primary");
     }
+  }
+}
+@media screen and (min-width: 100px) and (max-width: 980px) {
+  .router-link-container {
+    flex-wrap: wrap;
+    flex-direction: column;
   }
 }
 </style>

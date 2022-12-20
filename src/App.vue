@@ -1,7 +1,5 @@
 <template>
-  <header>
-    <Navbar />
-  </header>
+  <Navbar />
 
   <router-view v-slot="{ Component }">
     <transition name="fade">
@@ -23,6 +21,11 @@ export default {
 </script>
 
 <style lang="scss">
+@import "@swiper-base/swiper";
+@import "@swiper/navigation/navigation";
+@import "@swiper/scrollbar/scrollbar";
+@import "@swiper/a11y/a11y";
+@import "@swiper/pagination/pagination";
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s ease;

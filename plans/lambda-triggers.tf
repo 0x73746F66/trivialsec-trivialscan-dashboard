@@ -22,22 +22,4 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
     filter_prefix       = "Dev/accounts/"
     filter_suffix       = "full-report.json"
   }
-
-  lambda_function {
-    lambda_function_arn = data.terraform_remote_state.prod_scanner_ondemand.outputs.trivialscan_ondemand_arn
-    events              = [
-      "s3:ObjectCreated:*",
-    ]
-    filter_prefix       = "Prod/accounts/"
-    filter_suffix       = "scanner-record.json"
-  }
-
-  lambda_function {
-    lambda_function_arn = data.terraform_remote_state.dev_scanner_ondemand.outputs.trivialscan_ondemand_arn
-    events              = [
-      "s3:ObjectCreated:*",
-    ]
-    filter_prefix       = "Dev/accounts/"
-    filter_suffix       = "scanner-record.json"
-  }
 }

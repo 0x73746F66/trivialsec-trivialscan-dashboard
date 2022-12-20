@@ -479,8 +479,8 @@ $searchBarHeight: 50px;
     opacity: 0;
     transition: 0.2s linear;
 
-    @extend .bg-dark-40;
-    @extend .font-color-light;
+    background: color("dark-40");
+    color: color("light");
 
     &-active {
       opacity: 1;
@@ -488,7 +488,7 @@ $searchBarHeight: 50px;
       padding: 0 spacers("lg");
       border-radius: 0 radius("lg") radius("lg") 0;
 
-      @media (max-width: $breakpoint-lg) {
+      @media (max-width: breakpoints("lg")) {
         // width: 200px;
       }
 
@@ -507,7 +507,7 @@ $searchBarHeight: 50px;
     &-active {
       padding: 0 spacers("md");
       width: 25%;
-      @media (max-width: $breakpoint-lg) {
+      @media (max-width: breakpoints("lg")) {
         width: 50%;
       }
       &-cornered {
@@ -517,8 +517,8 @@ $searchBarHeight: 50px;
   }
 }
 .search-input-results {
-  @extend .font-color-light;
-  @extend .bg-dark-60;
+  color: color("light");
+  background: color("dark-60");
   border-radius: 0 0 radius("lg") radius("lg");
   width: 100%;
   padding: spacers("lg");
@@ -526,7 +526,7 @@ $searchBarHeight: 50px;
   z-index: 99;
   backdrop-filter: blur(8px);
 
-  @media (max-width: $breakpoint-lg) {
+  @media (max-width: breakpoints("lg")) {
     // width: 200px;
   }
 }
@@ -568,7 +568,7 @@ $searchBarHeight: 50px;
   right: 0;
 }
 .search-btn {
-  @extend .border-radius-round;
+  border-radius: 50%;
   height: calc($searchBarHeight - 14px);
   width: calc($searchBarHeight - 14px);
   background: color("primary");

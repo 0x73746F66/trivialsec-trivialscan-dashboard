@@ -80,7 +80,9 @@
 
     <PricingComponentRow class="padding-sm font-color-light pricing-table">
       <template v-slot:col-1>
-        <h4 class="font-base-sb padding-top-sm padding-bottom-sm font-color-light">
+        <h4
+          class="font-base-sb padding-top-sm padding-bottom-sm font-color-light"
+        >
           Passive Scans
         </h4>
       </template>
@@ -104,12 +106,18 @@
         <span class="font-xs font-color-light">On-demand (Managed)</span>
       </template>
       <template v-slot:col-3>
-        <span class="font-xs w-80 text-center">All Hosts Initial Scan Free</span>
-        <span class="font-xs w-80 text-center">$49 / Month Unlimited Rescans</span>
+        <span class="font-xs w-80 text-center"
+          >All Hosts Initial Scan Free</span
+        >
+        <span class="font-xs w-80 text-center"
+          >$49 / Month Unlimited Rescans</span
+        >
       </template>
       <template v-slot:col-4>
         <span class="font-xs w-80 text-center">Includes 500 / Day</span>
-        <span class="font-xs w-80 text-center">$49 / Month Unlimited Rescans</span>
+        <span class="font-xs w-80 text-center"
+          >$49 / Month Unlimited Rescans</span
+        >
       </template>
       <template v-slot:col-5>
         <checkIcon color="1abb9c" class="pricing-checkmark" />
@@ -136,7 +144,9 @@
 
     <PricingComponentRow class="padding-sm font-color-light pricing-table">
       <template v-slot:col-1>
-        <h4 class="font-base-sb padding-top-sm padding-bottom-sm font-color-light">
+        <h4
+          class="font-base-sb padding-top-sm padding-bottom-sm font-color-light"
+        >
           Active Scans
         </h4>
       </template>
@@ -176,7 +186,9 @@
       class="padding-sm font-color-light pricing-table border-bottom-primary"
     >
       <template v-slot:col-1>
-        <h4 class="font-base-sb padding-top-sm padding-bottom-sm font-color-light">
+        <h4
+          class="font-base-sb padding-top-sm padding-bottom-sm font-color-light"
+        >
           Trivial exposures
         </h4>
       </template>
@@ -198,7 +210,9 @@
       class="padding-sm font-color-light pricing-table border-bottom-primary"
     >
       <template v-slot:col-1>
-        <h4 class="font-base-sb padding-top-sm padding-bottom-sm font-color-light">
+        <h4
+          class="font-base-sb padding-top-sm padding-bottom-sm font-color-light"
+        >
           Vulnerable Software
         </h4>
       </template>
@@ -218,7 +232,9 @@
 
     <PricingComponentRow class="padding-sm font-color-light pricing-table">
       <template v-slot:col-1>
-        <h4 class="font-base-sb padding-top-sm padding-bottom-sm font-color-light">
+        <h4
+          class="font-base-sb padding-top-sm padding-bottom-sm font-color-light"
+        >
           Alert Delivery
         </h4>
       </template>
@@ -258,7 +274,9 @@
       class="padding-sm font-color-light pricing-table border-bottom-primary"
     >
       <template v-slot:col-1>
-        <h4 class="font-base-sb padding-top-sm padding-bottom-sm font-color-light">
+        <h4
+          class="font-base-sb padding-top-sm padding-bottom-sm font-color-light"
+        >
           Auto-remediation
         </h4>
       </template>
@@ -278,7 +296,9 @@
 
     <PricingComponentRow class="padding-sm font-color-light pricing-table">
       <template v-slot:col-1>
-        <h4 class="font-base-sb padding-top-sm padding-bottom-sm font-color-light">
+        <h4
+          class="font-base-sb padding-top-sm padding-bottom-sm font-color-light"
+        >
           Trivial Threats
         </h4>
       </template>
@@ -350,7 +370,9 @@
 
     <PricingComponentRow class="padding-sm font-color-light pricing-table">
       <template v-slot:col-1>
-        <h4 class="font-base-sb padding-top-sm padding-bottom-sm font-color-light">
+        <h4
+          class="font-base-sb padding-top-sm padding-bottom-sm font-color-light"
+        >
           Compliance
         </h4>
       </template>
@@ -422,7 +444,9 @@
       class="padding-sm font-color-light pricing-table border-bottom-primary"
     >
       <template v-slot:col-1>
-        <h4 class="font-base-sb padding-top-sm padding-bottom-sm font-color-light">
+        <h4
+          class="font-base-sb padding-top-sm padding-bottom-sm font-color-light"
+        >
           Access
         </h4>
       </template>
@@ -442,7 +466,9 @@
 
     <PricingComponentRow class="padding-sm font-color-light pricing-table">
       <template v-slot:col-1>
-        <h4 class="font-base-sb padding-top-sm padding-bottom-sm font-color-light">
+        <h4
+          class="font-base-sb padding-top-sm padding-bottom-sm font-color-light"
+        >
           Support
         </h4>
       </template>
@@ -463,9 +489,7 @@
     <PricingComponentRow class="padding-sm font-color-light pricing-table">
       <template v-slot:col-1> </template>
       <template v-slot:col-2>
-        <span class="font-xs font-color-light"
-          >5 Business Days Resolution</span
-        >
+        <span class="font-xs font-color-light">5 Business Days Resolution</span>
       </template>
       <template v-slot:col-3>
         <span class="font-xs w-100 text-center font-color-tertiary">X</span>
@@ -508,7 +532,7 @@
           :defaultCollapsed="false"
           buttonClasses="font-lg text-left padding-left-sm font-color-light w-100 d-flex justify-content-left border-none custom-accordion-button padding-xxs"
           contentClasses="custom-according-content bg-dark-20 padding-md font-color-light font-base"
-          >
+        >
           <template v-slot:header>
             <div
               class="font-base font-color-light d-flex d-flex flex-column font-color-primary align-items-start"
@@ -633,8 +657,8 @@ export default {
   &-list {
     list-style: none;
     li {
-      @extend .padding-bottom-md;
-      @extend .font-lg;
+      padding-bottom: spacers("md");
+      font-size: sizes("lg");
     }
   }
   &-icon {
@@ -646,7 +670,7 @@ export default {
     }
   }
   .is-recommended {
-    @extend .font-color-primary;
+    color: color("primary");
     position: absolute;
     top: -25px;
     left: 0;
@@ -666,12 +690,12 @@ export default {
     margin-left: auto;
     margin-right: auto;
     &-is-recommended {
-      @extend .bg-primary;
+      background: color("primary");
       border-radius: 50%;
     }
   }
   &-label {
-    @extend .padding-lg;
+    padding: spacers("lg");
     &-is-recommended {
       border-radius: 0 0 radius("sm") radius("sm");
       background: color("primary");

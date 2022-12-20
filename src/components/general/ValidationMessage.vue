@@ -43,13 +43,13 @@ export default {
     }
   }
   &-success {
-    @extend .font-color-primary;
+    color: color("primary");
   }
   &-warning {
-    @extend .font-color-warning;
+    color: color("warning");
   }
   &-error {
-    @extend .font-color-danger;
+    color: color("danger");
   }
 }
 </style>

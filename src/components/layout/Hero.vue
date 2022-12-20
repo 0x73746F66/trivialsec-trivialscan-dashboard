@@ -11,12 +11,12 @@
       </h1>
       <div class="font-color-light text-center margin-bottom-md">
         <h2 class="font-base-b">
-          Stay informed of your attack surface. We track the hacker exploits so you don't
-          have to.
+          Stay informed of your attack surface. We track the hacker exploits so
+          you don't have to.
         </h2>
         <h3 class="font-sm">
-          Free service to identify your trivial to exploit vulnerabilities, raising the
-          Cybersecurity poverty line.
+          Free service to identify your trivial to exploit vulnerabilities,
+          raising the Cybersecurity poverty line.
         </h3>
       </div>
     </div>
@@ -196,11 +196,11 @@ export default {
   }
 
   &-scrolled {
-    @media (min-width: $breakpoint-lg) {
-      width: calc($breakpoint-lg - 60px);
+    @media (min-width: breakpoints("lg")) {
+      width: calc(breakpoints("lg") - 60px);
     }
-    @media (min-width: $breakpoint-xxl) {
-      width: calc($breakpoint-xxl - 60px);
+    @media (min-width: breakpoints("xxl")) {
+      width: calc(breakpoints("xxl") - 60px);
     }
   }
   .hero-content {

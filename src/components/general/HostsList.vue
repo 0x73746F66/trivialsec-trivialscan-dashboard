@@ -174,17 +174,13 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-@import "@swiper/navigation/navigation";
-@import "@swiper/scrollbar/scrollbar";
-@import "@swiper/a11y/a11y";
-@import "@swiper/pagination/pagination";
 .target-slide {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   flex-direction: row;
 
-  @media (max-width: $breakpoint-lg) {
+  @media (max-width: breakpoints("lg")) {
     flex-direction: column;
   }
 
@@ -201,12 +197,12 @@ export default {
   border-radius: radius("sm");
   padding: spacers("xs");
   width: 30%;
-  @extend .font-xs;
+  font-size: sizes("xs");
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
 
-  @media (max-width: $breakpoint-lg) {
+  @media (max-width: breakpoints("lg")) {
     width: 100%;
   }
 }
@@ -219,7 +215,7 @@ export default {
 .target-swiper-button {
   position: relative;
   border-radius: radius("sm");
-  padding: padding("xs");
+  padding: spacers("xs");
   background: none;
   color: color(light);
   display: flex;

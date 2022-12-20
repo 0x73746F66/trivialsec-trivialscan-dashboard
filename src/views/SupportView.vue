@@ -13,7 +13,9 @@ import ContactForm from "@/components/forms/ContactForm.vue";
 
 <script>
 export default {
-  components: { ContactForm },
+  components: {
+    ContactForm,
+  },
 };
 </script>
 

@@ -15,18 +15,20 @@
     </div>
 
     <div class="container padding-bottom-xl padding-top-xl" v-if="!logged_in">
-      <LoginOrRegister loginModalId="loginModal" registerModalId="registerLogin" />
+      <LoginOrRegister
+        loginModalId="loginModal"
+        registerModalId="registerLogin"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import PricingComponent from "@/components/general/PricingComponent.vue"
-import LoginOrRegister from "@/components/general/LoginOrRegister.vue"
+import PricingComponent from "@/components/general/PricingComponent.vue";
+import LoginOrRegister from "@/components/general/LoginOrRegister.vue";
 </script>
 
 <script>
-
 export default {
   components: {
     PricingComponent,
@@ -40,10 +42,8 @@ export default {
   created() {
     this.logged_in = !!localStorage.getItem("/session/key");
   },
-  methods: {
-  },
+  methods: {},
 };
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

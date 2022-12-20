@@ -1,7 +1,6 @@
 <template>
   <main>
     <div class="container font-color-light padding-top-xl padding-bottom-xl">
-
       <div
         class="w-100 d-flex align-items-lg-center flex-column flex-lg-row justify-content-between margin-bottom-sm"
       >
@@ -10,35 +9,35 @@
         </div>
       </div>
 
-      <div class="d-flex flex-wrap router-link-container">
+      <div class="d-flex router-link-container">
         <RouterLink
-            to="/dashboard"
-            class="pill font-color-light margin-right-sm text-decoration-none"
-            >
+          to="/dashboard"
+          class="pill font-color-light margin-right-sm text-decoration-none"
+        >
           Dashboard
         </RouterLink>
         <RouterLink
-            to="/reports"
-            class="pill font-color-light margin-right-sm text-decoration-none"
-            >
+          to="/reports"
+          class="pill font-color-light margin-right-sm text-decoration-none"
+        >
           Reports
         </RouterLink>
         <RouterLink
-            to="/hosts"
-            class="pill font-color-light margin-right-sm text-decoration-none"
-            >
+          to="/hosts"
+          class="pill font-color-light margin-right-sm text-decoration-none"
+        >
           Hosts
         </RouterLink>
         <RouterLink
-            to="/findings"
-            class="pill font-color-light margin-right-sm text-decoration-none"
-            >
+          to="/findings"
+          class="pill font-color-light margin-right-sm text-decoration-none"
+        >
           Findings
         </RouterLink>
         <RouterLink
-            to="/certificate-issues"
-            class="pill font-color-light margin-right-sm text-decoration-none"
-            >
+          to="/certificate-issues"
+          class="pill font-color-light margin-right-sm text-decoration-none"
+        >
           Certificates
         </RouterLink>
       </div>
@@ -48,13 +47,11 @@
           <h2 class="font-xl-sb">Certificate Issues</h2>
           <span class="font-sm font-color-primary"
             >Encryption of the internet is based on inherent trust and
-            complicated configuration, here are some issues we
-            observed:</span
+            complicated configuration, here are some issues we observed:</span
           >
         </div>
         <CertificateList />
       </div>
-    
     </div>
   </main>
 </template>
@@ -62,7 +59,6 @@
 <script setup>
 import SearchForm from "@/components/forms/SearchForm.vue";
 import CertificateList from "@/components/general/CertificateList.vue";
-
 </script>
 
 <script>
@@ -105,7 +101,7 @@ export default {
   }
 }
 .router-link-container {
-  @extend .font-xs;
+  font-size: sizes("xs");
   .pill {
     background: transparent;
     border: 1px solid color("primary");
@@ -114,6 +110,12 @@ export default {
     &-active {
       background: color("primary");
     }
+  }
+}
+@media screen and (min-width: 100px) and (max-width: 980px) {
+  .router-link-container {
+    flex-wrap: wrap;
+    flex-direction: column;
   }
 }
 </style>

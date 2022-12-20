@@ -134,14 +134,14 @@ export default {
 </script>
 <style lang="scss">
 .footer {
-  @extend .bg-dark-40;
-  @extend .padding-md;
+  background: color("dark-40");
+  padding: spacers("md");
 
   &-social {
     border-top: 1px solid color("light");
   }
   &-social-link {
-    @extend .margin-right-sm;
+    margin-right: spacers("sm");
     width: 30px;
     &[title] {
       border-bottom: none;
@@ -151,7 +151,7 @@ export default {
     display: inline-flex;
     align-items: center;
   }
-  @media (max-width: $breakpoint-lg) {
+  @media (max-width: breakpoints("lg")) {
     flex-direction: column;
   }
 }

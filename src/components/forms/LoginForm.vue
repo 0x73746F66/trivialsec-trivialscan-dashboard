@@ -1,5 +1,8 @@
 <template>
-  <LoadingComponent class="modal-loading loading" :class="{ inactive: !loading }" />
+  <LoadingComponent
+    class="modal-loading loading"
+    :class="{ inactive: !loading }"
+  />
 
   <form class="login-form" @submit.prevent="login">
     <ValidationMessage
@@ -8,7 +11,7 @@
       :type="messageType"
     />
 
-    <EmaiInput
+    <EmailInput
       placeholder="Send an email with login link"
       id="id-email-1"
       label="Email"
@@ -24,16 +27,16 @@
   </form>
 </template>
 <script>
-import EmaiInput from "@/components/inputs/EmaiInput.vue";
+import EmailInput from "@/components/inputs/EmailInput.vue";
 import Button from "@/components/general/Button.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";
 import LoadingComponent from "@/components/general/LoadingComponent.vue";
 
-let apiUrl = import.meta.env.VITE_API_URL.trim()
-apiUrl = `${apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl}`
+let apiUrl = import.meta.env.VITE_API_URL.trim();
+apiUrl = `${apiUrl.endsWith("/") ? apiUrl.slice(0, -1) : apiUrl}`;
 
 export default {
-  components: { EmaiInput, Button, ValidationMessage, LoadingComponent },
+  components: { EmailInput, Button, ValidationMessage, LoadingComponent },
   data() {
     return {
       emailField: "",
@@ -58,7 +61,7 @@ export default {
           "Content-Type": "application/json;charset=UTF-8",
         },
       }).catch((errors) => {
-        this.message = `An error has occured, please try again. ${errors}`;
+        this.message = `An error has occurred, please try again. ${errors}`;
         this.messageType = "error";
         this.loading = false;
       });

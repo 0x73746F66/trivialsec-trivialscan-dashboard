@@ -1,18 +1,21 @@
 <template>
-<main>
-  <div class="container">
-    <LoadingComponent class="loading" v-if="loading"/>
-    <ValidationMessage
+  <main>
+    <div class="container">
+      <LoadingComponent class="loading" v-if="loading" />
+      <ValidationMessage
         v-if="errorMessage.length > 0"
         class="justify-content-start"
         :message="errorMessage"
         :type="errorMessageType"
-    />
-    <div class="certificate padding-top-xl padding-bottom-xl" v-if="Object.keys(certificate).length > 0">
-      <Certificate v-bind="certificate" />
+      />
+      <div
+        class="certificate padding-top-xl padding-bottom-xl"
+        v-if="Object.keys(certificate).length > 0"
+      >
+        <Certificate v-bind="certificate" />
+      </div>
     </div>
-  </div>
-</main>
+  </main>
 </template>
 
 <script setup>
@@ -30,8 +33,8 @@ export default {
   data() {
     return {
       loading: false,
-      errorMessage: '',
-      errorMessageType: '',
+      errorMessage: "",
+      errorMessageType: "",
       certificate: {},
     };
   },
@@ -48,27 +51,32 @@ export default {
   },
   methods: {
     async fetchData() {
-      this.loading = true
+      this.loading = true;
       try {
-        const response = await Api.get(`/certificate/${this.$route.params.sha1_fingerprint}`)
+        const response = await Api.get(
+          `/certificate/${this.$route.params.sha1_fingerprint}`
+        );
         if (response.status !== 200) {
           this.errorMessage = `${response.status}: ${response.statusText}`;
           this.errorMessageType = "error";
-          this.loading = false
+          this.loading = false;
           return;
         }
-        this.certificate = await response.json()
+        this.certificate = await response.json();
       } catch (error) {
-        this.message = error.name === 'AbortError' ? "Request timed out, please try refreshing the page." : `${error.name} ${error.message}. Couldn't complete this action.`
-        this.messageType = "error"
+        this.message =
+          error.name === "AbortError"
+            ? "Request timed out, please try refreshing the page."
+            : `${error.name} ${error.message}. Couldn't complete this action.`;
+        this.messageType = "error";
       }
-      this.loading = false
+      this.loading = false;
     },
   },
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .report {
   margin: 0 auto;
 }
