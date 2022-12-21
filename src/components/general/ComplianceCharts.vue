@@ -64,17 +64,17 @@ export default {
         for (const comp of data) {
           if (comp.data.week) {
             comp.data.week = comp.data.week.sort(
-              (x, y) => x.timestamp - y.timestamp
+              (x, y) => x.timestamp - y.timestamp,
             );
           }
           if (comp.data.month) {
             comp.data.month = comp.data.month.sort(
-              (x, y) => x.timestamp - y.timestamp
+              (x, y) => x.timestamp - y.timestamp,
             );
           }
           if (comp.data.year) {
             comp.data.year = comp.data.year.sort(
-              (x, y) => x.timestamp - y.timestamp
+              (x, y) => x.timestamp - y.timestamp,
             );
           }
           this.compData.push(comp);
