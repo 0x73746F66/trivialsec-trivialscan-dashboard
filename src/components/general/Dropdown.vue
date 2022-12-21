@@ -28,11 +28,10 @@
   </div>
 </template>
 <script setup>
-import { Collapse } from 'bootstrap'
+import { Collapse } from "bootstrap";
+import IconExpandPrimary from "@/components/icons/IconExpandPrimary.vue";
 </script>
 <script>
-import IconExpandPrimary from "@/components/icons/IconExpandPrimary.vue";
-
 export default {
   components: { IconExpandPrimary },
   props: {
@@ -42,7 +41,7 @@ export default {
     defaultShow: Boolean,
     defaultCollapsed: Boolean,
     buttonClasses: String,
-    contentClasses: String
+    contentClasses: String,
   },
 };
 </script>
