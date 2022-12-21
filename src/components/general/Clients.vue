@@ -44,7 +44,14 @@
           :key="client.name"
         >
           <div class="text-left font-color-light font-sm">
-            <p class="font-base-sb margin-bottom-sm">{{ client.name }}</p>
+            <p
+              class="font-base-sb margin-bottom-sm"
+              v-clipboard:copy="client.name"
+              v-clipboard:success="clientSuccess"
+              v-clipboard:error="clientError"
+            >
+              {{ client.name }}
+            </p>
             <p v-if="client.cli_version" class="mb-0">
               <span class="font-sm-sb margin-right-sm">CLI Version:</span>
               <span class="font-sm">{{ client.cli_version }}</span>
@@ -70,6 +77,9 @@
             <p class="mb-0 font-sm">Registration Token</p>
             <div
               class="token font-color-primary bg-dark padding-xs margin-bottom-xs"
+              v-clipboard:copy="client.access_token"
+              v-clipboard:success="tokenSuccess"
+              v-clipboard:error="tokenError"
             >
               {{ client.access_token }}
             </div>
@@ -87,6 +97,7 @@
                   v-if="!client.active"
                   :id="`deleteClient${index}`"
                   label="delete-client-header"
+                  :backdrop="false"
                 >
                   <template v-slot:button="buttonProps">
                     <button class="edit-mode-btn delete" v-bind="buttonProps">
@@ -149,6 +160,7 @@ import EmailInput from "@/components/inputs/EmailInput.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";
 import LoadingComponent from "@/components/general/LoadingComponent.vue";
 import moment from "moment";
+import { Popover } from "bootstrap";
 </script>
 
 <script>
@@ -176,6 +188,46 @@ export default {
     this.fetchClients();
   },
   methods: {
+    async tokenSuccess(event) {
+      const popover = new Popover(event.trigger, {
+        content: "Copied!",
+        placement: "right",
+      });
+      popover.show();
+      setTimeout(() => {
+        popover.hide();
+      }, 3000);
+    },
+    async tokenError(event) {
+      const popover = new Popover(event.trigger, {
+        content: "Clipboard failed",
+        placement: "right",
+      });
+      popover.show();
+      setTimeout(() => {
+        popover.hide();
+      }, 3000);
+    },
+    async clientSuccess(event) {
+      const popover = new Popover(event.trigger, {
+        content: "Copied!",
+        placement: "right",
+      });
+      popover.show();
+      setTimeout(() => {
+        popover.hide();
+      }, 3000);
+    },
+    async clientError(event) {
+      const popover = new Popover(event.trigger, {
+        content: "Clipboard failed",
+        placement: "right",
+      });
+      popover.show();
+      setTimeout(() => {
+        popover.hide();
+      }, 3000);
+    },
     async deleteClient(event) {
       this.loading = true;
       try {
@@ -285,30 +337,14 @@ export default {
 };
 </script>
 <style lang="scss">
+.delete-client-modal {
+  overflow: hidden;
+}
 .token {
   word-wrap: break-word;
   max-width: fit-content;
 }
 .client-actions {
   align-items: center;
-}
-.delete-client-modal {
-  .modal {
-    .modal-dialog {
-      margin-top: 0;
-      margin-bottom: 0;
-      height: 100%;
-
-      .modal-content {
-        height: 100%;
-
-        .modal-body {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-      }
-    }
-  }
 }
 </style>
