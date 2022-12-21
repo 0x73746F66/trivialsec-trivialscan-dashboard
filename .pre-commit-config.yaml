@@ -1,7 +1,7 @@
 ---
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.1.0
+    rev: v4.4.0
     hooks:
       - id: check-merge-conflict
       - id: check-yaml
@@ -17,13 +17,13 @@ repos:
         args: [--autofix, --no-sort-keys]
 
   - repo: https://github.com/compilerla/conventional-pre-commit
-    rev: v2.0.0
+    rev: v2.1.1
     hooks:
       - id: conventional-pre-commit
         stages: [commit-msg]
 
   - repo: https://github.com/kontrolilo/kontrolilo
-    rev: v2.1.0
+    rev: v2.2.0
     hooks:
       - id: license-check-configuration-lint
       - id: license-check-npm
@@ -35,23 +35,23 @@ repos:
         args: ["--domains", "trivialsec.com"]
 
   - repo: https://github.com/crate-ci/typos
-    rev: v1.7.0
+    rev: v1.13.6
     hooks:
       - id: typos
         files: src
 
   - repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.1.13
+    rev: v1.3.1
     hooks:
       - id: remove-tabs
 
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v2.5.1
+    rev: v3.0.0-alpha.4
     hooks:
       - id: prettier
 
   - repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.68.1
+    rev: v1.77.0
     hooks:
       - id: terraform_validate
       - id: terraform_checkov
@@ -62,7 +62,7 @@ repos:
           - --args=--skip-check CKV_AWS_86,CKV_AWS_68,CKV_AWS_145,CKV_AWS_144,CKV_AWS_18,CKV_AWS_19,CKV_AWS_21
 
   - repo: https://github.com/Yelp/detect-secrets
-    rev: v1.2.0
+    rev: v1.4.0
     hooks:
       - id: detect-secrets
         name: Detect secrets

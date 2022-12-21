@@ -19,7 +19,7 @@
               class="h-100 d-flex align-items-lg-center flex-column flex-lg-row"
             >
               <img
-                :src="`https://www.gravatar.com/avatar/${member.email_md5}`"
+                :src="`https://www.gravatar.com/avatar/${member.email_md5}?d=wavatar`"
                 class="border-radius-round profile-picture margin-right-md margin-bottom-md mb-lg-0"
                 alt="{{member.account.display}}'s Profile Picture'"
               />
@@ -449,7 +449,7 @@ export default {
     let stripeScript = document.createElement("script");
     stripeScript.setAttribute(
       "src",
-      "https://js.stripe.com/v3/pricing-table.js"
+      "https://js.stripe.com/v3/pricing-table.js",
     );
     document.head.appendChild(stripeScript);
   },
@@ -507,7 +507,7 @@ export default {
         localStorage.setItem("/member/email", email);
         localStorage.setItem(
           "/member/email_md5",
-          data?.member?.email_md5 || localStorage.getItem("/member/email_md5")
+          data?.member?.email_md5 || localStorage.getItem("/member/email_md5"),
         );
       } catch (error) {
         this.editMessage =
@@ -580,7 +580,7 @@ export default {
         this.editMessageType = "success";
         localStorage.setItem(
           "/account/display",
-          data?.display || localStorage.getItem("/account/display")
+          data?.display || localStorage.getItem("/account/display"),
         );
         this.editMode = !this.editMode;
       } catch (error) {

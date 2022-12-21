@@ -71,7 +71,7 @@
                   <span class="font-sm">{{ member_email }}</span>
                 </div>
                 <img
-                  :src="`https://www.gravatar.com/avatar/${email_md5}`"
+                  :src="`https://www.gravatar.com/avatar/${email_md5}?d=wavatar`"
                   :alt="`${account_name} Profile Picture`"
                   class="font-xs nav-profile"
                 />
@@ -121,6 +121,12 @@
         >Logout</RouterLink
       >
       <RouterLink
+        v-if="!logged_in"
+        to="/pricing"
+        class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+        >Pricing</RouterLink
+      >
+      <RouterLink
         v-if="logged_in"
         to="/profile"
         class="router-link d-flex margin-top-xs margin-bottom-xs align-items-end font-color-light text-decoration-none margin-right-md d-flex"
@@ -130,7 +136,7 @@
           <span class="font-sm">{{ member_email }}</span>
         </div>
         <img
-          :src="`https://www.gravatar.com/avatar/${email_md5}`"
+          :src="`https://www.gravatar.com/avatar/${email_md5}?d=wavatar`"
           :alt="`${account_name} Profile Picture`"
           class="font-xs nav-profile"
         />
@@ -138,7 +144,7 @@
       <div v-if="!logged_in">
         <div class="padding-sm p-lg-0">
           <div
-            class="login-register-section d-flex flex-lg-row flex-column align-items-center justify-content-start"
+            class="login-register-section d-flex flex-lg-row align-items-center justify-content-start"
           >
             <button
               type="button"
@@ -273,9 +279,10 @@ header {
 
   &-content {
     @media (max-width: breakpoints("lg")) {
-      background: color("dark-40");
+      background: color("dark-80");
       backdrop-filter: blur(8px);
       z-index: 100;
+      height: 100vh;
     }
   }
 

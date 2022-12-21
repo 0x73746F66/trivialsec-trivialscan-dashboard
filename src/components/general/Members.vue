@@ -88,7 +88,7 @@
         >
           <div class="d-flex justify-content-end">
             <img
-              :src="`https://www.gravatar.com/avatar/${member.email_md5}`"
+              :src="`https://www.gravatar.com/avatar/${member.email_md5}?d=wavatar`"
               class="swiper-slide-avatar margin-bottom-sm"
               alt=""
             />
