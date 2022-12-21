@@ -189,7 +189,7 @@
 
 <script setup>
 import LoadingComponent from "@/components/general/LoadingComponent.vue";
-import CollapsibleSection from "@/components/general/CollapsableSection.vue";
+import CollapsibleSection from "@/components/general/CollapsibleSection.vue";
 import QuestionComponent from "@/components/general/QuestionComponent.vue";
 import ComplianceCharts from "@/components/general/ComplianceCharts.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";

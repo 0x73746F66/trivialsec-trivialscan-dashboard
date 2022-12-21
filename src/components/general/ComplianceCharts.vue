@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import CollapsibleSection from "@/components/general/CollapsableSection.vue";
+import CollapsibleSection from "@/components/general/CollapsibleSection.vue";
 import TimeScaleCustomChart from "@/components/general/TimeScaleCustomChart.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";
 import LoadingComponent from "@/components/general/LoadingComponent.vue";
