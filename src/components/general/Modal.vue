@@ -14,11 +14,10 @@
     role="dialog"
     :aria-labelledby="label"
     aria-hidden="true"
+    :data-bs-backdrop="backdrop"
+    :data-bs-keyboard="keyboard"
   >
-    <div
-      :class="dialogClasses"
-      role="document"
-    >
+    <div :class="dialogClasses" role="document">
       <div class="modal-content">
         <div class="modal-header border-0">
           <slot name="modalTitle" :id="label"> </slot>
@@ -39,20 +38,37 @@
   </div>
 </template>
 <script setup>
-import { Modal } from 'bootstrap'
+import { Modal } from "bootstrap";
 </script>
 <script>
 export default {
   props: {
-    id: String,
-    label: String,
-    dialogClass: String,
+    id: {
+      type: String,
+      required: true,
+    },
+    label: {
+      type: String,
+      required: true,
+    },
+    dialogClass: {
+      type: String,
+      default: "",
+    },
+    backdrop: {
+      type: Boolean,
+      default: true,
+    },
+    keyboard: {
+      type: Boolean,
+      default: true,
+    },
   },
   computed: {
     dialogClasses() {
-      return `${this.dialogClass} modal-dialog modal-dialog-centered border-radius-sm`
-    } 
-  }
+      return `${this.dialogClass} modal-dialog modal-dialog-centered border-radius-sm`;
+    },
+  },
 };
 </script>
 <style lang="scss">
@@ -60,6 +76,6 @@ export default {
   background-color: #000 !important;
 }
 .modal-loading {
-  position: absolute!important;  
-} 
+  position: absolute !important;
+}
 </style>
