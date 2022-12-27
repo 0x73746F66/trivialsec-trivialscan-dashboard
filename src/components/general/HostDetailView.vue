@@ -1,32 +1,38 @@
 <template>
-  <div>
+  <div v-if="host">
+    <LoadingComponent class="loading" v-if="loading" />
+    <ValidationMessage
+      v-if="errorMessage?.length > 0"
+      class="justify-content-start"
+      :message="errorMessage"
+      :type="errorMessageType"
+    />
     <div class="d-flex flex-column flex-lg-row justify-content-between">
-      <span class="font-color-secondary font-sm-b">
+      <span class="font-color-light font-base-b">
         <div class="d-flex flex-column">
-          <CustomPill
-            class="margin-bottom-xs"
-            :label="host?.monitoring_enabled === true ? 'Active' : 'Inactive'"
-            :type="host?.monitoring_enabled === true ? 'success' : 'danger'"
-          />
-          <span class="margin-right-sm"
-            ><IconTarget class="target-icon" color="e2c878" />
-            {{ host?.transport?.hostname }}:{{ host?.transport?.port }}</span
-          >
-          <p class="font-color-light font-sm">
-            Peer Address: {{ host?.transport?.peer_address }}
-          </p>
-          <div class="d-flex">
-            <span class="font-color-light font-sm-b margin-right-xs"
-              >Monitoring</span
-            >
-            <Toggle
-              :defaultChecked="host?.monitoring_enabled"
-              @change="hostToggleChange($event, host?.transport?.hostname)"
-            />
-          </div>
+          <span class="margin-right-sm">
+            {{ host.transport?.hostname }}:{{ host.transport?.port }}
+            <span class="font-color-light font-sm">
+              {{ host.transport?.peer_address }}
+            </span>
+            <p class="font-color-light font-xs">Updated {{ lastUpdated }}</p>
+          </span>
         </div>
       </span>
-      <p class="font-color-light font-xs">Updated {{ lastUpdated }}</p>
+      <div class="d-flex align-items-center">
+        <Toggle
+          :defaultChecked="host.monitoring_enabled"
+          @change="hostToggleChange($event, host.transport?.hostname)"
+        />
+        <span class="font-color-light font-sm-b margin-left-xs"
+          >Monitoring</span
+        >
+        <CustomPill
+          class="margin-left-xs"
+          :label="host.monitoring_enabled === true ? 'Active' : 'Inactive'"
+          :type="host.monitoring_enabled === true ? 'success' : 'danger'"
+        />
+      </div>
     </div>
     <div class="row margin-bottom-xxs">
       <div class="col-6">
@@ -37,13 +43,13 @@
         <p class="margin-bottom-xs">
           <span class="font-sm-sb font-color-light"> Negotiated: </span>
           <span class="font-color-base font-color-light">
-            {{ host?.tls?.protocol?.negotiated }}
+            {{ host.tls?.protocol?.negotiated }}
           </span>
         </p>
         <p class="margin-bottom-xs">
           <span class="font-sm-sb font-color-light"> Preferred: </span>
           <span class="font-color-base font-color-light">
-            {{ host?.tls?.protocol?.preferred }}
+            {{ host.tls?.protocol?.preferred }}
           </span>
         </p>
         <div class="margin-bottom-xs">
@@ -51,7 +57,7 @@
           <div class="d-flex flex-column">
             <span
               class="font-color-base font-color-light"
-              v-for="(offered, offeredIndex) in host?.tls?.protocol?.offered"
+              v-for="(offered, offeredIndex) in host.tls?.protocol?.offered"
               :key="offeredIndex"
             >
               {{ offered }}
@@ -65,7 +71,7 @@
         <h3 class="font-color-light font-sm-sb">Certificates</h3>
         <span
           v-for="(sha1_fingerprint, certIndex) in uniqueCertificates(
-            host?.tls?.certificates
+            host.tls?.certificates,
           )"
           :key="certIndex"
           class="font-color-secondary font-sm word-break"
@@ -86,11 +92,11 @@
       </div>
     </div>
     <div class="row">
-      <div v-if="host?.tls?.client.expected_client_subjects.length">
+      <div v-if="host.tls?.client.expected_client_subjects.length">
         <div class="col-6">
           <span
             class="font-color-base font-color-light"
-            v-for="(subject, subjectIndex) in host?.tls?.client
+            v-for="(subject, subjectIndex) in host.tls?.client
               ?.expected_client_subjects"
             :key="subjectIndex"
           >
@@ -104,18 +110,18 @@
           Cipher
           <span
             class="font-color-light font-sm"
-            :title="`${host?.tls?.cipher.offered_rfc.join('\n')}`"
+            :title="`${host.tls?.cipher.offered_rfc.join('\n')}`"
           >
-            ({{ host?.tls?.cipher.offered_rfc.length }} offered)
+            ({{ host.tls?.cipher.offered_rfc.length }} offered)
           </span>
         </h3>
         <p class="margin-bottom-xs font-color-light">
           <span class="font-sm-sb">Negotiated:</span>
-          <span class="font-sm">{{ host?.tls?.cipher.negotiated }}</span>
+          <span class="font-sm">{{ host.tls?.cipher.negotiated }}</span>
         </p>
         <p class="margin-bottom-xs font-color-light">
           <span class="font-sm-sb">Negotiated Bits:</span>
-          <span class="font-sm">{{ host?.tls?.cipher.negotiated_bits }}</span>
+          <span class="font-sm">{{ host.tls?.cipher.negotiated_bits }}</span>
         </p>
       </div>
       <div class="col-lg-6 col-12">
@@ -126,40 +132,53 @@
         <p class="margin-bottom-xs">
           <span class="font-sm-sb font-color-light"> Cache Mode: </span>
           <span class="font-color-base font-color-light">
-            {{ host?.tls?.session_resumption.cache_mode }}
+            {{ host.tls?.session_resumption.cache_mode }}
           </span>
         </p>
         <p class="margin-bottom-xs">
           <span class="font-sm-sb font-color-light"> Ticket Hint: </span>
           <span class="font-color-base font-color-light text-capitalize">
-            {{ host?.tls?.session_resumption.ticket_hint }}
+            {{ host.tls?.session_resumption.ticket_hint }}
           </span>
         </p>
         <p class="margin-bottom-xs">
           <span class="font-sm-sb font-color-light"> Tickets: </span>
           <span class="font-color-base font-color-light text-capitalize">
-            {{ host?.tls?.session_resumption.tickets }}
+            {{ host.tls?.session_resumption.tickets }}
           </span>
         </p>
       </div>
     </div>
   </div>
 </template>
-<script>
+<script setup>
 import moment from "moment";
 import IconTarget from "@/components/icons/IconTarget.vue";
 import IconCertificate from "@/components/icons/IconCertificate.vue";
 import Toggle from "@/components/general/Toggle.vue";
 import CustomPill from "@/components/general/CustomPill.vue";
+import ValidationMessage from "@/components/general/ValidationMessage.vue";
+import LoadingComponent from "@/components/general/LoadingComponent.vue";
+</script>
 
+<script>
 export default {
   components: {
     IconTarget,
     IconCertificate,
     Toggle,
     CustomPill,
+    ValidationMessage,
+    LoadingComponent,
   },
   props: ["host"],
+  data() {
+    return {
+      loading: false,
+      errorMessage: "",
+      errorMessageType: "",
+    };
+  },
   methods: {
     uniqueCertificates(sha1Fingerprints) {
       const uniq = new Set(sha1Fingerprints);
@@ -175,9 +194,44 @@ export default {
         .join("")
         .replace(/CN=/g, "");
     },
-    // getCertificate(sha1_fingerprint) {
-    //     return host.tls.certificates.filter(cert => cert.sha1_fingerprint === sha1_fingerprint).pop()
-    // },
+    async hostToggleChange(e, hostname) {
+      this.loading = true;
+      try {
+        if (e.target.checked === true) {
+          const response = await Api.get(`/scanner/monitor/${hostname}`);
+          if (response.status !== 200) {
+            this.errorMessage = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`;
+            this.errorMessageType = "error";
+            this.loading = false;
+            e.target.checked = false;
+            return;
+          }
+          this.errorMessage = `Monitoring host.`;
+          this.errorMessageType = "success";
+          this.host.monitoring_enabled = true;
+        } else {
+          const response = await Api.get(`/scanner/deactivate/${hostname}`);
+          if (response.status !== 200) {
+            this.errorMessage = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`;
+            this.errorMessageType = "error";
+            this.loading = false;
+            e.target.checked = false;
+            return;
+          }
+          this.errorMessage = `No longer monitoring host.`;
+          this.errorMessageType = "success";
+          this.host.monitoring_enabled = false;
+        }
+      } catch (error) {
+        this.errorMessage =
+          error.name === "AbortError"
+            ? "Request timed out, please try refreshing the page."
+            : `${error.name} ${error.message}. Couldn't complete this action.`;
+        this.errorMessageType = "error";
+        e.target.checked = false;
+      }
+      this.loading = false;
+    },
   },
   computed: {
     lastUpdated() {
@@ -186,7 +240,7 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style scoped lang="scss">
 .report {
   &-item {
     cursor: pointer;

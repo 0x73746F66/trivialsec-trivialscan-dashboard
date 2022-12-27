@@ -88,7 +88,7 @@
             <div class="col-6">
               <Toggle
                 :defaultChecked="client.active"
-                @change="toggleClientFeed($event, client.name)"
+                @change="toggleClient($event, client.name)"
               />
             </div>
             <div class="d-flex col-6 justify-content-end">
@@ -117,6 +117,7 @@
                         :value="client.name"
                       />
                       <button
+                        data-bs-dismiss="modal"
                         type="submit"
                         class="btn-outline-danger-full font-color-danger font-sm"
                       >
@@ -165,8 +166,11 @@ import { Popover } from "bootstrap";
 
 <script>
 export default {
+  emits: ["update:errorMessage", "update:errorMessageType"],
   props: {
-    clients: Array,
+    clients: { type: Array, default: [] },
+    errorMessage: { type: String, default: "" },
+    errorMessageType: { type: String, default: "" },
   },
   components: {
     Swiper,
@@ -180,8 +184,6 @@ export default {
     return {
       modules: [Navigation, Pagination, Scrollbar, A11y],
       loading: false,
-      errorMessage: "",
-      errorMessageType: "",
     };
   },
   mounted() {
@@ -234,14 +236,16 @@ export default {
         const clientName = event.target.elements["ClientName"].value;
         const response = await Api.delete(`/client/${clientName}`);
         if (response.status != 202) {
-          this.errorMessage =
-            "Something went wrong. Client couldn't be deleted.";
-          this.errorMessageType = "error";
+          this.$emit(
+            "update:errorMessage",
+            "Something went wrong. Client couldn't be deleted",
+          );
+          this.$emit("update:errorMessageType", "error");
           this.loading = false;
           return;
         }
-        this.errorMessage = "This client was deleted";
-        this.errorMessageType = "success";
+        this.$emit("update:errorMessage", "This client was deleted");
+        this.$emit("update:errorMessageType", "success");
         for (const [index, client] of this.clients.entries()) {
           if (client.name === clientName) {
             this.clients.splice(index, 1);
@@ -249,11 +253,13 @@ export default {
           }
         }
       } catch (error) {
-        this.errorMessage =
+        this.$emit(
+          "update:errorMessage",
           error.name === "AbortError"
             ? "Request timed out, please try refreshing the page."
-            : `${error.name} ${error.message}. Couldn't complete this action.`;
-        this.errorMessageType = "error";
+            : `${error.name} ${error.message}. Couldn't complete this action.`,
+        );
+        this.$emit("update:errorMessageType", "error");
       }
       this.loading = false;
     },
@@ -262,13 +268,16 @@ export default {
       try {
         const response = await Api.get(`/clients`, { timeout: 30000 });
         if (response.status === 204) {
-          this.errorMessage = "No clients are registered";
-          this.errorMessageType = "warning";
+          this.$emit("update:errorMessage", "No clients are registered");
+          this.$emit("update:errorMessageType", "warning");
           this.loading = false;
           return;
         } else if (response.status !== 200) {
-          this.errorMessage = `${response.status} ${response.statusText}`;
-          this.errorMessageType = "error";
+          this.$emit(
+            "update:errorMessage",
+            `${response.status} ${response.statusText}`,
+          );
+          this.$emit("update:errorMessageType", "error");
           this.loading = false;
           return;
         }
@@ -278,15 +287,17 @@ export default {
           this.clients.push(client);
         });
       } catch (error) {
-        this.errorMessage =
+        this.$emit(
+          "update:errorMessage",
           error.name === "AbortError"
             ? "Request timed out, please try refreshing the page."
-            : `${error.name} ${error.message}. Couldn't complete this action.`;
-        this.errorMessageType = "error";
+            : `${error.name} ${error.message}. Couldn't complete this action.`,
+        );
+        this.$emit("update:errorMessageType", "error");
       }
       this.loading = false;
     },
-    async toggleClientFeed($event, client_name) {
+    async toggleClient($event, client_name) {
       const deactivate_url = `/deactivated/${client_name}`;
       const activate_url = `/activate/${client_name}`;
       this.loading = true;
@@ -294,13 +305,16 @@ export default {
         if ($event.target.checked === true) {
           const response = await Api.get(activate_url);
           if (response.status !== 200) {
-            this.errorMessage = `${response.status}: An error has occurred, please try again.`;
-            this.errorMessageType = "error";
+            this.$emit(
+              "update:errorMessage",
+              `${response.status} ${response.statusText}`,
+            );
+            this.$emit("update:errorMessageType", "error");
             this.loading = false;
             return;
           }
-          this.errorMessage = "Feed was enabled with success";
-          this.errorMessageType = "success";
+          this.$emit("update:errorMessage", "Client was enabled with success");
+          this.$emit("update:errorMessageType", "success");
           for (const client of this.clients) {
             if (client_name === client.name) {
               client.active = true;
@@ -310,13 +324,16 @@ export default {
         } else {
           const response = await Api.get(deactivate_url);
           if (response.status !== 200) {
-            this.errorMessage = `${response.status}: An error has occurred, please try again.`;
-            this.errorMessageType = "error";
+            this.$emit(
+              "update:errorMessage",
+              `${response.status} ${response.statusText}`,
+            );
+            this.$emit("update:errorMessageType", "error");
             this.loading = false;
             return;
           }
-          this.errorMessage = "Feed was disabled with success";
-          this.errorMessageType = "success";
+          this.$emit("update:errorMessage", "Client was disabled with success");
+          this.$emit("update:errorMessageType", "success");
           for (const client of this.clients) {
             if (client_name === client.name) {
               client.active = false;
@@ -325,11 +342,13 @@ export default {
           }
         }
       } catch (error) {
-        this.errorMessage =
+        this.$emit(
+          "update:errorMessageType",
           error.name === "AbortError"
             ? "Request timed out, please try refreshing the page."
-            : `${error.name} ${error.message}. Couldn't complete this action.`;
-        this.errorMessageType = "error";
+            : `${error.name} ${error.message}. Couldn't complete this action.`,
+        );
+        this.$emit("update:errorMessageType", "error");
       }
       this.loading = false;
     },

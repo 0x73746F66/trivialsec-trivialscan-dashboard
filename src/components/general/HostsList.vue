@@ -42,44 +42,43 @@
           :key="i"
         >
           <a
-            target="_blank"
             :href="`/hostname/${t.transport.hostname}/${t.transport.port}`"
             class="text-decoration-none target-icon-link font-color-secondary w-100"
           >
             <div class="d-flex flex-column justify-content-between w-100">
-              <div class="">
-                <IconTarget
-                  class="margin-right-sm target-icon"
-                  color="e2c878"
-                />
-                <div class="d-flex flex-column">
+              <div class="d-flex flex-column">
+                <span
+                  v-for="(http, id) in t.http"
+                  :key="id"
+                  class="http-status"
+                  :class="{
+                    'font-color-primary': http.status_code === 200,
+                    'font-color-danger': http.status_code !== 200,
+                  }"
+                >
                   <span
-                    v-for="(http, id) in t.http"
-                    :key="id"
-                    class="http-status"
-                    :class="{
-                      'font-color-primary': http.status_code === 200,
-                      'font-color-danger': http.status_code !== 200,
-                    }"
+                    class="pill font-sm-b padding-xxs font-color-dark status-code-pill"
+                    :class="{ success: http.status_code[0] === 2 }"
                   >
-                    {{ http.title }}
-                    <span
-                      class="pill padding-xxs font-color-light status-code-pill"
-                      :class="{ success: http.status_code[0] === 2 }"
-                    >
-                      {{ http.status_code }}
-                    </span>
+                    {{ http.status_code }}
                   </span>
-                  <span class="d-block"
-                    >{{ t.transport.hostname }}:{{ t.transport.port }}</span
-                  >
-                  <span v-if="t.error" class="d-block font-color-tertiary"
-                    >{{ t.error[0] }} {{ t.error[1] }}</span
-                  >
-                  <span class="d-block font-color-light-20">{{
-                    t.transport.peer_address
-                  }}</span>
-                </div>
+                  <span class="margin-left-xxs">
+                    {{ http.title }}
+                  </span>
+                </span>
+                <span class="d-block">
+                  <IconTarget
+                    class="margin-right-xxs target-icon"
+                    color="e2c878"
+                  />
+                  {{ t.transport.hostname }}:{{ t.transport.port }}
+                </span>
+                <span v-if="t.error" class="d-block font-color-tertiary"
+                  >{{ t.error[0] }} {{ t.error[1] }}</span
+                >
+                <span class="d-block font-color-light-60">
+                  {{ t.transport.peer_address }}
+                </span>
               </div>
               <div class="font-color-light-40">
                 {{ t.timeago }}

@@ -23,7 +23,8 @@
                     width="50"
                     height=""
                   />
-                  <span class="d-none d-lg-block font-xxl-b font-color-primary"
+                  <span
+                    class="d-none d-lg-block font-xxl-b font-color-primary nowrap"
                     >Trivial Security</span
                   >
                 </div>
@@ -171,11 +172,16 @@
     </div>
   </header>
 </template>
-<script>
-import IconTrivialSecurity from "@/components/icons/IconTrivialSecurity.vue";
 
+<script setup>
+import IconTrivialSecurity from "@/components/icons/IconTrivialSecurity.vue";
+</script>
+
+<script>
 export default {
-  components: { IconTrivialSecurity },
+  components: {
+    IconTrivialSecurity,
+  },
   data() {
     return {
       isNavbarHidden: true,

@@ -111,6 +111,7 @@
                 v-if="!member.current"
                 :id="`deleteMember${index}`"
                 label="delete-member-header"
+                :backdrop="false"
               >
                 <template v-slot:button="buttonProps">
                   <button class="edit-mode-btn delete" v-bind="buttonProps">
@@ -132,6 +133,7 @@
                     <button
                       type="submit"
                       class="btn-outline-danger-full font-color-danger font-sm"
+                      data-bs-dismiss="modal"
                     >
                       Yes
                     </button>
@@ -298,24 +300,8 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style scoped lang="scss">
 .delete-member-modal {
-  .modal {
-    .modal-dialog {
-      margin-top: 0;
-      margin-bottom: 0;
-      height: 100%;
-
-      .modal-content {
-        height: 100%;
-
-        .modal-body {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-      }
-    }
-  }
+  overflow: hidden;
 }
 </style>

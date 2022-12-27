@@ -17,6 +17,7 @@
     "crypto-js": "^4.1.1",
     "jquery": "^3.6.2",
     "moment": "^2.29.4",
+    "pusher-js": "^8.0.0",
     "random-words": "^1.2.0",
     "swiper": "^8.4.4",
     "vue": "^3.2.45",

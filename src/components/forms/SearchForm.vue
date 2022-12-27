@@ -215,6 +215,13 @@
               >
                 Scan now
               </button>
+              <RouterLink
+                v-if="result.scanned"
+                :to="`/hostname/${result.hostname}`"
+                class="search-result-item-link border-radius-lg margin-right-xxs"
+              >
+                Details
+              </RouterLink>
             </div>
           </span>
         </div>
@@ -358,7 +365,7 @@ export default {
         this.loading = true;
         try {
           const response = await Api.get(
-            `/search/${this.searchType}/${this.searchInput}`
+            `/search/${this.searchType}/${this.searchInput}`,
           );
           if (response.status !== 200) {
             this.errorMessage = `${response.status} ${response.statusText}: Sorry, we couldn't find what you're looking for`;
@@ -546,6 +553,16 @@ $searchBarHeight: 50px;
     width: 25px;
     height: 25px;
   }
+  &-link {
+    padding: 0 spacers("md");
+    border: none;
+    text-decoration: none;
+    background: color("primary");
+    color: color("dark");
+    &:hover {
+      color: color("dark");
+    }
+  }
   &-btn {
     min-width: max-content;
     border: none;
@@ -595,10 +612,6 @@ $searchBarHeight: 50px;
       left: 0;
       z-index: 1;
     }
-  }
-
-  &:hover {
-    // background: color("dark-40");
   }
 
   &-icon {

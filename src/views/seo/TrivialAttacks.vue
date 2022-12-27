@@ -257,6 +257,20 @@ export default {
   data() {
     return {
       logged_in: false,
+      links: [
+        {
+          label: "Trivial Security vs ImmuniWeb vs Qualys SSL Labs",
+          href: "#",
+        },
+        {
+          label: "Trivial Scanner vs SSLyze vs testssl.sh",
+          href: "#",
+        },
+        {
+          label: "How most SSL/TLS scanners are more harmful than helpful",
+          href: "#",
+        },
+      ],
       FAQs: [
         {
           question: "What's a cyber security?",

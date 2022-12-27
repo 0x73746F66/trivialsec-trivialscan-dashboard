@@ -165,25 +165,11 @@
         <h3 class="font-color-light font-base-sb">Additional Resources</h3>
         <span class="font-color-light">
           <ul>
-            <li>
+            <li v-for="(link, linkIndex) in links" :key="`${linkIndex}`">
               <a
                 class="text-decoration-none font-color-primary font-sm"
-                href="#"
-                >Trivial Security vs ImmuniWeb vs Qualys SSL Labs</a
-              >
-            </li>
-            <li>
-              <a
-                class="text-decoration-none font-color-primary font-sm"
-                href="#"
-                >Trivial Scanner vs SSLyze vs testssl.sh</a
-              >
-            </li>
-            <li>
-              <a
-                class="text-decoration-none font-color-primary font-sm"
-                href="#"
-                >How most SSL/TLS scanners are more harmful than helpful</a
+                :href="link.href"
+                >{{ link.label }}</a
               >
             </li>
           </ul>
@@ -226,6 +212,20 @@ export default {
       imagePopOutDesc: "",
       imagePopOutUrl: "",
       logged_in: false,
+      links: [
+        {
+          label: "Trivial Security vs ImmuniWeb vs Qualys SSL Labs",
+          href: "#",
+        },
+        {
+          label: "Trivial Scanner vs SSLyze vs testssl.sh",
+          href: "#",
+        },
+        {
+          label: "How most SSL/TLS scanners are more harmful than helpful",
+          href: "#",
+        },
+      ],
       FAQs: [
         {
           question: "What is SSL/TLS?",
@@ -246,6 +246,47 @@ export default {
           question: "What are the types of SSL certificates?",
           answer:
             "There are three types of SSL certificates available:\nDomain Validated (DV SSL) - base level protection that can be issued immediately.\nOrganization Validated (OV SSL) - next level protection that verifies the domain owner among several business details including name, city, states, and country.\nExtended Validation (EV SSL) - highest level of SSL certificates with the most stringent vetting process.",
+        },
+        {
+          question: "What is a host?",
+          answer:
+            "There are four types of hosts that Trivial Scanner currently supports; Apex domain names (eg. google.com or google.com.au), Sub domains; (maps.google.com or www.google.com.au); IPv4 and IPv6 addresses. ASN, CIDR ranges, and IPv6 prefix are on our development roadmap.",
+        },
+        {
+          question: "How often does the host monitor run?",
+          answer:
+            "Free accounts are once per day, paid accounts are able to set any hourly intervals per host. Enterprise customers gain the ability to apply any schedule to any host.",
+        },
+        {
+          question: "Can the scanner login to our systems?",
+          answer:
+            "Trivial Security is not a penetration testing suite, but shares many features with the early stages of a penetration test. Trivial Security scanners will see your internet connect services the same ay they are presented to anonymous malicious actors, Your login has identity verification (right?) so these bad actors are identified and can be prosecuted. Trivial Security aims to help you defend from the more discrete albeit simple attack vectors.",
+        },
+        {
+          question: "How much scan volume do you send?",
+          answer:
+            "Trivial Security finds novel techniques to derive our findings using methods that minimize overall scanning activity, we are passionate about avoiding impacts or otherwise reducing load on target resources.",
+        },
+        {
+          question:
+            "Can we opt-out or otherwise block the scanner from accessing our websites?",
+          answer:
+            "Trivial Security applies to all (well-formed) HTTP requests the User-Agent 'Trivial Scanner' for the open source tool, or 'Trivial Security' for the hosted scanner, and will act according to the robots.txt file at the root of your domain. In future we plan to publish an rDNS record so you may lookup incoming IP Addresses of any protocol to see if they are ours. Or simply email support@trivialsec.com with the subject Opt-out and your hosts, we'll provide a verification token for you to add a TXT to your DNS to prove ownership and we'll never scan any domains or IP address (A and AAAA records).",
+        },
+        {
+          question: "How many evaluations are performed?",
+          answer:
+            "Trivial Scanner is an open source project that is under active development and in 2022 there were over 100 unique rule evaluations implemented. We expect this to grow beyond 500 in 2023.",
+        },
+        {
+          question: "Can additional rule evaluations be added?",
+          answer:
+            "Trivial Scanner is an open source project and designed to be modular, so you may self-host the scanner and apply any number of rules. Our Discord community can be a place to discover additional rules that have not yet been added to the open source repository directly, and in future this site will publicly publish user submitted rulesets for bespoke needs outside the core projects goals",
+        },
+        {
+          question: "How to report suspected abuse?",
+          answer:
+            "Trivial Scanner is specifically designed to perform requests no different than any web browsers, and will reduce volume sent after the initial scan. Only customers with hosts that they have verified ownership can use our service for active scanning that may have unforeseeable or potentially disruptive activity. If you still believe there is abuse please send an email to abuse@trivialsec.com and provide us your logs of the activity.",
         },
       ],
     };

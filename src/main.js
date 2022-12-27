@@ -2,13 +2,17 @@ if (window.location.hostname == "trivialsec.com")
   window.location.href = `https://www.trivialsec.com${window.location.pathname}`;
 import { createApp } from "vue";
 import { VueClipboard } from "@soerenmartius/vue3-clipboard";
+import Pusher from "pusher-js";
 import App from "./App.vue";
 import router from "./router";
 import moment from "moment";
 import CryptoJS from "crypto-js";
 
 const app = createApp(App);
-app.config.globalProperties.$log = console.log;
+if (import.meta.env.DEV) {
+  app.config.globalProperties.$log = console.log;
+  Pusher.logToConsole = true;
+}
 app.use(router);
 app.use(VueClipboard);
 router.isReady().then(() => app.mount("#app"));
@@ -124,3 +128,51 @@ window.Api = {
     return response;
   },
 };
+window.pusher = new Pusher(
+  "b8b37751841a44557ab2", // pragma: allowlist secret
+  { cluster: "ap4" },
+);
+const channel = window.pusher.subscribe(localStorage.getItem("/account/name"));
+
+if (!("Notification" in window)) {
+  if (import.meta.env.DEV) {
+    console.log("This browser does not support desktop notification");
+  }
+} else if (Notification.permission === "granted") {
+  if (import.meta.env.DEV) {
+    console.log("Notification permissions have already been granted");
+  }
+} else if (Notification.permission !== "denied") {
+  Notification.requestPermission().then((permission) => {
+    if (permission === "granted") {
+      new Notification("Notifications active", {
+        body: `Notifications will appear here`,
+        icon: "/favicon.png",
+      });
+    }
+  });
+}
+channel.bind("trivial-scanner-status", (data) => {
+  if (data?.status === "Complete") {
+    const target = `${data.targets[0].transport.hostname}:${data.targets[0].transport.port}`;
+    const notification = new Notification(target, {
+      body: `${data.type} ${data.status}`,
+      icon: "/favicon.png",
+    });
+    notification.onclick = (event) => {
+      event.preventDefault();
+      window.open(
+        `https://${import.meta.env.DEV ? "dev" : "www"}.trivialsec.com${
+          data.results_uri
+        }`,
+        "_blank",
+      );
+    };
+  } else {
+    const target = `${data.hostname}:${data.port}`;
+    new Notification(target, {
+      body: `${data.type} ${data.status}`,
+      icon: "/favicon.png",
+    });
+  }
+});

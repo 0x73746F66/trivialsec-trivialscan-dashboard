@@ -1,11 +1,8 @@
 <template>
   <main>
-    <div class="container font-color-light padding-top-xl padding-bottom-xl">
+    <div class="container font-color-light padding-top-lg padding-bottom-xl">
       <LoadingComponent class="loading" v-if="loading" />
-
-      <div
-        class="w-100 d-flex align-items-lg-center flex-column flex-lg-row justify-content-between margin-bottom-sm"
-      >
+      <div class="d-flex flex-column flex-lg-row margin-bottom-sm">
         <div class="d-inline-block w-100 position-relative">
           <SearchForm />
         </div>

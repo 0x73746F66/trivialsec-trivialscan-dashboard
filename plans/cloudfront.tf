@@ -63,7 +63,7 @@ resource "aws_cloudfront_response_headers_policy" "dashboard_security_headers_po
         "frame-src https://js.stripe.com https://cdn.forms-content.sg-form.com",
         "style-src 'self' https://fonts.googleapis.com 'unsafe-inline'",
         "style-src-attr 'sha256-pILX+5FGCpLRHvNBgtABIdSMmytrYudGxJBUYXY1t0s=' 'sha256-wK4n87cEV+DaOorOySn50J1N+etqDZQSmu9zgJp4nu4='", # pragma: allowlist secret
-        "connect-src 'self' ${var.app_env != "Prod" ? data.terraform_remote_state.dev_lambda_api.outputs.function_url : data.terraform_remote_state.prod_lambda_api.outputs.function_url}",
+        "connect-src 'self' wss://ws-ap4.pusher.com https://sockjs-ap4.pusher.com ${var.app_env != "Prod" ? data.terraform_remote_state.dev_lambda_api.outputs.function_url : data.terraform_remote_state.prod_lambda_api.outputs.function_url}",
       ])
       override = true
     }

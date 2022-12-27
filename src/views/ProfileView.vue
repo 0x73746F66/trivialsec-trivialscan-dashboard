@@ -388,7 +388,11 @@
           class="profile-container bg-dark-40 border-radius-sm d-flex flex-column"
         >
           <Members />
-          <Clients v-bind:clients="clients" />
+          <Clients
+            v-bind:clients="clients"
+            v-model:errorMessage="clientsErrorMessage"
+            v-model:errorMessageType="clientsErrorMessageType"
+          />
         </div>
       </div>
     </div>
@@ -441,6 +445,8 @@ export default {
       billingEmail: "",
       upgradeFormMessage: "",
       upgradeFormMessageType: "",
+      clientsErrorMessage: "",
+      clientsErrorMessageType: "",
       loading: false,
     };
   },
@@ -629,8 +635,8 @@ export default {
           this.loading = false;
           return;
         }
-        this.errorMessage = "New Credentials generated!";
-        this.errorMessageType = "success";
+        this.clientsErrorMessage = "New Credentials generated!";
+        this.clientsErrorMessageType = "success";
         const client = await response.json();
         client.created = moment.utc(client.timestamp).fromNow();
         this.clients.push(client);
