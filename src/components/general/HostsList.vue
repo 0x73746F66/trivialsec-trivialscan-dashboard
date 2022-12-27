@@ -41,8 +41,8 @@
           v-for="(t, i) in target"
           :key="i"
         >
-          <a
-            :href="`/hostname/${t.transport.hostname}/${t.transport.port}`"
+          <RouterLink
+            :to="`/hostname/${t.transport.hostname}/${t.transport.port}`"
             class="text-decoration-none target-icon-link font-color-secondary w-100"
           >
             <div class="d-flex flex-column justify-content-between w-100">
@@ -84,7 +84,7 @@
                 {{ t.timeago }}
               </div>
             </div>
-          </a>
+          </RouterLink>
         </div>
       </swiper-slide>
     </swiper>

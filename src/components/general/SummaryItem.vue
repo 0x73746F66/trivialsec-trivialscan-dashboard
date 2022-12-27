@@ -71,11 +71,12 @@
             class="summary-icon-targets margin-right-xxs"
             color="e2c878"
           />
-          <a
-            :href="`/hostname/${target.transport.hostname}/${target.transport.port}`"
+          <RouterLink
+            :to="`/hostname/${target.transport.hostname}/${target.transport.port}`"
             class="font-color-secondary"
-            >{{ target.transport.hostname }}:{{ target.transport.port }}</a
           >
+            {{ target.transport.hostname }}:{{ target.transport.port }}
+          </RouterLink>
         </span>
         <span
           v-if="report.certificates.length > 0"

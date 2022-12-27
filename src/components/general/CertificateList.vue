@@ -130,7 +130,6 @@
                 class="d-flex justify-content-end align-items-end w-100 margin-top-sm"
               >
                 <a
-                  target="_blank"
                   :href="'/certificate/' + issue.certificate.sha1_fingerprint"
                   class="text-decoration-none font-sm font-color-primary"
                 >
@@ -153,7 +152,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import Dropdown from "@/components/general/Dropdown.vue";
 import CertificateIcon from "@/components/icons/CertificateIcon.vue";
 import IconChevron from "@/components/icons/IconChevron.vue";
@@ -163,7 +162,9 @@ import LoadingComponent from "@/components/general/LoadingComponent.vue";
 import moment from "moment";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
+</script>
 
+<script>
 export default {
   components: {
     Swiper,
@@ -197,7 +198,7 @@ export default {
       this.loading = true;
       try {
         const response = await Api.get(
-          `/findings/certificate?limit=${this.limit}`
+          `/findings/certificate?limit=${this.limit}`,
         );
         if (response.status !== 200) {
           this.errorMessage = `${response.status} ${response.statusText}`;
@@ -231,6 +232,7 @@ export default {
   },
 };
 </script>
+
 <style scoped lang="scss">
 .certificate-swiper-button {
   position: relative;

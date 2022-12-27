@@ -102,9 +102,8 @@
                   {{ evaluation?.result_label }}
                 </span>
                 <span class="font-sm" v-if="evaluation.transport">
-                  <a
-                    target="_blank"
-                    :href="`/hostname/${evaluation.transport.hostname}/${evaluation.transport.port}`"
+                  <RouterLink
+                    :to="`/hostname/${evaluation.transport.hostname}/${evaluation.transport.port}`"
                     class="font-color-lighter-60 text-decoration-none"
                   >
                     <IconTarget
@@ -116,7 +115,7 @@
                         evaluation.transport.port
                       }}
                     </span>
-                  </a>
+                  </RouterLink>
                 </span>
                 <span
                   class="font-sm"
@@ -126,7 +125,6 @@
                   "
                 >
                   <a
-                    target="_blank"
                     :href="`/certificate/${evaluation.metadata.sha1_fingerprint}`"
                     class="font-color-lighter-60 text-decoration-none"
                   >

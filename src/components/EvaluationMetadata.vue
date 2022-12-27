@@ -37,7 +37,7 @@
       <ul>
         <li
           v-for="(cipher, cipherIndex) in metadata.offered_strong_ciphers.split(
-            ' '
+            ' ',
           )"
           :key="cipherIndex"
         >
@@ -52,7 +52,7 @@
       <ul>
         <li
           v-for="(cipher, cipherIndex) in metadata.offered_weak_ciphers.split(
-            ' '
+            ' ',
           )"
           :key="cipherIndex"
         >
@@ -67,7 +67,7 @@
       <ul>
         <li
           v-for="(cipher, cipherIndex) in metadata.offered_cbc_ciphers.split(
-            ' '
+            ' ',
           )"
           :key="cipherIndex"
         >
@@ -82,7 +82,7 @@
       <ul>
         <li
           v-for="(cipher, cipherIndex) in metadata.offered_rc4_ciphers.split(
-            ' '
+            ' ',
           )"
           :key="cipherIndex"
         >
@@ -162,7 +162,6 @@
       v-else-if="metadata.sha1_fingerprint"
       class="font-color-secondary font-sm word-break"
       :href="`/certificate/${metadata.sha1_fingerprint}`"
-      target="_blank"
     >
       <IconCertificate color="e2c878" class="cert-icon margin-right-xxs" />
       <span title="See Certificate details">

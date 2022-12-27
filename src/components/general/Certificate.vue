@@ -59,10 +59,11 @@
             :key="sanIndex"
           >
             <RouterLink
-              :to="`/hostname/${san_item}`"
+              :to="`/hostname/${san_item}/`"
               class="font-color-secondary"
-              >{{ san_item }}</RouterLink
             >
+              <span data-bs-toggle="modal">{{ san_item }}</span>
+            </RouterLink>
           </span>
         </span>
         <span

@@ -13,32 +13,44 @@
         :type="errorMessageType"
       />
       <LoadingComponent class="loading" v-if="loading" />
-      <HostDetailView :host="host" />
-      <h3 class="heading">Scanner Reports</h3>
-      <div
-        v-for="(summary, index) in reports"
-        :key="index"
-        class="margin-bottom-sm"
-      >
-        <template v-if="summary">
-          <SummaryItem
-            :report="summary"
-            @deleteReport.once="handleDeleteReport"
-          />
-        </template>
+      <HostDetailView
+        :host="host"
+        :external_refs="external_refs"
+        :versions="versions"
+        :params="params"
+      />
+      <h4 class="heading">Scanner Reports</h4>
+      <div v-if="reports.length > 0">
+        <div
+          v-for="(summary, index) in reports"
+          :key="index"
+          class="margin-bottom-sm"
+        >
+          <template v-if="summary">
+            <SummaryItem
+              :report="summary"
+              @deleteReport.once="handleDeleteReport"
+            />
+          </template>
+        </div>
+      </div>
+      <div v-else class="font-color-danger font-base-sb">
+        No matching scanner reports on your account
       </div>
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
 import LoadingComponent from "@/components/general/LoadingComponent.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";
 import HostDetailView from "@/components/general/HostDetailView.vue";
 import SummaryItem from "@/components/general/SummaryItem.vue";
 import SearchForm from "@/components/forms/SearchForm.vue";
 import moment from "moment";
+</script>
 
+<script>
 export default {
   data() {
     return {
@@ -46,7 +58,9 @@ export default {
       errorMessage: "",
       errorMessageType: "",
       host: {},
+      external_refs: {},
       reports: [],
+      versions: [],
     };
   },
   components: {
@@ -56,11 +70,12 @@ export default {
     SummaryItem,
     SearchForm,
   },
-  created() {
+  mounted() {
     // watch the params of the route to fetch the data again
     this.$watch(
       () => this.$route.params,
       () => {
+        this.params = this.$route.params;
         this.fetchData();
       },
       // fetch the data when the view is created and the data is
@@ -83,9 +98,16 @@ export default {
     async fetchData() {
       this.loading = true;
       try {
-        const response = await Api.get(
-          `/host/${this.$route.params.hostname}?port=${this.$route.params.port}`,
-        );
+        let url = `/host/${this.$route.params.hostname}?port=${this.$route.params.port}`;
+        if (
+          !!this.$route.params.version &&
+          this.$route.params.version !== "latest"
+        ) {
+          url += `&last_updated=${moment
+            .utc(this.$route.params.version)
+            .toISOString()}`;
+        }
+        const response = await Api.get(url);
         if (response.status !== 200) {
           this.errorMessage = "An error occurred: Page couldn't be loaded";
           this.errorMessageType = "error";
@@ -94,6 +116,26 @@ export default {
         }
         const data = await response.json();
         this.host = data.host;
+        this.versions = data.versions
+          .map((version) => {
+            if (version === "latest") {
+              return {
+                value: version,
+                port: 443,
+                date: "99999999",
+                label: "latest",
+              };
+            }
+            const versionParts = version.split("/");
+            return {
+              value: version,
+              port: versionParts[0],
+              date: versionParts[1],
+              label: moment.utc(versionParts[1]).format("L"),
+            };
+          })
+          .sort((a, b) => b.date.localeCompare(a.date));
+        this.external_refs = data.external_refs;
         this.reports = data.reports.map((summary) => {
           summary.refId = this.shortReportId(summary.report_id);
           summary.dateAgo = moment.utc(summary.date).fromNow();

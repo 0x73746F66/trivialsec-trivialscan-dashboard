@@ -217,7 +217,7 @@
               </button>
               <RouterLink
                 v-if="result.scanned"
-                :to="`/hostname/${result.hostname}`"
+                :to="`/hostname/${result.hostname}/`"
                 class="search-result-item-link border-radius-lg margin-right-xxs"
               >
                 Details

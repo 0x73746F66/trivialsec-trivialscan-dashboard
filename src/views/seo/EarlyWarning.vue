@@ -323,12 +323,14 @@ export default {
 .sendgrid-embed {
   padding: 0;
   margin: 0;
+
   iframe {
     padding: 0;
     margin: 0;
     min-width: 430px;
     height: 520px;
     border: none;
+
     &::-webkit-scrollbar {
       width: 0;
       height: 0;

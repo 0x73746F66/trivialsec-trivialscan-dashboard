@@ -49,7 +49,7 @@
                   <div class="font-color-light">
                     Scan date:
                     <time :datetime="t.last_updated">{{
-                      moment(t.last_updated).format("L")
+                      moment.utc(t.last_updated).format("L")
                     }}</time>
                   </div>
                 </div>
@@ -140,20 +140,23 @@
                       :key="certIndex"
                       class="font-color-secondary font-sm word-break"
                     >
-                      <a
-                        target="_blank"
+                      <RouterLink
                         class="text-decoration-none font-color-secondary"
-                        :href="`/certificate/${sha1_fingerprint}`"
+                        :to="`/certificate/${sha1_fingerprint}`"
                       >
                         <IconCertificate
                           color="e2c878"
                           class="cert-icon margin-right-sm"
-                        /><span title="See Certificate details">{{
-                          commonNameFromSubject(
-                            getCertificate(sha1_fingerprint).subject,
-                          )
-                        }}</span>
-                      </a>
+                        /><span
+                          data-bs-toggle="modal"
+                          title="See Certificate details"
+                          >{{
+                            commonNameFromSubject(
+                              getCertificate(sha1_fingerprint).subject,
+                            )
+                          }}</span
+                        >
+                      </RouterLink>
                     </span>
                   </div>
                   <div class="col-6">
