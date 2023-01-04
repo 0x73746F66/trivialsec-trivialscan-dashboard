@@ -53,7 +53,7 @@ resource "aws_cloudfront_response_headers_policy" "dashboard_security_headers_po
       content_security_policy = join("; ", [
         "frame-ancestors 'none'",
         "default-src 'self'",
-        "img-src 'self' https://www.gravatar.com data:",
+        "img-src 'self' https://www.gravatar.com https://asciinema.org data:",
         "script-src 'self' 'unsafe-eval' https://www.gstatic.com https://www.google.com",
         "script-src-elem 'self' https://cdn.jsdelivr.net https://js.stripe.com",
         "font-src 'self' https://fonts.gstatic.com data:",

@@ -38,7 +38,8 @@
         "sonarlint.output.showAnalyzerLogs": true,
         "sonarlint.disableTelemetry": true,
         "cSpell.words": [
-            "swiper"
+            "swiper",
+            "trivialscan"
         ]
     },
     "extensions": {
