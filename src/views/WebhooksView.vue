@@ -309,7 +309,6 @@ export default {
 <style scoped lang="scss">
 .profile {
     &-picture {
-        border: 1px solid color('secondary');
         width: 100px;
         height: 100px;
         object-fit: cover;

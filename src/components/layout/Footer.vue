@@ -93,7 +93,7 @@
                             >API Reference</a
                         >
                         <RouterLink
-                            v-if="logged_in"
+                            v-if="!!$store.getItem('/session/key')"
                             to="/support"
                             class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none"
                             >Support Request</RouterLink
@@ -125,18 +125,10 @@ const apiUrl = import.meta.env.VITE_API_URL.trim()
 export default {
     data() {
         return {
-            logged_in: false,
-            account_name: null,
-            member_email: null,
             docsUrl: `${
                 apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl
             }/redoc`
         }
-    },
-    created() {
-        this.account_name = localStorage.getItem('/account/display')
-        this.member_email = localStorage.getItem('/member/email')
-        this.logged_in = !!localStorage.getItem('/session/key')
     },
     components: {
         IconTrivialSecurity,

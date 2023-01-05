@@ -12,8 +12,10 @@ import CryptoJS from 'crypto-js'
 const app = createApp(App)
 if (import.meta.env.DEV) {
     app.config.globalProperties.$log = console.log
+    app.config.globalProperties.$store = window.localStorage
     Pusher.logToConsole = true
 }
+
 app.use(router)
 app.use(VueClipboard)
 router.isReady().then(() => app.mount('#app'))

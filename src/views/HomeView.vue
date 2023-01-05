@@ -17,9 +17,9 @@
                     Trivial Security scanners check your websites for common web
                     vulnerabilities and misconfigurations. The checks are
                     designed to impose low load on sites and to avoid damaging
-                    them. Web Check tells you; what you need to worry about,
-                    when you need to worry about it and what you need to do
-                    about it.
+                    them. We will advise what you what need to really worry
+                    about, when you need to worry about it, and what you need to
+                    do about it.
                 </div>
                 <div class="row margin-bottom-sm">
                     It is easy to use and doesn't require a any technical skill.

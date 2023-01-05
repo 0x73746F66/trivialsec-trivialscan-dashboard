@@ -18,7 +18,7 @@ const routes = [
             localStorage.setItem('/member/email', '')
             localStorage.setItem('/member/email_md5', '')
             localStorage.setItem('/session/key', '')
-            next('/')
+            window.location.href = '/'
         }
     },
     {

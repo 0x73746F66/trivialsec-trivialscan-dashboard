@@ -92,7 +92,7 @@
                     </div>
 
                     <div class="text-left font-color-light font-sm">
-                        <p
+                        <div
                             v-if="session.current"
                             class="mb-0 font-sm word-break-all"
                         >
@@ -102,12 +102,24 @@
                             >
                                 (This Session)
                             </span>
-                        </p>
-                        <p class="mb-0 font-sm">{{ session.browser }}</p>
-                        <p class="mb-0 font-sm">{{ session.platform }}</p>
-                        <p v-if="session.created" class="mb-0 font-sm">
-                            Active {{ session.created }}
-                        </p>
+                        </div>
+                        <div class="mb-0">
+                            <span class="font-sm" :title="session.user_agent">{{
+                                session.browser
+                            }}</span>
+                        </div>
+                        <div class="mb-0 font-sm">{{ session.platform }}</div>
+                        <div v-if="session.created" class="mb-0 font-sm">
+                            Active
+                            <time
+                                :title="moment(session.timestamp)"
+                                :datetime="
+                                    moment(session.timestamp).toISOString()
+                                "
+                            >
+                                {{ session.created }}
+                            </time>
+                        </div>
                         <div
                             class="d-flex justify-content-end delete-session-modal"
                         >

@@ -24,6 +24,7 @@ export default {
     }
 }
 </script>
+
 <style lang="scss">
 /* The switch - the box around the slider */
 .switch {
