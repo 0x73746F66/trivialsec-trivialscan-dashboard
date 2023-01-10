@@ -20,12 +20,22 @@
                         <div
                             class="h-100 d-flex align-items-lg-center flex-column flex-lg-row"
                         >
-                            <img
-                                v-if="member.account"
-                                :src="`https://www.gravatar.com/avatar/${member.email_md5}?d=wavatar`"
-                                class="border-radius-round profile-picture margin-right-md margin-bottom-md mb-lg-0"
-                                :alt="`${member.account.display}'s Profile Picture`"
-                            />
+                            <div class="d-flex flex-column">
+                                <img
+                                    v-if="member.account"
+                                    :src="`https://www.gravatar.com/avatar/${member.email_md5}?d=wavatar`"
+                                    class="border-radius-round profile-picture margin-right-md margin-bottom-md mb-lg-0"
+                                    :alt="`${member.account.display}'s Profile Picture`"
+                                />
+                                <a
+                                    v-if="editMode"
+                                    class="text-decoration-none font-color-secondary"
+                                    href="https://en.gravatar.com/support/faq/"
+                                    target="_blank"
+                                >
+                                    Change avatar
+                                </a>
+                            </div>
                             <div
                                 class="d-flex flex-column justify-content-start"
                             >
@@ -519,7 +529,7 @@
                     </div>
                 </div>
                 <div
-                    class="profile-container bg-dark-40 border-radius-sm d-flex flex-column"
+                    class="profile-container bg-dark-40 border-radius-sm d-flex flex-column margin-bottom-lg"
                 >
                     <Clients
                         v-bind:clients="clients"
@@ -527,24 +537,146 @@
                         v-model:errorMessageType="clientsErrorMessageType"
                     />
                 </div>
+                <div
+                    class="profile-container d-flex flex-column bg-dark-40 border-radius-sm padding-sm"
+                >
+                    <div class="d-flex font-color-light">
+                        <h2 class="font-xl-sb margin-right-sm">Plan Quotas</h2>
+                        <QuestionComponent
+                            label="question-total-available"
+                            :content="quotasTooltip"
+                        />
+                    </div>
+                    <div
+                        class="d-flex flex-lg-row flex-column justify-content-around"
+                    >
+                        <RadialProgress
+                            :diameter="200"
+                            :completed-steps="quotas?.monitoring?.used"
+                            :total-steps="
+                                Math.max(
+                                    quotas?.monitoring?.total -
+                                        quotas?.monitoring?.used,
+                                    0
+                                )
+                            "
+                            innerStrokeColor="#1abb9c"
+                            startColor="#f45e5e"
+                            stopColor="#e2c878"
+                            strokeWidth="20"
+                            innerStrokeWidth="15"
+                            v-if="
+                                quotas?.monitoring?.used > 0 ||
+                                quotas?.monitoring?.total > 0
+                            "
+                        >
+                            <div class="d-flex flex-column align-items-center">
+                                <span class="font-color-secondary font-sm"
+                                    >Hosts Monitored</span
+                                >
+                                <span class="font-color-light font-xxl">
+                                    {{ quotas?.monitoring?.used }} /
+                                    {{
+                                        quotas?.monitoring?.total -
+                                        quotas?.monitoring?.used
+                                    }}
+                                </span>
+                            </div>
+                        </RadialProgress>
+                        <RadialProgress
+                            :diameter="200"
+                            :completed-steps="quotas?.active?.used"
+                            :total-steps="
+                                Math.max(
+                                    quotas?.active?.total -
+                                        quotas?.active?.used,
+                                    0
+                                )
+                            "
+                            innerStrokeColor="#1abb9c"
+                            startColor="#f45e5e"
+                            stopColor="#e2c878"
+                            strokeWidth="20"
+                            innerStrokeWidth="15"
+                            v-if="
+                                quotas?.active?.used > 0 ||
+                                quotas?.active?.total > 0
+                            "
+                        >
+                            <div class="d-flex flex-column align-items-center">
+                                <span class="font-color-secondary font-sm"
+                                    >Active Scans</span
+                                >
+                                <span class="font-color-light font-xxl">
+                                    {{ quotas?.active?.used }} /
+                                    {{
+                                        Math.max(
+                                            quotas?.active?.total -
+                                                quotas?.active?.used,
+                                            0
+                                        )
+                                    }}
+                                </span>
+                            </div>
+                        </RadialProgress>
+                        <RadialProgress
+                            :diameter="200"
+                            :completed-steps="quotas?.passive?.used"
+                            :total-steps="
+                                Math.max(
+                                    quotas?.passive?.total -
+                                        quotas?.passive?.used,
+                                    0
+                                )
+                            "
+                            innerStrokeColor="#1abb9c"
+                            startColor="#f45e5e"
+                            stopColor="#e2c878"
+                            strokeWidth="20"
+                            innerStrokeWidth="15"
+                            v-if="
+                                quotas?.passive?.used > 0 ||
+                                quotas?.passive?.total > 0
+                            "
+                        >
+                            <div class="d-flex flex-column align-items-center">
+                                <span class="font-color-secondary font-sm"
+                                    >Passive Scans</span
+                                >
+                                <span class="font-color-light font-xxl">
+                                    {{ quotas?.passive?.used }} /
+                                    {{
+                                        Math.max(
+                                            quotas?.passive?.total -
+                                                quotas?.passive?.used,
+                                            0
+                                        )
+                                    }}
+                                </span>
+                            </div>
+                        </RadialProgress>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
 </template>
 <script setup>
-import moment from 'moment'
-import randomWords from 'random-words'
+import LoadingComponent from '@/components/general/LoadingComponent.vue'
+import ValidationMessage from '@/components/general/ValidationMessage.vue'
+import AccountMenu from '@/components/layout/AccountMenu.vue'
 import IconPencil from '@/components/icons/IconPencil.vue'
 import IconCancel from '@/components/icons/IconCancel.vue'
 import checkIcon from '@/components/icons/checkIcon.vue'
-import LoadingComponent from '@/components/general/LoadingComponent.vue'
+import TextInput from '@/components/inputs/TextInput.vue'
+import EditableTextField from '@/components/inputs/EditableTextField.vue'
 import Button from '@/components/general/Button.vue'
 import Clients from '@/components/general/Clients.vue'
-import EditableTextField from '@/components/inputs/EditableTextField.vue'
-import TextInput from '@/components/inputs/TextInput.vue'
 import Modal from '@/components/general/Modal.vue'
-import ValidationMessage from '@/components/general/ValidationMessage.vue'
-import AccountMenu from '@/components/layout/AccountMenu.vue'
+import QuestionComponent from '@/components/general/QuestionComponent.vue'
+import RadialProgress from 'vue3-radial-progress'
+import moment from 'moment'
+import randomWords from 'random-words'
 </script>
 
 <script>
@@ -560,7 +692,9 @@ export default {
         ValidationMessage,
         LoadingComponent,
         Clients,
-        AccountMenu
+        AccountMenu,
+        QuestionComponent,
+        RadialProgress
     },
     data() {
         return {
@@ -571,6 +705,9 @@ export default {
             errorMessageType: '',
             editMessage: '',
             editMessageType: '',
+            quotasTooltip: '',
+            quotas: {},
+            quotaSections: [],
             email: '',
             primaryEmail: '',
             billingEmail: '',
@@ -581,14 +718,15 @@ export default {
             loading: false
         }
     },
-    mounted() {
-        this.fetchProfile()
+    async mounted() {
         let stripeScript = document.createElement('script')
         stripeScript.setAttribute(
             'src',
             'https://js.stripe.com/v3/pricing-table.js'
         )
         document.head.appendChild(stripeScript)
+        await this.fetchProfile()
+        this.fetchQuotas()
     },
     methods: {
         toggleEditMode() {
@@ -633,7 +771,7 @@ export default {
             const email = event.target.elements['Email'].value
             const response = await Api.post('/member/email', { email })
             try {
-                if (response.status !== 200) {
+                if (response.status !== 202) {
                     this.editMessage = `${response.status} ${response.statusText}`
                     this.editMessageType = 'error'
                     this.loading = false
@@ -663,7 +801,7 @@ export default {
             try {
                 const email = event.target.elements['PrimaryEmail'].value
                 const response = await Api.post('/account/email', { email })
-                if (response.status !== 200) {
+                if (response.status !== 202) {
                     this.editMessage = `${response.status} ${response.statusText}`
                     this.editMessageType = 'error'
                     this.loading = false
@@ -784,31 +922,85 @@ export default {
                 this.errorMessageType = 'error'
             }
             this.loading = false
+        },
+        async fetchQuotas() {
+            try {
+                const response = await Api.get(`/dashboard/quotas`, {
+                    timeout: 30000
+                })
+                if (response.status !== 200) {
+                    this.errorMessage = `${response.status} ${response.statusText}`
+                    this.errorMessageType = 'error'
+                    return
+                }
+                const data = await response.json()
+                if (
+                    data?.unlimited_monitoring === false &&
+                    data.monitoring.total > 0
+                ) {
+                    this.quotaSections.push('Monitoring')
+                }
+                if (data?.unlimited_scans === false) {
+                    if (data.passive.total > 0) {
+                        this.quotaSections.push('Passive')
+                    }
+                    if (data?.active.total > 0) {
+                        this.quotaSections.push('Active')
+                    }
+                }
+                if (
+                    data?.monitoring.total > 0 &&
+                    data.monitoring.used < data.monitoring.total
+                ) {
+                    this.quotasTooltip = `Total Available: you could be monitoring ${
+                        data.monitoring.total - data.monitoring.used
+                    } more hosts`
+                } else if (this.quotaSections.length > 0) {
+                    this.quotasTooltip = `Community Edition allows the used of self-managed scanners, and will perform one scan only when each new host it added`
+                } else if (this.unlimited_monitoring === true) {
+                    this.quotasTooltip = `You have Unlimited host monitoring`
+                } else {
+                    this.quotasTooltip = `This section shows how well you are utilizing Trivial Security`
+                }
+                this.quotas = data
+            } catch (error) {
+                this.errorMessage =
+                    error.name === 'AbortError'
+                        ? 'Request timed out, please try refreshing the page.'
+                        : `${error.name} ${error.message}. Couldn't complete this action.`
+                this.errorMessageType = 'error'
+            }
         }
     }
 }
 </script>
+
 <style scoped lang="scss">
 .modal {
     --bs-modal-width: 800px;
 }
+
 .profile {
     &-picture {
         width: 100px;
         height: 100px;
         object-fit: cover;
     }
+
     &-plan-information {
         width: 100%;
+
         @media (min-width: breakpoints('lg')) {
             width: auto;
         }
     }
+
     &-edit-icon {
         width: 25px;
         height: 25px;
         cursor: pointer;
     }
+
     &-container {
         padding: spacers('md');
 
@@ -830,22 +1022,27 @@ export default {
         svg {
             width: 30px;
         }
+
         &:hover {
             background: color('light-20');
         }
     }
+
     &.delete {
         svg {
             width: 30px;
         }
+
         &:hover {
             background: color('danger');
         }
     }
+
     &:hover {
         background: color('primary');
     }
 }
+
 .inline-custom-form {
     &-btn {
         border-radius: 50%;
@@ -857,13 +1054,16 @@ export default {
         margin-left: 10px;
         align-items: center;
         justify-content: center;
+
         svg {
             width: 35px;
         }
     }
+
     label {
         top: -10px !important;
     }
+
     input {
         margin-top: 0 !important;
     }

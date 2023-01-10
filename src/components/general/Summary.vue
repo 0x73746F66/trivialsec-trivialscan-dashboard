@@ -63,20 +63,20 @@ export default {
             summaries: []
         }
     },
-    created() {
-        const channel = window.pusher.subscribe(
-            localStorage.getItem('/account/name')
-        )
-        channel.bind('trivial-scanner-status', (data) => {
-            if (data?.status === 'Complete') {
-                data.refId = this.shortReportId(data.report_id)
-                data.dateAgo = moment.utc(data.date).fromNow()
-                this.summaries.unshift(data)
-            }
-        })
-    },
     mounted() {
         this.fetchSummaries()
+        if (localStorage.getItem('/account/name')) {
+            const channel = window.pusher.subscribe(
+                localStorage.getItem('/account/name')
+            )
+            channel.bind('trivial-scanner-status', (data) => {
+                if (data?.status === 'Complete') {
+                    data.refId = this.shortReportId(data.report_id)
+                    data.dateAgo = moment.utc(data.date).fromNow()
+                    this.addRecord(data)
+                }
+            })
+        }
     },
     computed: {
         slicedSummaries() {
@@ -88,6 +88,9 @@ export default {
         }
     },
     methods: {
+        addRecord(report) {
+            this.summaries.unshift(report)
+        },
         shortReportId(reportId) {
             return reportId.replace(/[\W_]+/g, '').slice(0, 11)
         },

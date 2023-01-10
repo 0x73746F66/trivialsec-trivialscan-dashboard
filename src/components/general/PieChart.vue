@@ -1,73 +1,73 @@
 <template>
-  <Responsive class="w-100 pie-chart">
-    <template #main="{ width }">
-      <Chart
-        direction="circular"
-        :size="{ width: width + 50, height: 400 }"
-        :data="data"
-        :margin="{
-          left: Math.round((width - 360) / 2),
-          top: 20,
-          right: 0,
-          bottom: 20,
-        }"
-        :config="{ controlHover: false }"
-      >
-        <!-- :axis="axis" -->
+    <Responsive class="w-100 pie-chart">
+        <template #main="{ width }">
+            <Chart
+                direction="circular"
+                :size="{ width: width + 50, height: 400 }"
+                :data="data"
+                :margin="{
+                    left: Math.round((width - 360) / 2),
+                    top: 20,
+                    right: 0,
+                    bottom: 20
+                }"
+                :config="{ controlHover: false }"
+            >
+                <!-- :axis="axis" -->
 
-        <template #layers>
-          <Pie
-            :dataKeys="['name', 'num']"
-            :pie-style="{
-              innerRadius: 100,
-              padAngle: 0.05,
-              colors: ['#1abb9c', '#e2c878'],
-            }"
-          />
+                <template #layers>
+                    <Pie
+                        :dataKeys="['name', 'num']"
+                        :pie-style="{
+                            innerRadius: 100,
+                            padAngle: 0.05,
+                            colors: ['#1abb9c', '#e2c878']
+                        }"
+                    />
+                </template>
+                <template #widgets>
+                    <Tooltip
+                        :config="{
+                            name: {},
+                            num: { label: 'Value:' }
+                        }"
+                        hideLine
+                    />
+                </template>
+            </Chart>
         </template>
-        <template #widgets>
-          <Tooltip
-            :config="{
-              name: {},
-              num: { label: 'Value:' },
-            }"
-            hideLine
-          />
-        </template>
-      </Chart>
-    </template>
-  </Responsive>
+    </Responsive>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
-import { Chart, Responsive, Pie, Tooltip } from "vue3-charts";
+import { defineComponent, ref } from 'vue'
+import { Chart, Responsive, Pie, Tooltip } from 'vue3-charts'
 
 export default defineComponent({
-  name: "LineChart",
-  components: { Chart, Responsive, Pie, Tooltip },
-  props: {
-    inUse: Number,
-    available: Number,
-  },
-  setup(props) {
-    const data = [
-      { name: "In Use", num: props.inUse },
-      { name: "Available", num: props.available },
-    ];
+    name: 'LineChart',
+    components: { Chart, Responsive, Pie, Tooltip },
+    props: {
+        inUse: Number,
+        available: Number
+    },
+    setup(props) {
+        const data = [
+            { name: 'In Use', num: props.inUse || 0 },
+            { name: 'Available', num: props.available || 0 }
+        ]
 
-    return { data };
-  },
-});
+        return { data }
+    }
+})
 </script>
 
 <style lang="scss">
 .pie-chart {
-  position: relative;
-  width: 100%;
+    position: relative;
+    width: 100%;
 
-  .axis {
-    display: none;
-  }
+    .axis {
+        display: none;
+    }
 }
 </style>

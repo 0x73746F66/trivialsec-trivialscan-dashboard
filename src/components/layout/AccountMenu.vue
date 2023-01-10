@@ -32,8 +32,15 @@
             to="/account/webhooks"
             class="router-link-item font-color-light text-decoration-none"
         >
-            <IconWebhooks color="f0f0f0" class="router-link-icon" />
+            <IconIntegrationLight color="f0f0f0" class="router-link-icon" />
             Webhooks
+        </RouterLink>
+        <RouterLink
+            to="/account/host-config"
+            class="router-link-item font-color-light text-decoration-none"
+        >
+            <IconConfigure color="f0f0f0" class="router-link-icon" />
+            Configure
         </RouterLink>
     </div>
 </template>
@@ -43,7 +50,8 @@ import IconAccount from '@/components/icons/IconAccount.vue'
 import IconSession from '@/components/icons/IconSession.vue'
 import IconMembers from '@/components/icons/IconMembers.vue'
 import IconNotificationLight from '@/components/icons/IconNotificationLight.vue'
-import IconWebhooks from '@/components/icons/IconWebhooks.vue'
+import IconIntegrationLight from '@/components/icons/IconIntegrationLight.vue'
+import IconConfigure from '@/components/icons/IconConfigure.vue'
 </script>
 
 <script>
@@ -53,7 +61,8 @@ export default {
         IconSession,
         IconMembers,
         IconNotificationLight,
-        IconWebhooks
+        IconIntegrationLight,
+        IconConfigure
     }
 }
 </script>

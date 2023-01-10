@@ -10,9 +10,9 @@ import moment from 'moment'
 import CryptoJS from 'crypto-js'
 
 const app = createApp(App)
+app.config.globalProperties.$store = window.localStorage
 if (import.meta.env.DEV) {
     app.config.globalProperties.$log = console.log
-    app.config.globalProperties.$store = window.localStorage
     Pusher.logToConsole = true
 }
 
@@ -160,53 +160,45 @@ window.Api = {
         return response
     }
 }
-function MakeId(length) {
-    var result = ''
-    var characters =
-        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-    var charactersLength = characters.length
-    for (var i = 0; i < length; i++) {
-        result += characters.charAt(
-            Math.floor(Math.random() * charactersLength)
-        )
+window.user_notify = (title, body, options = {}) => {
+    function MakeId(length) {
+        let result = ''
+        const characters =
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+        let charactersLength = characters.length
+        for (let i = 0; i < length; i++) {
+            result += characters.charAt(
+                Math.floor(Math.random() * charactersLength)
+            )
+        }
+        return result
     }
-    return result
-}
-window.pusher = new Pusher(
-    'b8b37751841a44557ab2', // pragma: allowlist secret
-    { cluster: 'ap4' }
-)
-const channel = window.pusher.subscribe(localStorage.getItem('/account/name'))
-const template = (
-    eleId,
-    title,
-    message
-) => `<div id="${eleId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header">
-        <strong class="me-auto">${title}</strong>
-        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-    <div class="toast-body">
-        ${message}
-    </div>
-</div>`
-window.user_notify = (title, message, options = {}) => {
-    const { icon = '/favicon.png' } = options
+    function ToastTemplate(eleId, header, content) {
+        return `<div id="${eleId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto">${header}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            ${content}
+        </div>
+    </div>`
+    }
+    const { icon = '/favicon.png', delay = 15000 } = options
+    const toastContainer = document.querySelector('.toast-container')
     if (!('Notification' in window)) {
         if (import.meta.env.DEV) {
             console.log('This browser does not support desktop notification')
         }
-        const toastContainer = document.querySelector('.toast-container')
         if (toastContainer) {
             setTimeout(() => {
                 const toastId = MakeId(5)
                 toastContainer.insertAdjacentHTML(
                     'beforeend',
-                    template(toastId, title, message)
+                    ToastTemplate(toastId, title, body)
                 )
-                const toast = new Toast(document.getElementById(toastId), {
-                    delay: 15000
-                })
+                const toastEl = document.getElementById(toastId)
+                const toast = new Toast(toastEl, { delay })
                 toast.show()
             }, 1000)
         }
@@ -214,10 +206,7 @@ window.user_notify = (title, message, options = {}) => {
         if (import.meta.env.DEV) {
             console.log('Desktop notifications already granted')
         }
-        const notification = new Notification(title, {
-            body: message,
-            icon: icon
-        })
+        const notification = new Notification(title, { body, icon })
         if (options.onclick instanceof Function) {
             notification.onclick = options.onclick
         }
@@ -227,27 +216,20 @@ window.user_notify = (title, message, options = {}) => {
         }
         Notification.requestPermission().then((permission) => {
             if (permission === 'granted') {
-                const notification = new Notification(title, {
-                    body: message,
-                    icon: icon
-                })
+                const notification = new Notification(title, { body, icon })
                 if (options.onclick instanceof Function) {
                     notification.onclick = options.onclick
                 }
             } else {
-                const toastContainer =
-                    document.querySelector('.toast-container')
                 if (toastContainer) {
                     setTimeout(() => {
                         const toastId = MakeId(5)
                         toastContainer.insertAdjacentHTML(
                             'beforeend',
-                            template(toastId, title, message)
+                            ToastTemplate(toastId, title, body)
                         )
-                        const toast = new Toast(
-                            document.getElementById(toastId),
-                            { delay: 15000 }
-                        )
+                        const toastEl = document.getElementById(toastId)
+                        const toast = new Toast(toastEl, { delay })
                         toast.show()
                     }, 1000)
                 }
@@ -257,44 +239,53 @@ window.user_notify = (title, message, options = {}) => {
         if (import.meta.env.DEV) {
             console.log(`Desktop notifications denied`)
         }
-        const toastContainer = document.querySelector('.toast-container')
         if (toastContainer) {
             setTimeout(() => {
                 const toastId = MakeId(5)
                 toastContainer.insertAdjacentHTML(
                     'beforeend',
-                    template(toastId, title, message)
+                    ToastTemplate(toastId, title, message)
                 )
-                const toast = new Toast(document.getElementById(toastId), {
-                    delay: 15000
-                })
+                const toastEl = document.getElementById(toastId)
+                const toast = new Toast(toastEl, { delay })
                 toast.show()
             }, 1000)
         }
     }
 }
-
-channel.bind('trivial-scanner-status', (data) => {
-    if (data?.status === 'Complete') {
-        window.user_notify(
-            `${data.targets[0].transport.hostname}:${data.targets[0].transport.port}`,
-            `${data.type} ${data.status}`,
-            {
-                onclick: (event) => {
-                    event.preventDefault()
-                    window.open(
-                        `https://${
-                            import.meta.env.DEV ? 'dev' : 'www'
-                        }.trivialsec.com${data.results_uri}`,
-                        '_blank'
-                    )
-                }
+window.initPusher = () => {
+    if (!window.pusher && localStorage.getItem('/account/name')) {
+        window.pusher = new Pusher(
+            'b8b37751841a44557ab2', // pragma: allowlist secret
+            { cluster: 'ap4' }
+        )
+        const channel = window.pusher.subscribe(
+            localStorage.getItem('/account/name')
+        )
+        channel.bind('trivial-scanner-status', (data) => {
+            if (data?.status === 'Complete') {
+                window.user_notify(
+                    `${data.targets[0].transport.hostname}:${data.targets[0].transport.port}`,
+                    `${data.type} ${data.status}`,
+                    {
+                        onclick: (event) => {
+                            event.preventDefault()
+                            window.open(
+                                `https://${
+                                    import.meta.env.DEV ? 'dev' : 'www'
+                                }.trivialsec.com${data.results_uri}`,
+                                '_blank'
+                            )
+                        }
+                    }
+                )
+            } else {
+                window.user_notify(
+                    `${data.hostname}:${data.port}`,
+                    `${data.type} ${data.status}`
+                )
             }
-        )
-    } else {
-        window.user_notify(
-            `${data.hostname}:${data.port}`,
-            `${data.type} ${data.status}`
-        )
+        })
     }
-})
+}
+document.addEventListener('DOMContentLoaded', window.initPusher)

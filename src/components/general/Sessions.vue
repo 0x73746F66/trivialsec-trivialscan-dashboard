@@ -7,13 +7,13 @@
             <h3 class="font-color-light font-lg-b modal-invite-header">
                 Sessions
             </h3>
-            <ValidationMessage
-                v-if="errorMessage.length > 0"
-                class="justify-content-between"
-                :message="errorMessage"
-                :type="errorMessageType"
-            />
         </div>
+        <ValidationMessage
+            v-if="errorMessage.length > 0"
+            class="justify-content-between"
+            :message="errorMessage"
+            :type="errorMessageType"
+        />
         <div class="margin-top-sm">
             <Swiper
                 :modules="modules"
@@ -275,7 +275,7 @@ export default {
                     this.loading = false
                     return
                 }
-                this.errorMessage = 'This member was deleted'
+                this.errorMessage = 'This session was deleted'
                 this.errorMessageType = 'success'
                 for (const [index, session] of this.sessions.entries()) {
                     if (session.session_token === sessionToken) {

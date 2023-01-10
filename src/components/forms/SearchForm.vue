@@ -391,6 +391,12 @@ export default {
             this.searchResults.reports = []
 
             if (this.searchInput.length > 0) {
+                if (this.searchInput.includes('://')) {
+                    this.searchInput = this.searchInput.split('://')[1]
+                }
+                if (this.searchInput.includes('/')) {
+                    this.searchInput = this.searchInput.split('/')[0]
+                }
                 this.loading = true
                 try {
                     const response = await Api.get(

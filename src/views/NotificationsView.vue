@@ -143,6 +143,7 @@
         </div>
     </main>
 </template>
+
 <script setup>
 import AccountMenu from '@/components/layout/AccountMenu.vue'
 import Toggle from '@/components/general/Toggle.vue'
@@ -184,9 +185,8 @@ export default {
     methods: {
         async handleToggle(event) {
             this.loading = true
-            const targetUrl = `/notification/${
-                event.target.checked ? 'enable' : 'disable'
-            }/${event.target.name}`
+            const action = event.target.checked ? 'enable' : 'disable'
+            const targetUrl = `/notification/${action}/${event.target.name}`
             try {
                 const response = await Api.get(targetUrl)
                 if (response.status !== 202) {
@@ -196,6 +196,8 @@ export default {
                     return
                 }
                 this.notifications[event.target.name] = event.target.checked
+                this.message = `${action}d notification ${event.target.name} event`
+                this.messageType = `success`
             } catch (error) {
                 this.message =
                     error.name === 'AbortError'

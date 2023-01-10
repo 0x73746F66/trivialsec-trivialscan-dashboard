@@ -39,7 +39,8 @@
         "sonarlint.disableTelemetry": true,
         "cSpell.words": [
             "swiper",
-            "trivialscan"
+            "trivialscan",
+            "trivialsec"
         ]
     },
     "extensions": {

@@ -80,8 +80,9 @@ const routes = [
                     data?.access_token || localStorage.getItem('/session/key')
                 )
             }
+            window.initPusher()
             if (localStorage.getItem('/session/key')) {
-                next('/dashboard')
+                next('/profile')
             } else {
                 next('/')
             }
@@ -112,7 +113,7 @@ const routes = [
                 )
             }
             if (localStorage.getItem('/session/key')) {
-                next('/dashboard')
+                next('/profile')
             } else {
                 next('/')
             }

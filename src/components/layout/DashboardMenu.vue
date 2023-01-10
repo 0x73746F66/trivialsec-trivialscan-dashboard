@@ -1,13 +1,6 @@
 <template>
     <div class="router-link-container margin-top-sm">
         <RouterLink
-            to="/dashboard"
-            class="router-link-item font-color-light text-decoration-none"
-        >
-            <IconDashboard color="f0f0f0" class="router-link-icon" />
-            Dashboard
-        </RouterLink>
-        <RouterLink
             to="/reports"
             class="router-link-item font-color-light text-decoration-none"
         >
@@ -34,6 +27,13 @@
         >
             <IconCertificate color="f0f0f0" class="router-link-icon" />
             Certificates
+        </RouterLink>
+        <RouterLink
+            to="/compliance"
+            class="router-link-item font-color-light text-decoration-none"
+        >
+            <IconDashboard color="f0f0f0" class="router-link-icon" />
+            Compliance
         </RouterLink>
     </div>
 </template>

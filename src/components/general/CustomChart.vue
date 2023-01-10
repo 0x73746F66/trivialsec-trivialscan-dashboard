@@ -38,11 +38,15 @@ import CustomChartDefs from './CustomChartDefs.vue'
 export default defineComponent({
     name: 'LineChart',
     props: {
-        chartData: Object,
+        options: {
+            type: Object,
+            default: {}
+        },
+        chartData: {
+            type: Object,
+            default: {}
+        },
         label: String
-    },
-    data() {
-        return {}
     },
     components: { Chart, Grid, Line, Area, CustomChartDefs },
     setup(props) {
@@ -56,17 +60,7 @@ export default defineComponent({
             right: 0,
             bottom: 80
         })
-        const options = ref({
-            scales: {
-                xAxes: [
-                    {
-                        ticks: {
-                            minRotation: 90
-                        }
-                    }
-                ]
-            }
-        })
+        const options = ref(props.options)
         const axis = ref({
             primary: {
                 type: 'band'

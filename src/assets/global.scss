@@ -1,370 +1,368 @@
-@import "@bootstrap/bootstrap";
-@import "@/assets/variables";
-@import "@/assets/fonts";
-@import "@/assets/forms";
+@import '@bootstrap/bootstrap';
+@import '@/assets/variables';
+@import '@/assets/fonts';
+@import '@/assets/forms';
 
 @each $name, $spacer in $spacers {
-  .margin-#{$name} {
-    margin: $spacer;
-  }
-  .margin-right-#{$name} {
-    margin-right: $spacer;
-  }
-  .margin-left-#{$name} {
-    margin-left: $spacer;
-  }
-  .margin-bottom-#{$name} {
-    margin-bottom: $spacer;
-  }
-  .margin-top-#{$name} {
-    margin-top: $spacer;
-  }
-  .padding-#{$name} {
-    padding: $spacer;
-  }
-  .padding-right-#{$name} {
-    padding-right: $spacer;
-  }
-  .padding-left-#{$name} {
-    padding-left: $spacer;
-  }
-  .padding-bottom-#{$name} {
-    padding-bottom: $spacer;
-  }
-  .padding-top-#{$name} {
-    padding-top: $spacer;
-  }
+    .margin-#{$name} {
+        margin: $spacer;
+    }
+    .margin-right-#{$name} {
+        margin-right: $spacer;
+    }
+    .margin-left-#{$name} {
+        margin-left: $spacer;
+    }
+    .margin-bottom-#{$name} {
+        margin-bottom: $spacer;
+    }
+    .margin-top-#{$name} {
+        margin-top: $spacer;
+    }
+    .padding-#{$name} {
+        padding: $spacer;
+    }
+    .padding-right-#{$name} {
+        padding-right: $spacer;
+    }
+    .padding-left-#{$name} {
+        padding-left: $spacer;
+    }
+    .padding-bottom-#{$name} {
+        padding-bottom: $spacer;
+    }
+    .padding-top-#{$name} {
+        padding-top: $spacer;
+    }
 }
 
 @each $name, $radius in $radius {
-  .border-radius-#{$name} {
-    border-radius: $radius;
-  }
+    .border-radius-#{$name} {
+        border-radius: $radius;
+    }
 }
 
 @each $name, $size in $font-sizes {
-  .font-#{$name} {
-    font-size: $size;
-    font-weight: 300;
-    font-family: Montserrat, sans-serif;
-  }
+    .font-#{$name} {
+        font-size: $size;
+        font-weight: 300;
+        font-family: Montserrat, sans-serif;
+    }
 
-  .font-#{$name}-sb {
-    font-size: $size;
-    font-weight: 500;
-    font-family: Montserrat-semi-bold, sans-serif;
-  }
+    .font-#{$name}-sb {
+        font-size: $size;
+        font-weight: 500;
+        font-family: Montserrat-semi-bold, sans-serif;
+    }
 
-  .font-#{$name}-b {
-    font-size: $size;
-    font-weight: 800;
-    font-family: Montserrat-bold, sans-serif;
-  }
+    .font-#{$name}-b {
+        font-size: $size;
+        font-weight: 800;
+        font-family: Montserrat-bold, sans-serif;
+    }
 }
 
 @each $name, $color in $colors {
-  .bg-#{$name} {
-    background: $color;
-  }
-  .border-color-#{$name} {
-    border-color: $color;
-  }
-  .border-#{$name} {
-    border: 1px solid $color;
-  }
-  .font-color-#{$name} {
-    color: $color;
-  }
-  .btn-fill-#{$name}-sm {
-    background: $color;
-    padding: spacers("xs") spacers("sm");
-    border-radius: radius("sm");
-    border: 1px solid $color;
-  }
-  .btn-fill-#{$name} {
-    background: $color;
-    padding: spacers("xs") spacers("sm");
-    border-radius: radius("sm");
-    border: 1px solid $color;
-  }
-  .btn-fill-#{$name}-full {
-    background: $color;
-    padding: spacers("xs") spacers("sm");
-    border-radius: radius("sm");
-    border: 1px solid $color;
-    width: 100%;
-  }
-  .btn-outline {
-    border-radius: radius("sm");
-    background: none;
-    transition: 0.2s linear;
-    &:hover {
-      color: color("light");
+    .bg-#{$name} {
+        background: $color;
     }
-  }
-  .btn-outline-#{$name}-sm {
-    @extend .btn-outline;
-    border: 2px solid $color;
-    padding: spacers("xs") spacers("sm");
-    &:hover {
-      background: $color;
+    .border-color-#{$name} {
+        border-color: $color;
     }
-  }
-  .btn-outline-#{$name} {
-    @extend .btn-outline;
-    border: 2px solid $color;
-    padding: spacers("xs") spacers("sm");
-    &:hover {
-      background: $color;
+    .border-#{$name} {
+        border: 1px solid $color;
     }
-  }
-  .btn-outline-#{$name}-full {
-    @extend .btn-outline;
-    border: 2px solid $color;
-    padding: spacers("xs") spacers("sm");
-    width: 100%;
-    &:hover {
-      background: $color;
+    .font-color-#{$name} {
+        color: $color;
     }
-  }
+    .btn-fill-#{$name}-sm {
+        background: $color;
+        padding: spacers('xs') spacers('sm');
+        border-radius: radius('sm');
+        border: 1px solid $color;
+    }
+    .btn-fill-#{$name} {
+        background: $color;
+        padding: spacers('xs') spacers('sm');
+        border-radius: radius('sm');
+        border: 1px solid $color;
+    }
+    .btn-fill-#{$name}-full {
+        background: $color;
+        padding: spacers('xs') spacers('sm');
+        border-radius: radius('sm');
+        border: 1px solid $color;
+        width: 100%;
+    }
+    .btn-outline {
+        border-radius: radius('sm');
+        background: none;
+        transition: 0.2s linear;
+        &:hover {
+            color: color('light');
+        }
+    }
+    .btn-outline-#{$name}-sm {
+        @extend .btn-outline;
+        border: 2px solid $color;
+        padding: spacers('xs') spacers('sm');
+        &:hover {
+            background: $color;
+        }
+    }
+    .btn-outline-#{$name} {
+        @extend .btn-outline;
+        border: 2px solid $color;
+        padding: spacers('xs') spacers('sm');
+        &:hover {
+            background: $color;
+        }
+    }
+    .btn-outline-#{$name}-full {
+        @extend .btn-outline;
+        border: 2px solid $color;
+        padding: spacers('xs') spacers('sm');
+        width: 100%;
+        &:hover {
+            background: $color;
+        }
+    }
 }
 @each $name, $size in $breakpoint-sizes {
-  @media (max-width: $size) {
-    .hide-#{$name} {
-      display: none !important;
+    @media (max-width: $size) {
+        .hide-#{$name} {
+            display: none !important;
+        }
+        .break-#{$name} {
+            flex-basis: 100%;
+            height: 0;
+        }
+        .break-col-#{$name} {
+            flex-basis: 100%;
+            width: 0;
+        }
     }
-    .break-#{$name} {
-      flex-basis: 100%;
-      height: 0;
-    }
-    .break-col-#{$name} {
-      flex-basis: 100%;
-      width: 0;
-    }
-  }
 }
 
 // Global Rules
 body {
-  background-color: color("dark") !important;
-  &::-webkit-scrollbar {
-    width: 0.4em;
-  }
-  &::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px color("primary-20");
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: color("primary");
-    outline: 1px solid color("primary");
-  }
+    background-color: color('dark') !important;
+    &::-webkit-scrollbar {
+        width: 0.4em;
+    }
+    &::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 6px color('primary-20');
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: color('primary');
+        outline: 1px solid color('primary');
+    }
 }
 ::selection,
 ::-moz-selection {
-  color: color("light");
-  background: color("primary-60");
+    color: color('light');
+    background: color('primary-60');
 }
 
 .pre-line {
-  white-space: pre-line;
+    white-space: pre-line;
 }
 .pre-wrap {
-  white-space: pre-wrap;
+    white-space: pre-wrap;
 }
 .nowrap {
-  white-space: nowrap;
+    white-space: nowrap;
 }
 .break-spaces {
-  white-space: break-spaces;
+    white-space: break-spaces;
 }
 li::marker {
-  color: color("primary");
+    color: color('primary');
 }
 a {
-  &:hover {
-    color: color("secondary");
-  }
+    &:hover {
+        color: color('secondary');
+    }
 }
 main {
-  min-height: 800px;
+    min-height: 800px;
 }
 strong {
-  font-weight: bold;
+    font-weight: bold;
 }
 blockquote {
-  margin: 0;
-  padding: 0 0 0 1em;
-  margin-block-start: 0;
-  margin-block-end: 0;
-  margin-inline-start: 1em;
-  margin-inline-end: 0;
-  border-left: 0.3em solid color("light");
-  quotes: "\201C" "\201D" "\2018" "\2019";
+    margin: 0;
+    padding: 0 0 0 1em;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-inline-start: 1em;
+    margin-inline-end: 0;
+    border-left: 0.3em solid color('light');
+    quotes: '\201C' '\201D' '\2018' '\2019';
 
-  &:before {
-    color: color("light");
-    content: open-quote;
-    font-size: 4em;
-    line-height: 0.1em;
-    margin-right: 0.25em;
-    vertical-align: -0.4em;
-  }
-  p {
-    display: inline;
-  }
+    &:before {
+        color: color('light');
+        content: open-quote;
+        font-size: 4em;
+        line-height: 0.1em;
+        margin-right: 0.25em;
+        vertical-align: -0.4em;
+    }
+    p {
+        display: inline;
+    }
 }
 .padding {
-  &-bottom-none {
-    padding-bottom: none;
-  }
-  &-top-none {
-    padding-top: none;
-  }
-  &-left-none {
-    padding-left: none;
-  }
-  &-right-none {
-    padding-right: none;
-  }
-  &-none {
-    padding: none;
-  }
+    &-bottom-none {
+        padding-bottom: none;
+    }
+    &-top-none {
+        padding-top: none;
+    }
+    &-left-none {
+        padding-left: none;
+    }
+    &-right-none {
+        padding-right: none;
+    }
+    &-none {
+        padding: none;
+    }
 }
 
 .max-w {
-  &lg-300 {
-    @media (min-width: breakpoints("lg")) {
-      max-width: 300px;
+    &lg-300 {
+        @media (min-width: breakpoints('lg')) {
+            max-width: 300px;
+        }
     }
-  }
 }
 
 .h-100 {
-  height: 100%;
+    height: 100%;
 }
 
 .w {
-  &-lg {
-    @media (min-width: breakpoints("lg")) {
-      &-75 {
-        width: 75% !important;
-      }
+    &-lg {
+        @media (min-width: breakpoints('lg')) {
+            &-75 {
+                width: 75% !important;
+            }
+        }
     }
-  }
 }
 
 .max-h-320px {
-  height: 320px !important;
+    height: 320px !important;
 }
 
 .border {
-  &-bottom {
-    &-primary {
-      border-bottom: 1px solid color("primary");
+    &-bottom {
+        &-primary {
+            border-bottom: 1px solid color('primary');
+        }
+        &-light-20 {
+            border-bottom: 1px solid color('light-20');
+        }
     }
-    &-light-20 {
-      border-bottom: 1px solid color("light-20");
+    &-radius {
+        &-round {
+            border-radius: 50%;
+        }
     }
-  }
-  &-radius {
-    &-round {
-      border-radius: 50%;
-    }
-  }
 }
 
 .pill {
-  border-radius: radius("md");
-  margin-bottom: spacers("xs");
-  padding: 5px spacers("xs");
-  text-align: left;
-  &-dark {
-    background: color("dark-20");
-    color: color("light");
-  }
+    border-radius: radius('md');
+    margin-bottom: spacers('xs');
+    padding: 5px spacers('xs');
+    text-align: left;
+    &-dark {
+        background: color('dark-20');
+        color: color('light');
+    }
 }
 
 .text {
-  &-right {
-    text-align: right;
-  }
-  &-left {
-    text-align: left;
-  }
+    &-right {
+        text-align: right;
+    }
+    &-left {
+        text-align: left;
+    }
 }
 
 .bg-none {
-  background: none !important;
+    background: none !important;
 }
 
 .max-w-100 {
-  max-width: 100%;
+    max-width: 100%;
 }
 
 .max-w-90 {
-  max-width: 90%;
+    max-width: 90%;
 }
 
 .max-w-80 {
-  max-width: 80%;
+    max-width: 80%;
 }
 
 .cursor-pointer {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .word-break-all {
-  word-break: break-all;
+    word-break: break-all;
 }
 .capitalize {
-  text-transform: capitalize;
+    text-transform: capitalize;
 }
 
 .overflow-wrap-anywhere {
-  overflow-wrap: anywhere;
+    overflow-wrap: anywhere;
 }
 .break {
-  flex-basis: 100%;
-  height: 0;
+    flex-basis: 100%;
+    height: 0;
 }
 .break-col {
-  flex-basis: 100%;
-  width: 0;
+    flex-basis: 100%;
+    width: 0;
 }
 
-.swiper-pagination {
-  position: relative !important;
-  bottom: 0 !important;
-  .swiper-pagination-bullet-active {
-    background: color("primary");
-  }
+.swiper-pagination .swiper-pagination-bullet-active {
+    background: color('primary');
 }
-
+.swiper-wrapper {
+    margin-bottom: sizes('lg');
+}
 .word-break {
-  word-break: break-word;
+    word-break: break-word;
 }
 
 [title] {
-  cursor: help;
-  border-bottom: 1px dotted color("primary");
+    cursor: help;
+    border-bottom: 1px dotted color('primary');
 }
 
 .button-prev,
 .button-next {
-  height: auto;
-  background: none;
-  border: none;
+    height: auto;
+    background: none;
+    border: none;
 
-  .cert-icon {
-    width: 25px;
-    height: 25px;
-  }
-  &.swiper-button-disabled {
-    filter: opacity(0.5);
-  }
+    .cert-icon {
+        width: 25px;
+        height: 25px;
+    }
+    &.swiper-button-disabled {
+        filter: opacity(0.5);
+    }
 }
 
 .button-prev {
-  .cert-icon {
-    transform: rotate(180deg);
-  }
+    .cert-icon {
+        transform: rotate(180deg);
+    }
 }

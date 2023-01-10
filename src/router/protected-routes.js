@@ -1,8 +1,8 @@
 const routes = [
     {
-        path: '/dashboard',
-        name: 'dashboard',
-        component: () => import('@/views/DashboardView.vue')
+        path: '/compliance',
+        name: 'compliance',
+        component: () => import('@/views/ComplianceView.vue')
     },
     {
         path: '/reports',
@@ -88,6 +88,11 @@ const routes = [
         path: '/account/webhooks',
         name: 'webhooks',
         component: () => import('@/views/WebhooksView.vue')
+    },
+    {
+        path: '/account/host-config',
+        name: 'host-config',
+        component: () => import('@/views/HostConfigView.vue')
     },
     {
         path: '/support',

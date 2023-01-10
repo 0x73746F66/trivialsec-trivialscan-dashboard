@@ -50,18 +50,18 @@
                         >
                             <div class="d-flex flex-column">
                                 <span
-                                    v-for="(http, id) in t.http"
-                                    :key="id"
+                                    v-if="t.http.length > 0"
                                     class="http-status"
-                                    :class="{
-                                        'font-color-primary':
-                                            http.status_code === 200,
-                                        'font-color-danger':
-                                            http.status_code !== 200
-                                    }"
                                 >
                                     <span
-                                        class="font-sm-b padding-xxs font-color-dark status-code-pill"
+                                        v-for="(http, key) in t.http"
+                                        :key="key"
+                                        :title="
+                                            `${http.title}\n${
+                                                http.request_url || ''
+                                            }`.trim()
+                                        "
+                                        class="font-sm-b padding-xxs margin-right-xxs font-color-dark status-code-pill"
                                         :class="{
                                             success:
                                                 http.status_code.toString()[0] ===
@@ -69,9 +69,6 @@
                                         }"
                                     >
                                         {{ http.status_code }}
-                                    </span>
-                                    <span class="margin-left-xxs">
-                                        {{ http.title }}
                                     </span>
                                 </span>
                                 <span class="d-block">

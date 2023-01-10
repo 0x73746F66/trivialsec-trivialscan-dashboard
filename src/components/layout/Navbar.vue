@@ -51,9 +51,9 @@
                         >
                             <RouterLink
                                 v-if="!!$store.getItem('/session/key')"
-                                to="/dashboard"
+                                to="/reports"
                                 class="router-link font-base font-color-light text-decoration-none margin-right-md"
-                                >Dashboard</RouterLink
+                                >Reports</RouterLink
                             >
                             <RouterLink
                                 v-if="!!$store.getItem('/session/key')"
@@ -129,9 +129,51 @@
         >
             <RouterLink
                 v-if="!!$store.getItem('/session/key')"
-                to="/dashboard"
+                to="/reports"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
-                >Dashboard</RouterLink
+                >Reports</RouterLink
+            >
+            <RouterLink
+                v-if="!!$store.getItem('/session/key')"
+                to="/hosts"
+                class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                >Hosts</RouterLink
+            >
+            <RouterLink
+                v-if="!!$store.getItem('/session/key')"
+                to="/profile"
+                class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                >Profile</RouterLink
+            >
+            <RouterLink
+                v-if="!!$store.getItem('/session/key')"
+                to="/profile/sessions"
+                class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                >My Sessions</RouterLink
+            >
+            <RouterLink
+                v-if="!!$store.getItem('/session/key')"
+                to="/account/members"
+                class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                >Profile</RouterLink
+            >
+            <RouterLink
+                v-if="!!$store.getItem('/session/key')"
+                to="/profile/notifications"
+                class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                >Notifications</RouterLink
+            >
+            <RouterLink
+                v-if="!!$store.getItem('/session/key')"
+                to="/account/webhooks"
+                class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                >Webhooks</RouterLink
+            >
+            <RouterLink
+                v-if="!!$store.getItem('/session/key')"
+                to="/account/host-config"
+                class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                >Configure</RouterLink
             >
             <RouterLink
                 v-if="!!$store.getItem('/session/key')"
@@ -247,7 +289,6 @@ header {
     width: 100%;
     max-width: 100vw;
     z-index: 100;
-    background: color('dark-40');
     backdrop-filter: blur(8px);
     position: fixed;
     transition: 0.2s linear;

@@ -20,11 +20,12 @@
             <span
                 class="col-2 col-lg-6 justify-content-end align-items-end text-right"
             >
-                <div class="delete-client-modal">
+                <div class="delete-report-modal">
                     <Modal
                         :id="`deleteReport${report.refId}`"
                         label="delete-report-header"
                         :dialogClass="report.refId"
+                        :backdrop="false"
                     >
                         <template v-slot:button="buttonProps">
                             <button class="btn-delete" v-bind="buttonProps">
@@ -266,6 +267,12 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+.modal {
+    --bs-modal-width: 800px;
+}
+.delete-report-modal {
+    overflow: hidden;
+}
 @media (max-width: breakpoints('sm')) {
     .break-mobile {
         display: block !important;

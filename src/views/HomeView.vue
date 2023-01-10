@@ -249,36 +249,37 @@ export default {
                         'Early Warning filters millions of events that we process every day and, using the IP and domain names you provide, correlates those which are relevant to your organisation into daily notification or immediate alerts'
                 },
                 // {
-                //   id: 4,
+                //   id: 5,
                 //   icon: IconLightningLight,
                 //   href: "/feature/trivial-attacks",
                 //   header: "Trivial Attacks",
                 //   description: "We automate many novel yet trivial attack vectors, and perform evaluations using standard tooling so you don't have to maintain and use numerous tools yourself",
                 // },
+                {
+                    id: 6,
+                    icon: IconIntLight,
+                    href: '/feature/threat-intel',
+                    header: 'Threat Intelligence',
+                    description:
+                        'Our module will help you find the signal from a vast source of OSINT and vendor data feeds, our curated blocklists can be downloaded or fetched by your network security devices'
+                },
                 // {
-                //   id: 5,
-                //   icon: IconIntLight,
-                //   href: "/feature/threat-intel",
-                //   header: "Threat Intelligence",
-                //   description: "Our module will help you find the signal from a vast source of OSINT and vendor data feeds, our curated blocklists can be downloaded or fetched by your network security devices",
-                // },
-                // {
-                //   id: 6,
+                //   id: 7,
                 //   icon: IconFeedLight,
                 //   href: "/feature/security-feeds",
                 //   header: "Feeds",
                 //   description: "There is a lot of written form security information published every hour relevant to your organisation. Our Research & Advisory feed is a curated source of relevant news for security analysts and CISO's, using our dashboard or any RSS viewer",
                 // },
+                // {
+                //     id: 8,
+                //     icon: IconIntegrationLight,
+                //     href: '/feature/webhooks',
+                //     header: 'Event Firehose',
+                //     description:
+                //         'We promote automation using Webhooks for real-time integration into your existing systems, simply generate a client secret and start receiving data immediately'
+                // },
                 {
-                    id: 7,
-                    icon: IconIntegrationLight,
-                    href: '/feature/webhooks',
-                    header: 'Event Firehose',
-                    description:
-                        'We promote automation using Webhooks for real-time integration into your existing systems, simply generate a client secret and start receiving data immediately'
-                },
-                {
-                    id: 8,
+                    id: 9,
                     icon: IconCliLight,
                     href: '/feature/developer-tools',
                     header: 'Developer Tools',
@@ -286,35 +287,35 @@ export default {
                         'API & CLI options enable automation via DevOps pipelines and secure the SDLC at any stage you require, as well as provide the means to do regular scanning by security professionals of any level of technical skill.'
                 },
                 // {
-                //   id: 9,
+                //   id: 10,
                 //   icon: IconGlobeLight,
                 //   href: "/feature/researchers",
                 //   header: "Security Researchers",
                 //   description: "We have a vast database of the public internet, compiled from the authoritative list of every registered domain using zone files (and not IP address probing)",
                 // },
                 // {
-                //   id: 10,
+                //   id: 11,
                 //   icon: IconFishLight,
                 //   href: "/feature/phishing-alerts",
                 //   header: "Phish Alert",
                 //   description: "Know when sites are copied or domains with similarities for a phishing attacks are registered We adhere to the concept of interoperability. You control your data, and we enable you with a growing list of supported open standard data exchange formats",
                 // },
-                // {
-                //     id: 11,
-                //     icon: IconTuneLight,
-                //     href: '/feature/open-source',
-                //     header: 'On-prem / Self-hosting',
-                //     description:
-                //         'While Trivial Security was created to make accessible many features typically out of reach to most organisations, our solutions equally benefit large enterprise with data sovereignty and complete control needs also'
-                // },
                 {
                     id: 12,
-                    icon: IconData,
-                    href: '/feature/interoperability',
-                    header: 'Interoperability',
+                    icon: IconTuneLight,
+                    href: '/feature/open-source',
+                    header: 'On-prem / Self-hosting',
                     description:
-                        'We adhere to open standards. You control your data, and we enable you with a growing list of supported data exchange formats so you can access and control your data at all times'
+                        'While Trivial Security was created to make accessible many features typically out of reach to most organisations, our solutions equally benefit large enterprise with data sovereignty and complete control needs also'
                 }
+                // {
+                //     id: 13,
+                //     icon: IconData,
+                //     href: '/feature/interoperability',
+                //     header: 'Interoperability',
+                //     description:
+                //         'We adhere to open standards. You control your data, and we enable you with a growing list of supported data exchange formats so you can access and control your data at all times'
+                // }
             ]
         }
     },
