@@ -1,16 +1,7 @@
 <template>
-    <LoadingComponent class="loading" :class="{ inactive: !loading }" />
     <div class="clients-section d-flex flex-column margin-top-lg">
         <div class="d-flex justify-content-between align-items-center">
             <h3 class="font-color-light font-lg-b">Clients</h3>
-        </div>
-        <div class="d-flex w-100">
-            <ValidationMessage
-                v-if="errorMessage.length > 0"
-                class="justify-content-between"
-                :message="errorMessage"
-                :type="errorMessageType"
-            />
         </div>
         <div class="margin-top-sm">
             <Swiper
@@ -188,11 +179,9 @@ import { Popover } from 'bootstrap'
 
 <script>
 export default {
-    emits: ['update:errorMessage', 'update:errorMessageType'],
+    emits: ['update:loading', 'update:errorMessage', 'update:errorMessageType'],
     props: {
-        clients: { type: Array, default: [] },
-        errorMessage: { type: String, default: '' },
-        errorMessageType: { type: String, default: '' }
+        clients: { type: Array, default: [] }
     },
     components: {
         Swiper,
@@ -253,7 +242,7 @@ export default {
             }, 3000)
         },
         async deleteClient(event) {
-            this.loading = true
+            this.$emit('update:loading', true)
             try {
                 const clientName = event.target.elements['ClientName'].value
                 const response = await Api.delete(`/client/${clientName}`)
@@ -263,7 +252,7 @@ export default {
                         "Something went wrong. Client couldn't be deleted"
                     )
                     this.$emit('update:errorMessageType', 'error')
-                    this.loading = false
+                    this.$emit('update:loading', false)
                     return
                 }
                 this.$emit('update:errorMessage', 'This client was deleted')
@@ -283,10 +272,10 @@ export default {
                 )
                 this.$emit('update:errorMessageType', 'error')
             }
-            this.loading = false
+            this.$emit('update:loading', false)
         },
         async fetchClients() {
-            this.loading = true
+            this.$emit('update:loading', true)
             try {
                 const response = await Api.get(`/clients`, { timeout: 30000 })
                 if (response.status === 204) {
@@ -295,7 +284,7 @@ export default {
                         'No clients are registered'
                     )
                     this.$emit('update:errorMessageType', 'warning')
-                    this.loading = false
+                    this.$emit('update:loading', false)
                     return
                 } else if (response.status !== 200) {
                     this.$emit(
@@ -303,7 +292,7 @@ export default {
                         `${response.status} ${response.statusText}`
                     )
                     this.$emit('update:errorMessageType', 'error')
-                    this.loading = false
+                    this.$emit('update:loading', false)
                     return
                 }
                 const data = await response.json()
@@ -320,12 +309,12 @@ export default {
                 )
                 this.$emit('update:errorMessageType', 'error')
             }
-            this.loading = false
+            this.$emit('update:loading', false)
         },
         async toggleClient($event, client_name) {
             const deactivate_url = `/deactivated/${client_name}`
             const activate_url = `/activate/${client_name}`
-            this.loading = true
+            this.$emit('update:loading', true)
             try {
                 if ($event.target.checked === true) {
                     const response = await Api.get(activate_url)
@@ -335,7 +324,7 @@ export default {
                             `${response.status} ${response.statusText}`
                         )
                         this.$emit('update:errorMessageType', 'error')
-                        this.loading = false
+                        this.$emit('update:loading', false)
                         return
                     }
                     this.$emit(
@@ -357,7 +346,7 @@ export default {
                             `${response.status} ${response.statusText}`
                         )
                         this.$emit('update:errorMessageType', 'error')
-                        this.loading = false
+                        this.$emit('update:loading', false)
                         return
                     }
                     this.$emit(
@@ -381,7 +370,7 @@ export default {
                 )
                 this.$emit('update:errorMessageType', 'error')
             }
-            this.loading = false
+            this.$emit('update:loading', false)
         }
     }
 }

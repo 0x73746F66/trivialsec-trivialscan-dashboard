@@ -33,13 +33,15 @@
                     </h2>
                     <ValidationMessage :message="message" :type="messageType" />
                     <div class="d-flex flex-column justify-content-between">
-                        <div
-                            v-for="(config, key) in configs"
-                            :key="key"
-                            class="d-flex margin-bottom-sm"
-                        >
-                            {{ config }}
-                        </div>
+                        <template v-for="(config, key) in configs" :key="key">
+                            <HostConfigForm
+                                v-if="!config.deleted"
+                                v-bind="config"
+                                v-model:loading="loading"
+                                v-model:message="message"
+                                v-model:messageType="messageType"
+                            />
+                        </template>
                     </div>
                 </div>
             </div>
@@ -93,6 +95,7 @@ export default {
                 const data = await response.json()
                 this.configs = data.map((conf) => {
                     conf.dateAgo = moment.utc(conf.timestamp).fromNow()
+                    conf.deleted = false
                     return conf
                 })
             } catch (error) {

@@ -533,8 +533,9 @@
                 >
                     <Clients
                         v-bind:clients="clients"
-                        v-model:errorMessage="clientsErrorMessage"
-                        v-model:errorMessageType="clientsErrorMessageType"
+                        v-model:loading="loading"
+                        v-model:errorMessage="errorMessage"
+                        v-model:errorMessageType="errorMessageType"
                     />
                 </div>
                 <div
@@ -563,8 +564,8 @@
                             innerStrokeColor="#1abb9c"
                             startColor="#f45e5e"
                             stopColor="#e2c878"
-                            strokeWidth="20"
-                            innerStrokeWidth="15"
+                            :strokeWidth="20"
+                            :innerStrokeWidth="15"
                             v-if="
                                 quotas?.monitoring?.used > 0 ||
                                 quotas?.monitoring?.total > 0
@@ -596,8 +597,8 @@
                             innerStrokeColor="#1abb9c"
                             startColor="#f45e5e"
                             stopColor="#e2c878"
-                            strokeWidth="20"
-                            innerStrokeWidth="15"
+                            :strokeWidth="20"
+                            :innerStrokeWidth="15"
                             v-if="
                                 quotas?.active?.used > 0 ||
                                 quotas?.active?.total > 0
@@ -632,8 +633,8 @@
                             innerStrokeColor="#1abb9c"
                             startColor="#f45e5e"
                             stopColor="#e2c878"
-                            strokeWidth="20"
-                            innerStrokeWidth="15"
+                            :strokeWidth="20"
+                            :innerStrokeWidth="15"
                             v-if="
                                 quotas?.passive?.used > 0 ||
                                 quotas?.passive?.total > 0
@@ -713,8 +714,6 @@ export default {
             billingEmail: '',
             upgradeFormMessage: '',
             upgradeFormMessageType: '',
-            clientsErrorMessage: '',
-            clientsErrorMessageType: '',
             loading: false
         }
     },
@@ -909,8 +908,8 @@ export default {
                     this.loading = false
                     return
                 }
-                this.clientsErrorMessage = 'New Credentials generated!'
-                this.clientsErrorMessageType = 'success'
+                this.errorMessage = 'New Credentials generated!'
+                this.errorMessageType = 'success'
                 const client = await response.json()
                 client.created = moment.utc(client.timestamp).fromNow()
                 this.clients.push(client)
