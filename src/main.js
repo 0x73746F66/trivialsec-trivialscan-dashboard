@@ -244,7 +244,7 @@ window.user_notify = (title, body, options = {}) => {
                 const toastId = MakeId(5)
                 toastContainer.insertAdjacentHTML(
                     'beforeend',
-                    ToastTemplate(toastId, title, message)
+                    ToastTemplate(toastId, title, body)
                 )
                 const toastEl = document.getElementById(toastId)
                 const toast = new Toast(toastEl, { delay })

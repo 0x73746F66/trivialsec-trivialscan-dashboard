@@ -89,7 +89,7 @@ export default {
     },
     methods: {
         addRecord(report) {
-            this.summaries.unshift(report)
+            this.summaries = [report].concat(this.summaries)
         },
         shortReportId(reportId) {
             return reportId.replace(/[\W_]+/g, '').slice(0, 11)

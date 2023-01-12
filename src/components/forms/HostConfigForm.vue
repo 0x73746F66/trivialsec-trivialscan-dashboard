@@ -2,61 +2,13 @@
     <div
         class="d-flex flex-column bg-dark-40 border-radius-sm padding-sm margin-bottom-lg"
     >
-        <div class="d-flex">
-            <div class="col-12 col-lg-6 font-lg-b font-color-secondary">
-                {{ hostname }}
-            </div>
-            <div class="col-12 col-lg-6">
-                <div class="d-flex justify-content-end delete-config-modal">
-                    <Modal
-                        v-if="!enabled"
-                        :id="`deleteConfig${id}`"
-                        label="delete-config-header"
-                        :backdrop="false"
-                    >
-                        <template v-slot:button="buttonProps">
-                            <button
-                                class="delete border-radius-lg"
-                                v-bind="buttonProps"
-                            >
-                                <IconTrash class="profile-edit-icon" />
-                            </button>
-                        </template>
-                        <template v-slot:modalTitle>
-                            <h5
-                                class="delete-config-header font-base font-color-light"
-                            >
-                                Are you sure you want to delete this
-                                configuration?
-                            </h5>
-                        </template>
-                        <template v-slot:modalContent>
-                            <form @submit.prevent="deleteConfig($event)">
-                                <input
-                                    type="hidden"
-                                    name="Hostname"
-                                    :value="hostname"
-                                />
-                                <button
-                                    type="submit"
-                                    class="btn-outline-danger-full font-color-danger font-sm"
-                                    data-bs-dismiss="modal"
-                                >
-                                    Yes
-                                </button>
-                            </form>
-                        </template>
-                    </Modal>
-                </div>
-            </div>
-        </div>
         <div class="d-flex align-items-center">
             <span class="font-sm-b font-color-light margin-right-xs"
                 >Monitoring</span
             >
             <Toggle
                 :defaultChecked="enabled"
-                @change="hostToggleChange($event, hostname)"
+                @change="hostToggleChange($event)"
             />
         </div>
         <div class="http-paths-field">
@@ -64,12 +16,7 @@
                 placeholder="Separate each path per line"
                 id="http-paths"
                 label="HTTP Paths"
-                :textDefault="
-                    path_names
-                        .filter((i) => typeof i === 'string')
-                        .map((i) => i.trim())
-                        .join('\n')
-                "
+                :textDefault="pathsField"
                 @change="handlePathNames"
             />
         </div>
@@ -79,18 +26,28 @@
                 id="ports"
                 size="sm"
                 label="Port Numbers"
-                :textDefault="
-                    ports.filter((i) => typeof i === 'number').join(',')
-                "
+                :textDefault="portsField"
                 @change="handlePorts"
             />
+            <div class="col-12" v-if="!enabled">
+                <div class="d-flex justify-content-end delete-config-modal">
+                    <form @submit.prevent="deleteConfig">
+                        <button
+                            type="submit"
+                            class="font-color-danger delete border-radius-lg font-sm"
+                            data-bs-dismiss="modal"
+                        >
+                            <IconTrash />
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 <script setup>
 import TextInput from '@/components/inputs/TextInput.vue'
 import TextArea from '@/components/inputs/TextArea.vue'
-import Button from '@/components/general/Button.vue'
 import Toggle from '@/components/general/Toggle.vue'
 import IconTrash from '@/components/icons/IconTrash.vue'
 import Modal from '@/components/general/Modal.vue'
@@ -98,7 +55,15 @@ import Modal from '@/components/general/Modal.vue'
 
 <script>
 export default {
-    emits: ['update:loading', 'update:message', 'update:messageType'],
+    emits: [
+        'update:loading',
+        'update:message',
+        'update:messageType',
+        'updateEnabled',
+        'updatePathNames',
+        'updatePorts',
+        'deleteConfig'
+    ],
     props: {
         enabled: {
             type: Boolean,
@@ -125,43 +90,55 @@ export default {
     components: {
         TextInput,
         TextArea,
-        Button,
         Toggle,
         IconTrash,
         Modal
     },
     data() {
         return {
-            id: null
+            id: null,
+            pathsField: '',
+            portsField: ''
         }
     },
     mounted() {
         this.id = this._uid
+        this.pathsField = this.path_names
+            .filter((i) => typeof i === 'string')
+            .map((i) => i.trim())
+            .join('\n')
+        this.portsField = this.ports
+            .filter((i) => typeof i === 'number')
+            .join(',')
     },
     methods: {
-        async handlePathNames(event) {
-            console.log(`handlePathNames`, event)
-        },
-        async handlePorts(event) {
-            console.log(`handlePorts`, event)
-        },
-        async deleteConfig(event) {
+        async handlePathNames(httpPaths) {
             this.$emit('update:loading', true)
+            const http_paths = [
+                ...new Set(
+                    httpPaths.split(/\r?\n|\r|\n/g).filter((i) => i.length > 0)
+                )
+            ]
             try {
-                const hostname = event.target.elements['Hostname'].value
-                const response = await Api.delete(`/scanner/config/${hostname}`)
+                const response = await Api.post(`/scanner/config`, {
+                    hostname: this.hostname,
+                    http_paths
+                })
                 if (response.status != 202) {
                     this.$emit(
                         'update:message',
-                        "Something went wrong. configuration couldn't be deleted."
+                        `${response.status} ${response.statusText}: Something went wrong. HTTP paths configuration couldn't be updated.`
                     )
                     this.$emit('update:messageType', `error`)
                     this.$emit('update:loading', false)
                     return
                 }
-                this.$emit('update:message', 'This configuration was deleted')
+                this.$emit(
+                    'update:message',
+                    `The HTTP paths configuration for ${this.hostname} was updated`
+                )
                 this.$emit('update:messageType', `success`)
-                this.$emit('update:deleted', true)
+                this.$emit('updatePathNames', this.hostname, http_paths)
             } catch (error) {
                 this.$emit(
                     'update:message',
@@ -173,26 +150,95 @@ export default {
             }
             this.$emit('update:loading', false)
         },
-        async hostToggleChange(e, hostname) {
+        async handlePorts(portsList) {
+            this.$emit('update:loading', true)
+            const ports = [...new Set(portsList.split(','))]
+            try {
+                const response = await Api.post(`/scanner/config`, {
+                    hostname: this.hostname,
+                    ports
+                })
+                if (response.status != 202) {
+                    this.$emit(
+                        'update:message',
+                        `${response.status} ${response.statusText}: Something went wrong. ports configuration couldn't be updated.`
+                    )
+                    this.$emit('update:messageType', `error`)
+                    this.$emit('update:loading', false)
+                    return
+                }
+                this.$emit(
+                    'update:message',
+                    `The ports configuration for ${this.hostname} was updated`
+                )
+                this.$emit('update:messageType', `success`)
+                this.$emit('updatePorts', this.hostname, ports)
+            } catch (error) {
+                this.$emit(
+                    'update:message',
+                    error.name === 'AbortError'
+                        ? 'Request timed out, please try refreshing the page.'
+                        : `${error.name} ${error.message}. Couldn't complete this action.`
+                )
+                this.$emit('update:messageType', `error`)
+            }
+            this.$emit('update:loading', false)
+        },
+        async deleteConfig() {
+            this.$emit('update:loading', true)
+            try {
+                const response = await Api.delete(
+                    `/scanner/config/${this.hostname}`
+                )
+                if (response.status != 202) {
+                    this.$emit(
+                        'update:message',
+                        `${response.status} ${response.statusText}: Something went wrong. configuration couldn't be deleted.`
+                    )
+                    this.$emit('update:messageType', `error`)
+                    this.$emit('update:loading', false)
+                    return
+                }
+                this.$emit(
+                    'update:message',
+                    `The configuration for ${this.hostname} was deleted`
+                )
+                this.$emit('update:messageType', `success`)
+                this.$emit('deleteConfig', this.hostname)
+            } catch (error) {
+                this.$emit(
+                    'update:message',
+                    error.name === 'AbortError'
+                        ? 'Request timed out, please try refreshing the page.'
+                        : `${error.name} ${error.message}. Couldn't complete this action.`
+                )
+                this.$emit('update:messageType', `error`)
+            }
+            this.$emit('update:loading', false)
+        },
+        async hostToggleChange(e) {
             this.$emit('update:loading', true)
             try {
                 if (e.target.checked === true) {
                     const response = await Api.get(
-                        `/scanner/monitor/${hostname}`
+                        `/scanner/monitor/${this.hostname}`
                     )
                     if (response.status !== 200) {
-                        this.errorMessage = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
-                        this.errorMessageType = 'error'
+                        this.$emit(
+                            'update:message',
+                            `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
+                        )
+                        this.$emit('update:messageType', 'error')
                         this.$emit('update:loading', false)
                         e.target.checked = false
                         return
                     }
-                    this.$emit('update:message', `Monitoring host.`)
+                    this.$emit('update:message', `Monitoring ${this.hostname}.`)
                     this.$emit('update:messageType', `success`)
-                    this.$emit('update:enabled', true)
+                    this.$emit('updateEnabled', this.hostname, true)
                 } else {
                     const response = await Api.get(
-                        `/scanner/deactivate/${hostname}`
+                        `/scanner/deactivate/${this.hostname}`
                     )
                     if (response.status !== 200) {
                         this.$emit(
@@ -204,9 +250,12 @@ export default {
                         e.target.checked = false
                         return
                     }
-                    this.$emit('update:message', `No longer monitoring host.`)
+                    this.$emit(
+                        'update:message',
+                        `No longer monitoring ${this.hostname}.`
+                    )
                     this.$emit('update:messageType', `success`)
-                    this.$emit('update:enabled', false)
+                    this.$emit('updateEnabled', this.hostname, false)
                 }
             } catch (error) {
                 this.$emit(
@@ -224,13 +273,6 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-.delete-config-modal {
-    overflow: hidden;
-}
-.modal {
-    --bs-modal-width: 800px;
-}
-
 .delete {
     border: none;
     background: none;
