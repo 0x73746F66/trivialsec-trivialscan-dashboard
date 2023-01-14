@@ -95,7 +95,9 @@
                         v-for="(ext, sanIndex) in extensions"
                         :key="sanIndex"
                     >
-                        <span :title="JSON.stringify(ext)">{{ ext.name }}</span>
+                        <span class="hover-help" :title="JSON.stringify(ext)">{{
+                            ext.name
+                        }}</span>
                     </span>
                 </span>
             </div>

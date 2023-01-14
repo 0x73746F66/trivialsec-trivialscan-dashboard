@@ -131,66 +131,77 @@
                 v-if="!!$store.getItem('/session/key')"
                 to="/reports"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                @click="toggleNavbar"
                 >Reports</RouterLink
             >
             <RouterLink
                 v-if="!!$store.getItem('/session/key')"
                 to="/hosts"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                @click="toggleNavbar"
                 >Hosts</RouterLink
             >
             <RouterLink
                 v-if="!!$store.getItem('/session/key')"
                 to="/profile"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                @click="toggleNavbar"
                 >Profile</RouterLink
             >
             <RouterLink
                 v-if="!!$store.getItem('/session/key')"
                 to="/profile/sessions"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                @click="toggleNavbar"
                 >My Sessions</RouterLink
             >
             <RouterLink
                 v-if="!!$store.getItem('/session/key')"
                 to="/account/members"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                @click="toggleNavbar"
                 >Profile</RouterLink
             >
             <RouterLink
                 v-if="!!$store.getItem('/session/key')"
                 to="/profile/notifications"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                @click="toggleNavbar"
                 >Notifications</RouterLink
             >
             <RouterLink
                 v-if="!!$store.getItem('/session/key')"
                 to="/account/webhooks"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                @click="toggleNavbar"
                 >Webhooks</RouterLink
             >
             <RouterLink
                 v-if="!!$store.getItem('/session/key')"
                 to="/account/host-config"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                @click="toggleNavbar"
                 >Configure</RouterLink
             >
             <RouterLink
                 v-if="!!$store.getItem('/session/key')"
                 to="/logout"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                @click="toggleNavbar"
                 >Logout</RouterLink
             >
             <RouterLink
                 v-if="!$store.getItem('/session/key')"
                 to="/pricing"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                @click="toggleNavbar"
                 >Pricing</RouterLink
             >
             <RouterLink
                 v-if="!!$store.getItem('/session/key')"
                 to="/profile"
                 class="router-link d-flex margin-top-xs margin-bottom-xs align-items-end font-color-light text-decoration-none margin-right-md d-flex"
+                @click="toggleNavbar"
             >
                 <div class="d-flex flex-column margin-right-sm align-items-end">
                     <span class="font-base">{{

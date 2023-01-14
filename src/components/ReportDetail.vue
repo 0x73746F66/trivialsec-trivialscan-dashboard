@@ -166,7 +166,7 @@
                                 </div>
                                 <div class="row margin-bottom-xxs">
                                     <div
-                                        class="col-6 d-flex flex-column margin-bottom-sm"
+                                        class="col-lg-6 col-12 d-flex flex-column margin-bottom-sm"
                                     >
                                         <h3
                                             class="font-color-light font-base-sb"
@@ -190,6 +190,7 @@
                                                     color="e2c878"
                                                     class="cert-icon margin-right-sm"
                                                 /><span
+                                                    class="hover-help"
                                                     data-bs-toggle="modal"
                                                     title="See Certificate details"
                                                     >{{
@@ -203,7 +204,7 @@
                                             </RouterLink>
                                         </span>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-lg-6 col-12">
                                         <h3
                                             class="font-color-secondary font-base-sb margin-top-sm"
                                         >
@@ -265,26 +266,25 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <template
+                                    <div
+                                        class="col-lg-6 col-12"
                                         v-if="
                                             target.tls.client
                                                 .expected_client_subjects.length
                                         "
                                     >
-                                        <div class="col-6">
-                                            <span
-                                                class="font-color-base font-color-light"
-                                                v-for="(
-                                                    subject, subjectIndex
-                                                ) in target.tls.client
-                                                    .expected_client_subjects"
-                                                :key="subjectIndex"
-                                            >
-                                                {{ subject }}
-                                            </span>
-                                        </div>
-                                    </template>
-                                    <div class="col-6">
+                                        <span
+                                            class="font-color-base font-color-light"
+                                            v-for="(
+                                                subject, subjectIndex
+                                            ) in target.tls.client
+                                                .expected_client_subjects"
+                                            :key="subjectIndex"
+                                        >
+                                            {{ subject }}
+                                        </span>
+                                    </div>
+                                    <div class="col-lg-6 col-12">
                                         <h3
                                             class="font-color-secondary font-base-sb"
                                         >
@@ -294,7 +294,7 @@
                                             />
                                             Cipher
                                             <span
-                                                class="font-color-light font-sm"
+                                                class="font-color-light font-sm hover-help"
                                                 :title="`${target.tls.cipher.offered_rfc.join(
                                                     '\n'
                                                 )}`"
@@ -605,6 +605,7 @@ export default {
     }
 }
 </script>
+<style scoped lang="scss"></style>
 <style lang="scss">
 .report-item {
     cursor: pointer;
@@ -651,7 +652,6 @@ export default {
 .modal-icon-report-close {
     width: 25px;
     height: 25px;
-    // transform: rotate(180deg);
 }
 
 .pill {

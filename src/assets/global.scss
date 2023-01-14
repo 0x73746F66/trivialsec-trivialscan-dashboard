@@ -340,12 +340,14 @@ blockquote {
 .word-break {
     word-break: break-word;
 }
-
-[title] {
-    cursor: help;
-    border-bottom: 1px dotted color('primary');
+@media (min-width: breakpoints('md')) {
+    .hover-help {
+        border-bottom: 1px dotted color('primary');
+        &:hover {
+            cursor: help;
+        }
+    }
 }
-
 .button-prev,
 .button-next {
     height: auto;

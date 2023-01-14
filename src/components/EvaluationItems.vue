@@ -170,6 +170,16 @@
                                 class="font-xs pre-line"
                                 v-html="evaluation?.description"
                             ></span>
+                            <div
+                                class="margin-top-sm"
+                                v-if="evaluation?.recommendation"
+                            >
+                                <div class="font-base-sb">Recommendation</div>
+                                <span
+                                    class="font-xs pre-line"
+                                    v-html="evaluation?.recommendation"
+                                ></span>
+                            </div>
                         </div>
                         <div
                             class="col-12 col-lg-6 d-flex flex-column bg-dark-40 border-radius-sm padding-sm evaluation-item-aside"
@@ -208,7 +218,7 @@
                                         "
                                         target="_blank"
                                         :href="reference.url"
-                                        class="font-xs-sb font-color-primary text-decoration-none"
+                                        class="font-xs-sb font-color-primary text-decoration-none hover-help"
                                         >{{ reference.name }}</a
                                     >
                                 </span>

@@ -17,47 +17,45 @@
                 </span>
                 <span class="break-mobile font-xs">{{ report.dateAgo }}</span>
             </span>
-            <span
-                class="col-2 col-lg-6 justify-content-end align-items-end text-right"
+            <div
+                class="col-2 col-lg-6 justify-content-end align-items-end text-right delete-report-modal"
             >
-                <div class="delete-report-modal">
-                    <Modal
-                        :id="`deleteReport${report.refId}`"
-                        label="delete-report-header"
-                        :dialogClass="report.refId"
-                        :backdrop="false"
-                    >
-                        <template v-slot:button="buttonProps">
-                            <button class="btn-delete" v-bind="buttonProps">
-                                <IconTrash class="trash-icon" />
-                            </button>
-                        </template>
-                        <template v-slot:modalTitle>
-                            <h5
-                                class="delete-report-header font-base font-color-light"
+                <Modal
+                    :id="`deleteReport${report.refId}`"
+                    label="delete-report-header"
+                    :dialogClass="report.refId"
+                    :backdrop="false"
+                >
+                    <template v-slot:button="buttonProps">
+                        <button class="btn-delete" v-bind="buttonProps">
+                            <IconTrash class="trash-icon" />
+                        </button>
+                    </template>
+                    <template v-slot:modalTitle>
+                        <h5
+                            class="delete-report-header font-base font-color-light"
+                        >
+                            Are you sure you want to delete this report?
+                        </h5>
+                    </template>
+                    <template v-slot:modalContent>
+                        <form @submit.prevent="deleteReport($event)">
+                            <input
+                                type="hidden"
+                                name="ReportId"
+                                :value="report.report_id"
+                            />
+                            <button
+                                data-bs-dismiss="modal"
+                                type="submit"
+                                class="btn-outline-danger-full font-color-danger font-sm"
                             >
-                                Are you sure you want to delete this report?
-                            </h5>
-                        </template>
-                        <template v-slot:modalContent>
-                            <form @submit.prevent="deleteReport($event)">
-                                <input
-                                    type="hidden"
-                                    name="ReportId"
-                                    :value="report.report_id"
-                                />
-                                <button
-                                    data-bs-dismiss="modal"
-                                    type="submit"
-                                    class="btn-outline-danger-full font-color-danger font-sm"
-                                >
-                                    Yes
-                                </button>
-                            </form>
-                        </template>
-                    </Modal>
-                </div>
-            </span>
+                                Yes
+                            </button>
+                        </form>
+                    </template>
+                </Modal>
+            </div>
             <span class="col-12 col-lg-6 d-flex">
                 <span v-if="report.project_name" class="font-base">
                     <span class="font-base-sb margin-right-xxs">Project:</span
@@ -121,57 +119,46 @@
         </div>
         <div class="row">
             <div
-                class="col-12 col-lg-6 d-flex flex-column justify-content-start align-items-start"
+                class="col-12 col-lg-6 d-flex align-items-start summary-pill-container"
             >
-                <div class="d-flex">
-                    <div
-                        v-if="report.results.fail > 0"
-                        class="summary-pill error"
+                <div v-if="report.results.fail > 0" class="summary-pill error">
+                    <IconError class="summary-icon" color="" />
+                    <span class="font-color-dark">{{
+                        report.results.fail
+                    }}</span>
+                    <span class="summary-pill-legend margin-left-xxs"
+                        >Failures</span
                     >
-                        <IconError class="summary-icon" color="" />
-                        <span class="font-color-dark">{{
-                            report.results.fail
-                        }}</span>
-                        <span class="summary-pill-legend margin-left-xxs"
-                            >Failures</span
-                        >
-                    </div>
-                    <div
-                        v-if="report.results.warn > 0"
-                        class="summary-pill warning"
+                </div>
+                <div
+                    v-if="report.results.warn > 0"
+                    class="summary-pill warning"
+                >
+                    <IconWarning class="summary-icon" color="" />
+                    <span class="font-color-dark">{{
+                        report.results.warn
+                    }}</span>
+                    <span class="summary-pill-legend margin-left-xxs"
+                        >Warnings</span
                     >
-                        <IconWarning class="summary-icon" color="" />
-                        <span class="font-color-dark">{{
-                            report.results.warn
-                        }}</span>
-                        <span class="summary-pill-legend margin-left-xxs"
-                            >Warnings</span
-                        >
-                    </div>
-                    <div
-                        v-if="report.results.pass > 0"
-                        class="summary-pill pass"
+                </div>
+                <div v-if="report.results.pass > 0" class="summary-pill pass">
+                    <checkIcon class="summary-icon" color="" />
+                    <span class="font-color-dark">{{
+                        report.results.pass
+                    }}</span>
+                    <span class="summary-pill-legend margin-left-xxs"
+                        >Passes</span
                     >
-                        <checkIcon class="summary-icon" color="" />
-                        <span class="font-color-dark">{{
-                            report.results.pass
-                        }}</span>
-                        <span class="summary-pill-legend margin-left-xxs"
-                            >Passes</span
-                        >
-                    </div>
-                    <div
-                        v-if="report.results.info > 0"
-                        class="summary-pill info hide-lg"
+                </div>
+                <div v-if="report.results.info > 0" class="summary-pill info">
+                    <IconInfo class="summary-icon" color="" />
+                    <span class="font-color-dark">{{
+                        report.results.info
+                    }}</span>
+                    <span class="summary-pill-legend margin-left-xxs"
+                        >Informational</span
                     >
-                        <IconInfo class="summary-icon" color="" />
-                        <span class="font-color-dark">{{
-                            report.results.info
-                        }}</span>
-                        <span class="summary-pill-legend margin-left-xxs"
-                            >Informational</span
-                        >
-                    </div>
                 </div>
             </div>
             <div
@@ -267,11 +254,10 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-.modal {
-    --bs-modal-width: 800px;
-}
 .delete-report-modal {
     overflow: hidden;
+    padding-right: 0;
+    padding-left: 0;
 }
 @media (max-width: breakpoints('sm')) {
     .break-mobile {
@@ -284,11 +270,6 @@ export default {
 .summary {
     color: color('light');
 }
-.trash-icon {
-    width: 25px;
-    height: 25px;
-    cursor: pointer;
-}
 .btn-delete {
     border: none;
     background: none;
@@ -298,6 +279,7 @@ export default {
     width: 40px;
     svg {
         width: 30px;
+        height: 30px;
     }
     &:hover {
         background: color('danger');
@@ -328,11 +310,16 @@ export default {
         padding: 0px;
         border-radius: radius('sm');
         color: color('dark');
-        margin-right: spacers('sm');
+        margin-right: spacers('xxs');
         padding: spacers('xxs') spacers('xs');
         transition: 0.2s linear;
         &-legend {
             display: none;
+        }
+        &-container {
+            flex-wrap: wrap;
+            padding-right: 0;
+            padding-left: 0;
         }
 
         &:hover {

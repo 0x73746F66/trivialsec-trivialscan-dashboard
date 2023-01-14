@@ -97,21 +97,24 @@
                             class="mb-0 font-sm word-break-all"
                         >
                             <span
-                                class="font-sm font-color-secondary active-session"
+                                class="font-sm font-color-secondary active-session hover-help"
                                 :title="session.session_token"
                             >
                                 (This Session)
                             </span>
                         </div>
                         <div class="mb-0">
-                            <span class="font-sm" :title="session.user_agent">{{
-                                session.browser
-                            }}</span>
+                            <span
+                                class="font-sm hover-help"
+                                :title="session.user_agent"
+                                >{{ session.browser }}</span
+                            >
                         </div>
                         <div class="mb-0 font-sm">{{ session.platform }}</div>
                         <div v-if="session.created" class="mb-0 font-sm">
                             Active
                             <time
+                                class="hover-help"
                                 :title="moment(session.timestamp)"
                                 :datetime="
                                     moment(session.timestamp).toISOString()

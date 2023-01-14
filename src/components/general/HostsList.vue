@@ -61,7 +61,7 @@
                                                 http.request_url || ''
                                             }`.trim()
                                         "
-                                        class="font-sm-b padding-xxs margin-right-xxs font-color-dark status-code-pill"
+                                        class="font-sm-b padding-xxs margin-right-xxs font-color-dark status-code-pill hover-help"
                                         :class="{
                                             success:
                                                 http.status_code.toString()[0] ===

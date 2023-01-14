@@ -134,7 +134,7 @@
                     <IconTarget class="target-icon" color="e2c878" />
                     Cipher
                     <span
-                        class="font-sm"
+                        class="font-sm hover-help"
                         :title="`${host.tls?.cipher.offered_rfc.join('\n')}`"
                     >
                         ({{ host.tls?.cipher.offered_rfc.length }} offered)
@@ -192,9 +192,11 @@
                         <IconCertificate
                             color="1abb9c"
                             class="cert-icon margin-right-xxs"
-                        /><span title="See Certificate details">{{
-                            sha1_fingerprint
-                        }}</span>
+                        /><span
+                            class="hover-help"
+                            title="See Certificate details"
+                            >{{ sha1_fingerprint }}</span
+                        >
                     </a>
                 </span>
             </div>

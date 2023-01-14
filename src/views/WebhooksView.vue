@@ -186,7 +186,7 @@
                                     @change="handleToggle($event)"
                                 />
                                 <label
-                                    class="font-color-light font-base-sb margin-left-sm"
+                                    class="font-color-light font-base-sb margin-left-sm hover-help"
                                     title="Generated, Toggle activation, CLI Authenticated"
                                 >
                                     Client Status
@@ -199,7 +199,7 @@
                                     @change="handleToggle($event)"
                                 />
                                 <label
-                                    class="font-color-light font-base-sb margin-left-sm"
+                                    class="font-color-light font-base-sb margin-left-sm hover-help"
                                     title="Report Uploads, Authentication"
                                 >
                                     Client Activity

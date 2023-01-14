@@ -38,6 +38,8 @@
         "sonarlint.output.showAnalyzerLogs": true,
         "sonarlint.disableTelemetry": true,
         "cSpell.words": [
+            "DNSSEC",
+            "OCSP",
             "swiper",
             "trivialscan",
             "trivialsec"
