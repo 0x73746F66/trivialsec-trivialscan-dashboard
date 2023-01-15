@@ -605,20 +605,32 @@ export default {
     }
 }
 </script>
-<style scoped lang="scss"></style>
-<style lang="scss">
+
+<style scoped lang="scss">
 .report-item {
     cursor: pointer;
     z-index: 10;
     height: 20px;
 }
-
 .cert-icon,
 .target-icon {
     height: 25px;
     width: 25px;
 }
+.pill {
+    color: color('light');
+    background: color('primary');
+    border: 1px solid color('primary');
 
+    &.collapsed {
+        background: none;
+        color: color('primary');
+        border: 1px solid color('primary');
+    }
+}
+</style>
+
+<style lang="scss">
 .link-icon {
     height: 20px;
     width: 20px;
@@ -652,17 +664,5 @@ export default {
 .modal-icon-report-close {
     width: 25px;
     height: 25px;
-}
-
-.pill {
-    color: color('light');
-    background: color('primary');
-    border: 1px solid color('primary');
-
-    &.collapsed {
-        background: none;
-        color: color('primary');
-        border: 1px solid color('primary');
-    }
 }
 </style>

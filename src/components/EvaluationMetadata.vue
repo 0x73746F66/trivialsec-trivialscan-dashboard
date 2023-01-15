@@ -3,37 +3,35 @@
         class="col-12 col-lg-6 font-sm font-color-light d-flex flex-column margin-top-sm"
     >
         <div class="d-flex" v-if="metadata['abuse.sh']">
-            <span class="font-sm-sb margin-right-xxs nowrap">abuse.sh </span
+            <span class="font-sm-sb margin-right-xxs">abuse.sh </span
             ><span>{{ metadata['abuse.sh'] }}</span>
         </div>
         <div class="d-flex" v-if="metadata['pwnedkeys.com']">
-            <span class="font-sm-sb margin-right-xxs nowrap"
-                >pwnedkeys.com </span
+            <span class="font-sm-sb margin-right-xxs">pwnedkeys.com </span
             ><span>{{ metadata['pwnedkeys.com'] }}</span>
         </div>
         <div class="d-flex" v-if="metadata.reason">
-            <span class="font-sm-sb margin-right-xxs nowrap">Reason:</span
+            <span class="font-sm-sb margin-right-xxs">Reason:</span
             ><span>{{ metadata.reason }}</span>
         </div>
         <div class="d-flex" v-if="metadata.crime_cbc">
-            <span class="font-sm-sb margin-right-xxs nowrap">Results:</span
+            <span class="font-sm-sb margin-right-xxs">Results:</span
             ><span>{{ metadata.crime_cbc }}</span>
         </div>
         <div class="d-flex" v-if="metadata.tls_robot">
-            <span class="font-sm-sb margin-right-xxs nowrap">Results:</span
+            <span class="font-sm-sb margin-right-xxs">Results:</span
             ><span>{{ metadata.tls_robot }}</span>
         </div>
         <div class="d-flex" v-if="metadata.chain_validation_result">
-            <span class="font-sm-sb margin-right-xxs nowrap">Results:</span
+            <span class="font-sm-sb margin-right-xxs">Results:</span
             ><span>{{ metadata.chain_validation_result }}</span>
         </div>
         <div class="d-flex" v-if="metadata.key_usage">
-            <span class="font-sm-sb margin-right-xxs nowrap">Key Usage:</span
+            <span class="font-sm-sb margin-right-xxs">Key Usage:</span
             ><span>{{ metadata.key_usage.join(', ') }}</span>
         </div>
         <div class="d-flex" v-if="metadata.extended_key_usage">
-            <span class="font-sm-sb margin-right-xxs nowrap"
-                >Extended Key Usage:</span
+            <span class="font-sm-sb margin-right-xxs">Extended Key Usage:</span
             ><span>{{ metadata.extended_key_usage.join(', ') }}</span>
         </div>
         <div v-if="metadata.expected_client_subjects">
@@ -159,14 +157,14 @@
         >
             <span class="font-sm-b margin-right-xxs">Certificate</span>
             <div
-                class="d-flex margin-right-xxs nowrap"
+                class="d-flex margin-right-xxs"
                 v-if="metadata.certificate_version"
             >
                 <span>version {{ metadata.certificate_version }}</span>
             </div>
         </div>
         <div class="d-flex" v-if="metadata.public_key_size">
-            <span class="font-sm-sb margin-right-xxs nowrap">Public Key:</span
+            <span class="font-sm-sb margin-right-xxs">Public Key:</span
             >{{ metadata.public_key_type }}{{ metadata.public_key_size }}
         </div>
         <div class="d-flex" v-if="metadata.expiry_status">
@@ -201,50 +199,47 @@
         <div class="margin-top-sm" v-if="metadata.revocation_ocsp_status">
             <div class="font-sm-b margin-right-xxs">Revocation</div>
             <div
-                class="margin-right-xxs nowrap"
+                class="margin-right-xxs"
                 v-if="metadata.revocation_ocsp_status"
             >
                 <span class="font-sm-sb margin-right-xxs">OCSP Status:</span
                 ><span>{{ metadata.revocation_ocsp_status }}</span>
             </div>
             <div
-                class="margin-right-xxs nowrap"
+                class="margin-right-xxs"
                 v-if="metadata.revocation_ocsp_response"
             >
                 <span class="font-sm-sb margin-right-xxs">OCSP Response:</span
                 ><span>{{ metadata.revocation_ocsp_response }}</span>
             </div>
             <div
-                class="margin-right-xxs nowrap"
+                class="margin-right-xxs"
                 v-if="metadata.revocation_ocsp_reason"
             >
                 <span class="font-sm-sb margin-right-xxs">OCSP Reason:</span
                 ><span>{{ metadata.revocation_ocsp_reason }}</span>
             </div>
-            <div
-                class="margin-right-xxs nowrap"
-                v-if="metadata.revocation_ocsp_time"
-            >
+            <div class="margin-right-xxs" v-if="metadata.revocation_ocsp_time">
                 <span class="font-sm-sb margin-right-xxs">OCSP Time:</span
                 ><span>{{ metadata.revocation_ocsp_time }}</span>
             </div>
         </div>
         <div class="margin-top-sm" v-if="metadata.ocsp_hash_algorithm">
-            <div class="margin-right-xxs nowrap">
+            <div class="margin-right-xxs">
                 <span class="font-sm-sb margin-right-xxs"
                     >OCSP Hash Algorithm:</span
                 ><span>{{ metadata.ocsp_hash_algorithm }}</span>
             </div>
         </div>
         <div class="margin-top-sm" v-if="metadata.signature_hash_algorithm">
-            <div class="margin-right-xxs nowrap">
+            <div class="margin-right-xxs">
                 <span class="font-sm-sb margin-right-xxs"
                     >OCSP Signature Hash Algorithm:</span
                 ><span>{{ metadata.signature_hash_algorithm }}</span>
             </div>
         </div>
         <div class="margin-top-sm" v-if="metadata.dnssec_algorithm">
-            <div class="margin-right-xxs nowrap">
+            <div class="margin-right-xxs">
                 <span class="font-sm-sb margin-right-xxs"
                     >DNSSEC Algorithm:</span
                 ><span>{{ metadata.dnssec_algorithm }}</span>
@@ -258,20 +253,41 @@
                 Certificate Transparency
             </div>
             <div
-                class="margin-right-xxs nowrap"
+                class="margin-right-xxs"
                 v-if="metadata.certificate_transparency_status"
             >
                 <span class="font-sm-sb margin-right-xxs">Status:</span
                 ><span>{{ metadata.certificate_transparency_status }}</span>
             </div>
             <div
-                class="margin-right-xxs nowrap"
+                class="margin-right-xxs"
                 v-if="metadata.certificate_transparency_description"
             >
                 <span class="font-sm-sb margin-right-xxs">Description:</span
                 ><span>{{
                     metadata.certificate_transparency_description
                 }}</span>
+            </div>
+        </div>
+        <div class="margin-top-sm" v-if="metadata.root_store_name">
+            <div class="font-sm-b margin-right-xxs">Certificate Store</div>
+            <div class="margin-right-xxs">
+                <span class="font-sm-sb margin-right-xxs">Name:</span>
+                <span>{{ metadata.root_store_name }}</span>
+            </div>
+            <div class="margin-right-xxs">
+                <span class="font-sm-sb margin-right-xxs">Version:</span>
+                <span>{{ metadata.store_version }}</span>
+            </div>
+            <div class="margin-right-xxs" v-if="metadata.store_description">
+                <span class="font-sm-sb margin-right-xxs">Description:</span>
+                <span>{{ metadata.store_description }}</span>
+            </div>
+            <div class="margin-right-xxs">
+                <span class="font-sm-sb" v-if="metadata.exists_in_store"
+                    >Exists in store</span
+                >
+                <span class="font-sm-sb" v-else>Doesn't exist in store</span>
             </div>
         </div>
         <div v-if="metadata.long_handshake_intolerance_versions?.length > 0">

@@ -72,7 +72,7 @@
                         </Modal>
                     </div>
                     <div class="table-responsive-lg">
-                        <table class="table table-borderless font-color-light">
+                        <table class="table table-dark font-color-light">
                             <thead>
                                 <tr>
                                     <th scope="col">Hostname</th>
@@ -84,7 +84,20 @@
                             </thead>
                             <tbody v-for="(config, key) in configs" :key="key">
                                 <tr>
-                                    <td scope="row">{{ config.hostname }}</td>
+                                    <td scope="row">
+                                        <RouterLink
+                                            :to="`/hostname/${config.hostname}`"
+                                            class="text-decoration-none"
+                                        >
+                                            <IconTarget
+                                                class="link-icon margin-right-xxs"
+                                                color="e2c878"
+                                            />
+                                            <span class="font-color-secondary">
+                                                {{ config.hostname }}
+                                            </span>
+                                        </RouterLink>
+                                    </td>
                                     <td>{{ config.ports.join(',') }}</td>
                                     <td class="pre-wrap">
                                         {{ config.path_names.join('\n') }}
@@ -166,6 +179,7 @@ import AccountMenu from '@/components/layout/AccountMenu.vue'
 import HostConfigForm from '@/components/forms/HostConfigForm.vue'
 import LoadingComponent from '@/components/general/LoadingComponent.vue'
 import ValidationMessage from '@/components/general/ValidationMessage.vue'
+import IconTarget from '@/components/icons/IconTarget.vue'
 import TextInput from '@/components/inputs/TextInput.vue'
 import TextArea from '@/components/inputs/TextArea.vue'
 import Toggle from '@/components/general/Toggle.vue'
@@ -181,6 +195,7 @@ export default {
         HostConfigForm,
         LoadingComponent,
         ValidationMessage,
+        IconTarget,
         TextInput,
         TextArea,
         Toggle,
@@ -292,6 +307,13 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+.link-icon {
+    height: 20px;
+    width: 20px;
+}
+.table {
+    --bs-table-bg: color('dark');
+}
 .modal {
     --bs-modal-width: 800px;
 }
