@@ -27,7 +27,7 @@
                     v-for="(summary, summaryIndex) in items"
                     :key="summaryIndex"
                     :report="summary"
-                    @deleteReport.once="handleDeleteReport"
+                    @deleteReport="handleDeleteReport"
                 />
             </SwiperSlide>
         </Swiper>
@@ -80,16 +80,17 @@ export default {
     },
     computed: {
         slicedSummaries() {
+            const copy = [...this.summaries]
             const arrays = []
-            while (this.summaries.length > 0) {
-                arrays.push(this.summaries.splice(0, 5))
+            while (copy.length > 0) {
+                arrays.push(copy.splice(0, 5))
             }
             return arrays
         }
     },
     methods: {
         addRecord(report) {
-            this.summaries = [report].concat(this.summaries)
+            this.summaries = [report].concat([...this.summaries])
         },
         shortReportId(reportId) {
             return reportId.replace(/[\W_]+/g, '').slice(0, 11)
@@ -97,7 +98,9 @@ export default {
         handleDeleteReport(reportId) {
             for (const [index, summary] of this.summaries.entries()) {
                 if (summary.report_id === reportId) {
-                    setTimeout(() => this.summaries.splice(index, 1), 5000)
+                    setTimeout(() => {
+                        this.summaries.splice(index, 1)
+                    }, 5000)
                     break
                 }
             }

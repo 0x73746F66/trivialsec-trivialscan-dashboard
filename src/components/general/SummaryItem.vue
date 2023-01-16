@@ -1,7 +1,7 @@
 <template>
     <div
         v-if="report"
-        class="summary w-100 bg-dark-40 border-radius-sm d-flex flex-column padding-sm margin-bottom-sm"
+        class="summary bg-dark-40 border-radius-sm d-flex flex-column padding-sm margin-bottom-sm"
     >
         <LoadingComponent class="loading" v-if="loading" />
         <div class="row row-cols-auto">
@@ -17,44 +17,19 @@
                 </span>
                 <span class="break-mobile font-xs">{{ report.dateAgo }}</span>
             </span>
-            <div
-                class="col-2 col-lg-6 justify-content-end align-items-end text-right delete-report-modal"
-            >
-                <Modal
-                    :id="`deleteReport${report.refId}`"
-                    label="delete-report-header"
-                    :dialogClass="report.refId"
-                    :backdrop="false"
-                >
-                    <template v-slot:button="buttonProps">
-                        <button class="btn-delete" v-bind="buttonProps">
+            <div class="col-2 col-lg-6 d-flex justify-content-end">
+                <div class="d-flex justify-content-end delete-report">
+                    <form @submit.prevent="deleteReport($event)">
+                        <input
+                            type="hidden"
+                            name="ReportId"
+                            :value="report.report_id"
+                        />
+                        <button type="submit" class="btn-delete">
                             <IconTrash class="trash-icon" />
                         </button>
-                    </template>
-                    <template v-slot:modalTitle>
-                        <h5
-                            class="delete-report-header font-base font-color-light"
-                        >
-                            Are you sure you want to delete this report?
-                        </h5>
-                    </template>
-                    <template v-slot:modalContent>
-                        <form @submit.prevent="deleteReport($event)">
-                            <input
-                                type="hidden"
-                                name="ReportId"
-                                :value="report.report_id"
-                            />
-                            <button
-                                data-bs-dismiss="modal"
-                                type="submit"
-                                class="btn-outline-danger-full font-color-danger font-sm"
-                            >
-                                Yes
-                            </button>
-                        </form>
-                    </template>
-                </Modal>
+                    </form>
+                </div>
             </div>
             <span class="col-12 col-lg-6 d-flex">
                 <span v-if="report.project_name" class="font-base">
@@ -179,7 +154,6 @@
     </div>
 </template>
 <script setup>
-import Modal from '@/components/general/Modal.vue'
 import checkIcon from '@/components/icons/checkIcon.vue'
 import IconError from '@/components/icons/IconError.vue'
 import IconWarning from '@/components/icons/IconWarning.vue'
@@ -202,7 +176,6 @@ export default {
         }
     },
     components: {
-        Modal,
         checkIcon,
         IconError,
         IconWarning,
@@ -254,8 +227,7 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-.delete-report-modal {
-    overflow: hidden;
+.delete-report {
     padding-right: 0;
     padding-left: 0;
 }
@@ -318,8 +290,10 @@ export default {
         }
         &-container {
             flex-wrap: wrap;
-            padding-right: 0;
-            padding-left: 0;
+            @media (max-width: breakpoints('sm')) {
+                padding-right: 0;
+                padding-left: 0;
+            }
         }
 
         &:hover {
