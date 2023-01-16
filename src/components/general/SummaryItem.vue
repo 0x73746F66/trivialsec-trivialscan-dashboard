@@ -3,7 +3,6 @@
         v-if="report"
         class="summary bg-dark-40 border-radius-sm d-flex flex-column padding-sm margin-bottom-sm"
     >
-        <LoadingComponent class="loading" v-if="loading" />
         <div class="row row-cols-auto">
             <ValidationMessage
                 v-if="delMessages[report.refId]?.length > 0"
@@ -163,12 +162,11 @@ import IconCertificate from '@/components/icons/IconCertificate.vue'
 import IconArrowPrimary from '@/components/icons/IconArrowPrimary.vue'
 import IconTrash from '@/components/icons/IconTrash.vue'
 import ValidationMessage from '@/components/general/ValidationMessage.vue'
-import LoadingComponent from '@/components/general/LoadingComponent.vue'
 </script>
 
 <script>
 export default {
-    emits: ['deleteReport'],
+    emits: ['deleteReport', 'update:loading'],
     props: {
         report: {
             type: Object,
@@ -184,12 +182,10 @@ export default {
         IconCertificate,
         IconArrowPrimary,
         IconTrash,
-        ValidationMessage,
-        LoadingComponent
+        ValidationMessage
     },
     data() {
         return {
-            loading: false,
             delMessages: {},
             delMessageTypes: {}
         }
@@ -201,14 +197,14 @@ export default {
         async deleteReport(event) {
             const reportId = event.target.elements['ReportId'].value
             const refId = this.shortReportId(reportId)
-            this.loading = true
+            this.$emit('update:loading', true)
             try {
                 const response = await Api.delete(`/report/${reportId}`)
                 if (response.status != 202) {
                     this.delMessages[refId] =
                         "Something went wrong. Report couldn't be deleted."
                     this.delMessageTypes[refId] = 'error'
-                    this.loading = false
+                    this.$emit('update:loading', false)
                     return
                 }
                 this.delMessages[refId] = `This report was deleted`
@@ -221,7 +217,7 @@ export default {
                         : `${error.name} ${error.message}. Couldn't complete this action.`
                 this.delMessageTypes[refId] = 'error'
             }
-            this.loading = false
+            this.$emit('update:loading', false)
         }
     }
 }

@@ -28,6 +28,7 @@
                     :key="summaryIndex"
                     :report="summary"
                     @deleteReport="handleDeleteReport"
+                    v-model:loading="loading"
                 />
             </SwiperSlide>
         </Swiper>
