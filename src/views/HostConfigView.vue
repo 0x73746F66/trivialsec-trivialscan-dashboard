@@ -36,10 +36,6 @@
                         >
                             Scanner Configuration
                         </h3>
-                        <ValidationMessage
-                            :message="message"
-                            :type="messageType"
-                        />
                         <Modal id="inviteModal" label="modal-invite-header">
                             <template v-slot:button="buttonProps">
                                 <Button
@@ -60,6 +56,8 @@
                                         id="Hostname"
                                         label="Hostname"
                                         :required="true"
+                                        v-model="inputHostname"
+                                        @keydown.enter="handleInput"
                                     />
                                     <Button
                                         type="submit"
@@ -71,7 +69,8 @@
                             </template>
                         </Modal>
                     </div>
-                    <div class="table-responsive-lg">
+                    <ValidationMessage :message="message" :type="messageType" />
+                    <div class="table-responsive-lg" v-if="configs.length > 0">
                         <table class="table table-dark font-color-light">
                             <thead>
                                 <tr>
@@ -210,7 +209,8 @@ export default {
             display_name: localStorage.getItem('/account/display'),
             member_avatar: localStorage.getItem('/member/email_md5'),
             member_email: localStorage.getItem('/member/email'),
-            configs: []
+            configs: [],
+            inputHostname: ''
         }
     },
     mounted() {
@@ -227,6 +227,7 @@ export default {
                 this.loading = false
                 return
             }
+            this.inputHostname = ''
             this.message = `Added ${hostname} configuration.`
             this.messageType = `success`
             this.configs.push({
@@ -300,6 +301,17 @@ export default {
                 if (config.hostname === hostname) {
                     setTimeout(() => this.configs.splice(index, 1), 5000)
                     break
+                }
+            }
+        },
+        async handleInput() {
+            this.inputHostname = ''
+            if (this.inputHostname.length > 0) {
+                if (this.inputHostname.includes('://')) {
+                    this.inputHostname = this.inputHostname.split('://')[1]
+                }
+                if (this.inputHostname.includes('/')) {
+                    this.inputHostname = this.inputHostname.split('/')[0]
                 }
             }
         }

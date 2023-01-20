@@ -1,6 +1,13 @@
 <template>
     <main>
         <LoadingComponent class="loading" :class="{ inactive: !loading }" />
+        <WebhookSecret
+            class="webhook-notice"
+            v-if="showSecret"
+            v-model:showNotice="showNotice"
+            :class="{ inactive: !showNotice }"
+            :signingSecret="showSecret"
+        />
         <div>
             <div class="container padding-top-sm padding-bottom-xl">
                 <AccountMenu />
@@ -28,246 +35,120 @@
                             </div>
                         </div>
                     </div>
-                    <h2 class="font-color-light font-lg-b margin-bottom-lg">
-                        Webhook Configuration
-                    </h2>
+                    <div
+                        class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center"
+                    >
+                        <h3
+                            class="font-color-light font-lg-b modal-invite-header"
+                        >
+                            Webhook Endpoints
+                        </h3>
+                        <Modal id="inviteModal" label="modal-invite-header">
+                            <template v-slot:button="buttonProps">
+                                <Button
+                                    v-bind="buttonProps"
+                                    class="btn-outline-primary-sm font-color-primary font-sm"
+                                    text="Add Endpoint"
+                                />
+                            </template>
+                            <template v-slot:modalTitle>
+                                <h5 class="font-base-b font-color-light">
+                                    Add Endpoint
+                                </h5>
+                            </template>
+                            <template v-slot:modalContent>
+                                <form @submit.prevent="addWebhook($event)">
+                                    <TextInput
+                                        placeholder="The endpoint URL to send the webhooks"
+                                        id="Endpoint"
+                                        label="Endpoint"
+                                        :required="true"
+                                    />
+                                    <Button
+                                        type="submit"
+                                        class="edit-btn border-radius-sm"
+                                        data-bs-toggle="modal"
+                                        text="Save"
+                                    />
+                                </form>
+                            </template>
+                        </Modal>
+                    </div>
                     <ValidationMessage :message="message" :type="messageType" />
-                    <div class="d-flex flex-column justify-content-between">
-                        <div class="d-flex margin-bottom-sm">
-                            <TextInput
-                                placeholder="Enter your webhook URL to receive all enabled events"
-                                id="webhook_endpoint"
-                                :textDefault="webhooks.webhook_endpoint"
-                                label="Your Webhook Endpoint"
-                                :required="true"
-                                @change="handleWebhookEndpoint($event)"
-                            />
-                        </div>
-                        <template v-if="showEvents">
-                            <h3
-                                class="font-color-light font-base-sb margin-top-md margin-bottom-lg"
+                    <div class="table-responsive-lg" v-if="webhooks.length > 0">
+                        <table class="table table-dark font-color-light">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Endpoint</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody
+                                v-for="(webhook, key) in webhooks"
+                                :key="key"
                             >
-                                Events to send
-                            </h3>
-                            <div class="d-flex margin-bottom-sm">
-                                <Toggle
-                                    :defaultChecked="webhooks.hosted_monitoring"
-                                    fieldName="hosted_monitoring"
-                                    @change="handleToggle($event)"
-                                />
-                                <label
-                                    class="font-color-light font-base-sb margin-left-sm"
-                                >
-                                    Hosted Monitoring
-                                </label>
-                            </div>
-                            <div class="d-flex margin-bottom-sm">
-                                <Toggle
-                                    :defaultChecked="webhooks.hosted_scanner"
-                                    fieldName="hosted_scanner"
-                                    @change="handleToggle($event)"
-                                />
-                                <label
-                                    class="font-color-light font-base-sb margin-left-sm"
-                                >
-                                    On-demand Scanner
-                                </label>
-                            </div>
-                            <div class="d-flex margin-bottom-sm">
-                                <Toggle
-                                    :defaultChecked="
-                                        webhooks.self_hosted_uploads
-                                    "
-                                    fieldName="self_hosted_uploads"
-                                    @change="handleToggle($event)"
-                                />
-                                <label
-                                    class="font-color-light font-base-sb margin-left-sm"
-                                >
-                                    Self-hosted Scanner
-                                </label>
-                            </div>
-                            <div class="d-flex margin-bottom-sm">
-                                <Toggle
-                                    :defaultChecked="
-                                        webhooks.early_warning_email
-                                    "
-                                    fieldName="early_warning_email"
-                                    @change="handleToggle($event)"
-                                />
-                                <label
-                                    class="font-color-light font-base-sb margin-left-sm"
-                                >
-                                    Early Warnings (Email)
-                                </label>
-                            </div>
-                            <div class="d-flex margin-bottom-sm">
-                                <Toggle
-                                    :defaultChecked="
-                                        webhooks.early_warning_domain
-                                    "
-                                    fieldName="early_warning_domain"
-                                    @change="handleToggle($event)"
-                                />
-                                <label
-                                    class="font-color-light font-base-sb margin-left-sm"
-                                >
-                                    Early Warnings (Domains)
-                                </label>
-                            </div>
-                            <div class="d-flex margin-bottom-sm">
-                                <Toggle
-                                    :defaultChecked="webhooks.early_warning_ip"
-                                    fieldName="early_warning_ip"
-                                    @change="handleToggle($event)"
-                                />
-                                <label
-                                    class="font-color-light font-base-sb margin-left-sm"
-                                >
-                                    Early Warnings (IP Address)
-                                </label>
-                            </div>
-                            <div class="d-flex margin-bottom-sm">
-                                <Toggle
-                                    :defaultChecked="
-                                        webhooks.new_findings_certificates
-                                    "
-                                    fieldName="new_findings_certificates"
-                                    @change="handleToggle($event)"
-                                />
-                                <label
-                                    class="font-color-light font-base-sb margin-left-sm"
-                                >
-                                    New Findings (Certificates)
-                                </label>
-                            </div>
-                            <div class="d-flex margin-bottom-sm">
-                                <Toggle
-                                    :defaultChecked="
-                                        webhooks.new_findings_domains
-                                    "
-                                    fieldName="new_findings_domains"
-                                    @change="handleToggle($event)"
-                                />
-                                <label
-                                    class="font-color-light font-base-sb margin-left-sm"
-                                >
-                                    New Findings (Domains)
-                                </label>
-                            </div>
-                            <div class="d-flex margin-bottom-sm">
-                                <Toggle
-                                    :defaultChecked="webhooks.include_warning"
-                                    fieldName="include_warning"
-                                    @change="handleToggle($event)"
-                                />
-                                <label
-                                    class="font-color-light font-base-sb margin-left-sm"
-                                >
-                                    Include Warning Findings
-                                </label>
-                            </div>
-                            <div class="d-flex margin-bottom-sm">
-                                <Toggle
-                                    :defaultChecked="webhooks.include_info"
-                                    fieldName="include_info"
-                                    @change="handleToggle($event)"
-                                />
-                                <label
-                                    class="font-color-light font-base-sb margin-left-sm"
-                                >
-                                    Include Informational Findings
-                                </label>
-                            </div>
-                            <div class="d-flex margin-bottom-sm">
-                                <Toggle
-                                    :defaultChecked="webhooks.client_status"
-                                    fieldName="client_status"
-                                    @change="handleToggle($event)"
-                                />
-                                <label
-                                    class="font-color-light font-base-sb margin-left-sm hover-help"
-                                    title="Generated, Toggle activation, CLI Authenticated"
-                                >
-                                    Client Status
-                                </label>
-                            </div>
-                            <div class="d-flex margin-bottom-sm">
-                                <Toggle
-                                    :defaultChecked="webhooks.client_activity"
-                                    fieldName="client_activity"
-                                    @change="handleToggle($event)"
-                                />
-                                <label
-                                    class="font-color-light font-base-sb margin-left-sm hover-help"
-                                    title="Report Uploads, Authentication"
-                                >
-                                    Client Activity
-                                </label>
-                            </div>
-                            <div class="d-flex margin-bottom-sm">
-                                <Toggle
-                                    :defaultChecked="
-                                        webhooks.scanner_configurations
-                                    "
-                                    fieldName="scanner_configurations"
-                                    @change="handleToggle($event)"
-                                />
-                                <label
-                                    class="font-color-light font-base-sb margin-left-sm"
-                                >
-                                    Scanner Configurations
-                                </label>
-                            </div>
-                            <div class="d-flex margin-bottom-sm">
-                                <Toggle
-                                    :defaultChecked="webhooks.report_created"
-                                    fieldName="report_created"
-                                    @change="handleToggle($event)"
-                                />
-                                <label
-                                    class="font-color-light font-base-sb margin-left-sm"
-                                >
-                                    Report Created
-                                </label>
-                            </div>
-                            <div class="d-flex margin-bottom-sm">
-                                <Toggle
-                                    :defaultChecked="webhooks.report_deleted"
-                                    fieldName="report_deleted"
-                                    @change="handleToggle($event)"
-                                />
-                                <label
-                                    class="font-color-light font-base-sb margin-left-sm"
-                                >
-                                    Report Deleted
-                                </label>
-                            </div>
-                            <div class="d-flex margin-bottom-sm">
-                                <Toggle
-                                    :defaultChecked="webhooks.account_activity"
-                                    fieldName="account_activity"
-                                    @change="handleToggle($event)"
-                                />
-                                <label
-                                    class="font-color-light font-base-sb margin-left-sm"
-                                >
-                                    Account Activity
-                                </label>
-                            </div>
-                            <div class="d-flex margin-bottom-sm">
-                                <Toggle
-                                    :defaultChecked="webhooks.member_activity"
-                                    fieldName="member_activity"
-                                    @change="handleToggle($event)"
-                                />
-                                <label
-                                    class="font-color-light font-base-sb margin-left-sm"
-                                >
-                                    Member Activity
-                                </label>
-                            </div>
-                        </template>
+                                <tr>
+                                    <td scope="row">
+                                        <IconTarget
+                                            class="link-icon margin-right-xxs"
+                                            color="e2c878"
+                                        />
+                                        <span class="font-color-secondary">
+                                            {{ webhook.endpoint }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div
+                                            class="d-flex justify-content-end edit-webhook-modal"
+                                        >
+                                            <Modal
+                                                :id="`editWebhook${webhook.id}`"
+                                                label="edit-webhook-header"
+                                            >
+                                                <template
+                                                    v-slot:button="buttonProps"
+                                                >
+                                                    <button
+                                                        type="button"
+                                                        class="edit-btn border-radius-sm"
+                                                        v-bind="buttonProps"
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                </template>
+                                                <template v-slot:modalTitle>
+                                                    <h5
+                                                        class="font-sm-b font-color-secondary"
+                                                    >
+                                                        {{ webhook.endpoint }}
+                                                    </h5>
+                                                </template>
+                                                <template v-slot:modalContent>
+                                                    <WebhookForm
+                                                        v-bind="webhook"
+                                                        v-model:loading="
+                                                            loading
+                                                        "
+                                                        v-model:message="
+                                                            message
+                                                        "
+                                                        v-model:messageType="
+                                                            messageType
+                                                        "
+                                                        @deleteWebhook.once="
+                                                            handleDeleteWebhook
+                                                        "
+                                                    />
+                                                </template>
+                                            </Modal>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div v-else class="font-base-sb font-color-secondary">
+                        No webhook endpoints registered
                     </div>
                 </div>
             </div>
@@ -277,125 +158,90 @@
 
 <script setup>
 import AccountMenu from '@/components/layout/AccountMenu.vue'
-import Toggle from '@/components/general/Toggle.vue'
-import ValidationMessage from '@/components/general/ValidationMessage.vue'
+import WebhookForm from '@/components/forms/WebhookForm.vue'
 import LoadingComponent from '@/components/general/LoadingComponent.vue'
+import ValidationMessage from '@/components/general/ValidationMessage.vue'
+import IconTarget from '@/components/icons/IconTarget.vue'
 import TextInput from '@/components/inputs/TextInput.vue'
+import TextArea from '@/components/inputs/TextArea.vue'
+import Toggle from '@/components/general/Toggle.vue'
+import Button from '@/components/general/Button.vue'
+import Modal from '@/components/general/Modal.vue'
+import WebhookSecret from '@/components/general/WebhookSecret.vue'
 </script>
 
 <script>
 export default {
     components: {
         AccountMenu,
-        Toggle,
-        ValidationMessage,
+        WebhookForm,
         LoadingComponent,
-        TextInput
+        ValidationMessage,
+        IconTarget,
+        TextInput,
+        TextArea,
+        Toggle,
+        Button,
+        Modal
     },
     data() {
         return {
+            message: '',
+            messageType: '',
+            showSecret: '',
+            loading: false,
+            showNotice: false,
             display_name: localStorage.getItem('/account/display'),
             member_avatar: localStorage.getItem('/member/email_md5'),
             member_email: localStorage.getItem('/member/email'),
-            message: '',
-            messageType: '',
-            loading: false,
-            webhooks: {
-                webhook_endpoint: null,
-                hosted_monitoring: false,
-                hosted_scanner: false,
-                self_hosted_uploads: false,
-                early_warning_email: false,
-                early_warning_domain: false,
-                early_warning_ip: false,
-                new_findings_certificates: false,
-                new_findings_domains: false,
-                include_warning: false,
-                include_info: false,
-                client_status: false,
-                client_activity: false,
-                scanner_configurations: false,
-                report_created: false,
-                report_deleted: false,
-                account_activity: false,
-                member_activity: false
-            }
-        }
-    },
-    computed: {
-        showEvents() {
-            return (
-                typeof this.webhooks.webhook_endpoint === 'string' &&
-                this.webhooks.webhook_endpoint.length > 0
-            )
+            webhooks: []
         }
     },
     mounted() {
-        this.fetchWebhooks()
+        this.fetchWebhook()
     },
     methods: {
-        async handleToggle(event) {
+        async addWebhook(event) {
             this.loading = true
-            const action = event.target.checked ? 'enable' : 'disable'
-            const targetUrl = `/webhook/${action}/${event.target.name}`
-            try {
-                const response = await Api.get(targetUrl)
-                if (response.status !== 202) {
-                    this.message = `${response.status} ${response.statusText}`
-                    this.messageType = `error`
-                    this.loading = false
-                    return
-                }
-                this.webhooks[event.target.name] = event.target.checked
-                this.message = `${action}d webhook ${event.target.name} event`
-                this.messageType = `success`
-            } catch (error) {
-                this.message =
-                    error.name === 'AbortError'
-                        ? 'Request timed out, please try refreshing the page.'
-                        : `${error.name} ${error.message}. Couldn't complete this action.`
-                this.messageType = 'error'
-            }
+            const endpoint = event.target.elements['Endpoint'].value
+            const response = await Api.post(`/webhook/enable`, { endpoint })
             this.loading = false
-        },
-        async handleWebhookEndpoint(event) {
-            this.loading = true
-            const endpoint =
-                event.target.value.length > 0 ? event.target.value : null
-            try {
-                const response = await Api.post(`/webhook/endpoint`, {
-                    endpoint
-                })
-                if (response.status !== 202) {
-                    this.message = `${response.status} ${response.statusText}`
-                    this.messageType = `error`
-                    this.loading = false
-                    return
-                }
-                this.webhooks.webhook_endpoint = endpoint
-                this.message = `Updated your Webhooks endpoint URL`
+            if (response.status === 201) {
+                const webhook = await response.json()
+                webhook.id = Math.max(this.webhooks.map((item) => item.id)) + 1
+                this.showSecret = webhook.signing_secret
+                this.message = `Added webhook to ${endpoint}`
                 this.messageType = `success`
-            } catch (error) {
-                this.message =
-                    error.name === 'AbortError'
-                        ? 'Request timed out, please try refreshing the page.'
-                        : `${error.name} ${error.message}. Couldn't complete this action.`
-                this.messageType = 'error'
+                this.webhooks.unshift(webhook)
+                this.showNotice = true
+                return
             }
-            this.loading = false
+            if (response.status === 206) {
+                this.message = `Webhook endpoint exists: ${endpoint}`
+                this.messageType = `warning`
+                return
+            }
+            this.message = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
+            this.messageType = 'error'
         },
-        async fetchWebhooks() {
+        async fetchWebhook() {
             this.loading = true
             try {
-                const response = await Api.get(`/me`, { timeout: 30000 })
+                const response = await Api.get(`/me`)
                 if (response.status !== 200) {
                     this.message = `${response.status} ${response.statusText}`
                     this.messageType = `error`
                     this.loading = false
                     return
                 }
-                const data = await response.json()
-                this.webhooks = data.member.account.webhooks
+                const session = await response.json()
+                let webhookId = 0
+                this.webhooks = session.member.account.webhooks.map(
+                    (webhook) => {
+                        webhook.id = webhookId++
+                        return webhook
+                    }
+                )
             } catch (error) {
                 this.message =
                     error.name === 'AbortError'
@@ -404,11 +250,35 @@ export default {
                 this.messageType = 'error'
             }
             this.loading = false
+        },
+        async handleDeleteWebhook(endpoint) {
+            for (const [index, webhook] of this.webhooks.entries()) {
+                if (webhook.endpoint === endpoint) {
+                    this.webhooks.splice(index, 1)
+                    break
+                }
+            }
         }
     }
 }
 </script>
 <style scoped lang="scss">
+.link-icon {
+    height: 20px;
+    width: 20px;
+}
+.table {
+    --bs-table-bg: color('dark');
+}
+.edit-btn {
+    padding: 0 spacers('lg');
+    border: 0;
+    background-color: color('primary');
+    &:hover {
+        color: color('secondary');
+        background-color: color('primary-80');
+    }
+}
 .profile {
     &-picture {
         width: 100px;

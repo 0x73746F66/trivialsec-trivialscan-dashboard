@@ -1,5 +1,14 @@
 ---
 repos:
+    - repo: https://github.com/Yelp/detect-secrets
+      rev: v1.4.0
+      hooks:
+          - id: detect-secrets
+            name: Detect secrets
+            language: python
+            entry: detect-secrets-hook
+            args: ['--baseline', '.secrets.baseline']
+
     - repo: https://github.com/pre-commit/pre-commit-hooks
       rev: v4.4.0
       hooks:
@@ -59,15 +68,6 @@ repos:
                 - --args=--framework terraform
                 - --args=--skip-check
                   CKV_AWS_86,CKV_AWS_68,CKV_AWS_145,CKV_AWS_144,CKV_AWS_18,CKV_AWS_19,CKV_AWS_21
-
-    - repo: https://github.com/Yelp/detect-secrets
-      rev: v1.4.0
-      hooks:
-          - id: detect-secrets
-            name: Detect secrets
-            language: python
-            entry: detect-secrets-hook
-            args: ['--baseline', '.secrets.baseline']
 
     - repo: https://github.com/mattlqx/pre-commit-sign
       rev: v1.1.3

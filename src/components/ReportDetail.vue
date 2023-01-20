@@ -1,6 +1,11 @@
 <template>
     <div class="container font-color-light padding-bottom-xl">
         <div class="row position-relative">
+            <LoadingComponent
+                class="loading"
+                :class="{ inactive: !loading }"
+                :active="loading"
+            />
             <div class="col-12 col-lg-6">
                 <h1 class="font-xl">{{ category }} Report</h1>
                 <div class="d-block">
@@ -89,11 +94,6 @@
                         </template>
                         <template #content>
                             <div class="modal-body">
-                                <LoadingComponent
-                                    class="loading"
-                                    :class="{ inactive: !loading }"
-                                    :active="loading"
-                                />
                                 <ValidationMessage
                                     :message="errorMessageScanHost"
                                     :type="errorMessageTypeScanHost"
@@ -295,13 +295,13 @@
                                             Cipher
                                             <span
                                                 class="font-color-light font-sm hover-help"
-                                                :title="`${target.tls.cipher.offered_rfc.join(
+                                                :title="`${target.tls.cipher.offered_rfc?.join(
                                                     '\n'
                                                 )}`"
                                             >
                                                 ({{
                                                     target.tls.cipher
-                                                        .offered_rfc.length
+                                                        .offered_rfc?.length
                                                 }}
                                                 offered)
                                             </span>
@@ -628,9 +628,6 @@ export default {
         border: 1px solid color('primary');
     }
 }
-</style>
-
-<style lang="scss">
 .link-icon {
     height: 20px;
     width: 20px;
@@ -660,7 +657,9 @@ export default {
         display: none;
     }
 }
+</style>
 
+<style lang="scss">
 .modal-icon-report-close {
     width: 25px;
     height: 25px;

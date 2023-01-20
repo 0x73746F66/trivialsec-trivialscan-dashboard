@@ -27,7 +27,14 @@ const clearState = () => {
     localStorage.setItem('/member/email_md5', '')
     localStorage.setItem('/session/key', '')
 }
-
+String.prototype.toCamelCase = function () {
+    return (this.slice(0, 1).toLowerCase() + this.slice(1))
+        .replace(/([-_ ]){1,}/g, ' ')
+        .split(/[-_ ]/)
+        .reduce((cur, acc) => {
+            return cur + acc[0].toUpperCase() + acc.substring(1)
+        })
+}
 const apiUrl = import.meta.env.VITE_API_URL.trim()
 window.Api = {
     get: async (uriPath, options = {}) => {

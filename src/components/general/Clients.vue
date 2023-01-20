@@ -41,7 +41,9 @@
                             v-clipboard:success="clientSuccess"
                             v-clipboard:error="clientError"
                         >
-                            {{ client.name }}
+                            <span class="hover-help" title="Copy to clipboard">
+                                {{ client.name }}
+                            </span>
                         </p>
                         <p v-if="client.cli_version" class="mb-0">
                             <span class="font-sm-sb margin-right-sm"
@@ -80,7 +82,9 @@
                             v-clipboard:success="tokenSuccess"
                             v-clipboard:error="tokenError"
                         >
-                            {{ client.access_token }}
+                            <span class="hover-help" title="Copy to clipboard">
+                                {{ client.access_token }}
+                            </span>
                         </div>
                     </div>
                     <div class="d-flex client-actions">

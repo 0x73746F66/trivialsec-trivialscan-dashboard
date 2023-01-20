@@ -40,14 +40,18 @@
                                             selected="selected"
                                             class="capitalize"
                                         >
-                                            {{ version.label
-                                            }}<span
+                                            <span
                                                 v-if="
                                                     version.value !== 'latest'
                                                 "
                                             >
-                                                port {{ version.port }}</span
+                                                {{ version.ip }} on
+                                                {{ version.port }} at
+                                                {{ version.label }}</span
                                             >
+                                            <span v-else>{{
+                                                version.label
+                                            }}</span>
                                         </option>
                                     </template>
                                     <template v-else>
@@ -55,14 +59,18 @@
                                             :value="version.value"
                                             class="capitalize"
                                         >
-                                            {{ version.label
-                                            }}<span
+                                            <span
                                                 v-if="
                                                     version.value !== 'latest'
                                                 "
                                             >
-                                                port {{ version.port }}</span
+                                                {{ version.ip }} on
+                                                {{ version.port }} at
+                                                {{ version.label }}</span
                                             >
+                                            <span v-else>{{
+                                                version.label
+                                            }}</span>
                                         </option>
                                     </template>
                                 </template>
@@ -135,9 +143,9 @@
                     Cipher
                     <span
                         class="font-sm hover-help"
-                        :title="`${host.tls?.cipher.offered_rfc.join('\n')}`"
+                        :title="`${host.tls?.cipher.offered_rfc?.join('\n')}`"
                     >
-                        ({{ host.tls?.cipher.offered_rfc.length }} offered)
+                        ({{ host.tls?.cipher.offered_rfc?.length }} offered)
                     </span>
                 </h3>
                 <p class="margin-bottom-xs">
@@ -336,6 +344,7 @@ export default {
     color: color('dark');
     padding: 0 spacers('xxs');
     width: max-content;
+    max-width: 110px;
 }
 
 .report {
