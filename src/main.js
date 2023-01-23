@@ -180,8 +180,10 @@ window.user_notify = (title, body, options = {}) => {
         }
         return result
     }
-    function ToastTemplate(eleId, header, content) {
-        return `<div id="${eleId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    function ToastTemplate(eleId, header, content, autohide = true) {
+        return `<div id="${eleId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="${
+            autohide ? 'true' : 'false'
+        }">
         <div class="toast-header">
             <strong class="me-auto">${header}</strong>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -202,7 +204,7 @@ window.user_notify = (title, body, options = {}) => {
                 const toastId = MakeId(5)
                 toastContainer.insertAdjacentHTML(
                     'beforeend',
-                    ToastTemplate(toastId, title, body)
+                    ToastTemplate(toastId, title, body, delay > 0)
                 )
                 const toastEl = document.getElementById(toastId)
                 const toast = new Toast(toastEl, { delay })
@@ -233,7 +235,7 @@ window.user_notify = (title, body, options = {}) => {
                         const toastId = MakeId(5)
                         toastContainer.insertAdjacentHTML(
                             'beforeend',
-                            ToastTemplate(toastId, title, body)
+                            ToastTemplate(toastId, title, body, delay > 0)
                         )
                         const toastEl = document.getElementById(toastId)
                         const toast = new Toast(toastEl, { delay })
@@ -251,7 +253,7 @@ window.user_notify = (title, body, options = {}) => {
                 const toastId = MakeId(5)
                 toastContainer.insertAdjacentHTML(
                     'beforeend',
-                    ToastTemplate(toastId, title, body)
+                    ToastTemplate(toastId, title, body, delay > 0)
                 )
                 const toastEl = document.getElementById(toastId)
                 const toast = new Toast(toastEl, { delay })

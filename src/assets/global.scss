@@ -372,3 +372,15 @@ blockquote {
         transform: rotate(180deg);
     }
 }
+.toast {
+    border: none;
+}
+.toast-header {
+    background-color: color('primary');
+    color: color('dark');
+    border-bottom: none;
+}
+.toast-body {
+    background-color: color('primary');
+    color: color('dark');
+}
