@@ -468,6 +468,7 @@ export default {
                         this.errorMessageScanHost = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
                         this.errorMessageTypeScanHost = 'error'
                         this.loading = false
+                        e.target.checked = false
                         return
                     }
                     this.errorMessageScanHost = `Monitoring host.`
@@ -480,6 +481,7 @@ export default {
                         this.errorMessageScanHost = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
                         this.errorMessageTypeScanHost = 'error'
                         this.loading = false
+                        e.target.checked = false
                         return
                     }
                     this.errorMessageScanHost = `No longer monitoring host.`
