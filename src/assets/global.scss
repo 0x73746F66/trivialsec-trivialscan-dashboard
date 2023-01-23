@@ -330,6 +330,10 @@ blockquote {
     flex-basis: 100%;
     width: 0;
 }
+.flex-right {
+    justify-content: right;
+    flex-grow: 1;
+}
 
 .swiper-pagination .swiper-pagination-bullet-active {
     background: color('primary');
