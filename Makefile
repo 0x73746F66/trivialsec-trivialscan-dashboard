@@ -68,14 +68,15 @@ tfinstall:
 	terraform -chdir=plans -install-autocomplete || true
 
 env:
-	@echo -e $(bold)$(primary)VITE_API_URL$(clear) = $(VITE_API_URL)
+	@echo -e $(bold)$(primary)VITE_API_URL$(clear) = $(shell terraform -chdir=plans output -raw api_function_url)
 	@echo -e $(bold)$(primary)CI_BUILD_REF$(clear) = $(CI_BUILD_REF)
 	@echo -e $(bold)$(primary)APP_ENV$(clear) = $(APP_ENV)
 
-init: env ## Runs tf init tf
+init: ## Runs tf init tf
+	@echo -e $(bold)$(primary)APP_ENV$(clear) = $(APP_ENV)
 	terraform -chdir=plans init -backend-config=${APP_ENV}-backend.conf -reconfigure -upgrade=true
 
-refresh:  ## Runs tf refresh
+refresh: ## Runs tf refresh
 	terraform -chdir=plans refresh
 
 plan:  ## Runs tf validate and tf plan
@@ -96,7 +97,7 @@ test-local:  ## Prettier test outputs
 	pre-commit run --all-files
 	semgrep -q --strict --timeout=0 --config=p/terraform
 
-run-local: env refresh  ## npm run dev
+run-local: refresh env  ## npm run dev
 	VITE_API_URL=$(shell terraform -chdir=plans output -raw api_function_url) npx vite --host
 
 ci-build: env init refresh  ## npm run build
