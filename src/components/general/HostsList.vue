@@ -20,6 +20,7 @@
             </button>
         </div>
         <Swiper
+            class="w-100"
             :modules="modules"
             :slides-per-view="1"
             :space-between="10"
@@ -169,7 +170,7 @@ export default {
     },
     computed: {
         slicedTargets() {
-            var arrays = []
+            const arrays = []
             while (this.targets.length > 0) {
                 arrays.push(this.targets.splice(0, 15))
             }

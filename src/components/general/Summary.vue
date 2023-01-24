@@ -11,6 +11,7 @@
             <button class="swiper-button swiper-button-prev"></button>
         </div>
         <Swiper
+            class="w-100"
             :modules="modules"
             :slides-per-view="1"
             :space-between="10"
