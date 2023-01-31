@@ -36,9 +36,6 @@ vite build (prod):
         paths:
             - node_modules/
             - $SOURCE_FILES
-    rules:
-        - changes:
-              - src/**/*
 
 terraform validate (prod):
     variables:
