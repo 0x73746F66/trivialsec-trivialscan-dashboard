@@ -98,7 +98,7 @@ terraform apply (prod):
     environment:
         name: aws
         url: https://sso.jumpcloud.com/saml2/aws1
-        on_stop: terraform destroy
+        on_stop: terraform destroy (prod)
     dependencies:
         - terraform plan (prod)
 
@@ -213,7 +213,7 @@ terraform apply (dev):
     environment:
         name: aws
         url: https://sso.jumpcloud.com/saml2/aws1
-        on_stop: terraform destroy
+        on_stop: terraform destroy (dev)
     dependencies:
         - terraform plan (dev)
 
