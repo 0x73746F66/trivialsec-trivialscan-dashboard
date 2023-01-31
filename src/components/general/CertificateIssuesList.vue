@@ -157,7 +157,7 @@
                                     "
                                     class="text-decoration-none font-sm font-color-primary"
                                 >
-                                    Read More
+                                    See Details
                                     <IconArrowPrimary
                                         class="basic-feature-read-more-link-icon"
                                     />

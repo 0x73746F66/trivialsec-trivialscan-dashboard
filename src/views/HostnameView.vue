@@ -5,7 +5,7 @@
                 <SearchForm />
             </div>
         </div>
-        <div class="margin-top-sm" v-if="host">
+        <div class="margin-top-sm" v-if="Object.keys(host).length > 0">
             <ValidationMessage
                 v-if="errorMessage.length > 0"
                 class="justify-content-start"
@@ -17,10 +17,10 @@
                 :host="host"
                 :external_refs="external_refs"
                 :versions="versions"
-                :params="params"
+                :v-model:params="params"
             />
-            <h4 class="heading">Scanner Reports</h4>
             <div v-if="reports.length > 0">
+                <h4 class="heading">Scanner Reports</h4>
                 <div
                     v-for="(summary, index) in reports"
                     :key="index"
@@ -35,7 +35,11 @@
                 </div>
             </div>
             <div v-else class="font-color-danger font-base-sb">
-                No matching scanner reports on your account
+                <ValidationMessage
+                    class="justify-content-start"
+                    message="No matching scanner reports on your account"
+                    type="error"
+                />
             </div>
         </div>
     </div>
@@ -60,7 +64,8 @@ export default {
             host: {},
             external_refs: {},
             reports: [],
-            versions: []
+            versions: [],
+            params: {}
         }
     },
     components: {

@@ -27,9 +27,10 @@
                                         class="d-none d-lg-block font-xxl-b font-color-primary nowrap"
                                     >
                                         Trivial Security<CustomPill
+                                            v-if="is_dev"
                                             class="margin-left-xs"
-                                            label="Beta"
-                                            type="secondary"
+                                            label="Demo"
+                                            type="danger"
                                             size="sm"
                                             classes="pill-beta"
                                         />
@@ -265,7 +266,8 @@ export default {
     },
     data() {
         return {
-            isNavbarHidden: true
+            isNavbarHidden: true,
+            is_dev: import.meta.env.DEV
         }
     },
     methods: {

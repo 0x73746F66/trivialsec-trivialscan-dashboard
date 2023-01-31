@@ -1,5 +1,5 @@
 <template>
-    <div class="container font-color-light padding-bottom-xl">
+    <div class="container">
         <div class="row position-relative">
             <LoadingComponent
                 class="loading"
@@ -407,14 +407,6 @@
                 </div>
             </div>
         </div>
-
-        <div class="row">
-            <EvaluationItems
-                :evaluations="evaluations"
-                :results="results"
-                :resultsFilter="resultsFilter"
-            />
-        </div>
     </div>
 </template>
 <script setup>
@@ -435,7 +427,6 @@ import IconChevron from '@/components/icons/IconChevron.vue'
 import CustomPill from '@/components/general/CustomPill.vue'
 import SlidingModal from '@/components/general/SlidingModal.vue'
 import ReportCertificates from '@/components/general/ReportCertificates.vue'
-import EvaluationItems from '@/components/EvaluationItems.vue'
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 </script>
@@ -458,8 +449,7 @@ export default {
         CustomPill,
         SlidingModal,
         IconChevron,
-        ReportCertificates,
-        EvaluationItems
+        ReportCertificates
     },
     props: [
         'generator',
@@ -477,8 +467,7 @@ export default {
         'certificates',
         'results_uri',
         'config',
-        'flags',
-        'evaluations'
+        'flags'
     ],
     data() {
         return {
@@ -486,13 +475,7 @@ export default {
             errorMessage: '',
             errorMessageType: '',
             errorMessageScanHost: '',
-            errorMessageTypeScanHost: '',
-            resultsFilter: {
-                pass: false,
-                fail: true,
-                warn: true,
-                info: false
-            }
+            errorMessageTypeScanHost: ''
         }
     },
     setup() {

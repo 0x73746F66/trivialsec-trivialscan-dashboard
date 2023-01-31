@@ -1,5 +1,5 @@
 <template>
-    <div class="font-color-light" v-if="host">
+    <div class="font-color-light" v-if="Object.keys(host).length > 0">
         <LoadingComponent class="loading" v-if="loading" />
         <ValidationMessage
             v-if="errorMessage?.length > 0"
@@ -28,7 +28,7 @@
                                 >
                                     <template
                                         v-if="
-                                            params.version ===
+                                            params?.version ===
                                             version.value.replace(
                                                 `${version.port}/`,
                                                 ''
@@ -207,6 +207,48 @@
                         >
                     </a>
                 </span>
+                <h3
+                    class="font-color-secondary font-sm-sb margin-top-sm"
+                    v-if="this.host.threat_intel?.length > 0"
+                >
+                    <IconTarget class="target-icon" color="e2c878" />
+                    Threat Feed Entries
+                </h3>
+                <div
+                    v-for="(info, intelKey) in host.threat_intel"
+                    :key="intelKey"
+                    class="font-color-light font-sm word-break"
+                    :title="info.feed_identifier"
+                >
+                    Appeared
+                    <time
+                        class="hover-help"
+                        :title="moment(info.feed_date)"
+                        :datetime="moment(info.feed_date).toISOString()"
+                    >
+                        {{ moment(info.feed_date).fromNow() }}
+                    </time>
+                    on
+                    <a
+                        v-if="info.source === 'TalosIntelligence'"
+                        class="font-color-primary margin-right-xxs"
+                        :href="`https://www.talosintelligence.com/reputation_center/lookup?search=${info.feed_identifier}`"
+                        target="_blank"
+                    >
+                        Cisco Talos Intelligence
+                    </a>
+                    <a
+                        v-else-if="info.source === 'Darklist'"
+                        class="font-color-primary margin-right-xxs"
+                        :href="`https://www.darklist.de/view.php?ip=${info.feed_identifier}`"
+                        target="_blank"
+                    >
+                        darklist.de
+                    </a>
+                    <span v-else class="margin-right-xxs">
+                        {{ info.source }}
+                    </span>
+                </div>
             </div>
             <div
                 class="col-lg-3 col-12 d-flex flex-column margin-bottom-xs bg-dark-60 border-radius-sm padding-sm"

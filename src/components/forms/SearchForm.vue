@@ -221,7 +221,7 @@
                                             report, index
                                         ) in result.reports"
                                         :key="index"
-                                        :href="`/result/${report}/detail`"
+                                        :href="`/result/${report}`"
                                         class="font-xs font-color-light-60 nowrap"
                                     >
                                         {{ index + 1 }}. Report
@@ -271,7 +271,7 @@
                     :key="index"
                 >
                     <span class="d-flex justify-content-between align-items-center">
-                        <a :href="`/result/${report}/detail`" class="d-flex font-color-light text-decoration-none">
+                        <a :href="`/result/${report}`" class="d-flex font-color-light text-decoration-none">
                             Report {{index+1}}
                         </a>
                         <div class="d-flex flex-row">

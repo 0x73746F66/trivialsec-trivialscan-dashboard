@@ -25,8 +25,8 @@ const routes = [
         component: () => import('@/views/CertificateIssuesView.vue')
     },
     {
-        path: '/result/:report_id',
-        name: 'result',
+        path: '/result/:report_id/detail',
+        name: 'cli-result',
         redirect: (to) => {
             return {
                 name: 'detail',
@@ -35,7 +35,7 @@ const routes = [
         }
     },
     {
-        path: '/result/:report_id/detail',
+        path: '/result/:report_id',
         name: 'detail',
         component: () => import('@/views/DetailView.vue')
     },

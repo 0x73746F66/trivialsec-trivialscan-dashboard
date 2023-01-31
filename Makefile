@@ -106,6 +106,11 @@ ci-build: env init refresh  ## npm run build
 preview: env init refresh  ## npm run build
 	VITE_API_URL=$(shell terraform -chdir=plans output -raw api_function_url) npx vite preview --host
 
+clear-cf:  ## AWS CloudFront cache invalidation
+	aws cloudfront create-invalidation \
+		--distribution-id $(shell terraform -chdir=plans output -raw cloudfront_trivialscan_dashboard) \
+		--paths "/index.html" "/assets/*.js" "/assets/*.css"
+
 lint:  ## npm run lint
 	npm run lint
 

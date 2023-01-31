@@ -46,8 +46,11 @@
                         class="summary-icon-targets margin-right-xxs"
                         color="e2c878"
                     />
+                    {{ $log(target) }}
                     <RouterLink
-                        :to="`/hostname/${target.transport.hostname}/${target.transport.port}`"
+                        :to="`/hostname/${target.transport.hostname}/${
+                            target.transport.port
+                        }/${moment.utc(report.date).format('YYYYMMDD')}`"
                         class="font-color-secondary"
                     >
                         {{ target.transport.hostname }}:{{
@@ -138,16 +141,20 @@
             <div
                 class="col-12 col-lg-6 d-flex flex-column justify-content-end align-items-end margin-top-sm"
             >
-                <a
-                    :href="`/result/${report.report_id}/detail`"
+                <RouterLink
+                    :to="{
+                        name: 'detail',
+                        params: { report_id: report.report_id }
+                    }"
                     class="font-color-primary text-decoration-none"
+                    @click="navData(report)"
                 >
-                    Read More
+                    Full Report
                     <IconArrowPrimary
                         class="summary-icon-next mr-0"
                         color="1abb9c"
                     />
-                </a>
+                </RouterLink>
             </div>
         </div>
     </div>
@@ -162,6 +169,7 @@ import IconCertificate from '@/components/icons/IconCertificate.vue'
 import IconArrowPrimary from '@/components/icons/IconArrowPrimary.vue'
 import IconTrash from '@/components/icons/IconTrash.vue'
 import ValidationMessage from '@/components/general/ValidationMessage.vue'
+import moment from 'moment'
 </script>
 
 <script>
@@ -191,6 +199,12 @@ export default {
         }
     },
     methods: {
+        navData(report) {
+            localStorage.setItem(
+                `/summary/${report.report_id}`,
+                JSON.stringify(report)
+            )
+        },
         shortReportId(reportId) {
             return reportId.replace(/[\W_]+/g, '').slice(0, 11)
         },
