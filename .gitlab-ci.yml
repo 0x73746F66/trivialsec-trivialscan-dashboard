@@ -278,6 +278,7 @@ secrets scanning:
     only:
         refs:
             - merge_request
+            - main
 
 repo checks:
     stage: build
@@ -310,9 +311,6 @@ whitespace:
             do
               pre-commit run $i --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
             done
-    only:
-        refs:
-            - merge_request
     rules:
         - changes:
               - src/**/*
@@ -329,9 +327,6 @@ yaml json py linting:
             do
               pre-commit run $i --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
             done
-    only:
-        refs:
-            - merge_request
     rules:
         - changes:
               - src/**/*
