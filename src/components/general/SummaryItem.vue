@@ -46,7 +46,6 @@
                         class="summary-icon-targets margin-right-xxs"
                         color="e2c878"
                     />
-                    {{ $log(target) }}
                     <RouterLink
                         :to="`/hostname/${target.transport.hostname}/${
                             target.transport.port
