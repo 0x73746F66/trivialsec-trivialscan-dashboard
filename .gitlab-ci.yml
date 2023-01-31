@@ -3,12 +3,19 @@ variables:
     TF_VAR_app_name: trivialscan-dashboard
     TF_LOG: WARN
     SOURCE_FILES: dist/
+    NODE_ENV: development
+    APP_ENV: Dev
+    TF_VAR_app_env: Dev
 
 stages:
     - build
     - pre-deploy
     - deploy
     - post-deploy
+
+#################
+# Production
+#################
 
 vite build (prod):
     variables:
@@ -29,9 +36,14 @@ vite build (prod):
         paths:
             - node_modules/
             - $SOURCE_FILES
+    rules:
+        - changes:
+              - src/**/*
 
-terraform validate:
+terraform validate (prod):
     variables:
+        NODE_ENV: production
+        APP_ENV: Prod
         TF_VAR_app_env: Prod
     stage: build
     tags:
@@ -45,8 +57,201 @@ terraform validate:
             done
     only:
         refs:
-            - merge_request
             - main
+    dependencies:
+        - vite build (prod)
+
+terraform plan (prod):
+    variables:
+        NODE_ENV: production
+        APP_ENV: Prod
+        TF_VAR_app_env: Prod
+    tags:
+        - jager
+    stage: pre-deploy
+    script:
+        - make init plan
+    only:
+        refs:
+            - main
+    artifacts:
+        name: tfplan
+        paths:
+            - plans/.tfplan
+            - plans/.terraform.lock.hcl
+            - plans/.terraform
+        reports:
+            terraform: tfplan.json
+    dependencies:
+        - vite build (prod)
+
+terraform apply (prod):
+    variables:
+        NODE_ENV: production
+        APP_ENV: Prod
+        TF_VAR_app_env: Prod
+    tags:
+        - jager
+    stage: deploy
+    script:
+        - make apply
+    only:
+        refs:
+            - main
+    environment:
+        name: aws
+        url: https://sso.jumpcloud.com/saml2/aws1
+        on_stop: terraform destroy
+    dependencies:
+        - terraform plan (prod)
+
+terraform destroy (prod):
+    variables:
+        APP_ENV: Prod
+        TF_VAR_app_env: Prod
+        GIT_STRATEGY: none
+    stage: post-deploy
+    tags:
+        - jager
+    script:
+        - make destroy
+    when: manual
+    environment:
+        name: aws
+        action: stop
+    artifacts:
+        name: tfdestroy
+        paths:
+            - plans/.tfdestroy
+        reports:
+            terraform: plans/tfdestroy.json
+    dependencies:
+        - terraform apply (prod)
+
+clear cdn cache (prod):
+    variables:
+        NODE_ENV: production
+        APP_ENV: Prod
+        TF_VAR_app_env: Prod
+    stage: post-deploy
+    tags:
+        - jager
+    script:
+        - make clear-cf
+    when: manual
+    dependencies:
+        - terraform apply (prod)
+
+#################
+# Non-Production
+#################
+
+vite build (dev):
+    tags:
+        - jager
+    stage: build
+    script:
+        - npm i
+        - make -B ci-build
+    rules:
+        - changes:
+              - src/**/*
+        - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "devel"'
+    artifacts:
+        name: dist
+        paths:
+            - node_modules/
+            - $SOURCE_FILES
+
+terraform validate (dev):
+    stage: build
+    tags:
+        - jager
+    script:
+        - |+
+            TOOLS="terraform_checkov terraform_validate"
+            for i in $TOOLS
+            do
+              pre-commit run $i --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
+            done
+    only:
+        refs:
+            - merge_request
+    dependencies:
+        - vite build (dev)
+
+terraform plan (dev):
+    variables:
+        APP_ENV: Dev
+        TF_VAR_app_env: Dev
+    tags:
+        - jager
+    stage: pre-deploy
+    script:
+        - make init plan
+    rules:
+        - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "devel"'
+    artifacts:
+        name: tfplan
+        paths:
+            - plans/.tfplan
+            - plans/.terraform.lock.hcl
+            - plans/.terraform
+        reports:
+            terraform: tfplan.json
+    dependencies:
+        - vite build (dev)
+
+terraform apply (dev):
+    variables:
+        APP_ENV: Dev
+        TF_VAR_app_env: Dev
+    tags:
+        - jager
+    stage: deploy
+    script:
+        - make apply
+    rules:
+        - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "devel"'
+    environment:
+        name: aws
+        url: https://sso.jumpcloud.com/saml2/aws1
+        on_stop: terraform destroy
+    dependencies:
+        - terraform plan (dev)
+
+terraform destroy (dev):
+    stage: post-deploy
+    tags:
+        - jager
+    script:
+        - make destroy
+    when: manual
+    environment:
+        name: aws
+        action: stop
+    artifacts:
+        name: tfdestroy
+        paths:
+            - plans/.tfdestroy
+        reports:
+            terraform: plans/tfdestroy.json
+    dependencies:
+        - terraform apply (dev)
+
+clear cdn cache (dev):
+    stage: post-deploy
+    tags:
+        - jager
+    script:
+        - make clear-cf
+    when: manual
+    dependencies:
+        - terraform apply (dev)
+
+######################
+# pre-commit tasks
+######################
 
 sca npm:
     stage: build
@@ -111,6 +316,9 @@ whitespace:
     only:
         refs:
             - merge_request
+    rules:
+        - changes:
+              - src/**/*
 
 yaml json py linting:
     stage: build
@@ -127,143 +335,6 @@ yaml json py linting:
     only:
         refs:
             - merge_request
-
-tf:plan:
-    variables:
-        APP_ENV: Prod
-        TF_VAR_app_env: Prod
-    tags:
-        - jager
-    stage: pre-deploy
-    script:
-        - make init plan
-    only:
-        refs:
-            - main
-    dependencies:
-        - vite build (prod)
-    artifacts:
-        name: tfplan
-        paths:
-            - plans/.tfplan
-            - plans/.terraform.lock.hcl
-            - plans/.terraform
-        reports:
-            terraform: tfplan.json
-
-tf:apply:
-    variables:
-        APP_ENV: Prod
-        TF_VAR_app_env: Prod
-    tags:
-        - jager
-    stage: deploy
-    script:
-        - make apply
-    only:
-        refs:
-            - main
-    environment:
-        name: aws
-        url: https://sso.jumpcloud.com/saml2/aws1
-        on_stop: tf:destroy
-    dependencies:
-        - vite build (prod)
-        - tf:plan
-
-vite build (dev):
-    variables:
-        NODE_ENV: production
-        APP_ENV: Dev
-        TF_VAR_app_env: Dev
-    tags:
-        - jager
-    stage: build
-    script:
-        - npm i
-        - make -B ci-build
     rules:
-        - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "devel"'
-    artifacts:
-        name: dist
-        paths:
-            - node_modules/
-            - $SOURCE_FILES
-
-tf:plan:dev:
-    variables:
-        APP_ENV: Dev
-        TF_VAR_app_env: Dev
-    tags:
-        - jager
-    stage: pre-deploy
-    script:
-        - make init plan
-    rules:
-        - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "devel"'
-    dependencies:
-        - vite build (dev)
-    artifacts:
-        name: tfplan
-        paths:
-            - plans/.tfplan
-            - plans/.terraform.lock.hcl
-            - plans/.terraform
-        reports:
-            terraform: tfplan.json
-
-tf:apply:dev:
-    variables:
-        APP_ENV: Dev
-        TF_VAR_app_env: Dev
-    tags:
-        - jager
-    stage: deploy
-    script:
-        - make apply
-    rules:
-        - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "devel"'
-    environment:
-        name: aws
-        url: https://sso.jumpcloud.com/saml2/aws1
-        on_stop: tf:destroy
-    dependencies:
-        - vite build (dev)
-        - tf:plan:dev
-
-tf:destroy:
-    variables:
-        APP_ENV: Prod
-        TF_VAR_app_env: Prod
-        GIT_STRATEGY: none
-    stage: post-deploy
-    tags:
-        - jager
-    script:
-        - make destroy
-    when: manual
-    environment:
-        name: aws
-        action: stop
-    artifacts:
-        name: tfdestroy
-        paths:
-            - plans/.tfdestroy
-        reports:
-            terraform: plans/tfdestroy.json
-
-clear cdn cache:
-    variables:
-        TF_VAR_app_env: Prod
-    stage: post-deploy
-    tags:
-        - jager
-    script:
-        - CF_DISTRIBUTION_ID=$(terraform -chdir=plans output -raw
-          cloudfront_trivialscan_dashboard)
-        - echo CF_DISTRIBUTION_ID=${CF_DISTRIBUTION_ID}
-        - |
-            aws cloudfront create-invalidation \
-            --distribution-id ${CF_DISTRIBUTION_ID} \
-            --paths "/index.html" "/assets/*.js" "/assets/*.css"
-    when: manual
+        - changes:
+              - src/**/*
