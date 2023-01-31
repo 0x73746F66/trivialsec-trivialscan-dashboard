@@ -101,7 +101,9 @@ export default {
             }
         },
         async fetchData() {
-            this.loading = true
+            if (!this.$route.params.hostname) {
+                return
+            }
             try {
                 let url = `/host/${this.$route.params.hostname}?port=${this.$route.params.port}`
                 if (
@@ -112,6 +114,7 @@ export default {
                         .utc(this.$route.params.version)
                         .toISOString()}`
                 }
+                this.loading = true
                 const response = await Api.get(url)
                 if (response.status !== 200) {
                     this.errorMessage =

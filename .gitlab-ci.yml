@@ -100,6 +100,7 @@ terraform apply (prod):
         url: https://sso.jumpcloud.com/saml2/aws1
         on_stop: terraform destroy (prod)
     dependencies:
+        - vite build (prod)
         - terraform plan (prod)
 
 terraform destroy (prod):
@@ -215,6 +216,7 @@ terraform apply (dev):
         url: https://sso.jumpcloud.com/saml2/aws1
         on_stop: terraform destroy (dev)
     dependencies:
+        - vite build (dev)
         - terraform plan (dev)
 
 terraform destroy (dev):
