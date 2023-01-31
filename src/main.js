@@ -14,6 +14,8 @@ app.config.globalProperties.$store = window.localStorage
 if (import.meta.env.DEV) {
     app.config.globalProperties.$log = console.log
     Pusher.logToConsole = true
+} else {
+    app.config.globalProperties.$log = function () {}
 }
 
 app.use(router)
