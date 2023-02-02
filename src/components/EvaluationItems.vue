@@ -121,7 +121,11 @@
                                     v-if="evaluation.transport"
                                 >
                                     <RouterLink
-                                        :to="`/hostname/${evaluation.transport.hostname}/${evaluation.transport.port}`"
+                                        :to="`/hostname/${
+                                            evaluation.transport.hostname
+                                        }/${evaluation.transport.port}${
+                                            reportDate ? '/' + reportDate : ''
+                                        }`"
                                         class="font-color-lighter-60 text-decoration-none"
                                     >
                                         <IconTarget
@@ -394,7 +398,7 @@ export default {
         IconCertificate,
         EvaluationMetadata
     },
-    props: ['evaluations', 'results', 'resultsFilter'],
+    props: ['evaluations', 'results', 'resultsFilter', 'reportDate'],
     methods: {
         slicedThreats(evaluation) {
             if (!evaluation.threats || evaluation.threats.length === 0) {

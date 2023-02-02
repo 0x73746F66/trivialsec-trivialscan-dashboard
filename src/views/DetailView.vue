@@ -20,6 +20,7 @@
                         :evaluations="report.evaluations"
                         :results="report.results"
                         :resultsFilter="resultsFilter"
+                        :reportDate="moment.utc(report.date).format('YYYYMMDD')"
                     />
                 </div>
             </div>
@@ -33,6 +34,7 @@ import EvaluationItems from '@/components/EvaluationItems.vue'
 import ValidationMessage from '@/components/general/ValidationMessage.vue'
 import LoadingComponent from '@/components/general/LoadingComponent.vue'
 import InlineLoading from '@/components/general/InlineLoading.vue'
+import moment from 'moment'
 </script>
 
 <script>

@@ -17,7 +17,7 @@
                 :host="host"
                 :external_refs="external_refs"
                 :versions="versions"
-                :v-model:params="params"
+                :params="params"
             />
             <div v-if="reports.length > 0">
                 <h4 class="heading">Scanner Reports</h4>

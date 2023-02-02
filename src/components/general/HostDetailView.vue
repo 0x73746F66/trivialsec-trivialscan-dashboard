@@ -209,7 +209,7 @@
                 </span>
                 <h3
                     class="font-color-secondary font-sm-sb margin-top-sm"
-                    v-if="this.host.threat_intel?.length > 0"
+                    v-if="host.threat_intel?.length > 0"
                 >
                     <IconTarget class="target-icon" color="e2c878" />
                     Threat Feed Entries
