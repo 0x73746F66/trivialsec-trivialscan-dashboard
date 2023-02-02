@@ -8,67 +8,39 @@
             class="container content-section margin-bottom-lg margin-top-xl padding-right-md padding-left-md"
         >
             <h2 class="font-color-primary font-xxl text-center">
-                Website configuration and Vulnerability scanning
+                Stay Ahead of the Threats with Attack Surface Monitoring and
+                Threat Intelligence!
             </h2>
             <div
                 class="content-section-body padding-left-xl padding-right-xl padding-top-md padding-bottom-md"
             >
                 <div class="row margin-bottom-sm">
-                    Trivial Security scanners check your websites for common web
-                    vulnerabilities and misconfigurations. The checks are
-                    designed to impose low load on sites and to avoid damaging
-                    them. We will advise what you what need to really worry
-                    about, when you need to worry about it, and what you need to
-                    do about it.
+                    With Trivial Security, you'll enjoy peace of mind that we've
+                    identified common threats providing you what you need to
+                    secure your business, giving you more time to focus on what
+                    really matters. Our thorough scanning sensors ensures that
+                    you have the most complete and up-to-date information to
+                    make informed security decisions.
                 </div>
                 <div class="row margin-bottom-sm">
                     It is easy to use and doesn't require a any technical skill.
-                    Some technical jargon may be present to for clarity where
-                    use of more general language would be more confusing if
-                    applied.
-                </div>
-                <div class="row">
-                    Potential security issues reported may include:
-                </div>
-                <div class="row">
-                    <ul class="padding-left-lg">
-                        <li>
-                            Trust Issues and/or common problems with the server
-                            certificate chains
-                        </li>
-                        <li>
-                            A range of DNS, TLS, and HTTP configuration concerns
-                            and implementation errors
-                        </li>
-                        <li>
-                            Whether site misconfiguration is resulting in loss
-                            of information integrity or confidentiality
-                        </li>
-                        <li>
-                            Whether browser policy and/or controls are in use
-                            with an effective configuration
-                        </li>
-                        <li>
-                            If any issues present on your website are related to
-                            a known weakness or vulnerability elsewhere
-                        </li>
-                        <li>
-                            The possible threat vectors (Mapped to Mitre Att&ck
-                            framework)
-                        </li>
-                        <li>
-                            Will any issues cause non-compliance with common
-                            standards (PCI DSS, NIST, FIPS)
-                        </li>
-                        <li>
-                            A range of 3rd party API checks for known exposures,
-                            website safety, honeypots, denylists, and more!
-                        </li>
-                    </ul>
+                    And for developers, we offer HTTP API, CLI and Webhooks for
+                    custom integrations and automation.
                 </div>
                 <div class="row margin-bottom-sm">
-                    And, we are constantly expanding the range of
-                    vulnerabilities and misconfigurations on which we report.
+                    And the best part? We're offering free monitoring services
+                    to help you get started. With no upfront costs. Plus, if the
+                    malicious actors can gain information about your business
+                    freely, we strive to ensure you do too unlike other products
+                    on the market that will charge you for what attackers get
+                    for free.
+                </div>
+                <div class="row margin-bottom-sm">
+                    We ensure that you only pay for what you need, making
+                    Trivial Security the most cost-effective solution on the
+                    market. Stay ahead of the threats and secure your business
+                    with our free monitoring. Sign up for your free service
+                    today!
                 </div>
             </div>
         </div>
@@ -84,84 +56,6 @@
                 />
             </div>
         </div>
-
-        <div
-            class="container content-section margin-bottom-xl margin-top-sm padding-right-md padding-left-md"
-        >
-            <h3 class="font-color-primary font-xl text-center">
-                Why Trivial Security?
-            </h3>
-            <div
-                class="content-section-body padding-left-xl padding-right-xl padding-top-md padding-bottom-md margin-bottom-sm"
-            >
-                <div class="row margin-bottom-xxs">
-                    Trivial Security came about by listening to the experiences
-                    of enterprise and government customers who shared complaints
-                    with us about the automated vulnerability scanning tools
-                    they use, and most start-ups we encountered place higher
-                    priorities on retrospective security (after a incident)
-                    instead of understanding their attack surface and defending.
-                </div>
-                <div class="row">
-                    We see Trivial Security helping website and
-                    internet-connected system owners utilize continuous security
-                    automation to find common issues first so they can remediate
-                    before attackers exploit them; freeing up more time to focus
-                    on the business instead of scanning or responding to
-                    incidents that could have been identified as trivial and
-                    prevented.
-                </div>
-            </div>
-        </div>
-
-        <div
-            class="container content-section margin-bottom-xl margin-top-sm padding-right-md padding-left-md"
-        >
-            <h4 class="font-color-primary font-xl text-center">
-                Focusing on your certificates
-            </h4>
-            <div
-                class="content-section-body padding-left-xl padding-right-xl padding-top-md padding-bottom-md margin-bottom-sm"
-            >
-                <div class="row margin-bottom-xxs">
-                    Feedback from our pre-release users suggest that most urgent
-                    findings arise in sites that have misconfigured or outdated
-                    certificates.
-                </div>
-                <div class="row">
-                    These issues can lead to insecure transactions and error
-                    messages, both of which harm the relationship between client
-                    and the public website service they are using.
-                </div>
-            </div>
-        </div>
-
-        <div
-            class="container content-section margin-bottom-xl margin-top-sm padding-right-md padding-left-md"
-        >
-            <h4 class="font-color-primary font-xl text-center">
-                Your Compliance is our concern too
-            </h4>
-            <div
-                class="content-section-body padding-left-xl padding-right-xl padding-top-md padding-bottom-md margin-bottom-sm"
-            >
-                <div class="row margin-bottom-xxs">
-                    We know from enterprise, start-ups, and government alike
-                    that your compliance programs are a significant investment,
-                    that is why we are launching with evaluation findings mapped
-                    to controls violations of; PCI DSS, NIST, and FIPS
-                    standards.
-                </div>
-                <div class="row font-base-sb margin-bottom-xxs">
-                    This is included in scanner reports for all customers.
-                </div>
-                <div class="row">
-                    We plan to include for all recommendation the corresponding
-                    controls mapping for; SOC2, ISO27k, and IRAP (ISM).
-                </div>
-            </div>
-        </div>
-
         <div class="container margin-bottom-xl margin-top-xl" v-if="!logged_in">
             <LoginOrRegister
                 loginModalId="loginModal"

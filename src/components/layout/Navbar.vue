@@ -3,7 +3,7 @@
         <div
             class="nav"
             :class="{
-                'nav-logged-in': !!$store.getItem('/session/key')
+                'nav-logged-in': isLoggedIn
             }"
         >
             <div class="container">
@@ -51,25 +51,25 @@
                             class="d-lg-flex d-none flex-column flex-lg-row align-items-center nav-content"
                         >
                             <RouterLink
-                                v-if="!!$store.getItem('/session/key')"
+                                v-if="isLoggedIn"
                                 to="/reports"
                                 class="router-link font-base font-color-light text-decoration-none margin-right-md"
                                 >Reports</RouterLink
                             >
                             <RouterLink
-                                v-if="!!$store.getItem('/session/key')"
+                                v-if="isLoggedIn"
                                 to="/logout"
                                 class="router-link font-base font-color-light text-decoration-none margin-right-md"
                                 >Logout</RouterLink
                             >
                             <RouterLink
-                                v-if="!$store.getItem('/session/key')"
+                                v-if="!isLoggedIn"
                                 to="/pricing"
                                 class="router-link font-base font-color-light text-decoration-none margin-right-md"
                                 >Pricing</RouterLink
                             >
                             <RouterLink
-                                v-if="!!$store.getItem('/session/key')"
+                                v-if="isLoggedIn"
                                 to="/profile"
                                 class="router-link d-flex font-color-light text-decoration-none margin-right-md d-flex nav-profile-router"
                             >
@@ -77,25 +77,21 @@
                                     class="d-flex flex-column align-items-end nav-profile-router-info nowrap"
                                 >
                                     <span class="font-base">{{
-                                        $store.getItem('/account/display')
+                                        accountDisplayName
                                     }}</span>
                                     <span class="font-sm">{{
-                                        $store.getItem('/member/email')
+                                        member.email
                                     }}</span>
                                 </div>
                                 <img
-                                    :src="`https://www.gravatar.com/avatar/${$store.getItem(
-                                        '/member/email_md5'
-                                    )}?d=wavatar`"
-                                    :alt="`${$store.getItem(
-                                        '/account/display'
-                                    )} Profile Picture`"
+                                    :src="avatarUrl"
+                                    :alt="`${accountDisplayName} Profile Picture`"
                                     class="font-xs nav-profile"
                                 />
                             </RouterLink>
                             <div
                                 class="padding-sm w-100 p-lg-0"
-                                v-if="!$store.getItem('/session/key')"
+                                v-if="!isLoggedIn"
                             >
                                 <div
                                     class="login-register-section d-flex flex-lg-row flex-column align-items-center justify-content-start"
@@ -129,100 +125,92 @@
             :class="{ 'nav-hidden': isNavbarHidden }"
         >
             <RouterLink
-                v-if="!!$store.getItem('/session/key')"
+                v-if="isLoggedIn"
                 to="/reports"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
                 @click="toggleNavbar"
                 >Reports</RouterLink
             >
             <RouterLink
-                v-if="!!$store.getItem('/session/key')"
+                v-if="isLoggedIn"
                 to="/hosts"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
                 @click="toggleNavbar"
                 >Hosts</RouterLink
             >
             <RouterLink
-                v-if="!!$store.getItem('/session/key')"
+                v-if="isLoggedIn"
                 to="/profile"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
                 @click="toggleNavbar"
                 >Profile</RouterLink
             >
             <RouterLink
-                v-if="!!$store.getItem('/session/key')"
+                v-if="isLoggedIn"
                 to="/profile/sessions"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
                 @click="toggleNavbar"
                 >My Sessions</RouterLink
             >
             <RouterLink
-                v-if="!!$store.getItem('/session/key')"
+                v-if="isLoggedIn"
                 to="/account/members"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
                 @click="toggleNavbar"
                 >Profile</RouterLink
             >
             <RouterLink
-                v-if="!!$store.getItem('/session/key')"
+                v-if="isLoggedIn"
                 to="/profile/notifications"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
                 @click="toggleNavbar"
                 >Notifications</RouterLink
             >
             <RouterLink
-                v-if="!!$store.getItem('/session/key')"
+                v-if="isLoggedIn"
                 to="/account/webhooks"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
                 @click="toggleNavbar"
                 >Webhooks</RouterLink
             >
             <RouterLink
-                v-if="!!$store.getItem('/session/key')"
+                v-if="isLoggedIn"
                 to="/account/host-config"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
                 @click="toggleNavbar"
                 >Configure</RouterLink
             >
             <RouterLink
-                v-if="!!$store.getItem('/session/key')"
+                v-if="isLoggedIn"
                 to="/logout"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
                 @click="toggleNavbar"
                 >Logout</RouterLink
             >
             <RouterLink
-                v-if="!$store.getItem('/session/key')"
+                v-if="!isLoggedIn"
                 to="/pricing"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
                 @click="toggleNavbar"
                 >Pricing</RouterLink
             >
             <RouterLink
-                v-if="!!$store.getItem('/session/key')"
+                v-if="isLoggedIn"
                 to="/profile"
                 class="router-link d-flex margin-top-xs margin-bottom-xs align-items-end font-color-light text-decoration-none margin-right-md d-flex"
                 @click="toggleNavbar"
             >
                 <div class="d-flex flex-column margin-right-sm align-items-end">
-                    <span class="font-base">{{
-                        $store.getItem('/account/display')
-                    }}</span>
-                    <span class="font-sm">{{
-                        $store.getItem('/member/email')
-                    }}</span>
+                    <span class="font-base">{{ accountDisplayName }}</span>
+                    <span class="font-sm">{{ member.email }}</span>
                 </div>
                 <img
-                    :src="`https://www.gravatar.com/avatar/${$store.getItem(
-                        '/member/email_md5'
-                    )}?d=wavatar`"
-                    :alt="`${$store.getItem(
-                        '/account/display'
-                    )} Profile Picture`"
+                    :src="avatarUrl"
+                    :alt="`${accountDisplayName} Profile Picture`"
                     class="font-xs nav-profile"
                 />
             </RouterLink>
-            <div v-if="!$store.getItem('/session/key')">
+            <div v-if="!isLoggedIn">
                 <div class="padding-sm p-lg-0">
                     <div
                         class="login-register-section d-flex flex-lg-row align-items-center justify-content-start"
@@ -266,9 +254,33 @@ export default {
     },
     data() {
         return {
+            accountName: window.localStorage.getItem('/account/name'),
+            accountDisplayName: window.localStorage.getItem('/account/display'),
+            member: {
+                email: window.localStorage.getItem('/member/email'),
+                email_md5: window.localStorage.getItem('/member/email_md5')
+            },
+            isLoggedIn: false,
             isNavbarHidden: true,
             is_dev: import.meta.env.DEV
         }
+    },
+    computed: {
+        avatarUrl() {
+            return `https://www.gravatar.com/avatar/${this.member.email_md5}?d=wavatar`
+        }
+    },
+    mounted() {
+        // watch the params of the route to fetch the data again
+        this.$watch(
+            () => this.$route.params,
+            () => {
+                this.isLoggedIn = !!window.localStorage.getItem('/session/key')
+            },
+            // fetch the data when the view is created and the data is
+            // already being observed
+            { immediate: true }
+        )
     },
     methods: {
         toggleNavbar() {
