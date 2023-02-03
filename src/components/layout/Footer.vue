@@ -21,6 +21,25 @@
                             />
                             Check out our open source projects on Gitlab
                         </a>
+                        <div class="d-flex flex-column margin-top-xs font-sm">
+                            <RouterLink
+                                to="/docs"
+                                class="margin-bottom-xs font-color-light-60 text-decoration-none"
+                                >Documentation</RouterLink
+                            >
+                            <a
+                                class="margin-bottom-xs font-color-light-60 text-decoration-none"
+                                :href="docsUrl"
+                                target="_blank"
+                                >API Reference</a
+                            >
+                            <a
+                                class="margin-bottom-xs font-color-light-60 text-decoration-none"
+                                href="https://discord.gg/BgqUw8Tu6a"
+                                target="_blank"
+                                >Chat with a real person</a
+                            >
+                        </div>
                     </div>
                 </div>
                 <div
@@ -74,13 +93,21 @@
                     </div>
                 </div>
                 <div
+                    v-if="!!$store.getItem('/session/key')"
                     class="col-6 col-lg-3 d-flex flex-lg-row flex-column justify-content-end"
                 >
                     <div class="d-flex flex-column">
-                        <span
-                            class="font-lg-sb font-color-light margin-bottom-md"
-                            >Need Support?</span
+                        <a
+                            class="text-decoration-none"
+                            href="https://discord.gg/BgqUw8Tu6a"
+                            target="_blank"
                         >
+                            <span
+                                class="font-lg-sb font-color-light margin-bottom-md"
+                            >
+                                Need Support?
+                            </span>
+                        </a>
                         <RouterLink
                             to="/docs"
                             class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none"
@@ -103,6 +130,46 @@
                             href="https://discord.gg/BgqUw8Tu6a"
                             target="_blank"
                             >Chat with a real person</a
+                        >
+                    </div>
+                </div>
+                <div
+                    v-if="!$store.getItem('/session/key')"
+                    class="col-6 col-lg-3 d-flex flex-lg-row flex-column justify-content-end"
+                >
+                    <div class="d-flex flex-column">
+                        <RouterLink
+                            to="/about"
+                            class="text-decoration-none margin-bottom-md"
+                        >
+                            <span class="font-lg-sb font-color-light">
+                                Why us?
+                            </span>
+                        </RouterLink>
+                        <RouterLink
+                            to="/use-cases/executives"
+                            class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none"
+                            >C-level executives</RouterLink
+                        >
+                        <RouterLink
+                            to="/use-cases/security-engineers"
+                            class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none"
+                            >Security and IT professionals</RouterLink
+                        >
+                        <RouterLink
+                            to="/use-cases/compliance"
+                            class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none"
+                            >Compliance and legal professionals</RouterLink
+                        >
+                        <RouterLink
+                            to="/use-cases/financial"
+                            class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none"
+                            >Insurance & Financial</RouterLink
+                        >
+                        <RouterLink
+                            to="/use-cases/public-sector"
+                            class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none"
+                            >Public Sector</RouterLink
                         >
                     </div>
                 </div>

@@ -27,6 +27,11 @@ const routes = [
         component: () => import('@/views/PricingView.vue')
     },
     {
+        path: '/about',
+        name: 'about',
+        component: () => import('@/views/AboutView.vue')
+    },
+    {
         path: '/docs',
         name: 'docs',
         component: () => import('@/views/DocsView.vue')
@@ -183,6 +188,31 @@ const routes = [
         path: '/feature/interoperability',
         name: 'feature-interoperability',
         component: () => import('@/views/seo/Interoperability.vue')
+    },
+    {
+        path: '/use-cases/executives',
+        name: 'use-case-executives',
+        component: () => import('@/views/use-case/Executives.vue')
+    },
+    {
+        path: '/use-cases/security-engineers',
+        name: 'use-case-security',
+        component: () => import('@/views/use-case/SecurityEngineers.vue')
+    },
+    {
+        path: '/use-cases/compliance',
+        name: 'use-case-compliance',
+        component: () => import('@/views/use-case/Compliance.vue')
+    },
+    {
+        path: '/use-cases/financial',
+        name: 'use-case-financial',
+        component: () => import('@/views/use-case/Financial.vue')
+    },
+    {
+        path: '/use-cases/public-sector',
+        name: 'use-case-public-sector',
+        component: () => import('@/views/use-case/PublicSector.vue')
     }
 ]
 
