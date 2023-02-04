@@ -241,15 +241,15 @@ export default {
             links: [
                 {
                     label: 'Trivial Security vs ImmuniWeb vs Qualys SSL Labs',
-                    href: '#'
+                    href: '/article/trivial-scanner-vs-immuniweb-vs-qualys'
                 },
                 {
                     label: 'Trivial Scanner vs SSLyze vs testssl.sh',
-                    href: '#'
+                    href: '/article/trivial-scanner-vs-sslyze-vs-testssl'
                 },
                 {
                     label: 'How most SSL/TLS scanners are more harmful than helpful',
-                    href: '#'
+                    href: '/article/how-most-ssl-tls-scanners-are-harmful'
                 }
             ],
             FAQs: [

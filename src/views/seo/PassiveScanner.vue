@@ -245,65 +245,65 @@ export default {
             links: [
                 {
                     label: 'Trivial Security vs ImmuniWeb vs Qualys SSL Labs',
-                    href: '#'
+                    href: '/article/trivial-scanner-vs-immuniweb-vs-qualys'
                 },
                 {
                     label: 'Trivial Scanner vs SSLyze vs testssl.sh',
-                    href: '#'
+                    href: '/article/trivial-scanner-vs-sslyze-vs-testssl'
                 },
                 {
                     label: 'How most SSL/TLS scanners are more harmful than helpful',
-                    href: '#'
+                    href: '/article/how-most-ssl-tls-scanners-are-harmful'
                 }
             ],
             FAQs: [
                 {
                     question: 'What is SSL/TLS?',
-                    answer: marked(WhatIsTLS, { sanitize: true })
+                    answer: marked(WhatIsTLS)
                 },
                 {
                     question: 'What is a Certificate?',
-                    answer: marked(WhatIsACert, { sanitize: true })
+                    answer: marked(WhatIsACert)
                 },
                 {
                     question: 'What are the impacts of vulnerabilities?',
-                    answer: marked(VulnerabilityImpacts, { sanitize: true })
+                    answer: marked(VulnerabilityImpacts)
                 },
                 {
                     question: 'What are the types of SSL certificates?',
-                    answer: marked(TypesOfCertificates, { sanitize: true })
+                    answer: marked(TypesOfCertificates)
                 },
                 {
                     question: 'What is a host?',
-                    answer: marked(WhatIsAHost, { sanitize: true })
+                    answer: marked(WhatIsAHost)
                 },
                 {
                     question: 'How often does the host monitor run?',
-                    answer: marked(HostMonitoringFrequency, { sanitize: true })
+                    answer: marked(HostMonitoringFrequency)
                 },
                 {
                     question: 'Can the scanner login to our systems?',
-                    answer: marked(AppLoginFeature, { sanitize: true })
+                    answer: marked(AppLoginFeature)
                 },
                 {
                     question: 'How much scan volume do you send?',
-                    answer: marked(ScanVolume, { sanitize: true })
+                    answer: marked(ScanVolume)
                 },
                 {
                     question: 'Can we opt-out or otherwise block the scanner?',
-                    answer: marked(BlockScanner, { sanitize: true })
+                    answer: marked(BlockScanner)
                 },
                 {
                     question: 'How many evaluations are performed?',
-                    answer: marked(EvaluationCount, { sanitize: true })
+                    answer: marked(EvaluationCount)
                 },
                 {
                     question: 'Can additional rule evaluations be added?',
-                    answer: marked(CustomEvaluations, { sanitize: true })
+                    answer: marked(CustomEvaluations)
                 },
                 {
                     question: 'How to report suspected abuse?',
-                    answer: marked(ReportAbuse, { sanitize: true })
+                    answer: marked(ReportAbuse)
                 }
             ]
         }

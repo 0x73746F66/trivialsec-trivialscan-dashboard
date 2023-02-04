@@ -213,6 +213,11 @@ const routes = [
         path: '/use-cases/public-sector',
         name: 'use-case-public-sector',
         component: () => import('@/views/use-case/PublicSector.vue')
+    },
+    {
+        path: '/article/:slug',
+        name: 'articles',
+        component: () => import('@/views/ArticlesView.vue')
     }
 ]
 

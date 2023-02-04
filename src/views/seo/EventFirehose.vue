@@ -235,45 +235,45 @@ export default {
             links: [
                 {
                     label: 'Trivial Security vs ImmuniWeb vs Qualys SSL Labs',
-                    href: '#'
+                    href: '/article/trivial-scanner-vs-immuniweb-vs-qualys'
                 },
                 {
                     label: 'Trivial Scanner vs SSLyze vs testssl.sh',
-                    href: '#'
+                    href: '/article/trivial-scanner-vs-sslyze-vs-testssl'
                 },
                 {
                     label: 'How most SSL/TLS scanners are more harmful than helpful',
-                    href: '#'
+                    href: '/article/how-most-ssl-tls-scanners-are-harmful'
                 }
             ],
             FAQs: [
                 {
                     question: 'What is a webhook?',
-                    answer: marked(WebhookDefinition, { sanitize: true })
+                    answer: marked(WebhookDefinition)
                 },
                 {
                     question: 'What events are sent?',
-                    answer: marked(WebhookEvents, { sanitize: true })
+                    answer: marked(WebhookEvents)
                 },
                 {
                     question: 'Can the webhook login to our systems?',
-                    answer: marked(WebhookAuth, { sanitize: true })
+                    answer: marked(WebhookAuth)
                 },
                 {
                     question: 'How much event volume do you send?',
-                    answer: marked(WebhookVolume, { sanitize: true })
+                    answer: marked(WebhookVolume)
                 },
                 {
                     question: 'What is a host?',
-                    answer: marked(WhatIsAHost, { sanitize: true })
+                    answer: marked(WhatIsAHost)
                 },
                 {
                     question: 'How often does the host monitor run?',
-                    answer: marked(HostMonitoringFrequency, { sanitize: true })
+                    answer: marked(HostMonitoringFrequency)
                 },
                 {
                     question: 'Can past webhooks be re-sent?',
-                    answer: marked(ReplayWebhook, { sanitize: true })
+                    answer: marked(ReplayWebhook)
                 }
             ]
         }
