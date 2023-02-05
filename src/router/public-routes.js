@@ -150,19 +150,9 @@ const routes = [
         component: () => import('@/views/seo/TrivialAttacks.vue')
     },
     {
-        path: '/feature/threat-intel',
-        name: 'feature-threat-intel',
-        component: () => import('@/views/seo/ThreatIntel.vue')
-    },
-    {
         path: '/feature/security-feeds',
         name: 'feature-security-feeds',
         component: () => import('@/views/seo/SecurityFeeds.vue')
-    },
-    {
-        path: '/feature/webhooks',
-        name: 'feature-webhooks',
-        component: () => import('@/views/seo/EventFirehose.vue')
     },
     {
         path: '/feature/developer-tools',
@@ -183,11 +173,6 @@ const routes = [
         path: '/feature/open-source',
         name: 'feature-open-source',
         component: () => import('@/views/seo/OpenSource.vue')
-    },
-    {
-        path: '/feature/interoperability',
-        name: 'feature-interoperability',
-        component: () => import('@/views/seo/Interoperability.vue')
     },
     {
         path: '/use-cases/executives',

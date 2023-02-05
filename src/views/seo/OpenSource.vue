@@ -3,114 +3,107 @@
         <div class="row">
             <div class="col-12 feature-container margin-bottom-md">
                 <div class="font-color-light feature-name-bg">
-                    <h1 class="font-color-light font-xxl-b">Active Scanning</h1>
+                    <h1 class="font-color-light font-xxl-b">
+                        Open Source / Self-hosting
+                    </h1>
                     <div class="font-color-light font-lg-sb">
-                        Lorem ipsum dolor sit amet. Est aperiam corrupti in
-                        ipsum earum sed eligendi ratione
+                        Commercially supported open source, easy to review,
+                        customizable, low TCO, you keep it forever, and
+                        unrivalled privacy control.
                     </div>
                 </div>
             </div>
 
             <div
-                class="col-lg-3 col-12 justify-content-center align-items-center d-flex flex-column feature-parra font-sm font-color-light"
+                class="col-lg-6 col-12 justify-content-center align-items-center d-flex flex-column feature-parra font-sm font-color-light"
             >
                 <p>
-                    Lorem ipsum dolor sit amet. Est aperiam corrupti in ipsum
-                    earum sed eligendi ratione sit placeat porro aut obcaecati
-                    dolorem. Est laborum provident qui harum rerum quo
-                    temporibus quaerat. Vel blanditiis illo qui temporibus
-                    dolorum 33 itaque blanditiis et commodi error et molestiae
-                    maiores qui omnis illo id ipsam repellendus. Ex consequatur
-                    assumenda non laborum nisi sed voluptate illo non atque
-                    facilis aut omnis fugit.
+                    We can but don't have to leave you on your own. Our team of
+                    expert security professionals provides commercial-grade
+                    support, ensuring that you have the help you need when you
+                    need it. By leveraging open source software, businesses can
+                    reduce the cost of licensing and support, which can help to
+                    reduce the overall cost of ownership for the software.
                 </p>
                 <p>
-                    Ex explicabo omnis ab nihil rerum non deserunt modi et
-                    voluptatibus incidunt. Hic atque quasi aut praesentium
-                    inventore sit sapiente quasi. A repellendus facilis est
-                    distinctio laborum in distinctio inventore ut voluptas ipsum
-                    sit ratione galisum. Et velit eligendi est dolor eius qui
-                    omnis sequi.
+                    Trivial Security highly regard transparent development
+                    practices: By using Git and open sourcing the software that
+                    interacts with your systems, development activities are open
+                    and transparent, allowing for collaboration and
+                    contributions from a large community of developers. This can
+                    help to ensure that the software is of high quality and free
+                    of bugs. By offering a free version of the software,
+                    development is spread over a larger user base, making it
+                    more accessible to a wider audience.
+                </p>
+                <p>
+                    Every change made follows continuous integration and
+                    deployment via Gitlab and used in conjunction with DevOps
+                    practices to automate the software development and
+                    deployment process. This can help to ensure that software is
+                    delivered to users quickly and with a high degree of
+                    reliability.
                 </p>
             </div>
             <div
-                class="col-lg-9 d-flex justify-content-center col-12 margin-bottom-xl feature-image-container"
+                class="col-lg-6 d-flex justify-content-center col-12 margin-bottom-xl feature-image-container"
                 @click="imagePopOut($event)"
                 data-bs-toggle="modal"
                 :data-bs-target="`#${imagePopOutId}`"
             >
                 <img
                     class="img-fluid feature-image"
-                    src="../../assets/media/dashboard.png"
+                    src="../../assets/media/use-cases-image1.jpg"
                     alt="Description of image"
                 />
             </div>
-
             <div
-                class="col-lg-3 col-12 justify-content-center align-items-center d-flex flex-column feature-parra font-sm font-color-light"
+                class="col-12 justify-content-center align-items-center d-flex flex-column feature-parra font-sm font-color-light"
             >
                 <p>
-                    Lorem ipsum dolor sit amet. Est aperiam corrupti in ipsum
-                    earum sed eligendi ratione sit placeat porro aut obcaecati
-                    dolorem. Est laborum provident qui harum rerum quo
-                    temporibus quaerat. Vel blanditiis illo qui temporibus
-                    dolorum 33 itaque blanditiis et commodi error et molestiae
-                    maiores qui omnis illo id ipsam repellendus. Ex consequatur
-                    assumenda non laborum nisi sed voluptate illo non atque
-                    facilis aut omnis fugit.
+                    Organizations are increasingly recognizing the importance of
+                    self-hosting and controlling their data, and open source
+                    software offers a compelling solution. By choosing an
+                    on-premise solution based on open source software,
+                    organizations can enjoy a range of benefits that go beyond
+                    the financial savings of not having to pay licensing fees.
+                    One of the key advantages of using open source for
+                    on-premise data control is the ability to customize the
+                    solution to meet specific requirements. With access to the
+                    source code, organizations can modify the software to meet
+                    their unique needs, which is often not possible with
+                    proprietary solutions. This level of customization also
+                    allows for better integration with existing systems and
+                    workflows.
                 </p>
                 <p>
-                    Ex explicabo omnis ab nihil rerum non deserunt modi et
-                    voluptatibus incidunt. Hic atque quasi aut praesentium
-                    inventore sit sapiente quasi. A repellendus facilis est
-                    distinctio laborum in distinctio inventore ut voluptas ipsum
-                    sit ratione galisum. Et velit eligendi est dolor eius qui
-                    omnis sequi.
+                    Another benefit of using open source for on-premise data
+                    control is improved security. By self-hosting data,
+                    organizations can have full control over their data and the
+                    security measures in place to protect it. Additionally, the
+                    large community of developers working on open source
+                    software means that vulnerabilities are often discovered and
+                    addressed quickly, making open source solutions a secure
+                    choice. On-premise solutions also offer increased data
+                    privacy. By self-hosting data, organizations can ensure that
+                    their data is not being shared or sold to third parties.
+                    This is particularly important for organizations handling
+                    sensitive information.
                 </p>
-            </div>
-            <div
-                class="col-lg-9 d-flex justify-content-center col-12 margin-bottom-xl feature-image-container"
-                @click="imagePopOut($event)"
-                data-bs-toggle="modal"
-                :data-bs-target="`#${imagePopOutId}`"
-            >
-                <img
-                    class="img-fluid feature-image"
-                    src="../../assets/media/dashboard.png"
-                    alt="Description of image"
-                />
-            </div>
-
-            <div class="col-12 padding-top-sm margin-bottom-lg">
-                <h3 class="font-color-light font-xl-sb">
-                    How Passive Scanning works
-                </h3>
-                <div
-                    class="font-sm d-flex flex-column justify-content-between font-color-primary w-100 align-items-start"
-                >
-                    <span class="font-color-lighter">
-                        <p>
-                            Lorem ipsum dolor sit amet. Est aperiam corrupti in
-                            ipsum earum sed eligendi ratione sit placeat porro
-                            aut obcaecati dolorem. Est laborum provident qui
-                            harum rerum quo temporibus quaerat. Vel blanditiis
-                            illo qui temporibus dolorum 33 itaque blanditiis et
-                            commodi error et molestiae maiores qui omnis illo id
-                            ipsam repellendus. Ex consequatur assumenda non
-                            laborum nisi sed voluptate illo non atque facilis
-                            aut omnis fugit.
-                        </p>
-                        <p>
-                            Ex explicabo omnis ab nihil rerum non deserunt modi
-                            et voluptatibus incidunt. Hic atque quasi aut
-                            praesentium inventore sit sapiente quasi. A
-                            repellendus facilis est distinctio laborum in
-                            distinctio inventore ut voluptas ipsum sit ratione
-                            galisum. Et velit eligendi est dolor eius qui omnis
-                            sequi.
-                        </p>
-                    </span>
-                </div>
+                <p>
+                    Finally, open source solutions offer greater reliability and
+                    freedom compared to proprietary solutions. The large
+                    community of developers ensures that open source solutions
+                    are constantly evolving and improving, while the lack of
+                    vendor lock-in means that organizations are free to continue
+                    using the solution even if the vendor goes out of business.
+                </p>
+                <p>
+                    We've taken the best of open source and combined it with the
+                    reliability and support of a commercial solution. You get
+                    the security you need without sacrificing quality or
+                    control. Get started now and take control of your security.
+                </p>
             </div>
 
             <div class="col-12 padding-top-sm margin-bottom-lg">

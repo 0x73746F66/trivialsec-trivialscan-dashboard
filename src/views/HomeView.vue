@@ -75,7 +75,6 @@ import cIconLightningLight from '@/components/icons/IconLightningLight.vue'
 import cIconAlarmLight from '@/components/icons/IconAlarmLight.vue'
 import cIconIntLight from '@/components/icons/IconIntLight.vue'
 import cIconFeedLight from '@/components/icons/IconFeedLight.vue'
-import cIconIntegrationLight from '@/components/icons/IconIntegrationLight.vue'
 import cIconCliLight from '@/components/icons/IconCliLight.vue'
 import cIconGlobeLight from '@/components/icons/IconGlobeLight.vue'
 import cIconFishLight from '@/components/icons/IconFishLight.vue'
@@ -94,7 +93,6 @@ const IconLightningLight = shallowRef(cIconLightningLight)
 const IconAlarmLight = shallowRef(cIconAlarmLight)
 const IconIntLight = shallowRef(cIconIntLight)
 const IconFeedLight = shallowRef(cIconFeedLight)
-const IconIntegrationLight = shallowRef(cIconIntegrationLight)
 const IconCliLight = shallowRef(cIconCliLight)
 const IconGlobeLight = shallowRef(cIconGlobeLight)
 const IconFishLight = shallowRef(cIconFishLight)
@@ -142,38 +140,23 @@ export default {
                     description:
                         'Early Warning filters millions of events that we process every day and, using the IP and domain names you provide, correlates those which are relevant to your organisation into daily notification or immediate alerts'
                 },
-                // {
-                //   id: 5,
-                //   icon: IconLightningLight,
-                //   href: "/feature/trivial-attacks",
-                //   header: "Trivial Attacks",
-                //   description: "We automate many novel yet trivial attack vectors, and perform evaluations using standard tooling so you don't have to maintain and use numerous tools yourself",
-                // },
                 {
-                    id: 6,
-                    icon: IconIntLight,
-                    href: '/feature/threat-intel',
-                    header: 'Threat Intelligence',
+                    id: 5,
+                    icon: IconLightningLight,
+                    href: '/feature/trivial-attacks',
+                    header: 'Trivial Attacks',
                     description:
-                        'Our module will help you find the signal from a vast source of OSINT and vendor data feeds, our curated blocklists can be downloaded or fetched by your network security devices'
+                        "We automate many novel yet trivial attack vectors, and perform evaluations using standard tooling so you don't have to maintain and use numerous tools yourself"
                 },
                 // {
-                //   id: 7,
+                //   id: 6,
                 //   icon: IconFeedLight,
                 //   href: "/feature/security-feeds",
                 //   header: "Feeds",
                 //   description: "There is a lot of written form security information published every hour relevant to your organisation. Our Research & Advisory feed is a curated source of relevant news for security analysts and CISO's, using our dashboard or any RSS viewer",
                 // },
-                // {
-                //     id: 8,
-                //     icon: IconIntegrationLight,
-                //     href: '/feature/webhooks',
-                //     header: 'Event Firehose',
-                //     description:
-                //         'We promote automation using Webhooks for real-time integration into your existing systems, simply generate a client secret and start receiving data immediately'
-                // },
                 {
-                    id: 9,
+                    id: 7,
                     icon: IconCliLight,
                     href: '/feature/developer-tools',
                     header: 'Developer Tools',
@@ -181,35 +164,27 @@ export default {
                         'API & CLI options enable automation via DevOps pipelines and secure the SDLC at any stage you require, as well as provide the means to do regular scanning by security professionals of any level of technical skill.'
                 },
                 // {
-                //   id: 10,
+                //   id: 8,
                 //   icon: IconGlobeLight,
                 //   href: "/feature/researchers",
                 //   header: "Security Researchers",
                 //   description: "We have a vast database of the public internet, compiled from the authoritative list of every registered domain using zone files (and not IP address probing)",
                 // },
                 // {
-                //   id: 11,
+                //   id: 9,
                 //   icon: IconFishLight,
                 //   href: "/feature/phishing-alerts",
                 //   header: "Phish Alert",
                 //   description: "Know when sites are copied or domains with similarities for a phishing attacks are registered We adhere to the concept of interoperability. You control your data, and we enable you with a growing list of supported open standard data exchange formats",
                 // },
                 {
-                    id: 12,
+                    id: 10,
                     icon: IconTuneLight,
                     href: '/feature/open-source',
                     header: 'On-prem / Self-hosting',
                     description:
                         'While Trivial Security was created to make accessible many features typically out of reach to most organisations, our solutions equally benefit large enterprise with data sovereignty and complete control needs also'
                 }
-                // {
-                //     id: 13,
-                //     icon: IconData,
-                //     href: '/feature/interoperability',
-                //     header: 'Interoperability',
-                //     description:
-                //         'We adhere to open standards. You control your data, and we enable you with a growing list of supported data exchange formats so you can access and control your data at all times'
-                // }
             ]
         }
     },

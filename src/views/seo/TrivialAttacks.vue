@@ -3,114 +3,76 @@
         <div class="row">
             <div class="col-12 feature-container margin-bottom-md">
                 <div class="font-color-light feature-name-bg">
-                    <h1 class="font-color-light font-xxl-b">Active Scanning</h1>
+                    <h1 class="font-color-light font-xxl-b">Trivial Attacks</h1>
                     <div class="font-color-light font-lg-sb">
-                        Lorem ipsum dolor sit amet. Est aperiam corrupti in
-                        ipsum earum sed eligendi ratione
+                        A solution designed to simplify the process of
+                        identifying rare and obscure security weaknesses in your
+                        systems.
                     </div>
                 </div>
             </div>
 
             <div
-                class="col-lg-3 col-12 justify-content-center align-items-center d-flex flex-column feature-parra font-sm font-color-light"
+                class="col-lg-6 col-12 justify-content-center align-items-center d-flex flex-column feature-parra font-sm font-color-light"
             >
                 <p>
-                    Lorem ipsum dolor sit amet. Est aperiam corrupti in ipsum
-                    earum sed eligendi ratione sit placeat porro aut obcaecati
-                    dolorem. Est laborum provident qui harum rerum quo
-                    temporibus quaerat. Vel blanditiis illo qui temporibus
-                    dolorum 33 itaque blanditiis et commodi error et molestiae
-                    maiores qui omnis illo id ipsam repellendus. Ex consequatur
-                    assumenda non laborum nisi sed voluptate illo non atque
-                    facilis aut omnis fugit.
+                    We automate the discovery of vulnerabilities via our niche
+                    algorithms, allowing you to quickly and accurately identify
+                    potential attack vectors that are often overlooked by
+                    traditional security tools. For example, weaknesses in trust
+                    of TLS, which can allow attackers to intercept or interfere
+                    with integrity and confidentially of communications. Our
+                    tool provides the capability to detect "Server-Side Request
+                    Forgery (SSRF)" vulnerabilities, where attackers can send
+                    malicious requests from a vulnerable server to other
+                    systems, potentially gaining access to sensitive
+                    information.
                 </p>
                 <p>
-                    Ex explicabo omnis ab nihil rerum non deserunt modi et
-                    voluptatibus incidunt. Hic atque quasi aut praesentium
-                    inventore sit sapiente quasi. A repellendus facilis est
-                    distinctio laborum in distinctio inventore ut voluptas ipsum
-                    sit ratione galisum. Et velit eligendi est dolor eius qui
-                    omnis sequi.
+                    Our tool can uncover Subdomain Takeover that occurs when a
+                    subdomain of a website is no longer being used by the
+                    organization and can be claimed by an attacker. For example,
+                    if an organization discontinues the use of a subdomain such
+                    as "blog.example.com," an attacker can claim ownership of
+                    the subdomain and use it for malicious purposes. When we
+                    detect these types of weaknesses various alert methods help
+                    you take action on the potential security risk.
+                </p>
+                <p>
+                    Another obscure vulnerability that we can uncover is "Typo
+                    Squatting." This occurs when an attacker registers a domain
+                    name that is similar to a popular website with the intention
+                    of tricking users into visiting their site. For example, an
+                    attacker may register "examplle.com" instead of
+                    "example.com," hoping to trick users who accidentally type
+                    the wrong URL. We can detect these types of weaknesses
+                    immediately as soon as they are registered and before they
+                    can be leveraged for an attack, and alert you to the
+                    imminent security event.
+                </p>
+                <p>
+                    Using our specialized tooling will free your organization
+                    from the time-consuming task of manual vulnerability
+                    scanning and allowing you to focus on more complex security
+                    tasks. Whether you're conducting internal assessments or
+                    offering niche third-party testing services, Whether you're
+                    conducting internal assessments or offering niche
+                    third-party testing services, Trivial Security is the ideal
+                    tool for discovering rare and obscure vulnerabilities. Get
+                    started today with Trivial Security.
                 </p>
             </div>
             <div
-                class="col-lg-9 d-flex justify-content-center col-12 margin-bottom-xl feature-image-container"
+                class="col-lg-6 d-flex justify-content-center col-12 margin-bottom-xl feature-image-container"
                 @click="imagePopOut($event)"
                 data-bs-toggle="modal"
                 :data-bs-target="`#${imagePopOutId}`"
             >
                 <img
                     class="img-fluid feature-image"
-                    src="../../assets/media/dashboard.png"
+                    src="../../assets/media/use-cases-image1.jpg"
                     alt="Description of image"
                 />
-            </div>
-
-            <div
-                class="col-lg-3 col-12 justify-content-center align-items-center d-flex flex-column feature-parra font-sm font-color-light"
-            >
-                <p>
-                    Lorem ipsum dolor sit amet. Est aperiam corrupti in ipsum
-                    earum sed eligendi ratione sit placeat porro aut obcaecati
-                    dolorem. Est laborum provident qui harum rerum quo
-                    temporibus quaerat. Vel blanditiis illo qui temporibus
-                    dolorum 33 itaque blanditiis et commodi error et molestiae
-                    maiores qui omnis illo id ipsam repellendus. Ex consequatur
-                    assumenda non laborum nisi sed voluptate illo non atque
-                    facilis aut omnis fugit.
-                </p>
-                <p>
-                    Ex explicabo omnis ab nihil rerum non deserunt modi et
-                    voluptatibus incidunt. Hic atque quasi aut praesentium
-                    inventore sit sapiente quasi. A repellendus facilis est
-                    distinctio laborum in distinctio inventore ut voluptas ipsum
-                    sit ratione galisum. Et velit eligendi est dolor eius qui
-                    omnis sequi.
-                </p>
-            </div>
-            <div
-                class="col-lg-9 d-flex justify-content-center col-12 margin-bottom-xl feature-image-container"
-                @click="imagePopOut($event)"
-                data-bs-toggle="modal"
-                :data-bs-target="`#${imagePopOutId}`"
-            >
-                <img
-                    class="img-fluid feature-image"
-                    src="../../assets/media/dashboard.png"
-                    alt="Description of image"
-                />
-            </div>
-
-            <div class="col-12 padding-top-sm margin-bottom-lg">
-                <h3 class="font-color-light font-xl-sb">
-                    How Passive Scanning works
-                </h3>
-                <div
-                    class="font-sm d-flex flex-column justify-content-between font-color-primary w-100 align-items-start"
-                >
-                    <span class="font-color-lighter">
-                        <p>
-                            Lorem ipsum dolor sit amet. Est aperiam corrupti in
-                            ipsum earum sed eligendi ratione sit placeat porro
-                            aut obcaecati dolorem. Est laborum provident qui
-                            harum rerum quo temporibus quaerat. Vel blanditiis
-                            illo qui temporibus dolorum 33 itaque blanditiis et
-                            commodi error et molestiae maiores qui omnis illo id
-                            ipsam repellendus. Ex consequatur assumenda non
-                            laborum nisi sed voluptate illo non atque facilis
-                            aut omnis fugit.
-                        </p>
-                        <p>
-                            Ex explicabo omnis ab nihil rerum non deserunt modi
-                            et voluptatibus incidunt. Hic atque quasi aut
-                            praesentium inventore sit sapiente quasi. A
-                            repellendus facilis est distinctio laborum in
-                            distinctio inventore ut voluptas ipsum sit ratione
-                            galisum. Et velit eligendi est dolor eius qui omnis
-                            sequi.
-                        </p>
-                    </span>
-                </div>
             </div>
 
             <div class="col-12 padding-top-sm margin-bottom-lg">
