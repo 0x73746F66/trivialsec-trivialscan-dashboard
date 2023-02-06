@@ -434,7 +434,7 @@
                                             >
                                                 <Button
                                                     v-bind="buttonProps"
-                                                    class="btn-fill-primary-full font-color-light font-sm"
+                                                    class="btn-fill-primary-full font-color-dark font-sm-sb"
                                                     text="Upgrade"
                                                 />
                                             </template>
@@ -442,6 +442,15 @@
                                             </template>
                                             <template v-slot:modalContent>
                                                 <stripe-pricing-table
+                                                    :client-reference-id="
+                                                        member.account
+                                                            .billing_client_id ||
+                                                        member.account.name
+                                                    "
+                                                    :customer-email="
+                                                        member.account
+                                                            .billing_email
+                                                    "
                                                     pricing-table-id="prctbl_1LtVOcGZtHTgMn6lK07ldv8B"
                                                     publishable-key="pk_live_51HTJBRGZtHTgMn6l6LdsX1xQYlEwDSFR2aUpjzooo0wIiRTvxJZC4Op6aSeceg5JLGPy9qeam7s1AKVBXoSNjY8R00Qi76Bera"
                                                 >
@@ -464,7 +473,7 @@
                                             >
                                                 <Button
                                                     v-bind="buttonProps"
-                                                    class="btn-fill-primary-full font-color-light font-sm"
+                                                    class="btn-fill-primary-full font-color-dark font-sm-sb"
                                                     text="Upgrade"
                                                 />
                                             </template>
@@ -523,6 +532,14 @@
                                             </template>
                                         </Modal>
                                     </div>
+                                    <form @submit.prevent="navPortal($event)">
+                                        <button
+                                            class="btn-outline-primary-full font-color-primary font-sm margin-top-sm"
+                                            type="submit"
+                                        >
+                                            Manage billing
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -797,7 +814,7 @@ export default {
             const email = event.target.elements['BillingEmail'].value
             try {
                 const response = await Api.post('/billing/email', { email })
-                if (response.status !== 200) {
+                if (response.status !== 202) {
                     this.editMessage = `${response.status} ${response.statusText}`
                     this.editMessageType = 'error'
                     this.loading = false
@@ -939,6 +956,25 @@ export default {
                         : `${error.name} ${error.message}. Couldn't complete this action.`
                 this.errorMessageType = 'error'
             }
+        },
+        async navPortal() {
+            this.loading = true
+            try {
+                const response = await Api.post(
+                    '/stripe/create-customer-portal-session',
+                    void 0,
+                    { redirect: 'manual' }
+                )
+                const url = await response.json()
+                window.location.href = url
+            } catch (error) {
+                this.errorMessage =
+                    error.name === 'AbortError'
+                        ? 'Request timed out, please try refreshing the page.'
+                        : `${error.name} ${error.message}. Couldn't complete this action.`
+                this.errorMessageType = 'error'
+            }
+            this.loading = false
         }
     }
 }

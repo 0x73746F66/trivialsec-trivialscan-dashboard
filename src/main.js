@@ -90,7 +90,7 @@ window.Api = {
         const url = new URL(urlPath)
         const canonical_string = `POST\n${url.hostname}\n${url.port || 443}\n${
             url.pathname
-        }\n${ts}\n${window.btoa(body)}`
+        }\n${ts}${data ? '\n' + window.btoa(body) : ''}`
         const hash = CryptoJS.algo.HMAC.create(
             CryptoJS.algo.SHA512,
             localStorage.getItem('/session/key')
