@@ -540,6 +540,10 @@
                 </div>
                 <div
                     class="profile-container d-flex flex-column bg-dark-40 border-radius-sm padding-sm"
+                    v-if="
+                        !quotas?.unlimited_monitoring &&
+                        !quotas?.unlimited_scans
+                    "
                 >
                     <div class="d-flex font-color-light">
                         <h2 class="font-xl-sb margin-right-sm">Plan Quotas</h2>
@@ -553,106 +557,75 @@
                     >
                         <RadialProgress
                             :diameter="200"
-                            :completed-steps="quotas?.monitoring?.used"
-                            :total-steps="
-                                Math.max(
-                                    quotas?.monitoring?.total -
-                                        quotas?.monitoring?.used,
-                                    0
-                                )
-                            "
+                            :completed-steps="quotas?.monitoring?.used || 0"
+                            :total-steps="quotas?.monitoring?.total || 0"
                             innerStrokeColor="#1abb9c"
                             startColor="#f45e5e"
                             stopColor="#e2c878"
                             :strokeWidth="20"
                             :innerStrokeWidth="15"
-                            v-if="
-                                quotas?.monitoring?.used > 0 ||
-                                quotas?.monitoring?.total > 0
-                            "
                         >
-                            <div class="d-flex flex-column align-items-center">
+                            <div
+                                class="d-flex flex-column align-items-center"
+                                v-if="quotas?.unlimited_monitoring"
+                            >
+                                <span class="font-color-secondary font-sm"
+                                    >Unlimited Monitoring</span
+                                >
+                            </div>
+                            <div
+                                class="d-flex flex-column align-items-center"
+                                v-else-if="
+                                    quotas?.monitoring?.used > 0 ||
+                                    quotas?.monitoring?.total > 0
+                                "
+                            >
                                 <span class="font-color-secondary font-sm"
                                     >Hosts Monitored</span
                                 >
                                 <span class="font-color-light font-xxl">
                                     {{ quotas?.monitoring?.used }} /
-                                    {{
-                                        quotas?.monitoring?.total -
-                                        quotas?.monitoring?.used
-                                    }}
+                                    {{ quotas?.monitoring?.total }}
+                                </span>
+                                <span class="font-color-light font-base">
+                                    {{ quotas?.monitoring?.period }}
                                 </span>
                             </div>
                         </RadialProgress>
                         <RadialProgress
                             :diameter="200"
-                            :completed-steps="quotas?.active?.used"
-                            :total-steps="
-                                Math.max(
-                                    quotas?.active?.total -
-                                        quotas?.active?.used,
-                                    0
-                                )
-                            "
+                            :completed-steps="quotas?.ondemand?.used || 0"
+                            :total-steps="quotas?.ondemand?.total || 0"
                             innerStrokeColor="#1abb9c"
                             startColor="#f45e5e"
                             stopColor="#e2c878"
                             :strokeWidth="20"
                             :innerStrokeWidth="15"
-                            v-if="
-                                quotas?.active?.used > 0 ||
-                                quotas?.active?.total > 0
-                            "
                         >
-                            <div class="d-flex flex-column align-items-center">
+                            <div
+                                class="d-flex flex-column align-items-center"
+                                v-if="quotas?.unlimited_scans"
+                            >
                                 <span class="font-color-secondary font-sm"
-                                    >Active Scans</span
+                                    >Unlimited Scans</span
                                 >
-                                <span class="font-color-light font-xxl">
-                                    {{ quotas?.active?.used }} /
-                                    {{
-                                        Math.max(
-                                            quotas?.active?.total -
-                                                quotas?.active?.used,
-                                            0
-                                        )
-                                    }}
-                                </span>
                             </div>
-                        </RadialProgress>
-                        <RadialProgress
-                            :diameter="200"
-                            :completed-steps="quotas?.passive?.used"
-                            :total-steps="
-                                Math.max(
-                                    quotas?.passive?.total -
-                                        quotas?.passive?.used,
-                                    0
-                                )
-                            "
-                            innerStrokeColor="#1abb9c"
-                            startColor="#f45e5e"
-                            stopColor="#e2c878"
-                            :strokeWidth="20"
-                            :innerStrokeWidth="15"
-                            v-if="
-                                quotas?.passive?.used > 0 ||
-                                quotas?.passive?.total > 0
-                            "
-                        >
-                            <div class="d-flex flex-column align-items-center">
+                            <div
+                                class="d-flex flex-column align-items-center"
+                                v-else-if="
+                                    quotas?.ondemand?.used > 0 ||
+                                    quotas?.ondemand?.total > 0
+                                "
+                            >
                                 <span class="font-color-secondary font-sm"
-                                    >Passive Scans</span
+                                    >On-Demand Scans</span
                                 >
                                 <span class="font-color-light font-xxl">
-                                    {{ quotas?.passive?.used }} /
-                                    {{
-                                        Math.max(
-                                            quotas?.passive?.total -
-                                                quotas?.passive?.used,
-                                            0
-                                        )
-                                    }}
+                                    {{ quotas?.ondemand?.used }} /
+                                    {{ quotas?.ondemand?.total }}
+                                </span>
+                                <span class="font-color-light font-base">
+                                    {{ quotas?.ondemand?.period }}
                                 </span>
                             </div>
                         </RadialProgress>
@@ -706,7 +679,8 @@ export default {
             errorMessageType: '',
             editMessage: '',
             editMessageType: '',
-            quotasTooltip: '',
+            quotasTooltip:
+                'This section shows how well you are utilizing Trivial Security',
             quotas: {},
             quotaSections: [],
             email: '',
@@ -940,26 +914,22 @@ export default {
                     this.quotaSections.push('Monitoring')
                 }
                 if (data?.unlimited_scans === false) {
-                    if (data.passive.total > 0) {
-                        this.quotaSections.push('Passive')
+                    if (data.ondemand.total > 0) {
+                        this.quotaSections.push('On-Demand')
                     }
-                    if (data?.active.total > 0) {
-                        this.quotaSections.push('Active')
-                    }
+                }
+                if (this.quotaSections.length > 0) {
+                    this.quotasTooltip = `Community Edition allows the use of self-managed scanners and will perform one scan only when each new host it added`
+                } else if (this.unlimited_monitoring === true) {
+                    this.quotasTooltip += `, you have Unlimited host monitoring`
                 }
                 if (
                     data?.monitoring.total > 0 &&
                     data.monitoring.used < data.monitoring.total
                 ) {
-                    this.quotasTooltip = `Total Available: you could be monitoring ${
+                    this.quotasTooltip += `, you could be monitoring ${
                         data.monitoring.total - data.monitoring.used
                     } more hosts`
-                } else if (this.quotaSections.length > 0) {
-                    this.quotasTooltip = `Community Edition allows the used of self-managed scanners, and will perform one scan only when each new host it added`
-                } else if (this.unlimited_monitoring === true) {
-                    this.quotasTooltip = `You have Unlimited host monitoring`
-                } else {
-                    this.quotasTooltip = `This section shows how well you are utilizing Trivial Security`
                 }
                 this.quotas = data
             } catch (error) {

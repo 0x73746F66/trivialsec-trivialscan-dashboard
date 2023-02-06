@@ -29,10 +29,10 @@
                                         Trivial Security<CustomPill
                                             v-if="is_dev"
                                             class="margin-left-xs"
-                                            label="Demo"
-                                            type="danger"
+                                            label="Testing"
+                                            type="secondary"
                                             size="sm"
-                                            classes="pill-beta"
+                                            classes="pill-testing"
                                         />
                                     </span>
                                 </div>
@@ -301,7 +301,7 @@ header {
         }
     }
 }
-.pill-beta {
+.pill-testing {
     display: inline-flex;
     min-width: fit-content;
     vertical-align: super;
