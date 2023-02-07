@@ -597,7 +597,6 @@ export default {
         slicedEvaluations() {
             let groups = new Set()
             for (const evaluation of this.evaluations) {
-                console.log(evaluation)
                 groups.add([evaluation.group, evaluation.group_id].toString())
             }
             let ruleGroups = []
