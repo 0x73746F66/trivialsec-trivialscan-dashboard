@@ -5,6 +5,7 @@
         </div>
         <div class="margin-top-sm">
             <Swiper
+                class="padding-bottom-lg"
                 :modules="modules"
                 :slides-per-view="1"
                 :space-between="10"

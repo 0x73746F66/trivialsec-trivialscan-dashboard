@@ -60,7 +60,7 @@
                 :modules="modules"
                 :slides-per-view="1"
                 :space-between="10"
-                class="padding-bottom-sm"
+                class="padding-bottom-lg"
                 :navigation="{
                     nextEl: '.custom-member-swiper-button-next',
                     prevEl: '.custom-member-swiper-button-prev'

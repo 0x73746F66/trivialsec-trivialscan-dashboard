@@ -166,6 +166,9 @@ body {
 
 .pre-line {
     white-space: pre-line;
+    p {
+        margin-bottom: 0;
+    }
 }
 .pre-wrap {
     white-space: pre-wrap;

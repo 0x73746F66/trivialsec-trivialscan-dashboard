@@ -588,7 +588,6 @@ export default {
     }
 }
 </script>
-
 <style scoped lang="scss">
 .report-item {
     cursor: pointer;
@@ -640,9 +639,17 @@ export default {
         display: none;
     }
 }
-</style>
 
-<style lang="scss">
+.expand-icon {
+    transform: rotate(180deg);
+    width: 25px;
+    height: 25px;
+}
+
+.collapsed .expand-icon {
+    transform: rotate(0deg);
+}
+
 .modal-icon-report-close {
     width: 25px;
     height: 25px;

@@ -349,34 +349,14 @@ export default {
     }
 }
 
-.report-dropdown {
-    background: color('dark-20');
-    border-bottom: 1px solid color('dark-60');
-    align-items: center;
-    padding: spacers('xs');
-
-    .expand-icon {
-        transform: rotate(180deg);
-        width: 25px;
-        height: 25px;
-    }
-
-    &.collapsed {
-        .expand-icon {
-            transform: rotate(0deg);
-        }
-    }
-
-    &-content {
-        border-bottom: 1px solid color('dark-60');
-        padding: spacers('xs');
-    }
-}
-
-.modal-icon-report-close {
+.expand-icon {
+    transform: rotate(180deg);
     width: 25px;
     height: 25px;
-    // transform: rotate(180deg);
+}
+
+.collapsed .expand-icon {
+    transform: rotate(0deg);
 }
 
 .truncate-ellipsis {

@@ -165,7 +165,7 @@ export default {
     }
 }
 </script>
-<style lang="scss">
+<style scoped lang="scss">
 @media (max-width: breakpoints('sm')) {
     .custom-pill {
         min-width: max-content;
@@ -190,5 +190,9 @@ export default {
 }
 .prev-chevron {
     transform: rotate(180deg);
+}
+.modal-icon-report-close {
+    width: 25px;
+    height: 25px;
 }
 </style>

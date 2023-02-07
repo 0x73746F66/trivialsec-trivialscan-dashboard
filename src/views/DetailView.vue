@@ -52,7 +52,11 @@ export default {
                 pass: false,
                 fail: true,
                 warn: true,
-                info: false
+                info: false,
+                tls_negotiation: true,
+                certificate: true,
+                compliance: true,
+                transport: true
             },
             loading: false,
             message: '',

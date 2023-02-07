@@ -408,12 +408,6 @@ export default {
     width: 20px;
 }
 
-.modal-icon-report-close {
-    width: 25px;
-    height: 25px;
-    // transform: rotate(180deg);
-}
-
 .pill {
     color: color('light');
     background: color('primary');

@@ -16,6 +16,7 @@
             <button class="swiper-button swiper-button-prev"></button>
         </div>
         <Swiper
+            class="padding-bottom-lg"
             :modules="modules"
             :slides-per-view="1"
             :space-between="10"
@@ -39,7 +40,7 @@
                     :defaultCollapsed="true"
                     :key="`${Certindex}${index}`"
                     buttonClasses="font-lg text-left dashboard-dropdown font-color-light w-100 d-flex justify-content-left border-none padding-xxs"
-                    contentClasses=" bg-dark-20 dashboard-dropdown-content tpadding-md font-color-light font-base"
+                    contentClasses="bg-dark-20 dashboard-dropdown-content font-color-light font-base"
                 >
                     <template v-slot:header class="w-100">
                         <div

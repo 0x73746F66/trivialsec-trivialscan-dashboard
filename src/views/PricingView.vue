@@ -32,14 +32,12 @@
 </template>
 
 <script setup>
-import PricingComponent from '@/components/general/PricingComponent.vue'
 import LoginOrRegister from '@/components/general/LoginOrRegister.vue'
 </script>
 
 <script>
 export default {
     components: {
-        PricingComponent,
         LoginOrRegister
     },
     data() {
@@ -61,5 +59,3 @@ export default {
     methods: {}
 }
 </script>
-
-<style scoped lang="scss"></style>
