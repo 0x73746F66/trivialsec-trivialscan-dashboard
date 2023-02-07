@@ -48,7 +48,11 @@ export default {
                 pass: false,
                 fail: true,
                 warn: false,
-                info: false
+                info: false,
+                tls_negotiation: true,
+                certificate: false,
+                compliance: true,
+                transport: true
             }
         }
     },
