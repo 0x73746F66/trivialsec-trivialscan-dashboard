@@ -708,14 +708,16 @@ export default {
             loading: false
         }
     },
-    async mounted() {
+    created() {
+        this.fetchProfile()
+    },
+    mounted() {
         let stripeScript = document.createElement('script')
         stripeScript.setAttribute(
             'src',
             'https://js.stripe.com/v3/pricing-table.js'
         )
         document.head.appendChild(stripeScript)
-        await this.fetchProfile()
         this.fetchQuotas()
     },
     methods: {

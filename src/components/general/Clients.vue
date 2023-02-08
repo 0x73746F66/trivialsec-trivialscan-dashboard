@@ -202,7 +202,7 @@ export default {
             loading: false
         }
     },
-    mounted() {
+    created() {
         this.fetchClients()
     },
     methods: {
@@ -280,7 +280,6 @@ export default {
             this.$emit('update:loading', false)
         },
         async fetchClients() {
-            this.$emit('update:loading', true)
             try {
                 const response = await Api.get(`/clients`, { timeout: 30000 })
                 if (response.status === 204) {
@@ -289,7 +288,6 @@ export default {
                         'No clients are registered'
                     )
                     this.$emit('update:errorMessageType', 'warning')
-                    this.$emit('update:loading', false)
                     return
                 } else if (response.status !== 200) {
                     this.$emit(
@@ -297,7 +295,6 @@ export default {
                         `${response.status} ${response.statusText}`
                     )
                     this.$emit('update:errorMessageType', 'error')
-                    this.$emit('update:loading', false)
                     return
                 }
                 const data = await response.json()
@@ -314,7 +311,6 @@ export default {
                 )
                 this.$emit('update:errorMessageType', 'error')
             }
-            this.$emit('update:loading', false)
         },
         async toggleClient($event, client_name) {
             const deactivate_url = `/deactivated/${client_name}`
