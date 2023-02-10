@@ -76,7 +76,7 @@ export default {
                 'how-most-ssl-tls-scanners-are-harmful':
                     'How most SSL/TLS scanners are more harmful than helpful',
                 'commitment-to-sustainable-practices':
-                    'Our Commitment to Sustainable Practices'
+                    'Our Commitment to Environmentally Sustainable Practices'
             },
             articles: {
                 'trivial-scanner-vs-sslyze-vs-testssl': marked(

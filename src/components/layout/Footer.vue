@@ -23,9 +23,19 @@
                         </a>
                         <div class="d-flex flex-column margin-top-xs font-sm">
                             <RouterLink
-                                to="/docs"
+                                :to="{ name: 'docs' }"
                                 class="margin-bottom-xs font-color-light-60 text-decoration-none"
                                 >Documentation</RouterLink
+                            >
+                            <RouterLink
+                                :to="{
+                                    name: 'articles',
+                                    params: {
+                                        slug: 'commitment-to-sustainable-practices'
+                                    }
+                                }"
+                                class="margin-bottom-xs font-color-light-60 text-decoration-none"
+                                >Environmental Sustainability</RouterLink
                             >
                             <a
                                 class="margin-bottom-xs font-color-light-60 text-decoration-none"
@@ -109,7 +119,7 @@
                             </span>
                         </a>
                         <RouterLink
-                            to="/docs"
+                            :to="{ name: 'docs' }"
                             class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none"
                             >Documentation</RouterLink
                         >
@@ -121,7 +131,7 @@
                         >
                         <RouterLink
                             v-if="!!$store.getItem('/session/key')"
-                            to="/support"
+                            :to="{ name: 'support' }"
                             class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none"
                             >Support Request</RouterLink
                         >
@@ -139,7 +149,7 @@
                 >
                     <div class="d-flex flex-column">
                         <RouterLink
-                            to="/about"
+                            :to="{ name: 'about' }"
                             class="text-decoration-none margin-bottom-md"
                         >
                             <span class="font-lg-sb font-color-light">
@@ -147,27 +157,27 @@
                             </span>
                         </RouterLink>
                         <RouterLink
-                            to="/use-cases/executives"
+                            :to="{ name: 'use-case-executives' }"
                             class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none"
                             >C-level executives</RouterLink
                         >
                         <RouterLink
-                            to="/use-cases/security-engineers"
+                            :to="{ name: 'use-case-security' }"
                             class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none"
                             >Security and IT professionals</RouterLink
                         >
                         <RouterLink
-                            to="/use-cases/compliance"
+                            :to="{ name: 'use-case-compliance' }"
                             class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none"
                             >Compliance and legal professionals</RouterLink
                         >
                         <RouterLink
-                            to="/use-cases/financial"
+                            :to="{ name: 'use-case-financial' }"
                             class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none"
                             >Insurance & Financial</RouterLink
                         >
                         <RouterLink
-                            to="/use-cases/public-sector"
+                            :to="{ name: 'use-case-public-sector' }"
                             class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none"
                             >Public Sector</RouterLink
                         >

@@ -561,7 +561,7 @@
                 <div
                     class="profile-container d-flex flex-column bg-dark-40 border-radius-sm padding-sm"
                     v-if="
-                        Object.keys(quotas) > 0 &&
+                        Object.keys(quotas).length > 0 &&
                         !quotas?.unlimited_monitoring &&
                         !quotas?.unlimited_scans
                     "
