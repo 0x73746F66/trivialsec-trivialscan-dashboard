@@ -218,7 +218,7 @@ export default {
                     return
                 }
                 const data = await response.json()
-                this.notifications = data.member.account.notifications
+                this.notifications = data.account.notifications
             } catch (error) {
                 this.message =
                     error.name === 'AbortError'

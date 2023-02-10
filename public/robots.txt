@@ -1,0 +1,4 @@
+User-agent: Googlebot
+Disallow: /logout
+Disallow: /privacy.html
+Disallow: /terms.html

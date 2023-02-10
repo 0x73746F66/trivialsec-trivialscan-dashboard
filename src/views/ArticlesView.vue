@@ -56,6 +56,7 @@ import { marked } from 'marked'
 import TrivialScannerVsSslyzeVsTestssl from '@/views/seo/articles/trivial-scanner-vs-sslyze-vs-testssl.md?raw'
 import TrivialScannerVsImmuniWebVsQualys from '@/views/seo/articles/trivial-scanner-vs-immuniweb-vs-qualys.md?raw'
 import HowMostSSLTLSScannersAreHarmful from '@/views/seo/articles/how-most-ssl-tls-scanners-are-harmful.md?raw'
+import CommitmentSustainable from '@/views/seo/articles/commitment-to-sustainable-practices.md?raw'
 </script>
 
 <script>
@@ -73,7 +74,9 @@ export default {
                 'trivial-scanner-vs-immuniweb-vs-qualys':
                     'Trivial Scanner vs ImmuniWeb vs Qualys SSL Labs',
                 'how-most-ssl-tls-scanners-are-harmful':
-                    'How most SSL/TLS scanners are more harmful than helpful'
+                    'How most SSL/TLS scanners are more harmful than helpful',
+                'commitment-to-sustainable-practices':
+                    'Our Commitment to Sustainable Practices'
             },
             articles: {
                 'trivial-scanner-vs-sslyze-vs-testssl': marked(
@@ -84,6 +87,9 @@ export default {
                 ),
                 'how-most-ssl-tls-scanners-are-harmful': marked(
                     HowMostSSLTLSScannersAreHarmful
+                ),
+                'commitment-to-sustainable-practices': marked(
+                    CommitmentSustainable
                 )
             }
         }

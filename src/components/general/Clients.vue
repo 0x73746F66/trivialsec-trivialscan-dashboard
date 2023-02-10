@@ -1,5 +1,8 @@
 <template>
-    <div class="clients-section d-flex flex-column margin-top-lg">
+    <div
+        class="clients-section d-flex flex-column margin-top-lg"
+        v-if="clients.length > 0"
+    >
         <div class="d-flex justify-content-between align-items-center">
             <h3 class="font-color-light font-lg-b">Clients</h3>
         </div>
@@ -167,6 +170,13 @@
             </div>
         </div>
     </div>
+    <div v-else>
+        <ValidationMessage
+            class="justify-content-start"
+            message="Generate a client to utilise the CLI"
+            type="warning"
+        />
+    </div>
 </template>
 
 <script setup>
@@ -283,11 +293,6 @@ export default {
             try {
                 const response = await Api.get(`/clients`, { timeout: 30000 })
                 if (response.status === 204) {
-                    this.$emit(
-                        'update:errorMessage',
-                        'No clients are registered'
-                    )
-                    this.$emit('update:errorMessageType', 'warning')
                     return
                 } else if (response.status !== 200) {
                     this.$emit(

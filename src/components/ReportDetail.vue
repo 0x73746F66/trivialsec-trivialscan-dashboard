@@ -172,6 +172,7 @@
                                             Certificates
                                         </h3>
                                         <span
+                                            v-if="target?.tls?.certificates"
                                             v-for="(
                                                 sha1_fingerprint, certIndex
                                             ) in uniqueCertificates(

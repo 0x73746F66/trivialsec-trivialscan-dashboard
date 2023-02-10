@@ -293,7 +293,8 @@
                                             >Active Plan:</span
                                         >
                                         <span class="font-sm font-sm">{{
-                                            member.account?.billing.product_name
+                                            member.account?.billing
+                                                ?.product_name
                                         }}</span>
                                     </div>
                                     <div>
@@ -301,48 +302,49 @@
                                             class="font-color-primary font-lg-b"
                                             >{{
                                                 member.account?.billing
-                                                    .display_amount
+                                                    ?.display_amount
                                             }}
                                         </span>
                                         <span
                                             v-if="
                                                 member.account?.billing
-                                                    .display_period
+                                                    ?.display_period
                                             "
                                             class="font-lg-b"
                                             >/{{
                                                 member.account?.billing
-                                                    .display_period
+                                                    ?.display_period
                                             }}</span
                                         >
                                     </div>
                                 </div>
                                 <div
-                                    v-if="member.account?.billing.is_trial"
+                                    v-if="member.account?.billing?.is_trial"
                                     class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column"
                                 >
                                     <span class="font-sm font-color-primary"
                                         >Trial ends
                                         {{
-                                            member.account?.billing.next_payment
+                                            member.account?.billing
+                                                ?.next_payment
                                         }}</span
                                     >
                                 </div>
                                 <div
-                                    v-if="member.account?.billing.description"
+                                    v-if="member.account?.billing?.description"
                                     class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column"
                                 >
                                     <span class="font-base-sb margin-right-sm"
                                         >Payment Method:</span
                                     >
                                     <span class="font-sm">{{
-                                        member.account?.billing.description
+                                        member.account?.billing?.description
                                     }}</span>
                                 </div>
                                 <div
                                     v-if="
-                                        member.account?.billing.next_due &&
-                                        !member.account?.billing.is_trial
+                                        member.account?.billing?.next_due &&
+                                        !member.account?.billing?.is_trial
                                     "
                                     class="d-flex margin-bottom-sm align-items-lg-center d-flex flex-lg-row flex-column"
                                 >
@@ -350,7 +352,7 @@
                                         >Next Payment:</span
                                     >
                                     <span class="font-sm">{{
-                                        member.account?.billing.next_payment
+                                        member.account?.billing?.next_payment
                                     }}</span>
                                 </div>
                                 <div
@@ -408,7 +410,7 @@
                                         <a
                                             v-if="
                                                 member.account?.billing
-                                                    .has_invoice
+                                                    ?.has_invoice
                                             "
                                             target="_blank"
                                             href="https://billing.stripe.com/p/login/8wMcQ27YKdPcbxSeUU"
@@ -419,10 +421,10 @@
                                     <div
                                         v-if="
                                             member.account?.billing
-                                                .product_name ===
+                                                ?.product_name ===
                                                 'Community Edition' ||
                                             member.account?.billing
-                                                .product_name === 'Basics'
+                                                ?.product_name === 'Basics'
                                         "
                                     >
                                         <Modal
@@ -461,7 +463,8 @@
                                     <div
                                         v-if="
                                             member.account?.billing
-                                                .product_name === 'Professional'
+                                                ?.product_name ===
+                                            'Professional'
                                         "
                                     >
                                         <Modal
@@ -558,6 +561,7 @@
                 <div
                     class="profile-container d-flex flex-column bg-dark-40 border-radius-sm padding-sm"
                     v-if="
+                        Object.keys(quotas) > 0 &&
                         !quotas?.unlimited_monitoring &&
                         !quotas?.unlimited_scans
                     "
@@ -709,7 +713,24 @@ export default {
         }
     },
     created() {
-        this.fetchProfile()
+        const storedRaw = localStorage.getItem(`/me`)
+        const data = storedRaw ? JSON.parse(storedRaw) : {}
+        if (data?.member) {
+            this.member = data.member
+            this.member.account = data.account
+            this.member.status = this.member.confirmed
+                ? 'Confirmed'
+                : 'Pending activation'
+            this.member.created = moment.utc(this.member.timestamp).fromNow()
+            if (this.member.account?.billing?.next_due) {
+                this.member.account.billing.next_payment = moment
+                    .utc(this.member.account.billing.next_due)
+                    .fromNow()
+            }
+            localStorage.removeItem(`/me`)
+        } else {
+            this.fetchProfile()
+        }
     },
     mounted() {
         let stripeScript = document.createElement('script')
@@ -738,13 +759,14 @@ export default {
                 }
                 const data = await response.json()
                 this.member = data.member
+                this.member.account = data.account
                 this.member.status = this.member.confirmed
                     ? 'Confirmed'
                     : 'Pending activation'
                 this.member.created = moment
                     .utc(this.member.timestamp)
                     .fromNow()
-                if (this.member.account?.billing.next_due) {
+                if (this.member.account?.billing?.next_due) {
                     this.member.account.billing.next_payment = moment
                         .utc(this.member.account.billing.next_due)
                         .fromNow()
@@ -920,37 +942,34 @@ export default {
                 const response = await Api.get(`/dashboard/quotas`, {
                     timeout: 30000
                 })
-                if (response.status !== 200) {
-                    this.errorMessage = `${response.status} ${response.statusText}`
-                    this.errorMessageType = 'error'
-                    return
-                }
-                const data = await response.json()
-                if (
-                    data?.unlimited_monitoring === false &&
-                    data.monitoring.total > 0
-                ) {
-                    this.quotaSections.push('Monitoring')
-                }
-                if (data?.unlimited_scans === false) {
-                    if (data.ondemand.total > 0) {
-                        this.quotaSections.push('On-Demand')
+                if (response.status === 200) {
+                    const data = await response.json()
+                    if (
+                        data?.unlimited_monitoring === false &&
+                        data.monitoring.total > 0
+                    ) {
+                        this.quotaSections.push('Monitoring')
                     }
+                    if (data?.unlimited_scans === false) {
+                        if (data.ondemand.total > 0) {
+                            this.quotaSections.push('On-Demand')
+                        }
+                    }
+                    if (this.quotaSections.length > 0) {
+                        this.quotasTooltip = `Community Edition allows the use of self-managed scanners and will perform one scan only when each new host it added`
+                    } else if (this.unlimited_monitoring === true) {
+                        this.quotasTooltip += `, you have Unlimited host monitoring`
+                    }
+                    if (
+                        data?.monitoring.total > 0 &&
+                        data.monitoring.used < data.monitoring.total
+                    ) {
+                        this.quotasTooltip += `, you could be monitoring ${
+                            data.monitoring.total - data.monitoring.used
+                        } more hosts`
+                    }
+                    this.quotas = data
                 }
-                if (this.quotaSections.length > 0) {
-                    this.quotasTooltip = `Community Edition allows the use of self-managed scanners and will perform one scan only when each new host it added`
-                } else if (this.unlimited_monitoring === true) {
-                    this.quotasTooltip += `, you have Unlimited host monitoring`
-                }
-                if (
-                    data?.monitoring.total > 0 &&
-                    data.monitoring.used < data.monitoring.total
-                ) {
-                    this.quotasTooltip += `, you could be monitoring ${
-                        data.monitoring.total - data.monitoring.used
-                    } more hosts`
-                }
-                this.quotas = data
             } catch (error) {
                 this.errorMessage =
                     error.name === 'AbortError'

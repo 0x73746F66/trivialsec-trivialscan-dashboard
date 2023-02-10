@@ -111,6 +111,16 @@
                             nominated contacts.
                         </p>
                         <p>
+                            All websites have a domain registration, or served
+                            from a subdomain of the registered domain or hosting
+                            service. Early Warning reads the DNS (Domain Name
+                            System) zone files that authoritatively store the
+                            millions of domains, and we derive the subdomains
+                            from there to identify malicious and lookalike
+                            sites, also called phishing sites, the instant they
+                            are registered.
+                        </p>
+                        <p>
                             Early Warning never sends your IP or domain names to
                             third parties, all information is first sent to us
                             and then Early Warning will filter this bulk data to

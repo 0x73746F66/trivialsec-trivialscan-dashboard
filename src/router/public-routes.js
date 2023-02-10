@@ -59,38 +59,41 @@ const routes = [
                         ),
                     3000
                 )
-            } else {
-                const data = await response.json()
-                localStorage.setItem(
-                    '/account/name',
-                    data?.member?.account?.name ||
-                        localStorage.getItem('/account/name')
-                )
-                localStorage.setItem(
-                    '/account/display',
-                    data?.member?.account?.display ||
-                        localStorage.getItem('/account/display')
-                )
-                localStorage.setItem(
-                    '/member/email',
-                    data?.member?.email || localStorage.getItem('/member/email')
-                )
-                localStorage.setItem(
-                    '/member/email_md5',
-                    data?.member?.email_md5 ||
-                        localStorage.getItem('/member/email_md5')
-                )
-                localStorage.setItem(
-                    '/session/key',
-                    data?.access_token || localStorage.getItem('/session/key')
-                )
+                next('/')
+                return
             }
+            const data = await response.json()
+            localStorage.setItem(
+                '/account/name',
+                data?.account?.name || localStorage.getItem('/account/name')
+            )
+            localStorage.setItem(
+                '/account/display',
+                data?.account?.display ||
+                    localStorage.getItem('/account/display')
+            )
+            localStorage.setItem(
+                '/member/email',
+                data?.member?.email || localStorage.getItem('/member/email')
+            )
+            localStorage.setItem(
+                '/member/email_md5',
+                data?.member?.email_md5 ||
+                    localStorage.getItem('/member/email_md5')
+            )
+            localStorage.setItem(
+                '/session/key',
+                data?.session?.access_token ||
+                    localStorage.getItem('/session/key')
+            )
             window.initPusher()
             if (localStorage.getItem('/session/key')) {
-                next('/profile')
-            } else {
-                next('/')
+                data.session.access_token = null
+                localStorage.setItem(`/me`, JSON.stringify(data))
+                next({ name: 'profile' })
+                return
             }
+            next('/')
         }
     },
     {

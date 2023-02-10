@@ -74,6 +74,9 @@ export default {
                             `/summary/${this.$route.params.report_id}`
                         )
                     )
+                    localStorage.removeItem(
+                        `/summary/${this.$route.params.report_id}`
+                    )
                 } catch (error) {
                     this.message = error.toString()
                     this.messageType = 'error'

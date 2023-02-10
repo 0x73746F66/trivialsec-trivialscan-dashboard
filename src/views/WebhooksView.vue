@@ -234,14 +234,12 @@ export default {
                     this.loading = false
                     return
                 }
-                const session = await response.json()
+                const data = await response.json()
                 let webhookId = 0
-                this.webhooks = session.member.account.webhooks.map(
-                    (webhook) => {
-                        webhook.id = webhookId++
-                        return webhook
-                    }
-                )
+                this.webhooks = data.account.webhooks.map((webhook) => {
+                    webhook.id = webhookId++
+                    return webhook
+                })
             } catch (error) {
                 this.message =
                     error.name === 'AbortError'
