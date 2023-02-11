@@ -109,7 +109,7 @@ preview: env init refresh  ## npm run build
 clear-cf:  ## AWS CloudFront cache invalidation
 	aws cloudfront create-invalidation \
 		--distribution-id $(shell terraform -chdir=plans output -raw cloudfront_trivialscan_dashboard) \
-		--paths "/index.html" "/assets/*.js" "/assets/*.css"
+		--paths "/favicon.png" "/index.html" "/robots.txt" "/.well-known/*" "/manifest.json" "/assets/*.js" "/assets/*.ttf" "/assets/*.map" "/assets/*.svg" "/assets/*.png" "/assets/*.css"
 
 lint:  ## npm run lint
 	npm run lint
