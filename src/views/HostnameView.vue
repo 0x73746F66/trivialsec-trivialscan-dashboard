@@ -15,6 +15,7 @@
             <LoadingComponent class="loading" v-if="loading" />
             <HostDetailView
                 :host="host"
+                :related_domains="related_domains"
                 :external_refs="external_refs"
                 :versions="versions"
                 :params="params"
@@ -63,6 +64,7 @@ export default {
             errorMessageType: '',
             host: {},
             external_refs: {},
+            related_domains: [],
             reports: [],
             versions: [],
             params: {}
@@ -147,6 +149,7 @@ export default {
                     })
                     .sort((a, b) => b.date.localeCompare(a.date))
                 this.external_refs = data.external_refs
+                this.related_domains = data.related_domains
                 this.reports = data.reports.map((summary) => {
                     summary.refId = this.shortReportId(summary.report_id)
                     summary.dateAgo = moment.utc(summary.date).fromNow()

@@ -99,8 +99,8 @@
         </div>
         <div class="row margin-bottom-xxs">
             <div class="col-lg-9 col-12 margin-bottom-xs">
-                <h3 class="font-color-secondary font-sm-sb margin-top-sm">
-                    <IconTarget class="target-icon" color="e2c878" />
+                <h3 class="font-color-secondary font-base-sb margin-top-sm">
+                    <IconInfo class="target-icon" color="e2c878" />
                     Protocol
                 </h3>
                 <p class="margin-bottom-xs">
@@ -138,8 +138,8 @@
                         {{ subject }}
                     </span>
                 </div>
-                <h3 class="font-color-secondary font-sm-sb">
-                    <IconTarget class="target-icon" color="e2c878" />
+                <h3 class="font-color-secondary font-base-sb">
+                    <IconInfo class="target-icon" color="e2c878" />
                     Cipher
                     <span
                         class="font-sm hover-help"
@@ -149,19 +149,49 @@
                     </span>
                 </h3>
                 <p class="margin-bottom-xs">
-                    <span class="font-sm-sb">Negotiated:</span>
+                    <span class="font-sm-sb margin-right-xxs">Negotiated:</span>
                     <span class="font-sm">{{
                         host.tls?.cipher.negotiated
                     }}</span>
                 </p>
                 <p class="margin-bottom-xs">
-                    <span class="font-sm-sb">Negotiated Bits:</span>
+                    <span class="font-sm-sb margin-right-xxs"
+                        >Negotiated Bits:</span
+                    >
                     <span class="font-sm">{{
                         host.tls?.cipher.negotiated_bits
                     }}</span>
                 </p>
-                <h3 class="font-color-secondary font-sm-sb margin-top-sm">
-                    <IconTarget class="target-icon" color="e2c878" />
+                <h3
+                    class="font-color-secondary font-base-sb margin-top-sm"
+                    v-if="related_domains?.length > 0"
+                >
+                    <IconInfo class="target-icon" color="e2c878" />
+                    Related Domains
+                </h3>
+                <span
+                    v-for="(domain_name, hostIndex) in related_domains"
+                    :key="hostIndex"
+                    class="font-color-secondary font-sm word-break"
+                >
+                    <RouterLink
+                        :to="{
+                            name: 'hostname',
+                            params: {
+                                hostname: domain_name
+                            }
+                        }"
+                        class="text-decoration-none font-color-light d-flex"
+                    >
+                        <IconTarget class="target-icon" color="1abb9c" /><span
+                            class="margin-left-xxs hover-help"
+                            title="See domain details"
+                            >{{ domain_name }}</span
+                        >
+                    </RouterLink>
+                </span>
+                <h3 class="font-color-secondary font-base-sb margin-top-sm">
+                    <IconInfo class="target-icon" color="e2c878" />
                     Session Resumption
                 </h3>
                 <p class="margin-bottom-xs">
@@ -182,8 +212,8 @@
                         {{ host.tls?.session_resumption.tickets }}
                     </span>
                 </p>
-                <h3 class="font-color-secondary font-sm-sb margin-top-sm">
-                    <IconTarget class="target-icon" color="e2c878" />
+                <h3 class="font-color-secondary font-base-sb margin-top-sm">
+                    <IconInfo class="target-icon" color="e2c878" />
                     Certificate Fingerprints
                 </h3>
                 <span
@@ -208,10 +238,10 @@
                     </a>
                 </span>
                 <h3
-                    class="font-color-secondary font-sm-sb margin-top-sm"
+                    class="font-color-secondary font-base-sb margin-top-sm"
                     v-if="host.threat_intel?.length > 0"
                 >
-                    <IconTarget class="target-icon" color="e2c878" />
+                    <IconInfo class="target-icon" color="e2c878" />
                     Threat Feed Entries
                 </h3>
                 <div
@@ -253,7 +283,7 @@
             <div
                 class="col-lg-3 col-12 d-flex flex-column margin-bottom-xs bg-dark-60 border-radius-sm padding-sm"
             >
-                <h3 class="font-color-light font-sm-sb">OSINT</h3>
+                <h3 class="font-color-light font-sm-sb">OSINT Pivots</h3>
                 <span
                     v-for="(link, name) in external_refs"
                     :key="name"
@@ -277,6 +307,7 @@
 <script setup>
 import moment from 'moment'
 import IconTarget from '@/components/icons/IconTarget.vue'
+import IconInfo from '@/components/icons/IconInfo.vue'
 import IconLink from '@/components/icons/IconLink.vue'
 import IconCertificate from '@/components/icons/IconCertificate.vue'
 import Toggle from '@/components/general/Toggle.vue'
@@ -289,6 +320,7 @@ import LoadingComponent from '@/components/general/LoadingComponent.vue'
 export default {
     components: {
         IconTarget,
+        IconInfo,
         IconLink,
         IconCertificate,
         Toggle,
@@ -296,7 +328,7 @@ export default {
         ValidationMessage,
         LoadingComponent
     },
-    props: ['host', 'external_refs', 'versions', 'params'],
+    props: ['host', 'external_refs', 'versions', 'related_domains', 'params'],
     data() {
         return {
             loading: false,
