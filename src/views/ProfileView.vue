@@ -269,8 +269,9 @@
                                     <template v-slot:modalContent>
                                         <Button
                                             class="btn-outline-danger-sm font-color-danger font-sm"
-                                            text="Procced"
+                                            text="Proceed"
                                             @click="deleteAccount()"
+                                            data-bs-toggle="modal"
                                         />
                                     </template>
                                 </Modal>
@@ -908,9 +909,26 @@ export default {
             this.loading = false
         },
         async deleteAccount() {
-            if (import.meta.env.DEV) {
-                console.log('delete account')
+            this.loading = true
+            try {
+                const response = await Api.delete(`/account`)
+                if (response.status != 202) {
+                    this.errorMessage =
+                        "Something went wrong. session couldn't be deleted."
+                    this.errorMessageType = 'error'
+                    this.loading = false
+                    return
+                }
+                this.errorMessage = 'This account was deleted'
+                this.errorMessageType = 'success'
+            } catch (error) {
+                this.errorMessage =
+                    error.name === 'AbortError'
+                        ? 'Request timed out, please try refreshing the page.'
+                        : `${error.name} ${error.message}. Couldn't complete this action.`
+                this.errorMessageType = 'error'
             }
+            this.loading = false
         },
         async generateClientCredential() {
             const client_name = randomWords({ exactly: 2, join: '' })

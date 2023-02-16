@@ -43,11 +43,13 @@
                 />
             </div>
         </div>
+        <InlineLoading class="margin-top-lg" :loading="true" v-else />
     </div>
 </template>
 
 <script setup>
 import LoadingComponent from '@/components/general/LoadingComponent.vue'
+import InlineLoading from '@/components/general/InlineLoading.vue'
 import ValidationMessage from '@/components/general/ValidationMessage.vue'
 import HostDetailView from '@/components/general/HostDetailView.vue'
 import SummaryItem from '@/components/general/SummaryItem.vue'
@@ -76,6 +78,9 @@ export default {
         HostDetailView,
         SummaryItem,
         SearchForm
+    },
+    created() {
+        this.loading = true
     },
     mounted() {
         // watch the params of the route to fetch the data again

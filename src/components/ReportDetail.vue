@@ -223,7 +223,7 @@
                                                 class="font-color-base font-color-light"
                                             >
                                                 {{
-                                                    target.tls.protocol
+                                                    target.tls?.protocol
                                                         .negotiated
                                                 }}
                                             </span>
@@ -238,7 +238,7 @@
                                                 class="font-color-base font-color-light"
                                             >
                                                 {{
-                                                    target.tls.protocol
+                                                    target.tls?.protocol
                                                         .preferred
                                                 }}
                                             </span>
@@ -254,7 +254,7 @@
                                                     class="font-color-base font-color-light"
                                                     v-for="(
                                                         offered, offeredIndex
-                                                    ) in target.tls.protocol
+                                                    ) in target.tls?.protocol
                                                         .offered"
                                                     :key="offeredIndex"
                                                 >

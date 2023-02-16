@@ -150,6 +150,14 @@
                     <div v-else class="font-base-sb font-color-secondary">
                         No webhook endpoints registered
                     </div>
+                    <div class="margin-top-xl">
+                        <h3
+                            class="font-color-light font-lg-b modal-invite-header"
+                        >
+                            Recent Events
+                        </h3>
+                        <WebhookEvents />
+                    </div>
                 </div>
             </div>
         </div>
@@ -168,6 +176,7 @@ import Toggle from '@/components/general/Toggle.vue'
 import Button from '@/components/general/Button.vue'
 import Modal from '@/components/general/Modal.vue'
 import WebhookSecret from '@/components/general/WebhookSecret.vue'
+import WebhookEvents from '@/components/general/WebhookEvents.vue'
 </script>
 
 <script>

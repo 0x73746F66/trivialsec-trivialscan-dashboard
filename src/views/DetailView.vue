@@ -14,7 +14,7 @@
             <ReportDetail v-bind="report" />
             <div class="container">
                 <div class="row">
-                    <InlineLoading :loading="loading" />
+                    <InlineLoading class="margin-top-lg" :loading="loading" />
                     <EvaluationItems
                         v-if="report.evaluations"
                         :evaluations="report.evaluations"
