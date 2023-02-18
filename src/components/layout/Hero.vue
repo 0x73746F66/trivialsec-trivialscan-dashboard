@@ -38,23 +38,20 @@ export default {
     components: { IconTrivialSecurity },
     mounted() {
         let canvas = document.getElementById('canv')
-        var cw = canvas.width / 10
-        var ch = canvas.height / 10
+        var cw = canvas.width / 7
+        var ch = canvas.height / 20
         var cw100 = cw * 10
         var ch100 = ch * 10
 
         let ctx = canvas.getContext('2d')
 
         let numArr = []
-        let num = 30
+        let num = 25
         let fontSizeMax = 15
-        let maxSpeed = 0.01
+        let maxSpeed = 0.005
         let directionMax = 0.15
         let directionMin = -0.15
-        let display = [
-            ['🪲', '🪰'],
-            ['0', '1']
-        ]
+        let display = ['0', '1']
         let fonts = ['Georgia', 'Courier New']
 
         let color = 'rgba(26, 187, 156, 0.4)'
@@ -125,10 +122,7 @@ export default {
                 dy:
                     Math.random() * (directionMax - directionMin) +
                     directionMin,
-                content:
-                    display[Math.round(Math.random())][
-                        Math.round(Math.random())
-                    ]
+                content: display[Math.round(Math.random())]
             })
         }
 
@@ -162,10 +156,7 @@ export default {
                         dy:
                             Math.random() * (directionMax - directionMin) +
                             directionMin,
-                        content:
-                            display[Math.round(Math.random())][
-                                Math.round(Math.random())
-                            ]
+                        content: display[Math.round(Math.random())]
                     })
                 }
                 drawRandom(num.x, num.y, num.fs, num.content)
@@ -175,8 +166,8 @@ export default {
         function changeDisplay() {
             let randomNum = Math.floor(Math.random() * numArr.length)
             let num = numArr[randomNum]
-            num.content =
-                display[Math.round(Math.random())][Math.round(Math.random())]
+            if (Math.round(Math.random()) === 0) return
+            num.content = display[Math.round(Math.random())]
         }
 
         function drawRandom(w, h, fs = fontSizeMax, content) {
@@ -194,6 +185,13 @@ export default {
         }
 
         window.requestAnimationFrame(main)
+        setInterval(() => {
+            const displays = [
+                ['0', '1'],
+                ['🪲', '🪲']
+            ]
+            display = displays[Math.round(Math.random())]
+        }, 3000)
     }
 }
 </script>

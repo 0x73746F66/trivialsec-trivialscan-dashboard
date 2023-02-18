@@ -88,6 +88,8 @@ export default {
             () => this.$route.params,
             () => {
                 this.params = this.$route.params
+                this.errorMessage = ''
+                this.errorMessageType = ''
                 this.fetchData()
             },
             // fetch the data when the view is created and the data is

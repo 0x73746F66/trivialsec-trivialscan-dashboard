@@ -8,8 +8,7 @@
             class="container content-section margin-bottom-lg margin-top-xl padding-right-md padding-left-md"
         >
             <h2 class="font-color-primary font-xxl text-center">
-                Stay Ahead of the Threats with Attack Surface Monitoring and
-                Threat Intelligence!
+                Monitoring that won't disrupt
             </h2>
             <div
                 class="content-section-body padding-left-xl padding-right-xl padding-top-md padding-bottom-md"
@@ -35,6 +34,49 @@
                     on the market that will charge you for what attackers get
                     for free.
                 </div>
+            </div>
+        </div>
+
+        <div class="container basic-feature-container margin-top-md">
+            <div class="row padding-top-lg padding-bottom-lg">
+                <BasicFeature
+                    :key="basicFeatures[0].id"
+                    :feature="basicFeatures[0]"
+                />
+                <BasicFeature
+                    :key="basicFeatures[1].id"
+                    :feature="basicFeatures[1]"
+                />
+                <BasicFeature
+                    :key="basicFeatures[2].id"
+                    :feature="basicFeatures[2]"
+                />
+            </div>
+        </div>
+
+        <div
+            class="container content-section margin-bottom-lg margin-top-lg padding-right-md padding-left-md"
+        >
+            <h2 class="font-color-primary font-xxl text-center">
+                Automatic filtering hundreds of Threat Intelligence sources!
+            </h2>
+            <div
+                class="content-section-body padding-left-xl padding-right-xl padding-top-md padding-bottom-md"
+            >
+                <div class="row margin-bottom-sm">
+                    This has required that you know all the threat intelligence
+                    sources; acquire and analyze the many disparate protocols
+                    and formats, and filter data that relates to you.
+                </div>
+                <div class="row margin-bottom-sm">
+                    When you use Trivial Security you skip these steps, save
+                    time developing, maintaining, researching new sources, and
+                    continuously analysing them. Instead of every organisation
+                    doing this many times over, we provide FREE threat
+                    intelligence alerting (Early Warning Service) linked to your
+                    usage of our scanners to save effort maintaining lists of
+                    matching identifiers.
+                </div>
                 <div class="row margin-bottom-sm">
                     We ensure that you only pay for what you need, making
                     Trivial Security the most cost-effective solution on the
@@ -45,18 +87,63 @@
             </div>
         </div>
 
-        <div
-            class="container basic-feature-container margin-bottom-md margin-top-md"
-        >
+        <div class="container basic-feature-container margin-top-md">
             <div class="row padding-top-lg padding-bottom-lg">
                 <BasicFeature
-                    v-for="basicFeature in basicFeatures"
-                    :key="basicFeature.id"
-                    :feature="basicFeature"
+                    :key="basicFeatures[3].id"
+                    :feature="basicFeatures[3]"
+                />
+                <BasicFeature
+                    :key="basicFeatures[4].id"
+                    :feature="basicFeatures[4]"
+                />
+                <BasicFeature
+                    :key="basicFeatures[5].id"
+                    :feature="basicFeatures[5]"
                 />
             </div>
         </div>
-        <div class="container margin-bottom-xl margin-top-xl" v-if="!logged_in">
+
+        <div
+            class="container content-section margin-bottom-lg margin-top-lg padding-right-md padding-left-md"
+        >
+            <h2 class="font-color-primary font-xxl text-center">
+                A security tool that is actually pleasing to use
+            </h2>
+            <div
+                class="content-section-body padding-left-xl padding-right-xl padding-top-md padding-bottom-md"
+            >
+                <div class="row margin-bottom-sm">
+                    If you're not too technical, and just want an email when
+                    something important is found. You tell us once what types of
+                    things are or not important, otherwise you'll never hear
+                    from us. Change settings any time, if your preferences
+                    change.
+                </div>
+                <div class="row margin-bottom-sm">
+                    Maybe you are a software developer that prefers to interact
+                    with an API, we have an OpenAPI spec for you, and happy to
+                    share our Postman configuration for testing.
+                </div>
+                <div class="row margin-bottom-sm">
+                    We love automation and DevOps, so we open sourced all our
+                    rule evaluation code as a set of python modules or as CLI
+                    with full customisation of how all rules are evaluated,
+                    adding custom rules, and easy to do self-hosting from
+                    anywhere python runs.
+                </div>
+                <div class="row margin-bottom-sm">
+                    You're a SOC and wan't all of the data delivered in
+                    real-time, create as many webhook endpoints as you need, for
+                    one, all, or any combination of event source categories;
+                    account activity, scanner, early warning service. Or use the
+                    dashboard to explore scan results and check out our OSINT
+                    pivots!
+                </div>
+            </div>
+        </div>
+
+        <div class="container margin-bottom-xl margin-top-lg" v-if="!logged_in">
             <LoginOrRegister
                 loginModalId="loginModal"
                 registerModalId="registerLogin"
