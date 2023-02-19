@@ -171,7 +171,9 @@
         </div>
     </div>
     <div v-else>
+        <InlineLoading :loading="loading" />
         <ValidationMessage
+            v-if="!loading"
             class="justify-content-start"
             message="Generate a client to utilise the CLI"
             type="warning"
@@ -187,7 +189,7 @@ import Modal from '@/components/general/Modal.vue'
 import Toggle from '@/components/general/Toggle.vue'
 import EmailInput from '@/components/inputs/EmailInput.vue'
 import ValidationMessage from '@/components/general/ValidationMessage.vue'
-import LoadingComponent from '@/components/general/LoadingComponent.vue'
+import InlineLoading from '@/components/general/InlineLoading.vue'
 import moment from 'moment'
 import { Popover } from 'bootstrap'
 </script>
@@ -204,7 +206,7 @@ export default {
         Toggle,
         EmailInput,
         ValidationMessage,
-        LoadingComponent
+        InlineLoading
     },
     data() {
         return {
@@ -291,8 +293,10 @@ export default {
         },
         async fetchClients() {
             try {
+                this.loading = true
                 const response = await Api.get(`/clients`, { timeout: 30000 })
                 if (response.status === 204) {
+                    this.loading = false
                     return
                 } else if (response.status !== 200) {
                     this.$emit(
@@ -300,6 +304,7 @@ export default {
                         `${response.status} ${response.statusText}`
                     )
                     this.$emit('update:errorMessageType', 'error')
+                    this.loading = false
                     return
                 }
                 const data = await response.json()
@@ -316,6 +321,7 @@ export default {
                 )
                 this.$emit('update:errorMessageType', 'error')
             }
+            this.loading = false
         },
         async toggleClient($event, client_name) {
             const deactivate_url = `/deactivated/${client_name}`

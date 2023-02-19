@@ -561,97 +561,13 @@
                 </div>
                 <div
                     class="profile-container d-flex flex-column bg-dark-40 border-radius-sm padding-sm"
-                    v-if="
-                        Object.keys(quotas).length > 0 &&
-                        !quotas?.unlimited_monitoring &&
-                        !quotas?.unlimited_scans
-                    "
                 >
-                    <div class="d-flex font-color-light">
-                        <h2 class="font-xl-sb margin-right-sm">Plan Quotas</h2>
-                        <QuestionComponent
-                            label="question-total-available"
-                            :content="quotasTooltip"
-                        />
-                    </div>
-                    <div
-                        class="d-flex flex-lg-row flex-column justify-content-around"
-                    >
-                        <RadialProgress
-                            :diameter="200"
-                            :completed-steps="quotas?.monitoring?.used || 0"
-                            :total-steps="quotas?.monitoring?.total || 0"
-                            innerStrokeColor="#1abb9c"
-                            startColor="#f45e5e"
-                            stopColor="#e2c878"
-                            :strokeWidth="20"
-                            :innerStrokeWidth="15"
-                        >
-                            <div
-                                class="d-flex flex-column align-items-center"
-                                v-if="quotas?.unlimited_monitoring"
-                            >
-                                <span class="font-color-secondary font-sm"
-                                    >Unlimited Monitoring</span
-                                >
-                            </div>
-                            <div
-                                class="d-flex flex-column align-items-center"
-                                v-else-if="
-                                    quotas?.monitoring?.used > 0 ||
-                                    quotas?.monitoring?.total > 0
-                                "
-                            >
-                                <span class="font-color-secondary font-sm"
-                                    >Hosts Monitored</span
-                                >
-                                <span class="font-color-light font-xxl">
-                                    {{ quotas?.monitoring?.used }} /
-                                    {{ quotas?.monitoring?.total }}
-                                </span>
-                                <span class="font-color-light font-base">
-                                    {{ quotas?.monitoring?.period }}
-                                </span>
-                            </div>
-                        </RadialProgress>
-                        <RadialProgress
-                            :diameter="200"
-                            :completed-steps="quotas?.ondemand?.used || 0"
-                            :total-steps="quotas?.ondemand?.total || 0"
-                            innerStrokeColor="#1abb9c"
-                            startColor="#f45e5e"
-                            stopColor="#e2c878"
-                            :strokeWidth="20"
-                            :innerStrokeWidth="15"
-                        >
-                            <div
-                                class="d-flex flex-column align-items-center"
-                                v-if="quotas?.unlimited_scans"
-                            >
-                                <span class="font-color-secondary font-sm"
-                                    >Unlimited Scans</span
-                                >
-                            </div>
-                            <div
-                                class="d-flex flex-column align-items-center"
-                                v-else-if="
-                                    quotas?.ondemand?.used > 0 ||
-                                    quotas?.ondemand?.total > 0
-                                "
-                            >
-                                <span class="font-color-secondary font-sm"
-                                    >On-Demand Scans</span
-                                >
-                                <span class="font-color-light font-xxl">
-                                    {{ quotas?.ondemand?.used }} /
-                                    {{ quotas?.ondemand?.total }}
-                                </span>
-                                <span class="font-color-light font-base">
-                                    {{ quotas?.ondemand?.period }}
-                                </span>
-                            </div>
-                        </RadialProgress>
-                    </div>
+                    <Quotas
+                        v-model:quotas="quotas"
+                        v-model:loading="loading"
+                        v-model:errorMessage="errorMessage"
+                        v-model:errorMessageType="errorMessageType"
+                    />
                 </div>
             </div>
         </div>
@@ -668,9 +584,8 @@ import TextInput from '@/components/inputs/TextInput.vue'
 import EditableTextField from '@/components/inputs/EditableTextField.vue'
 import Button from '@/components/general/Button.vue'
 import Clients from '@/components/general/Clients.vue'
+import Quotas from '@/components/general/Quotas.vue'
 import Modal from '@/components/general/Modal.vue'
-import QuestionComponent from '@/components/general/QuestionComponent.vue'
-import RadialProgress from 'vue3-radial-progress'
 import moment from 'moment'
 import randomWords from 'random-words'
 </script>
@@ -688,23 +603,19 @@ export default {
         ValidationMessage,
         LoadingComponent,
         Clients,
-        AccountMenu,
-        QuestionComponent,
-        RadialProgress
+        Quotas,
+        AccountMenu
     },
     data() {
         return {
             member: {},
+            quotas: {},
             clients: [],
             editMode: false,
             errorMessage: '',
             errorMessageType: '',
             editMessage: '',
             editMessageType: '',
-            quotasTooltip:
-                'This section shows how well you are utilizing Trivial Security',
-            quotas: {},
-            quotaSections: [],
             email: '',
             primaryEmail: '',
             billingEmail: '',
@@ -740,7 +651,6 @@ export default {
             'https://js.stripe.com/v3/pricing-table.js'
         )
         document.head.appendChild(stripeScript)
-        this.fetchQuotas()
     },
     methods: {
         toggleEditMode() {
@@ -954,47 +864,6 @@ export default {
                 this.errorMessageType = 'error'
             }
             this.loading = false
-        },
-        async fetchQuotas() {
-            try {
-                const response = await Api.get(`/dashboard/quotas`, {
-                    timeout: 30000
-                })
-                if (response.status === 200) {
-                    const data = await response.json()
-                    if (
-                        data?.unlimited_monitoring === false &&
-                        data.monitoring.total > 0
-                    ) {
-                        this.quotaSections.push('Monitoring')
-                    }
-                    if (data?.unlimited_scans === false) {
-                        if (data.ondemand.total > 0) {
-                            this.quotaSections.push('On-Demand')
-                        }
-                    }
-                    if (this.quotaSections.length > 0) {
-                        this.quotasTooltip = `Community Edition allows the use of self-managed scanners and will perform one scan only when each new host it added`
-                    } else if (this.unlimited_monitoring === true) {
-                        this.quotasTooltip += `, you have Unlimited host monitoring`
-                    }
-                    if (
-                        data?.monitoring.total > 0 &&
-                        data.monitoring.used < data.monitoring.total
-                    ) {
-                        this.quotasTooltip += `, you could be monitoring ${
-                            data.monitoring.total - data.monitoring.used
-                        } more hosts`
-                    }
-                    this.quotas = data
-                }
-            } catch (error) {
-                this.errorMessage =
-                    error.name === 'AbortError'
-                        ? 'Request timed out, please try refreshing the page.'
-                        : `${error.name} ${error.message}. Couldn't complete this action.`
-                this.errorMessageType = 'error'
-            }
         },
         async navPortal() {
             this.loading = true

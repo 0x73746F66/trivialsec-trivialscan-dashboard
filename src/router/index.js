@@ -29,7 +29,9 @@ router.beforeEach(async (to) => {
         '/docs',
         '/feature',
         '/use-cases',
-        '/article'
+        '/article',
+        '/privacy',
+        '/terms-and-conditions'
     ]
     const authRequired =
         !publicPages.includes(to.path) &&

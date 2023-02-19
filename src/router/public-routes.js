@@ -27,6 +27,16 @@ const routes = [
         component: () => import('@/views/PricingView.vue')
     },
     {
+        path: '/terms-and-conditions',
+        name: 'terms',
+        component: () => import('@/views/TermsView.vue')
+    },
+    {
+        path: '/privacy',
+        name: 'privacy',
+        component: () => import('@/views/PrivacyView.vue')
+    },
+    {
         path: '/about',
         name: 'about',
         component: () => import('@/views/AboutView.vue')

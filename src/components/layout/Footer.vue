@@ -2,7 +2,7 @@
     <div class="footer">
         <div class="container">
             <div class="row">
-                <div class="col-12 margin-bottom-lg col-lg-2">
+                <div class="col-12 col-lg-2">
                     <IconTrivialSecurity
                         alt="Trivial Security"
                         class=""
@@ -23,9 +23,24 @@
                         </a>
                         <div class="d-flex flex-column margin-top-xs font-sm">
                             <RouterLink
+                                v-if="!$store.getItem('/session/key')"
                                 :to="{ name: 'docs' }"
                                 class="margin-bottom-xs font-color-light-60 text-decoration-none"
                                 >Documentation</RouterLink
+                            >
+                            <a
+                                v-if="!$store.getItem('/session/key')"
+                                class="margin-bottom-xs font-color-light-60 text-decoration-none"
+                                :href="docsUrl"
+                                target="_blank"
+                                >API Reference</a
+                            >
+                            <a
+                                v-if="!$store.getItem('/session/key')"
+                                class="margin-bottom-xs font-color-light-60 text-decoration-none"
+                                href="https://discord.gg/BgqUw8Tu6a"
+                                target="_blank"
+                                >Chat with a real person</a
                             >
                             <RouterLink
                                 :to="{
@@ -37,17 +52,11 @@
                                 class="margin-bottom-xs font-color-light-60 text-decoration-none"
                                 >Environmental Sustainability</RouterLink
                             >
-                            <a
+                            <RouterLink
+                                v-if="!!$store.getItem('/session/key')"
+                                :to="{ name: 'about' }"
                                 class="margin-bottom-xs font-color-light-60 text-decoration-none"
-                                :href="docsUrl"
-                                target="_blank"
-                                >API Reference</a
-                            >
-                            <a
-                                class="margin-bottom-xs font-color-light-60 text-decoration-none"
-                                href="https://discord.gg/BgqUw8Tu6a"
-                                target="_blank"
-                                >Chat with a real person</a
+                                >About Us</RouterLink
                             >
                         </div>
                     </div>
@@ -108,13 +117,11 @@
                 >
                     <div class="d-flex flex-column">
                         <a
-                            class="text-decoration-none"
+                            class="text-decoration-none margin-bottom-md"
                             href="https://discord.gg/BgqUw8Tu6a"
                             target="_blank"
                         >
-                            <span
-                                class="font-lg-sb font-color-light margin-bottom-md"
-                            >
+                            <span class="font-lg-sb font-color-light">
                                 Need Support?
                             </span>
                         </a>
@@ -182,6 +189,31 @@
                             >Public Sector</RouterLink
                         >
                     </div>
+                </div>
+                <div class="col-12 w-100 text-center margin-bottom-sm">
+                    <RouterLink
+                        :to="{ name: 'terms' }"
+                        class="font-sm font-color-light text-decoration-none"
+                        >Terms & Conditions</RouterLink
+                    >
+                    <span class="font-color-light"> | </span>
+                    <RouterLink
+                        :to="{ name: 'privacy' }"
+                        class="font-sm font-color-light text-decoration-none"
+                        >Privacy Policy</RouterLink
+                    >
+                </div>
+                <div class="col-12 w-100 font-sm text-center font-color-light">
+                    &copy; {{ new Date().getFullYear() }}
+                    <span class="hover-help" title="ABN; 19 655 146 071"
+                        >Trivial Security </span
+                    >Pty Ltd<span class="font-color-light"> | </span
+                    ><span class="hover-help" title="ABN; 87 664 888 386"
+                        >Trivial Group </span
+                    >Pty Ltd
+                </div>
+                <div class="col-12 w-100 font-sm text-center font-color-light">
+                    All rights reserved
                 </div>
             </div>
         </div>
