@@ -85,7 +85,12 @@
                                 <tr>
                                     <td scope="row">
                                         <RouterLink
-                                            :to="`/hostname/${config.hostname}`"
+                                            :to="{
+                                                name: 'hostname',
+                                                params: {
+                                                    hostname: config.hostname
+                                                }
+                                            }"
                                             class="text-decoration-none"
                                         >
                                             <IconTarget

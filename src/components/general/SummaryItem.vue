@@ -37,7 +37,7 @@
                 </span>
             </span>
         </div>
-        <div class="row margin-top-sm">
+        <div class="row">
             <div
                 class="col-12 col-lg-6 d-flex nowrap flex-column justify-content-start align-items-start margin-bottom-sm"
             >

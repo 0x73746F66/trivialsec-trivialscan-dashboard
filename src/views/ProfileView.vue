@@ -338,9 +338,32 @@
                                     <span class="font-base-sb margin-right-sm"
                                         >Payment Method:</span
                                     >
-                                    <span class="font-sm">{{
-                                        member.account?.billing?.description
-                                    }}</span>
+                                    <a
+                                        v-if="
+                                            member.account?.billing
+                                                ?.description ===
+                                            'Stripe Payments'
+                                        "
+                                        target="_blank"
+                                        href="https://billing.stripe.com/p/login/8wMcQ27YKdPcbxSeUU"
+                                        class="text-decoration-none"
+                                    >
+                                        <span
+                                            class="font-sm font-color-light hover-help"
+                                            title="Login to Stripe.com"
+                                            >{{
+                                                member.account?.billing
+                                                    ?.description
+                                            }}</span
+                                        >
+                                    </a>
+                                    <span
+                                        v-else
+                                        class="font-sm font-color-light"
+                                        >{{
+                                            member.account?.billing?.description
+                                        }}</span
+                                    >
                                 </div>
                                 <div
                                     v-if="
@@ -407,18 +430,6 @@
                                     </EditableTextField>
                                 </div>
                                 <div class="d-flex flex-column">
-                                    <div class="d-flex margin-bottom-sm">
-                                        <a
-                                            v-if="
-                                                member.account?.billing
-                                                    ?.has_invoice
-                                            "
-                                            target="_blank"
-                                            href="https://billing.stripe.com/p/login/8wMcQ27YKdPcbxSeUU"
-                                            class="text-decoration-none d-flex align-items-center justify-content-center margin-bottom-sm mb-lg-0 btn-outline-primary-full font-color-primary font-sm"
-                                            text="Billing Portal"
-                                        />
-                                    </div>
                                     <div
                                         v-if="
                                             member.account?.billing
