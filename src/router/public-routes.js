@@ -49,62 +49,7 @@ const routes = [
     {
         path: '/login/:magic_link',
         name: 'magic_link',
-        beforeEnter: async (to, from, next) => {
-            const response = await fetch(
-                `${apiUrl}/magic-link/${to.params.magic_link}`
-            ).catch((errors) => {
-                console.error(errors)
-                setTimeout(() => window.user_notify(`Errors`, errors), 3000)
-            })
-            if (response.status !== 200) {
-                const errMessage =
-                    response.status === 204
-                        ? `This 1-time use magic link has already been used`
-                        : `An error occurred and has been logged`
-                setTimeout(
-                    () =>
-                        window.user_notify(
-                            `${response.status} ${response.statusText}`,
-                            errMessage
-                        ),
-                    3000
-                )
-                next('/')
-                return
-            }
-            const data = await response.json()
-            localStorage.setItem(
-                '/account/name',
-                data?.account?.name || localStorage.getItem('/account/name')
-            )
-            localStorage.setItem(
-                '/account/display',
-                data?.account?.display ||
-                    localStorage.getItem('/account/display')
-            )
-            localStorage.setItem(
-                '/member/email',
-                data?.member?.email || localStorage.getItem('/member/email')
-            )
-            localStorage.setItem(
-                '/member/email_md5',
-                data?.member?.email_md5 ||
-                    localStorage.getItem('/member/email_md5')
-            )
-            localStorage.setItem(
-                '/session/key',
-                data?.session?.access_token ||
-                    localStorage.getItem('/session/key')
-            )
-            window.initPusher()
-            if (localStorage.getItem('/session/key')) {
-                data.session.access_token = null
-                localStorage.setItem(`/me`, JSON.stringify(data))
-                next({ name: 'profile' })
-                return
-            }
-            next('/')
-        }
+        component: () => import('@/views/LoginView.vue')
     },
     {
         path: '/accept/:token',

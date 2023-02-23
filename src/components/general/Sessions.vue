@@ -5,7 +5,7 @@
             class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center"
         >
             <h3 class="font-color-light font-lg-b modal-invite-header">
-                Sessions
+                Active Sessions
             </h3>
         </div>
         <ValidationMessage

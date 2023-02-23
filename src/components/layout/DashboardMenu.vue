@@ -1,39 +1,39 @@
 <template>
     <div class="router-link-container margin-top-sm">
         <RouterLink
-            to="/reports"
+            :to="{ name: 'reports' }"
             class="router-link-item font-color-light text-decoration-none"
         >
             <IconReport color="f0f0f0" class="router-link-icon" />
-            Reports
+            <span class="router-link-name">Reports</span>
         </RouterLink>
         <RouterLink
-            to="/hosts"
+            :to="{ name: 'hosts' }"
             class="router-link-item font-color-light text-decoration-none"
         >
             <IconTarget color="f0f0f0" class="router-link-icon" />
-            Hosts
+            <span class="router-link-name">Hosts</span>
         </RouterLink>
         <RouterLink
-            to="/findings"
+            :to="{ name: 'findings' }"
             class="router-link-item font-color-light text-decoration-none"
         >
             <IconScan1Light color="f0f0f0" class="router-link-icon" />
-            Findings
+            <span class="router-link-name">Findings</span>
         </RouterLink>
         <RouterLink
-            to="/certificate-issues"
+            :to="{ name: 'certificate-issues' }"
             class="router-link-item font-color-light text-decoration-none"
         >
             <IconCertificate color="f0f0f0" class="router-link-icon" />
-            Certificates
+            <span class="router-link-name">Certificates</span>
         </RouterLink>
         <RouterLink
-            to="/compliance"
+            :to="{ name: 'compliance' }"
             class="router-link-item font-color-light text-decoration-none"
         >
             <IconDashboard color="f0f0f0" class="router-link-icon" />
-            Compliance
+            <span class="router-link-name">Compliance</span>
         </RouterLink>
     </div>
 </template>
@@ -90,6 +90,23 @@ export default {
         &-active {
             border-radius: spacers('md');
             background: color('primary-60');
+        }
+    }
+}
+@media screen and (min-width: 1360px) and (max-width: 1368px),
+    screen and (min-width: 1020px) and (max-width: 1024px),
+    screen and (min-width: 1175px) and (max-width: 1180px),
+    screen and (min-width: 1110px) and (max-width: 1114px),
+    screen and (min-width: 1278px) and (max-width: 1280px) {
+    .router-link-name {
+        display: none;
+    }
+    .router-link-container {
+        max-width: fit-content;
+        overflow-x: hidden;
+        z-index: -1;
+        .router-link-icon {
+            margin-right: 0;
         }
     }
 }

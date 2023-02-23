@@ -11,9 +11,7 @@
             </div>
 
             <div class="w-100 margin-bottom-md">
-                <h2 class="font-xl-sb margin-bottom-md">
-                    Hostname & IP Addresses
-                </h2>
+                <h2 class="font-xl-sb margin-bottom-md">Scanned Hosts</h2>
                 <HostsList />
             </div>
         </div>

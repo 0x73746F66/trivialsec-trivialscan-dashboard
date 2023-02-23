@@ -70,9 +70,9 @@ const routes = [
         component: () => import('@/views/ProfileView.vue')
     },
     {
-        path: '/profile/sessions',
-        name: 'sessions',
-        component: () => import('@/views/SessionsView.vue')
+        path: '/profile/security',
+        name: 'security',
+        component: () => import('@/views/SecurityView.vue')
     },
     {
         path: '/profile/notifications',

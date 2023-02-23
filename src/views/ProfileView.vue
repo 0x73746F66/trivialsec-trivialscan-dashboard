@@ -992,4 +992,10 @@ export default {
         margin-top: 0 !important;
     }
 }
+@media screen and (min-width: 820px) and (max-width: 1200px) {
+    .profile-container {
+        margin-left: 45px;
+        padding: spacers('md');
+    }
+}
 </style>

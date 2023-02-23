@@ -251,7 +251,7 @@ export default {
 </script>
 <style lang="scss">
 .footer {
-    background: color('dark-40');
+    background: rgb(26 22 22);
     padding: spacers('md');
 
     &-social {
