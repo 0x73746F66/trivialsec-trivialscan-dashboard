@@ -244,6 +244,32 @@ export default {
                     return
                 }
                 const data = await response.json()
+                localStorage.setItem(
+                    '/account/name',
+                    data?.account?.name || localStorage.getItem('/account/name')
+                )
+                localStorage.setItem(
+                    '/account/display',
+                    data?.account?.display ||
+                        localStorage.getItem('/account/display')
+                )
+                localStorage.setItem(
+                    '/account/mfa',
+                    data?.account?.mfa || localStorage.getItem('/account/mfa')
+                )
+                localStorage.setItem(
+                    '/member/email',
+                    data?.member?.email || localStorage.getItem('/member/email')
+                )
+                localStorage.setItem(
+                    '/member/email_md5',
+                    data?.member?.email_md5 ||
+                        localStorage.getItem('/member/email_md5')
+                )
+                localStorage.setItem(
+                    '/member/mfa',
+                    data?.member?.mfa || localStorage.getItem('/member/mfa')
+                )
                 let webhookId = 0
                 this.webhooks = data.account.webhooks.map((webhook) => {
                     webhook.id = webhookId++

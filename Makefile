@@ -100,6 +100,15 @@ test-local:  ## Prettier test outputs
 run-local: refresh env  ## npm run dev
 	VITE_API_URL=$(shell terraform -chdir=plans output -raw api_function_url) npx vite --host
 
+run-local-tls: env  ## npm run dev
+	npx vite --port 5173 --host jager.tail55052.ts.net --https
+#  --tls-cert /home/chris/trivialsec/trivialscan-lambda/.development/jager.crt --tls-key /home/chris/trivialsec/trivialscan-lambda/.development/jager.key
+
+clean-build: env init refresh  ## npm run build
+	rm -rf dist
+	npm update --save
+	VITE_API_URL=$(shell terraform -chdir=plans output -raw api_function_url) npx vite build --force
+
 ci-build: env init refresh  ## npm run build
 	VITE_API_URL=$(shell terraform -chdir=plans output -raw api_function_url) npx vite build --force
 

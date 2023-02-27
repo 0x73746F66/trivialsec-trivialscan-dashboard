@@ -388,7 +388,6 @@ export default {
                     account_activity: this.accountActivity,
                     member_activity: this.memberActivity
                 }
-                console.log('webhook', webhook)
                 const response = await Api.post(`/webhook/enable`, webhook)
                 if (response.status !== 206 && response.status !== 201) {
                     this.$emit(

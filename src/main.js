@@ -106,6 +106,9 @@ window.Api = {
             'Content-Type': 'application/json;charset=UTF-8',
             Authorization
         })
+        if (!options.cache) {
+            options.cache = 'no-cache'
+        }
         const response = await fetch(urlPath, {
             ...options,
             method: 'POST',
@@ -150,6 +153,9 @@ window.Api = {
             'Content-Type': 'application/json;charset=UTF-8',
             Authorization
         })
+        if (!options.cache) {
+            options.cache = 'no-cache'
+        }
         const response = await fetch(urlPath, {
             ...options,
             method: 'DELETE',
@@ -264,6 +270,7 @@ window.user_notify = (title, body, options = {}) => {
         }
     }
 }
+
 window.initPusher = () => {
     if (!window.pusher && localStorage.getItem('/account/name')) {
         window.pusher = new Pusher(

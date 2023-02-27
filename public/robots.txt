@@ -1,4 +1,4 @@
 User-agent: Googlebot
 Disallow: /logout
-Disallow: /privacy.html
-Disallow: /terms.html
+Disallow: /privacy
+Disallow: /terms-and-conditions

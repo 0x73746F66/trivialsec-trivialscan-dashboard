@@ -4,7 +4,7 @@
         <div
             class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center"
         >
-            <h3 class="font-color-light font-lg-b modal-invite-header">
+            <h3 class="font-color-light font-base-b modal-invite-header">
                 Active Sessions
             </h3>
         </div>

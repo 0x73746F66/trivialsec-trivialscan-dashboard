@@ -126,77 +126,77 @@
         >
             <RouterLink
                 v-if="isLoggedIn"
-                to="/reports"
+                :to="{ name: 'reports' }"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
                 @click="toggleNavbar"
                 >Reports</RouterLink
             >
             <RouterLink
                 v-if="isLoggedIn"
-                to="/hosts"
+                :to="{ name: 'hosts' }"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
                 @click="toggleNavbar"
                 >Hosts</RouterLink
             >
             <RouterLink
                 v-if="isLoggedIn"
-                to="/profile"
+                :to="{ name: 'profile' }"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
                 @click="toggleNavbar"
                 >Profile</RouterLink
             >
             <RouterLink
                 v-if="isLoggedIn"
-                to="/profile/sessions"
+                :to="{ name: 'security' }"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
                 @click="toggleNavbar"
-                >My Sessions</RouterLink
+                >Security</RouterLink
             >
             <RouterLink
                 v-if="isLoggedIn"
-                to="/account/members"
+                :to="{ name: 'members' }"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
                 @click="toggleNavbar"
                 >Profile</RouterLink
             >
             <RouterLink
                 v-if="isLoggedIn"
-                to="/profile/notifications"
+                :to="{ name: 'notifications' }"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
                 @click="toggleNavbar"
                 >Notifications</RouterLink
             >
             <RouterLink
                 v-if="isLoggedIn"
-                to="/account/webhooks"
+                :to="{ name: 'webhooks' }"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
                 @click="toggleNavbar"
                 >Webhooks</RouterLink
             >
             <RouterLink
                 v-if="isLoggedIn"
-                to="/account/host-config"
+                :to="{ name: 'host-config' }"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
                 @click="toggleNavbar"
                 >Configure</RouterLink
             >
             <RouterLink
                 v-if="isLoggedIn"
-                to="/logout"
+                :to="{ name: 'logout' }"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
                 @click="toggleNavbar"
                 >Logout</RouterLink
             >
             <RouterLink
                 v-if="!isLoggedIn"
-                to="/pricing"
+                :to="{ name: 'pricing' }"
                 class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
                 @click="toggleNavbar"
                 >Pricing</RouterLink
             >
             <RouterLink
                 v-if="isLoggedIn"
-                to="/profile"
+                :to="{ name: 'profile' }"
                 class="router-link d-flex margin-top-xs margin-bottom-xs align-items-end font-color-light text-decoration-none margin-right-md d-flex"
                 @click="toggleNavbar"
             >
@@ -239,9 +239,16 @@
             </div>
         </div>
     </header>
+    <ValidationMessage
+        v-if="isLoggedIn && accountMfa === 'enroll' && member.mfa !== true"
+        class="container justify-content-start"
+        message="Warning: You have not enrolled a second factor for authentication (2FA)"
+        type="warning"
+    />
 </template>
 
 <script setup>
+import ValidationMessage from '@/components/general/ValidationMessage.vue'
 import IconTrivialSecurity from '@/components/icons/IconTrivialSecurity.vue'
 import CustomPill from '@/components/general/CustomPill.vue'
 </script>
@@ -249,6 +256,7 @@ import CustomPill from '@/components/general/CustomPill.vue'
 <script>
 export default {
     components: {
+        ValidationMessage,
         IconTrivialSecurity,
         CustomPill
     },
@@ -256,7 +264,9 @@ export default {
         return {
             accountName: window.localStorage.getItem('/account/name'),
             accountDisplayName: window.localStorage.getItem('/account/display'),
+            accountMfa: window.localStorage.getItem('/account/mfa'),
             member: {
+                mfa: window.localStorage.getItem('/member/mfa'),
                 email: window.localStorage.getItem('/member/email'),
                 email_md5: window.localStorage.getItem('/member/email_md5')
             },
@@ -270,15 +280,20 @@ export default {
             return `https://www.gravatar.com/avatar/${this.member.email_md5}?d=wavatar`
         }
     },
-    mounted() {
-        // watch the params of the route to fetch the data again
+    created() {
         this.$watch(
             () => this.$route.params,
             () => {
                 this.isLoggedIn = !!window.localStorage.getItem('/session/key')
+                this.accountName = window.localStorage.getItem('/account/name')
+                this.accountDisplayName =
+                    window.localStorage.getItem('/account/display')
+                this.accountMfa = window.localStorage.getItem('/account/mfa')
+                this.member.mfa = window.localStorage.getItem('/member/mfa')
+                this.member.email = window.localStorage.getItem('/member/email')
+                this.member.email_md5 =
+                    window.localStorage.getItem('/member/email_md5')
             },
-            // fetch the data when the view is created and the data is
-            // already being observed
             { immediate: true }
         )
     },

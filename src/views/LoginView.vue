@@ -9,6 +9,12 @@
                 :message="message"
                 :type="messageType"
             />
+            <h2
+                class="font-lg-sb font-color-light text-center"
+                v-if="loadingMessage"
+            >
+                {{ loadingMessage }}
+            </h2>
             <InlineLoading :loading="loading" />
         </div>
     </div>
@@ -31,16 +37,18 @@ export default {
         return {
             loading: true,
             message: '',
-            messageType: ''
+            messageType: '',
+            loadingMessage: 'Checking credentials'
         }
     },
-    mounted() {
+    created() {
         this.fetchSession()
     },
     methods: {
         async fetchSession() {
             if (!this.$route.params.magic_link) {
                 this.loading = false
+                this.loadingMessage = ''
                 this.message = 'No Magic Link provided'
                 this.messageType = 'error'
                 return
@@ -79,6 +87,10 @@ export default {
                     localStorage.getItem('/account/display')
             )
             localStorage.setItem(
+                '/account/mfa',
+                data?.account?.mfa || localStorage.getItem('/account/mfa')
+            )
+            localStorage.setItem(
                 '/member/email',
                 data?.member?.email || localStorage.getItem('/member/email')
             )
@@ -86,6 +98,10 @@ export default {
                 '/member/email_md5',
                 data?.member?.email_md5 ||
                     localStorage.getItem('/member/email_md5')
+            )
+            localStorage.setItem(
+                '/member/mfa',
+                data?.member?.mfa || localStorage.getItem('/member/mfa')
             )
             localStorage.setItem(
                 '/session/key',
@@ -96,7 +112,14 @@ export default {
                 window.initPusher()
                 data.session.access_token = null
                 localStorage.setItem(`/me`, JSON.stringify(data))
-                // this.$router.push({ name: 'mfa' })
+                this.$router.push({
+                    name:
+                        data?.account?.mfa === 'enroll' &&
+                        data?.member?.mfa !== true
+                            ? 'security'
+                            : 'profile'
+                })
+                this.loadingMessage = ''
                 return
             }
             this.message =
