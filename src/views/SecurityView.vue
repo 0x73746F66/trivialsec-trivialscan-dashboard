@@ -47,12 +47,16 @@
                             </label>
                         </div>
                     </div>
-                    <div class="margin-bottom-lg profile-sessions-section d-flex flex-column">
+                    <div
+                        class="margin-bottom-lg profile-sessions-section d-flex flex-column"
+                    >
                         <div
                             v-if="false"
                             class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center"
                         >
-                            <h3 class="font-color-light font-base-b modal-invite-header">
+                            <h3
+                                class="font-color-light font-base-b modal-invite-header"
+                            >
                                 Code Generator (TOTP)
                             </h3>
                             <div class=""></div>
@@ -60,7 +64,9 @@
                         <div
                             class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center"
                         >
-                            <h3 class="font-color-light font-base-b modal-invite-header">
+                            <h3
+                                class="font-color-light font-base-b modal-invite-header"
+                            >
                                 Passkey (FIDO) Devices
                             </h3>
                             <Modal
@@ -104,8 +110,145 @@
                                 </template>
                             </Modal>
                         </div>
-                        <div class="row col-12" v-if="webauthnDevices.length > 0">
-                            <U2FDevice />
+                        <div v-if="fidoDevices.length > 0">
+                            <Swiper
+                                :modules="modules"
+                                :slides-per-view="1"
+                                :space-between="10"
+                                class="padding-bottom-lg"
+                                :navigation="{
+                                    nextEl: '.custom-devices-swiper-button-next',
+                                    prevEl: '.custom-devices-swiper-button-prev'
+                                }"
+                                :pagination="{ clickable: true }"
+                                :scrollbar="{ draggable: true }"
+                                :breakpoints="{
+                                    '640': {
+                                        slidesPerView: 1,
+                                        spaceBetween: 20
+                                    },
+                                    '768': {
+                                        slidesPerView: 2,
+                                        spaceBetween: 40
+                                    },
+                                    '1024': {
+                                        slidesPerView: 4,
+                                        spaceBetween: 50
+                                    }
+                                }"
+                            >
+                                <SwiperSlide
+                                    class="d-flex border-radius-sm flex-column padding-md bg-dark-60"
+                                    v-for="(device, deviceIndex) in fidoDevices"
+                                    :key="deviceIndex"
+                                >
+                                    <div class="d-flex justify-content-end">
+                                        <U2FDevice />
+                                    </div>
+
+                                    <div
+                                        class="text-left font-color-light font-sm"
+                                    >
+                                        <div
+                                            class="mb-0 font-sm word-break-all"
+                                        >
+                                            <span
+                                                class="font-sm font-color-secondary"
+                                                :title="device.record_id"
+                                            >
+                                                {{ device.device_name }}
+                                            </span>
+                                        </div>
+                                        <div
+                                            v-if="device.created"
+                                            class="mb-0 font-sm"
+                                        >
+                                            <span
+                                                class="font-sm-sb margin-right-xxs"
+                                            >
+                                                Created
+                                            </span>
+                                            <time
+                                                class="hover-help"
+                                                :title="device.created_at"
+                                                :datetime="device.created_at"
+                                            >
+                                                {{ device.created }}
+                                            </time>
+                                        </div>
+                                        <div
+                                            class="d-flex justify-content-end delete-device-modal"
+                                        >
+                                            <Modal
+                                                :id="`deleteDevice${deviceIndex}`"
+                                                label="delete-device-header"
+                                                :backdrop="false"
+                                            >
+                                                <template
+                                                    v-slot:button="buttonProps"
+                                                >
+                                                    <button
+                                                        class="edit-mode-btn delete border-radius-lg"
+                                                        v-bind="buttonProps"
+                                                    >
+                                                        <IconTrash
+                                                            class="profile-edit-icon"
+                                                        />
+                                                    </button>
+                                                </template>
+                                                <template v-slot:modalTitle>
+                                                    <h5
+                                                        class="delete-session-header font-base font-color-light"
+                                                    >
+                                                        Are you sure you want to
+                                                        remove this MFA method?
+                                                    </h5>
+                                                </template>
+                                                <template v-slot:modalContent>
+                                                    <form
+                                                        @submit.prevent="
+                                                            deleteDevice($event)
+                                                        "
+                                                    >
+                                                        <input
+                                                            type="hidden"
+                                                            name="RecordId"
+                                                            :value="
+                                                                device.record_id
+                                                            "
+                                                        />
+                                                        <button
+                                                            type="submit"
+                                                            class="btn-outline-danger-full font-color-danger font-sm"
+                                                            data-bs-dismiss="modal"
+                                                        >
+                                                            Yes
+                                                        </button>
+                                                    </form>
+                                                </template>
+                                            </Modal>
+                                        </div>
+                                    </div>
+                                </SwiperSlide>
+                            </Swiper>
+                            <div
+                                class="d-flex justify-content-between margin-top-sm"
+                            >
+                                <div>
+                                    <button
+                                        class="custom-swiper-button custom-devices-swiper-button-prev"
+                                    >
+                                        &lt;
+                                    </button>
+                                </div>
+                                <div>
+                                    <button
+                                        class="custom-swiper-button custom-devices-swiper-button-next"
+                                    >
+                                        &gt;
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <div class="row col-12" v-else>
                             <ValidationMessage
@@ -119,7 +262,9 @@
                         <div
                             class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center"
                         >
-                            <h3 class="font-color-light font-base-b modal-invite-header">
+                            <h3
+                                class="font-color-light font-base-b modal-invite-header"
+                            >
                                 Active Sessions
                             </h3>
                         </div>
@@ -163,50 +308,84 @@
                                 >
                                     <div class="d-flex justify-content-end">
                                         <iPhone
-                                            v-if="session.platform.startsWith('iPhone')"
+                                            v-if="
+                                                session.platform.startsWith(
+                                                    'iPhone'
+                                                )
+                                            "
                                             class="swiper-slide-avatar margin-bottom-sm"
                                             :class="
-                                                session.platform.split(' ')[0].toLowerCase()
+                                                session.platform
+                                                    .split(' ')[0]
+                                                    .toLowerCase()
                                             "
                                         />
                                         <Android
-                                            v-else-if="session.platform.startsWith('Android')"
+                                            v-else-if="
+                                                session.platform.startsWith(
+                                                    'Android'
+                                                )
+                                            "
                                             class="swiper-slide-avatar margin-bottom-sm"
                                             :class="
-                                                session.platform.split(' ')[0].toLowerCase()
+                                                session.platform
+                                                    .split(' ')[0]
+                                                    .toLowerCase()
                                             "
                                         />
                                         <Windows
-                                            v-else-if="session.platform.startsWith('Windows')"
+                                            v-else-if="
+                                                session.platform.startsWith(
+                                                    'Windows'
+                                                )
+                                            "
                                             class="swiper-slide-avatar margin-bottom-sm"
                                             :class="
-                                                session.platform.split(' ')[0].toLowerCase()
+                                                session.platform
+                                                    .split(' ')[0]
+                                                    .toLowerCase()
                                             "
                                         />
                                         <Linux
-                                            v-else-if="session.platform.startsWith('Linux')"
+                                            v-else-if="
+                                                session.platform.startsWith(
+                                                    'Linux'
+                                                )
+                                            "
                                             class="swiper-slide-avatar margin-bottom-sm"
                                             :class="
-                                                session.platform.split(' ')[0].toLowerCase()
+                                                session.platform
+                                                    .split(' ')[0]
+                                                    .toLowerCase()
                                             "
                                         />
                                         <Mac
-                                            v-else-if="session.platform.startsWith('Mac')"
+                                            v-else-if="
+                                                session.platform.startsWith(
+                                                    'Mac'
+                                                )
+                                            "
                                             class="swiper-slide-avatar margin-bottom-sm"
                                             :class="
-                                                session.platform.split(' ')[0].toLowerCase()
+                                                session.platform
+                                                    .split(' ')[0]
+                                                    .toLowerCase()
                                             "
                                         />
                                         <Devices
                                             v-else
                                             class="swiper-slide-avatar margin-bottom-sm"
                                             :class="
-                                                session.platform.split(' ')[0].toLowerCase()
+                                                session.platform
+                                                    .split(' ')[0]
+                                                    .toLowerCase()
                                             "
                                         />
                                     </div>
 
-                                    <div class="text-left font-color-light font-sm">
+                                    <div
+                                        class="text-left font-color-light font-sm"
+                                    >
                                         <div
                                             v-if="session.current"
                                             class="mb-0 font-sm word-break-all"
@@ -225,14 +404,23 @@
                                                 >{{ session.browser }}</span
                                             >
                                         </div>
-                                        <div class="mb-0 font-sm">{{ session.platform }}</div>
-                                        <div v-if="session.created" class="mb-0 font-sm">
+                                        <div class="mb-0 font-sm">
+                                            {{ session.platform }}
+                                        </div>
+                                        <div
+                                            v-if="session.created"
+                                            class="mb-0 font-sm"
+                                        >
                                             Active
                                             <time
                                                 class="hover-help"
-                                                :title="moment(session.timestamp)"
+                                                :title="
+                                                    moment(session.timestamp)
+                                                "
                                                 :datetime="
-                                                    moment(session.timestamp).toISOString()
+                                                    moment(
+                                                        session.timestamp
+                                                    ).toISOString()
                                                 "
                                             >
                                                 {{ session.created }}
@@ -247,30 +435,40 @@
                                                 label="delete-session-header"
                                                 :backdrop="false"
                                             >
-                                                <template v-slot:button="buttonProps">
+                                                <template
+                                                    v-slot:button="buttonProps"
+                                                >
                                                     <button
                                                         class="edit-mode-btn delete border-radius-lg"
                                                         v-bind="buttonProps"
                                                     >
-                                                        <IconTrash class="profile-edit-icon" />
+                                                        <IconTrash
+                                                            class="profile-edit-icon"
+                                                        />
                                                     </button>
                                                 </template>
                                                 <template v-slot:modalTitle>
                                                     <h5
                                                         class="delete-session-header font-base font-color-light"
                                                     >
-                                                        Are you sure you want to delete this
-                                                        session?
+                                                        Are you sure you want to
+                                                        delete this session?
                                                     </h5>
                                                 </template>
                                                 <template v-slot:modalContent>
                                                     <form
-                                                        @submit.prevent="deleteSession($event)"
+                                                        @submit.prevent="
+                                                            deleteSession(
+                                                                $event
+                                                            )
+                                                        "
                                                     >
                                                         <input
                                                             type="hidden"
                                                             name="SessionToken"
-                                                            :value="session.session_token"
+                                                            :value="
+                                                                session.session_token
+                                                            "
                                                         />
                                                         <button
                                                             type="submit"
@@ -286,7 +484,9 @@
                                     </div>
                                 </SwiperSlide>
                             </Swiper>
-                            <div class="d-flex justify-content-between margin-top-sm">
+                            <div
+                                class="d-flex justify-content-between margin-top-sm"
+                            >
                                 <div>
                                     <button
                                         class="custom-swiper-button custom-session-swiper-button-prev"
@@ -362,14 +562,15 @@ export default {
             message: '',
             messageType: '',
             loading: false,
-            mfaEnrollment: window.localStorage.getItem('/account/mfa') === 'enroll',
+            mfaEnrollment:
+                window.localStorage.getItem('/account/mfa') === 'enroll',
             sessions: [],
             sessionsMessage: '',
             sessionsMessageType: '',
             webauthnSupported: 'credentials' in navigator,
             fidoMessage: '',
             fidoMessageType: '',
-            webauthnDevices: [],
+            fidoDevices: [],
             enrollId: '',
             publicKeyOptions: {}
         }
@@ -408,11 +609,11 @@ export default {
             this.enrollId = data.enrollId
             data.options.user.id = decode(data.options.user.id)
             data.options.challenge = decode(data.options.challenge)
-            // if (data.options.excludeCredentials) {
-            //     for (const cred of data.options.excludeCredentials) {
-            //         cred.id = decode(cred.id)
-            //     }
-            // }
+            if (data.options.excludeCredentials) {
+                for (const cred of data.options.excludeCredentials) {
+                    cred.id = decode(cred.id)
+                }
+            }
             this.publicKeyOptions = data.options
         },
         async enrollU2F(event) {
@@ -479,9 +680,13 @@ export default {
                     return
                 }
                 const data = await response.json()
-                this.sessions = data.map((session) => {
+                this.sessions = data.sessions.map((session) => {
                     session.created = moment.utc(session.timestamp).fromNow()
                     return session
+                })
+                this.fidoDevices = data.fido_devices.map((item) => {
+                    item.created = moment.utc(item.created_at).fromNow()
+                    return item
                 })
             } catch (error) {
                 this.sessionsMessage =
@@ -550,207 +755,121 @@ export default {
     }
 }
 </script>
+<style lang="scss">
+.delete-device-modal,
+.delete-session-modal {
+    .modal {
+        --bs-modal-width: 800px;
+        overflow: hidden;
+    }
+    .modal-dialog {
+        margin: auto 0;
+    }
+}
+</style>
 <style scoped lang="scss">
 .profile {
-  &-picture {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-  }
-
-  &-container {
-    padding: spacers("md");
-
-    @media (min-width: breakpoints("lg")) {
-      padding: spacers("xl");
+    &-picture {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
     }
-  }
-}
 
-.delete-session-modal {
-  overflow: hidden;
-}
+    &-container {
+        padding: spacers('md');
 
-.modal {
-  --bs-modal-width: 800px;
+        @media (min-width: breakpoints('lg')) {
+            padding: spacers('xl');
+        }
+    }
 }
 
 .profile-edit-icon {
-  width: 25px;
-  height: 25px;
-  cursor: pointer;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
 }
 
 .edit-mode-btn {
-  border: none;
-  background: none;
-  border-radius: 50%;
-  transition: 0.2s linear;
-  height: 40px;
-  width: 40px;
+    border: none;
+    background: none;
+    border-radius: 50%;
+    transition: 0.2s linear;
+    height: 40px;
+    width: 40px;
 
-  &.close {
-    svg {
-      width: 30px;
+    &.close {
+        svg {
+            width: 30px;
+        }
+
+        &:hover {
+            background: color('light-20');
+        }
+    }
+
+    &.delete {
+        svg {
+            width: 30px;
+        }
+
+        &:hover {
+            background: color('danger');
+        }
     }
 
     &:hover {
-      background: color("light-20");
+        background: color('primary');
     }
-  }
-
-  &.delete {
-    svg {
-      width: 30px;
-    }
-
-    &:hover {
-      background: color("danger");
-    }
-  }
-
-  &:hover {
-    background: color("primary");
-  }
 }
 
 .swiper-slide {
-  &-avatar {
-    width: 50px;
-    height: 50px;
+    &-avatar {
+        width: 50px;
+        height: 50px;
 
-    &.linux {
-      background: color("light-60");
-      border-radius: 50%;
+        &.linux {
+            background: color('light-60');
+            border-radius: 50%;
+        }
     }
-  }
 
-  .swiper-wrapper {
-    padding-bottom: spacers("sm");
-  }
+    .swiper-wrapper {
+        padding-bottom: spacers('sm');
+    }
 }
 
 .custom-swiper-button {
-  position: relative;
-  border-radius: radius("sm");
-  padding: 0 spacers("xs");
-  background: color("dark-60");
-  color: color(light);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: 0.2s linear;
-  border: 1px solid color("dark");
+    position: relative;
+    border-radius: radius('sm');
+    padding: 0 spacers('xs');
+    background: color('dark-60');
+    color: color(light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s linear;
+    border: 1px solid color('dark');
 
-  &:hover {
-    border: 1px solid color("secondary");
-    color: color("secondary");
-  }
+    &:hover {
+        border: 1px solid color('secondary');
+        color: color('secondary');
+    }
 
-  &:disabled {
-    display: none;
-  }
+    &:disabled {
+        display: none;
+    }
 }
 
 .swiper-button-disabled {
-  display: none;
+    display: none;
 }
 
 .active-session {
-  border-bottom: none;
-}
-
-.delete-session-modal {
-  overflow: hidden;
+    border-bottom: none;
 }
 
 .modal {
-  --bs-modal-width: 800px;
+    --bs-modal-width: 800px;
 }
-
-.profile-edit-icon {
-  width: 25px;
-  height: 25px;
-  cursor: pointer;
-}
-
-.edit-mode-btn {
-  border: none;
-  background: none;
-  border-radius: 50%;
-  transition: 0.2s linear;
-  height: 40px;
-  width: 40px;
-
-  &.close {
-    svg {
-      width: 30px;
-    }
-
-    &:hover {
-      background: color("light-20");
-    }
-  }
-
-  &.delete {
-    svg {
-      width: 30px;
-    }
-
-    &:hover {
-      background: color("danger");
-    }
-  }
-
-  &:hover {
-    background: color("primary");
-  }
-}
-
-.swiper-slide {
-  &-avatar {
-    width: 50px;
-    height: 50px;
-
-    &.linux {
-      background: color("light-60");
-      border-radius: 50%;
-    }
-  }
-
-  .swiper-wrapper {
-    padding-bottom: spacers("sm");
-  }
-}
-
-.custom-swiper-button {
-  position: relative;
-  border-radius: radius("sm");
-  padding: 0 spacers("xs");
-  background: color("dark-60");
-  color: color(light);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: 0.2s linear;
-  border: 1px solid color("dark");
-
-  &:hover {
-    border: 1px solid color("secondary");
-    color: color("secondary");
-  }
-
-  &:disabled {
-    display: none;
-  }
-}
-
-.swiper-button-disabled {
-  display: none;
-}
-
-.active-session {
-  border-bottom: none;
-}
-
 </style>
