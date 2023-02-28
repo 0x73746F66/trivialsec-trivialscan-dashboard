@@ -266,7 +266,7 @@ export default {
             accountDisplayName: window.localStorage.getItem('/account/display'),
             accountMfa: window.localStorage.getItem('/account/mfa'),
             member: {
-                mfa: window.localStorage.getItem('/member/mfa'),
+                mfa: window.localStorage.getItem('/member/mfa') === 'true',
                 email: window.localStorage.getItem('/member/email'),
                 email_md5: window.localStorage.getItem('/member/email_md5')
             },
@@ -289,7 +289,7 @@ export default {
                 this.accountDisplayName =
                     window.localStorage.getItem('/account/display')
                 this.accountMfa = window.localStorage.getItem('/account/mfa')
-                this.member.mfa = window.localStorage.getItem('/member/mfa')
+                this.member.mfa = window.localStorage.getItem('/member/mfa') === 'true'
                 this.member.email = window.localStorage.getItem('/member/email')
                 this.member.email_md5 =
                     window.localStorage.getItem('/member/email_md5')

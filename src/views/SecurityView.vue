@@ -652,8 +652,40 @@ export default {
                     this.fidoMessageType = `error`
                     return
                 }
+                const data = await response.json()
+                data.created = moment.utc(data.created_at).fromNow()
+                this.fidoDevices.push(data)
                 this.fidoMessage = 'Enrolled'
                 this.fidoMessageType = `success`
+
+            } catch (error) {
+                this.loading = false
+                this.fidoMessage =
+                    error.name === 'AbortError'
+                        ? 'Request timed out, please try refreshing the page.'
+                        : `${error.name} ${error.message}. Couldn't complete this action.`
+                this.fidoMessageType = `error`
+            }
+        },
+        async deleteDevice(event) {
+            const recordId = event.target.elements['RecordId'].value
+            try {
+                this.loading = true
+                const response = await Api.delete(`/webauthn/delete/${recordId}`)
+                this.loading = false
+                if (response.status != 202) {
+                    this.fidoMessage = `${response.status} ${response.statusText}: Something went wrong. The U2F device was not removed.`
+                    this.fidoMessageType = `error`
+                    return
+                }
+                this.fidoMessage = 'Removed device'
+                this.fidoMessageType = `success`
+                for (const [index, device] of this.fidoDevices.entries()) {
+                    if (device.record_id === recordId) {
+                        this.fidoDevices.splice(index, 1)
+                        break
+                    }
+                }
             } catch (error) {
                 this.loading = false
                 this.fidoMessage =
