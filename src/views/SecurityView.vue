@@ -76,7 +76,7 @@
                             >
                                 <template v-slot:button="buttonProps">
                                     <Button
-                                        @click="registerU2F()"
+                                        @click="registerFIDO()"
                                         v-bind="buttonProps"
                                         class="btn-outline-primary-sm font-color-primary font-sm"
                                         text="Enroll New Device"
@@ -88,7 +88,7 @@
                                     </h5>
                                 </template>
                                 <template v-slot:modalContent>
-                                    <form @submit.prevent="enrollU2F($event)">
+                                    <form @submit.prevent="enrollFIDO($event)">
                                         <ValidationMessage
                                             v-if="fidoMessage.length > 0"
                                             class="justify-content-between"
@@ -579,7 +579,7 @@ export default {
         this.fetchSessions()
     },
     methods: {
-        async registerU2F() {
+        async registerFIDO() {
             this.enrollId = ''
             this.publicKeyOptions = ''
             this.fidoMessage = ''
@@ -593,7 +593,7 @@ export default {
                     }
                 )
                 if (response.status != 201) {
-                    this.fidoMessage = `${response.status} ${response.statusText}: Something went wrong. The U2F device was not registered.`
+                    this.fidoMessage = `${response.status} ${response.statusText}: Something went wrong. The FIDO device was not registered.`
                     this.fidoMessageType = `error`
                     return
                 }
@@ -602,7 +602,7 @@ export default {
                 this.fidoMessage =
                     error.name === 'AbortError'
                         ? 'Request timed out, please try refreshing the page.'
-                        : `${error.name} ${error.message}. The U2F device was not registered.`
+                        : `${error.name} ${error.message}. The FIDO device was not registered.`
                 this.fidoMessageType = `error`
                 return
             }
@@ -616,10 +616,10 @@ export default {
             }
             this.publicKeyOptions = data.options
         },
-        async enrollU2F(event) {
+        async enrollFIDO(event) {
             if (!this.publicKeyOptions || !this.enrollId) {
                 this.fidoMessage =
-                    'U2F device was not registered and cannot be enrolled, please retry in a moment.'
+                    'FIDO device was not registered and cannot be enrolled, please retry in a moment.'
                 this.fidoMessageType = `error`
             }
             const deviceName = event.target.elements['DeviceName'].value
@@ -648,7 +648,7 @@ export default {
                 )
                 this.loading = false
                 if (response.status != 202) {
-                    this.fidoMessage = `${response.status} ${response.statusText}: Something went wrong. The U2F device was not enrolled.`
+                    this.fidoMessage = `${response.status} ${response.statusText}: Something went wrong. The FIDO device was not enrolled.`
                     this.fidoMessageType = `error`
                     return
                 }
@@ -657,7 +657,10 @@ export default {
                 this.fidoDevices.push(data)
                 this.fidoMessage = 'Enrolled'
                 this.fidoMessageType = `success`
-
+                if (window.localStorage.getItem('/member/mfa') !== 'true') {
+                    window.localStorage.setItem('/member/mfa', 'true')
+                    this.$router.go()
+                }
             } catch (error) {
                 this.loading = false
                 this.fidoMessage =
@@ -671,10 +674,12 @@ export default {
             const recordId = event.target.elements['RecordId'].value
             try {
                 this.loading = true
-                const response = await Api.delete(`/webauthn/delete/${recordId}`)
+                const response = await Api.delete(
+                    `/webauthn/delete/${recordId}`
+                )
                 this.loading = false
                 if (response.status != 202) {
-                    this.fidoMessage = `${response.status} ${response.statusText}: Something went wrong. The U2F device was not removed.`
+                    this.fidoMessage = `${response.status} ${response.statusText}: Something went wrong. The FIDO device was not removed.`
                     this.fidoMessageType = `error`
                     return
                 }
@@ -685,6 +690,10 @@ export default {
                         this.fidoDevices.splice(index, 1)
                         break
                     }
+                }
+                if (this.fidoDevices.length === 0) {
+                    window.localStorage.setItem('/member/mfa', '')
+                    this.$router.go()
                 }
             } catch (error) {
                 this.loading = false

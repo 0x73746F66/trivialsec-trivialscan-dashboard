@@ -24,6 +24,7 @@
 import PagePlaceholder from '@/components/PagePlaceholder.vue'
 import InlineLoading from '@/components/general/InlineLoading.vue'
 import ValidationMessage from '@/components/general/ValidationMessage.vue'
+import { encode, decode } from 'base64-arraybuffer'
 </script>
 
 <script>
@@ -38,7 +39,8 @@ export default {
             loading: true,
             message: '',
             messageType: '',
-            loadingMessage: 'Checking credentials'
+            loadingMessage: 'Checking credentials',
+            webauthnSupported: 'credentials' in navigator
         }
     },
     created() {
@@ -77,38 +79,8 @@ export default {
                 return
             }
             const data = await response.json()
-            localStorage.setItem(
-                '/account/name',
-                data?.account?.name || localStorage.getItem('/account/name')
-            )
-            localStorage.setItem(
-                '/account/display',
-                data?.account?.display ||
-                    localStorage.getItem('/account/display')
-            )
-            localStorage.setItem(
-                '/account/mfa',
-                data?.account?.mfa || localStorage.getItem('/account/mfa')
-            )
-            localStorage.setItem(
-                '/member/email',
-                data?.member?.email || localStorage.getItem('/member/email')
-            )
-            localStorage.setItem(
-                '/member/email_md5',
-                data?.member?.email_md5 ||
-                    localStorage.getItem('/member/email_md5')
-            )
-            localStorage.setItem(
-                '/member/mfa',
-                data?.member?.mfa || localStorage.getItem('/member/mfa')
-            )
-            localStorage.setItem(
-                '/session/key',
-                data?.session?.access_token ||
-                    localStorage.getItem('/session/key')
-            )
-            if (localStorage.getItem('/session/key')) {
+            if (!data.member.mfa && !!data.session.access_token) {
+                this.saveSessionData(data.account, data.session, data.member)
                 window.initPusher()
                 data.session.access_token = null
                 localStorage.setItem(`/me`, JSON.stringify(data))
@@ -119,11 +91,142 @@ export default {
                             ? 'security'
                             : 'profile'
                 })
-                this.loadingMessage = ''
                 return
+            }
+            if (
+                this.webauthnSupported &&
+                data.member.mfa &&
+                data.fido_devices
+            ) {
+                this.loadingMessage = 'Confirm 2FA to complete login'
+                return this.promptFido()
             }
             this.message =
                 'Magic Link error, no session could be established. Please try again.'
+            this.messageType = 'error'
+        },
+        saveSessionData(account, session, member) {
+            localStorage.setItem(
+                '/account/name',
+                account.name || localStorage.getItem('/account/name')
+            )
+            localStorage.setItem(
+                '/account/display',
+                account.display || localStorage.getItem('/account/display')
+            )
+            localStorage.setItem(
+                '/account/mfa',
+                account.mfa || localStorage.getItem('/account/mfa')
+            )
+            localStorage.setItem(
+                '/member/email',
+                member.email || localStorage.getItem('/member/email')
+            )
+            localStorage.setItem(
+                '/member/email_md5',
+                member.email_md5 || localStorage.getItem('/member/email_md5')
+            )
+            localStorage.setItem(
+                '/member/mfa',
+                member.mfa || localStorage.getItem('/member/mfa')
+            )
+            localStorage.setItem(
+                '/session/key',
+                session.access_token || localStorage.getItem('/session/key')
+            )
+        },
+        async promptFido() {
+            try {
+                const response = await Api.get('/webauthn/login').catch(
+                    (err) => {
+                        this.fidoMessage = err
+                        this.fidoMessageType = `error`
+                    }
+                )
+                if (response.status != 201) {
+                    this.fidoMessage = `${response.status} ${response.statusText}: Something went wrong starting FIDO.`
+                    this.fidoMessageType = `error`
+                    return
+                }
+                const options = await response.json()
+                options.challenge = decode(options.challenge)
+                for (let cred of options.allowCredentials) {
+                    cred.id = decode(cred.id)
+                }
+            } catch (error) {
+                this.fidoMessage =
+                    error.name === 'AbortError'
+                        ? 'Request timed out, please try refreshing the page.'
+                        : `${error.name} ${error.message}. The FIDO device was not registered.`
+                this.fidoMessageType = `error`
+                return
+            }
+
+            const cred = await navigator.credentials.get({
+                publicKey: options
+            })
+            const credential = {}
+            credential.fido = 1
+            credential.id = cred.id
+            credential.type = cred.type
+            credential.rawId = encode(cred.rawId)
+
+            if (cred.response) {
+                const clientDataJSON = encode(cred.response.clientDataJSON)
+                const authenticatorData = encode(
+                    cred.response.authenticatorData
+                )
+                const signature = encode(cred.response.signature)
+                const userHandle = encode(cred.response.userHandle)
+                credential.response = {
+                    clientDataJSON,
+                    authenticatorData,
+                    signature,
+                    userHandle
+                }
+            }
+            try {
+                const response = await Api.post(
+                    '/webauthn/login',
+                    credential
+                ).catch((err) => {
+                    this.fidoMessage = err
+                    this.fidoMessageType = `error`
+                })
+                if (response.status != 202) {
+                    this.fidoMessage = `${response.status} ${response.statusText}: Something went wrong during FIDO login.`
+                    this.fidoMessageType = `error`
+                    return
+                }
+                const data = await response.json()
+                if (!!data.session.access_token) {
+                    this.saveSessionData(
+                        data.account,
+                        data.session,
+                        data.member
+                    )
+                    window.initPusher()
+                    data.session.access_token = null
+                    localStorage.setItem(`/me`, JSON.stringify(data))
+                    this.$router.push({
+                        name:
+                            data?.account?.mfa === 'enroll' &&
+                            data?.member?.mfa !== true
+                                ? 'security'
+                                : 'profile'
+                    })
+                    return
+                }
+            } catch (error) {
+                this.fidoMessage =
+                    error.name === 'AbortError'
+                        ? 'Request timed out, please try refreshing the page.'
+                        : `${error.name} ${error.message}. The FIDO device was not registered.`
+                this.fidoMessageType = `error`
+                return
+            }
+            this.message =
+                'FIDO error, no session could be established. Please try again.'
             this.messageType = 'error'
         }
     }
