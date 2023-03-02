@@ -528,7 +528,7 @@ import Windows from '@/components/icons/Windows.vue'
 import Linux from '@/components/icons/Linux.vue'
 import Mac from '@/components/icons/Mac.vue'
 import Devices from '@/components/icons/Devices.vue'
-import { encode, decode } from 'base64-arraybuffer'
+import { encode, decode } from '@qix/base64url-arraybuffer'
 import moment from 'moment'
 </script>
 
