@@ -24,7 +24,7 @@
 import PagePlaceholder from '@/components/PagePlaceholder.vue'
 import InlineLoading from '@/components/general/InlineLoading.vue'
 import ValidationMessage from '@/components/general/ValidationMessage.vue'
-import { encode, decode } from 'base64-arraybuffer'
+import { encode, decode } from '@qix/base64url-arraybuffer'
 </script>
 
 <script>
