@@ -79,7 +79,15 @@ export default {
                 return
             }
             const data = await response.json()
-            if (!data.member.mfa && !!data.session.access_token) {
+            if (
+                this.webauthnSupported &&
+                data.member.mfa &&
+                data.fido_options
+            ) {
+                this.loadingMessage = 'Confirm 2FA to complete login'
+                return this.promptFido(data.fido_options, data.member.email)
+            }
+            if (!!data.session.access_token) {
                 this.saveSessionData(data.account, data.session, data.member)
                 window.initPusher()
                 data.session.access_token = null
@@ -92,14 +100,6 @@ export default {
                             : 'profile'
                 })
                 return
-            }
-            if (
-                this.webauthnSupported &&
-                data.member.mfa &&
-                data.fido_devices
-            ) {
-                this.loadingMessage = 'Confirm 2FA to complete login'
-                return this.promptFido()
             }
             this.message =
                 'Magic Link error, no session could be established. Please try again.'
@@ -135,41 +135,22 @@ export default {
                 session.access_token || localStorage.getItem('/session/key')
             )
         },
-        async promptFido() {
-            try {
-                const response = await Api.get('/webauthn/login').catch(
-                    (err) => {
-                        this.fidoMessage = err
-                        this.fidoMessageType = `error`
-                    }
-                )
-                if (response.status != 201) {
-                    this.fidoMessage = `${response.status} ${response.statusText}: Something went wrong starting FIDO.`
-                    this.fidoMessageType = `error`
-                    return
+        async promptFido(options, member_email) {
+            options.challenge = decode(options.challenge)
+            options.allowCredentials = options.allowCredentials.map(
+                allowed => {
+                    allowed.id = decode(allowed.id)
+                    return allowed
                 }
-                const options = await response.json()
-                options.challenge = decode(options.challenge)
-                for (let cred of options.allowCredentials) {
-                    cred.id = decode(cred.id)
-                }
-            } catch (error) {
-                this.fidoMessage =
-                    error.name === 'AbortError'
-                        ? 'Request timed out, please try refreshing the page.'
-                        : `${error.name} ${error.message}. The FIDO device was not registered.`
-                this.fidoMessageType = `error`
-                return
-            }
-
+            )
             const cred = await navigator.credentials.get({
                 publicKey: options
             })
             const credential = {}
-            credential.fido = 1
             credential.id = cred.id
             credential.type = cred.type
             credential.rawId = encode(cred.rawId)
+            credential.member_email = member_email
 
             if (cred.response) {
                 const clientDataJSON = encode(cred.response.clientDataJSON)
