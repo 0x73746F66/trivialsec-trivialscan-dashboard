@@ -38,10 +38,10 @@ export default {
     components: { IconTrivialSecurity },
     mounted() {
         let canvas = document.getElementById('canv')
-        var cw = canvas.width / 7
-        var ch = canvas.height / 20
-        var cw100 = cw * 10
-        var ch100 = ch * 10
+        let cw = canvas.width / 7
+        let ch = canvas.height / 20
+        let cw100 = cw * 10
+        let ch100 = ch * 10
 
         let ctx = canvas.getContext('2d')
 
@@ -61,13 +61,6 @@ export default {
 
         render()
         function render() {
-            let dimensions = getObjectFitSize(
-                true,
-                canvas.clientWidth,
-                canvas.clientHeight,
-                canvas.width,
-                canvas.height
-            )
             const dpr = window.devicePixelRatio || 1
             canvas.style.width = '100vw'
             canvas.style.height = '100vh'
@@ -81,36 +74,7 @@ export default {
             ctx.scale(ratio * dpr, ratio * dpr)
         }
 
-        function getObjectFitSize(
-            contains /* true = contain, false = cover */,
-            containerWidth,
-            containerHeight,
-            width,
-            height
-        ) {
-            var doRatio = width / height
-            var cRatio = containerWidth / containerHeight
-            var targetWidth = 0
-            var targetHeight = 0
-            var test = contains ? doRatio > cRatio : doRatio < cRatio
-
-            if (test) {
-                targetWidth = containerWidth
-                targetHeight = targetWidth / doRatio
-            } else {
-                targetHeight = containerHeight
-                targetWidth = targetHeight * doRatio
-            }
-
-            return {
-                width: targetWidth,
-                height: targetHeight,
-                x: containerWidth - targetWidth,
-                y: containerHeight - targetHeight
-            }
-        }
-
-        for (var i = 0; i < num; i++) {
+        for (let i = 0; i < num; i++) {
             numArr.push({
                 x: Math.random() * cw100 + cw,
                 y: Math.random() * ch100 + ch + fontSizeMax,
@@ -126,13 +90,13 @@ export default {
             })
         }
 
-        for (var i = 0; i < numArr.length - 1; i++) {
+        for (let i = 0; i < numArr.length - 1; i++) {
             let num = numArr[i]
             drawRandom(num.x, num.y, num.fs, num.content)
         }
 
         function updateNums() {
-            for (var x = 0; x < numArr.length - 1; x++) {
+            for (let x = 0; x < numArr.length - 1; x++) {
                 let num = numArr[x]
                 num.x += num.dx
                 num.y += num.dy
@@ -170,7 +134,7 @@ export default {
             num.content = display[Math.round(Math.random())]
         }
 
-        function drawRandom(w, h, fs = fontSizeMax, content) {
+        function drawRandom(w, h, fs, content) {
             ctx.fillStyle = color
             ctx.font = `${fs.toString()}px ${fonts[Math.round(Math.random())]}`
             ctx.fillText(content, w, h)
@@ -180,7 +144,6 @@ export default {
             ctx.clearRect(0, 0, canvas.width, canvas.height)
             changeDisplay()
             updateNums()
-            drawRandom()
             window.requestAnimationFrame(main)
         }
 
