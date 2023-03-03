@@ -137,12 +137,9 @@ export default {
         },
         async promptFido(options, member_email) {
             options.challenge = decode(options.challenge)
-            options.allowCredentials = options.allowCredentials.map(
-                allowed => {
-                    allowed.id = decode(allowed.id)
-                    return allowed
-                }
-            )
+            for (const allowed of options.allowCredentials) {
+                allowed.id = decode(allowed.id)
+            }
             const cred = await navigator.credentials.get({
                 publicKey: options
             })
@@ -166,17 +163,17 @@ export default {
                     userHandle
                 }
             }
+            this.loadingMessage = "Verifying Credentials"
+            this.loading = true
             try {
                 const response = await Api.post(
                     '/webauthn/login',
                     credential
-                ).catch((err) => {
-                    this.fidoMessage = err
-                    this.fidoMessageType = `error`
-                })
-                if (response.status != 202) {
-                    this.fidoMessage = `${response.status} ${response.statusText}: Something went wrong during FIDO login.`
-                    this.fidoMessageType = `error`
+                )
+                this.loading = false
+                if (response.status != 200) {
+                    this.message = `${response.status} ${response.statusText}: Something went wrong during FIDO login.`
+                    this.messageType = `error`
                     return
                 }
                 const data = await response.json()
@@ -186,24 +183,20 @@ export default {
                         data.session,
                         data.member
                     )
+                    this.loadingMessage = "Verified!"
                     window.initPusher()
                     data.session.access_token = null
                     localStorage.setItem(`/me`, JSON.stringify(data))
-                    this.$router.push({
-                        name:
-                            data?.account?.mfa === 'enroll' &&
-                            data?.member?.mfa !== true
-                                ? 'security'
-                                : 'profile'
-                    })
+                    this.$router.push({name: 'profile'})
                     return
                 }
             } catch (error) {
-                this.fidoMessage =
+                this.message =
                     error.name === 'AbortError'
                         ? 'Request timed out, please try refreshing the page.'
                         : `${error.name} ${error.message}. The FIDO device was not registered.`
-                this.fidoMessageType = `error`
+                this.messageType = `error`
+                this.loading = false
                 return
             }
             this.message =

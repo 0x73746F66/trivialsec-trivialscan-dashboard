@@ -105,6 +105,7 @@
                                             class="btn-outline-primary-full font-color-primary font-sm"
                                             text="Start Enrollment"
                                             type="submit"
+                                            :disabled="!recordId"
                                         />
                                     </form>
                                 </template>
@@ -571,8 +572,8 @@ export default {
             fidoMessage: '',
             fidoMessageType: '',
             fidoDevices: [],
-            enrollId: '',
-            publicKeyOptions: {}
+            publicKeyOptions: {},
+            recordId: ''
         }
     },
     created() {
@@ -580,11 +581,10 @@ export default {
     },
     methods: {
         async registerFIDO() {
-            this.enrollId = ''
+            this.recordId = ''
             this.publicKeyOptions = ''
             this.fidoMessage = ''
             this.fidoMessageType = ''
-            let data
             try {
                 const response = await Api.get('/webauthn/register').catch(
                     (err) => {
@@ -597,7 +597,16 @@ export default {
                     this.fidoMessageType = `error`
                     return
                 }
-                data = await response.json()
+                const options = await response.json()
+                this.recordId = options.user.name
+                options.user.id = decode(options.user.id)
+                options.challenge = decode(options.challenge)
+                if (options.excludeCredentials) {
+                    for (const cred of options.excludeCredentials) {
+                        cred.id = decode(cred.id)
+                    }
+                }
+                this.publicKeyOptions = options
             } catch (error) {
                 this.fidoMessage =
                     error.name === 'AbortError'
@@ -606,18 +615,9 @@ export default {
                 this.fidoMessageType = `error`
                 return
             }
-            this.enrollId = data.enrollId
-            data.options.user.id = decode(data.options.user.id)
-            data.options.challenge = decode(data.options.challenge)
-            if (data.options.excludeCredentials) {
-                for (const cred of data.options.excludeCredentials) {
-                    cred.id = decode(cred.id)
-                }
-            }
-            this.publicKeyOptions = data.options
         },
         async enrollFIDO(event) {
-            if (!this.publicKeyOptions || !this.enrollId) {
+            if (!this.publicKeyOptions || !this.recordId) {
                 this.fidoMessage =
                     'FIDO device was not registered and cannot be enrolled, please retry in a moment.'
                 this.fidoMessageType = `error`
@@ -627,6 +627,7 @@ export default {
                 publicKey: this.publicKeyOptions
             })
             const credential = {}
+            credential.record_id = this.recordId
             credential.id = cred.id
             credential.rawId = encode(cred.rawId)
             credential.type = cred.type
@@ -643,7 +644,7 @@ export default {
             try {
                 this.loading = true
                 const response = await Api.post(
-                    `/webauthn/enroll/${this.enrollId}/${deviceName}`,
+                    `/webauthn/enroll/${deviceName}`,
                     credential
                 )
                 this.loading = false
