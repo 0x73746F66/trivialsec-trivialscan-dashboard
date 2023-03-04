@@ -530,6 +530,7 @@ import Linux from '@/components/icons/Linux.vue'
 import Mac from '@/components/icons/Mac.vue'
 import Devices from '@/components/icons/Devices.vue'
 import { encode, decode } from '@qix/base64url-arraybuffer'
+import { Modal as BSModal } from 'bootstrap'
 import moment from 'moment'
 </script>
 
@@ -623,6 +624,9 @@ export default {
                 this.fidoMessageType = `error`
             }
             const deviceName = event.target.elements['DeviceName'].value
+                .toLowerCase()
+                .split(' ')
+                .join('-')
             const cred = await navigator.credentials.create({
                 publicKey: this.publicKeyOptions
             })
@@ -656,11 +660,18 @@ export default {
                 const data = await response.json()
                 data.created = moment.utc(data.created_at).fromNow()
                 this.fidoDevices.push(data)
-                this.fidoMessage = 'Enrolled'
-                this.fidoMessageType = `success`
+                this.message = 'Enrolled'
+                this.messageType = `success`
                 if (window.localStorage.getItem('/member/mfa') !== 'true') {
                     window.localStorage.setItem('/member/mfa', 'true')
                     this.$router.go()
+                } else {
+                    const modal = BSModal.getInstance(
+                        document.getElementById('enrollModal')
+                    )
+                    if (modal?._isShown) {
+                        modal.hide()
+                    }
                 }
             } catch (error) {
                 this.loading = false
