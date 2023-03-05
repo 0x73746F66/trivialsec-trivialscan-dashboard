@@ -52,6 +52,11 @@ const routes = [
         component: () => import('@/views/LoginView.vue')
     },
     {
+        path: '/login',
+        name: 'magic_link',
+        component: () => import('@/views/LoginView.vue')
+    },
+    {
         path: '/accept/:token',
         name: 'accept_link',
         beforeEnter: async (to, from, next) => {
