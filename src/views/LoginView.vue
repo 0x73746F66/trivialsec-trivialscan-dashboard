@@ -9,21 +9,33 @@
                 :message="message"
                 :type="messageType"
             />
-            <h2
-                class="font-lg-sb font-color-light text-center"
-                v-if="loadingMessage"
-            >
-                {{ loadingMessage }}
-            </h2>
-            <InlineLoading :loading="loading" />
+            <div v-if="magic_link">
+                <h2
+                    class="font-lg-sb font-color-light text-center"
+                    v-if="loadingMessage"
+                >
+                    {{ loadingMessage }}
+                </h2>
+                <InlineLoading :loading="loading" />
+            </div>
+            <div v-else>
+                <h2 class="font-lg-sb font-color-light text-center">
+                    Passkey (FIDO) Login
+                </h2>
+                <div class="d-flex flex-column align-items-center">
+                    <div class="col-lg-6 col-12">
+                        <LoginForm />
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import PagePlaceholder from '@/components/PagePlaceholder.vue'
 import InlineLoading from '@/components/general/InlineLoading.vue'
 import ValidationMessage from '@/components/general/ValidationMessage.vue'
+import LoginForm from '@/components/forms/LoginForm.vue'
 import { encode, decode } from '@qix/base64url-arraybuffer'
 </script>
 
@@ -32,10 +44,13 @@ let apiUrl = import.meta.env.VITE_API_URL.trim()
 apiUrl = `${apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl}`
 export default {
     components: {
-        PagePlaceholder
+        InlineLoading,
+        ValidationMessage,
+        LoginForm
     },
     data() {
         return {
+            magic_link: '',
             loading: true,
             message: '',
             messageType: '',
@@ -52,11 +67,12 @@ export default {
                 this.loading = false
                 this.loadingMessage = ''
                 this.message = 'No Magic Link provided'
-                this.messageType = 'error'
+                this.messageType = 'warning'
                 return
             }
+            this.magic_link = this.$route.params.magic_link
             const response = await fetch(
-                `${apiUrl}/magic-link/${this.$route.params.magic_link}`
+                `${apiUrl}/magic-link/${this.magic_link}`
             ).catch((errors) => {
                 console.error(errors)
                 setTimeout(() => window.user_notify(`Errors`, errors), 3000)
@@ -163,13 +179,10 @@ export default {
                     userHandle
                 }
             }
-            this.loadingMessage = "Verifying Credentials"
+            this.loadingMessage = 'Verifying Credentials'
             this.loading = true
             try {
-                const response = await Api.post(
-                    '/webauthn/login',
-                    credential
-                )
+                const response = await Api.post('/webauthn/login', credential)
                 this.loading = false
                 if (response.status != 200) {
                     this.message = `${response.status} ${response.statusText}: Something went wrong during FIDO login.`
@@ -183,11 +196,11 @@ export default {
                         data.session,
                         data.member
                     )
-                    this.loadingMessage = "Verified!"
+                    this.loadingMessage = 'Verified!'
                     window.initPusher()
                     data.session.access_token = null
                     localStorage.setItem(`/me`, JSON.stringify(data))
-                    this.$router.push({name: 'profile'})
+                    this.$router.push({ name: 'profile' })
                     return
                 }
             } catch (error) {
