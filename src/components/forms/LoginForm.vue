@@ -174,7 +174,7 @@ export default {
                         if (modal?._isShown) {
                             modal.hide()
                         }
-                        this.$router.push({name: 'profile'})
+                        this.$router.push({name: 'reports'})
                     }, 3000)
 
                     return

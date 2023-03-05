@@ -35,6 +35,13 @@
             <IconDashboard color="f0f0f0" class="router-link-icon" />
             <span class="router-link-name">Compliance</span>
         </RouterLink>
+        <RouterLink
+            :to="{ name: 'early-warning-service' }"
+            class="router-link-item font-color-light text-decoration-none"
+        >
+            <IconAlarmLight color="f0f0f0" class="router-link-icon" />
+            <span class="router-link-name">Early Warning</span>
+        </RouterLink>
     </div>
 </template>
 
@@ -44,6 +51,7 @@ import IconTarget from '@/components/icons/IconTarget.vue'
 import IconReport from '@/components/icons/IconReport.vue'
 import IconDashboard from '@/components/icons/IconDashboard.vue'
 import IconScan1Light from '@/components/icons/IconScan1Light.vue'
+import IconAlarmLight from '@/components/icons/IconAlarmLight.vue'
 </script>
 
 <script>
@@ -53,7 +61,8 @@ export default {
         IconTarget,
         IconReport,
         IconDashboard,
-        IconScan1Light
+        IconScan1Light,
+        IconAlarmLight
     }
 }
 </script>

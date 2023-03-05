@@ -20,6 +20,11 @@ const routes = [
         component: () => import('@/views/FindingsView.vue')
     },
     {
+        path: '/early-warning-service',
+        name: 'early-warning-service',
+        component: () => import('@/views/EarlyWarningServiceView.vue')
+    },
+    {
         path: '/certificate-issues',
         name: 'certificate-issues',
         component: () => import('@/views/CertificateIssuesView.vue')

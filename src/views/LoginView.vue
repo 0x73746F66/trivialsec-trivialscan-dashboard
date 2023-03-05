@@ -97,7 +97,7 @@ export default {
                         data?.account?.mfa === 'enroll' &&
                         data?.member?.mfa !== true
                             ? 'security'
-                            : 'profile'
+                            : 'reports'
                 })
                 return
             }
