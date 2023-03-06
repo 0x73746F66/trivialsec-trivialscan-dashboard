@@ -47,12 +47,12 @@ const routes = [
         component: () => import('@/views/DocsView.vue')
     },
     {
-        path: '/login/:magic_link',
-        name: 'magic_link',
+        path: '/login',
+        name: 'login',
         component: () => import('@/views/LoginView.vue')
     },
     {
-        path: '/login',
+        path: '/login/:magic_link',
         name: 'magic_link',
         component: () => import('@/views/LoginView.vue')
     },
