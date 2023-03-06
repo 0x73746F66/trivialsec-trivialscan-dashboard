@@ -1,31 +1,29 @@
 <template>
     <div class="container margin-top-sm">
         <div
-            class="profile-container bg-dark-40 border-radius-sm margin-bottom-lg d-flex flex-column"
+            class="profile-container bg-dark-40 border-radius-sm margin-bottom-lg d-flex flex-column align-items-center"
         >
-            <ValidationMessage
-                v-if="message.length > 0"
-                class="justify-content-start"
-                :message="message"
-                :type="messageType"
-            />
-            <div v-if="magic_link">
-                <h2
-                    class="font-lg-sb font-color-light text-center"
-                    v-if="loadingMessage"
-                >
-                    {{ loadingMessage }}
-                </h2>
-                <InlineLoading :loading="loading" />
-            </div>
-            <div v-else>
-                <h2 class="font-lg-sb font-color-light text-center">
-                    Passkey (FIDO) Login
-                </h2>
-                <div class="d-flex flex-column align-items-center">
-                    <div class="col-lg-6 col-12">
-                        <LoginForm />
-                    </div>
+            <div class="col-lg-6 col-12">
+                <ValidationMessage
+                    v-if="message.length > 0"
+                    class="justify-content-start"
+                    :message="message"
+                    :type="messageType"
+                />
+                <div v-if="magic_link">
+                    <h2
+                        class="font-lg-sb font-color-light text-center"
+                        v-if="loadingMessage"
+                    >
+                        {{ loadingMessage }}
+                    </h2>
+                    <InlineLoading :loading="loading" />
+                </div>
+                <div v-else class="margin-top-md">
+                    <h2 class="font-lg-sb font-color-light text-center">
+                        Passkey (FIDO) Login
+                    </h2>
+                    <LoginForm />
                 </div>
             </div>
         </div>

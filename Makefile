@@ -110,7 +110,7 @@ clean-build: env init refresh  ## npm run build
 	VITE_API_URL=$(shell terraform -chdir=plans output -raw api_function_url) npx vite build --force
 
 ci-build: env init refresh  ## npm run build
-	VITE_API_URL=$(shell terraform -chdir=plans output -raw api_function_url) npx vite build --force
+	VITE_API_URL=$(shell terraform -chdir=plans output -raw api_function_url) npx vite build
 
 preview: env init refresh  ## npm run build
 	VITE_API_URL=$(shell terraform -chdir=plans output -raw api_function_url) npx vite preview --host

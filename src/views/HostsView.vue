@@ -12,18 +12,22 @@
 
             <div class="w-100 margin-bottom-md">
                 <h2 class="font-xl-sb margin-bottom-md">Scanned Hosts</h2>
-                <div class="d-flex flex-row align-items-center justify-content-center">
-                    <LoadingComponent class="loading" :class="{ inactive: !loading }" />
-                    <div v-if="errorMessage.length > 0" class="d-flex flex-column w-100">
+                <div
+                    class="d-flex flex-row align-items-center justify-content-center"
+                >
+                    <LoadingComponent
+                        class="loading"
+                        :class="{ inactive: !loading }"
+                    />
+                    <div
+                        v-if="errorMessage.length > 0"
+                        class="d-flex flex-column w-100"
+                    >
                         <ValidationMessage
                             class="justify-content-start"
                             :message="errorMessage"
                             :type="errorMessageType"
                         />
-                        <span
-                            class="font-xl font-color-light-80 text-center w-100 bg-dark-40 border-radius-sm d-block"
-                            >No data to display</span
-                        >
                     </div>
                     <div>
                         <button
@@ -68,11 +72,14 @@
                                                 class="http-status"
                                             >
                                                 <span
-                                                    v-for="(http, key) in t.http"
+                                                    v-for="(
+                                                        http, key
+                                                    ) in t.http"
                                                     :key="key"
                                                     :title="
                                                         `${http.title}\n${
-                                                            http.request_url || ''
+                                                            http.request_url ||
+                                                            ''
                                                         }`.trim()
                                                     "
                                                     class="font-sm-b padding-xxs margin-right-xxs font-color-dark status-code-pill hover-help"
@@ -97,9 +104,12 @@
                                             <span
                                                 v-if="t.error"
                                                 class="d-block font-color-tertiary"
-                                                >{{ t.error[0] }} {{ t.error[1] }}</span
+                                                >{{ t.error[0] }}
+                                                {{ t.error[1] }}</span
                                             >
-                                            <span class="d-block font-color-light-60">
+                                            <span
+                                                class="d-block font-color-light-60"
+                                            >
                                                 {{ t.transport.peer_address }}
                                             </span>
                                         </div>
