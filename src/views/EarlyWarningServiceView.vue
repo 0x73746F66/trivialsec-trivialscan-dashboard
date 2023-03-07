@@ -55,6 +55,7 @@
                                         class="bg-dark-60 border-radius-sm padding-md margin-right-xs margin-bottom-xs"
                                     >
                                         <Modal
+                                            :backdrop="false"
                                             :id="`alertModal${key}`"
                                             label="modal-alert-header"
                                         >
@@ -350,7 +351,7 @@ export default {
             const original = [...this.alerts]
             const arrays = []
             while (this.alerts.length > 0) {
-                arrays.push(this.alerts.splice(0, 6))
+                arrays.push(this.alerts.splice(0, 15))
             }
             this.alerts = original
             return arrays
