@@ -36,125 +36,103 @@ import IconTrivialSecurity from '@/components/icons/IconTrivialSecurity.vue'
 
 export default {
     components: { IconTrivialSecurity },
+    data() {
+        return {
+            canvas: null,
+            ctx: null,
+            objects: [],
+            color: 'rgba(26, 187, 156, 0.4)',
+            fonts: ['Georgia', 'Courier New'],
+            totalObjects: 25,
+            fontSizeMax: 120,
+            maxSpeed: 0.005,
+            directionMax: 0.5,
+            directionMin: -0.5
+        }
+    },
     mounted() {
-        let canvas = document.getElementById('canv')
-        let cw = canvas.width / 7
-        let ch = canvas.height / 20
-        let cw100 = cw * 10
-        let ch100 = ch * 10
+        this.canvas = document.getElementById('canv')
+        const dpr = window.devicePixelRatio || 1
+        this.canvas.style.width = '100vw'
+        this.canvas.style.height = '100vh'
+        this.canvas.width = this.canvas.offsetWidth
+        this.canvas.height = this.canvas.offsetHeight
 
-        let ctx = canvas.getContext('2d')
-
-        let numArr = []
-        let num = 25
-        let fontSizeMax = 15
-        let maxSpeed = 0.005
-        let directionMax = 0.15
-        let directionMin = -0.15
-        let display = ['0', '1']
-        let fonts = ['Georgia', 'Courier New']
-
-        let color = 'rgba(26, 187, 156, 0.4)'
-
-        const originalHeight = canvas.height
-        const originalWidth = canvas.width
-
-        render()
-        function render() {
-            const dpr = window.devicePixelRatio || 1
-            canvas.style.width = '100vw'
-            canvas.style.height = '100vh'
-            canvas.width = canvas.offsetWidth
-            canvas.height = canvas.offsetHeight
-
-            let ratio = Math.min(
-                canvas.clientWidth / originalWidth,
-                canvas.clientHeight / originalHeight
-            )
-            ctx.scale(ratio * dpr, ratio * dpr)
+        const originalHeight = this.canvas.height
+        const originalWidth = this.canvas.width
+        const ratio = Math.min(
+            this.canvas.clientWidth / originalWidth,
+            this.canvas.clientHeight / originalHeight
+        )
+        this.ctx = this.canvas.getContext('2d')
+        this.ctx.scale(ratio * dpr, ratio * dpr)
+        for (let i = 0; i < this.totalObjects; i++) {
+            this.objects.push(this.makeObject())
         }
-
-        for (let i = 0; i < num; i++) {
-            numArr.push({
-                x: Math.random() * cw100 + cw,
-                y: Math.random() * ch100 + ch + fontSizeMax,
-                fs: Math.floor(Math.random() * fontSizeMax),
-                spd: Math.random() * maxSpeed,
-                dx:
-                    Math.random() * (directionMax - directionMin) +
-                    directionMin,
-                dy:
-                    Math.random() * (directionMax - directionMin) +
-                    directionMin,
-                content: display[Math.round(Math.random())]
-            })
+        for (const object of this.objects) {
+            this.drawRandom(object.x, object.y, object.fs, object.content)
         }
-
-        for (let i = 0; i < numArr.length - 1; i++) {
-            let num = numArr[i]
-            drawRandom(num.x, num.y, num.fs, num.content)
-        }
-
-        function updateNums() {
-            for (let x = 0; x < numArr.length - 1; x++) {
-                let num = numArr[x]
-                num.x += num.dx
-                num.y += num.dy
-                num.fs -= num.spd
+        window.requestAnimationFrame(this.main)
+    },
+    methods: {
+        main() {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+            this.changeDisplay()
+            this.update()
+            window.requestAnimationFrame(this.main)
+        },
+        update() {
+            for (let x = 0; x < this.objects.length - 1; x++) {
+                let object = this.objects[x]
+                object.x += object.dx
+                object.y += object.dy
+                object.fs -= object.spd
                 if (
-                    Math.floor(num.fs) === 0 ||
-                    num.x > canvas.width ||
-                    num.x < 0 ||
-                    num.y > canvas.height ||
-                    num.x < 0
+                    Math.floor(object.fs) === 0 ||
+                    object.x > this.canvas.width ||
+                    object.x < 0 ||
+                    object.y > this.canvas.height ||
+                    object.x < 0
                 ) {
-                    numArr.splice(x, 1)
-                    numArr.push({
-                        x: Math.random() * cw100 + cw,
-                        y: Math.random() * ch100 + ch + fontSizeMax,
-                        fs: Math.floor(Math.random() * fontSizeMax),
-                        spd: Math.random() * maxSpeed,
-                        dx:
-                            Math.random() * (directionMax - directionMin) +
-                            directionMin,
-                        dy:
-                            Math.random() * (directionMax - directionMin) +
-                            directionMin,
-                        content: display[Math.round(Math.random())]
-                    })
+                    this.objects.splice(x, 1)
+                    this.objects.push(this.makeObject())
                 }
-                drawRandom(num.x, num.y, num.fs, num.content)
+                this.drawRandom(object.x, object.y, object.fs, object.content)
             }
-        }
-
-        function changeDisplay() {
-            let randomNum = Math.floor(Math.random() * numArr.length)
-            let num = numArr[randomNum]
+        },
+        makeObject() {
+            const display = ['0', '1']
+            const cw = this.canvas.width / 5
+            const ch = this.canvas.height / 5
+            const cw100 = cw * 10
+            const ch100 = ch * 10
+            return {
+                x: Math.random() * cw100 + cw,
+                y: Math.random() * ch100 + ch + this.fontSizeMax,
+                fs: Math.floor(Math.random() * this.fontSizeMax),
+                spd: Math.random() * this.maxSpeed,
+                dx:
+                    Math.random() * (this.directionMax - this.directionMin) +
+                    this.directionMin,
+                dy:
+                    Math.random() * (this.directionMax - this.directionMin) +
+                    this.directionMin,
+                content: display[Math.round(Math.random())]
+            }
+        },
+        drawRandom(w, h, fs, content) {
+            this.ctx.fillStyle = this.color
+            this.ctx.font = `${fs.toString()}px ${
+                this.fonts[Math.round(Math.random())]
+            }`
+            this.ctx.fillText(content, w, h)
+        },
+        changeDisplay() {
+            let object =
+                this.objects[Math.floor(Math.random() * this.objects.length)]
             if (Math.round(Math.random()) === 0) return
-            num.content = display[Math.round(Math.random())]
+            object.content = object.content === '1' ? '0' : '1'
         }
-
-        function drawRandom(w, h, fs, content) {
-            ctx.fillStyle = color
-            ctx.font = `${fs.toString()}px ${fonts[Math.round(Math.random())]}`
-            ctx.fillText(content, w, h)
-        }
-
-        function main() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height)
-            changeDisplay()
-            updateNums()
-            window.requestAnimationFrame(main)
-        }
-
-        window.requestAnimationFrame(main)
-        setInterval(() => {
-            const displays = [
-                ['0', '1'],
-                ['🪲', '🪲']
-            ]
-            display = displays[Math.round(Math.random())]
-        }, 3000)
     }
 }
 </script>

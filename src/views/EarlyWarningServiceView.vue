@@ -25,7 +25,9 @@
                 >
                     <div class="d-flex justify-content-between w-100">
                         <div>
-                            <button class="swiper-button swiper-button-prev"></button>
+                            <button
+                                class="swiper-button swiper-button-prev"
+                            ></button>
                         </div>
                         <Swiper
                             class="padding-bottom-lg"
@@ -49,23 +51,43 @@
                                     v-for="(alert, key) in ews"
                                     :key="key"
                                 >
-                                    <div class="bg-dark-60 border-radius-sm padding-md margin-right-xs margin-bottom-xs">
-                                        <Modal :id="`alertModal${key}`" label="modal-alert-header">
-                                            <template v-slot:button="buttonProps">
-                                                <div class="d-flex justify-content-between w-100 flex-wrap">
-                                                    <span class="font-base-sb font-color-secondary">
-                                                        {{ alert.feed_identifier }}
+                                    <div
+                                        class="bg-dark-60 border-radius-sm padding-md margin-right-xs margin-bottom-xs"
+                                    >
+                                        <Modal
+                                            :id="`alertModal${key}`"
+                                            label="modal-alert-header"
+                                        >
+                                            <template
+                                                v-slot:button="buttonProps"
+                                            >
+                                                <div
+                                                    class="d-flex justify-content-between w-100 flex-wrap"
+                                                >
+                                                    <span
+                                                        class="font-base-sb font-color-secondary"
+                                                    >
+                                                        {{
+                                                            alert.feed_identifier
+                                                        }}
                                                     </span>
                                                     <span class="font-sm">
                                                         {{ alert.source }}
                                                     </span>
                                                 </div>
-                                                <div v-if="alert.matching_data?.domains">
+                                                <div
+                                                    v-if="
+                                                        alert.matching_data
+                                                            ?.domains
+                                                    "
+                                                >
                                                     <ul>
                                                         <li
                                                             v-for="(
-                                                                matched_domain, i
-                                                            ) in alert.matching_data
+                                                                matched_domain,
+                                                                i
+                                                            ) in alert
+                                                                .matching_data
                                                                 ?.domains"
                                                             :key="i"
                                                         >
@@ -82,23 +104,40 @@
                                                                 <span
                                                                     class="font-color-light"
                                                                 >
-                                                                    {{ matched_domain }}
+                                                                    {{
+                                                                        matched_domain
+                                                                    }}
                                                                 </span>
                                                             </RouterLink>
                                                         </li>
                                                     </ul>
                                                 </div>
-                                                <div class="d-flex font-sm justify-content-between flex-wrap">
-                                                    <div class="col-lg-6 col-12">
-                                                        <span class="margin-right-xxs"
+                                                <div
+                                                    class="d-flex font-sm justify-content-between flex-wrap"
+                                                >
+                                                    <div
+                                                        class="col-lg-6 col-12"
+                                                    >
+                                                        <span
+                                                            class="margin-right-xxs"
                                                             >Discovered</span
                                                         >
                                                         <time
                                                             class="hover-help"
-                                                            :title="alert.feed_date"
-                                                            :datetime="alert.feed_date"
+                                                            :title="
+                                                                alert.feed_date
+                                                            "
+                                                            :datetime="
+                                                                alert.feed_date
+                                                            "
                                                         >
-                                                            {{ moment.utc(alert.feed_date).fromNow() }}
+                                                            {{
+                                                                moment
+                                                                    .utc(
+                                                                        alert.feed_date
+                                                                    )
+                                                                    .fromNow()
+                                                            }}
                                                         </time>
                                                         <div class="d-flex">
                                                             <span
@@ -108,10 +147,22 @@
                                                             </span>
                                                             <time
                                                                 class="hover-help"
-                                                                :title="alert.feed_date"
-                                                                :datetime="alert.feed_date"
+                                                                :title="
+                                                                    alert.feed_date
+                                                                "
+                                                                :datetime="
+                                                                    alert.feed_date
+                                                                "
                                                             >
-                                                                {{ moment.utc(alert.feed_data.last_seen).fromNow() }}
+                                                                {{
+                                                                    moment
+                                                                        .utc(
+                                                                            alert
+                                                                                .feed_data
+                                                                                .last_seen
+                                                                        )
+                                                                        .fromNow()
+                                                                }}
                                                             </time>
                                                         </div>
                                                     </div>
@@ -129,40 +180,67 @@
                                                 </div>
                                             </template>
                                             <template v-slot:modalTitle>
-                                                <h5 class="font-lg-b font-color-light">
+                                                <h5
+                                                    class="font-lg-b font-color-light"
+                                                >
                                                     {{ alert.summary }}
                                                 </h5>
                                             </template>
                                             <template v-slot:modalContent>
-                                                <div class="d-flex" v-if="alert.reference_url">
-                                                    <IconLink color="e2c878" class="link-icon margin-right-xxs" />
-                                                    <a class="font-sm font-color-secondary text-decoration-none" :href="alert.reference_url" target="_blank">
+                                                <div
+                                                    class="d-flex"
+                                                    v-if="alert.reference_url"
+                                                >
+                                                    <IconLink
+                                                        color="e2c878"
+                                                        class="link-icon margin-right-xxs"
+                                                    />
+                                                    <a
+                                                        class="font-sm font-color-secondary text-decoration-none"
+                                                        :href="
+                                                            alert.reference_url
+                                                        "
+                                                        target="_blank"
+                                                    >
                                                         Source information
                                                     </a>
                                                 </div>
-                                                <div class="d-flex flex-column font-sm-sb margin-top-sm">
+                                                <div
+                                                    class="d-flex flex-column font-sm-sb margin-top-sm"
+                                                >
                                                     Description:
                                                     <span class="font-sm">
                                                         {{ alert.description }}
                                                     </span>
                                                 </div>
-                                                <div class="d-flex margin-top-xxs">
+                                                <div
+                                                    class="d-flex margin-top-xxs"
+                                                >
                                                     <span
                                                         class="font-sm-sb margin-right-xxs"
                                                     >
                                                         Category:
                                                     </span>
                                                     <span class="font-sm">
-                                                        {{ alert.feed_data.category }}
+                                                        {{
+                                                            alert.feed_data
+                                                                .category
+                                                        }}
                                                     </span>
                                                 </div>
                                                 <div
                                                     class="d-flex flex-column margin-top-sm"
-                                                    v-if="alert.matching_data.emailed_to"
+                                                    v-if="
+                                                        alert.matching_data
+                                                            .emailed_to
+                                                    "
                                                 >
                                                     Sent to:
                                                     <span class="font-sm">
-                                                        {{ alert.matching_data.emailed_to }}
+                                                        {{
+                                                            alert.matching_data
+                                                                .emailed_to
+                                                        }}
                                                     </span>
                                                 </div>
                                                 <div
@@ -180,14 +258,16 @@
                             </SwiperSlide>
                         </Swiper>
                         <div>
-                            <button class="swiper-button swiper-button-next"></button>
+                            <button
+                                class="swiper-button swiper-button-next"
+                            ></button>
                         </div>
                     </div>
                 </div>
                 <div v-else>
                     <ValidationMessage
                         message="No early warning alerts sent"
-                        type="warning"
+                        type="success"
                     />
                 </div>
             </div>
@@ -304,5 +384,4 @@ export default {
     width: 15px;
     height: 15px;
 }
-
 </style>
