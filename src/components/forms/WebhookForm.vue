@@ -89,26 +89,6 @@
             </div>
             <div class="d-flex margin-bottom-sm">
                 <Toggle
-                    :defaultChecked="include_warning"
-                    fieldName="include_warning"
-                    @change="handleToggle($event)"
-                />
-                <label class="font-color-light font-base-sb margin-left-sm">
-                    Include Warning Findings
-                </label>
-            </div>
-            <div class="d-flex margin-bottom-sm">
-                <Toggle
-                    :defaultChecked="include_info"
-                    fieldName="include_info"
-                    @change="handleToggle($event)"
-                />
-                <label class="font-color-light font-base-sb margin-left-sm">
-                    Include Informational Findings
-                </label>
-            </div>
-            <div class="d-flex margin-bottom-sm">
-                <Toggle
                     :defaultChecked="client_status"
                     fieldName="client_status"
                     @change="handleToggle($event)"
@@ -263,14 +243,6 @@ export default {
             type: Boolean,
             default: false
         },
-        include_warning: {
-            type: Boolean,
-            default: false
-        },
-        include_info: {
-            type: Boolean,
-            default: false
-        },
         client_status: {
             type: Boolean,
             default: false
@@ -318,8 +290,6 @@ export default {
             earlyWarningIp: this.early_warning_ip,
             newFindingsCertificates: this.new_findings_certificates,
             newFindingsDomains: this.new_findings_domains,
-            includeWarning: this.include_warning,
-            includeInfo: this.include_info,
             clientStatus: this.client_status,
             clientActivity: this.client_activity,
             scannerConfigurations: this.scanner_configurations,
@@ -378,8 +348,6 @@ export default {
                     early_warning_ip: this.earlyWarningIp,
                     new_findings_certificates: this.newFindingsCertificates,
                     new_findings_domains: this.newFindingsDomains,
-                    include_warning: this.includeWarning,
-                    include_info: this.includeInfo,
                     client_status: this.clientStatus,
                     client_activity: this.clientActivity,
                     scanner_configurations: this.scannerConfigurations,

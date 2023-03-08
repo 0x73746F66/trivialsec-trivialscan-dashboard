@@ -113,30 +113,6 @@
                                 New Findings (Domains)
                             </label>
                         </div>
-                        <div class="d-flex margin-bottom-sm">
-                            <Toggle
-                                :defaultChecked="notifications.include_warning"
-                                fieldName="include_warning"
-                                @change="handleToggle($event)"
-                            />
-                            <label
-                                class="font-color-light font-base-sb margin-left-sm"
-                            >
-                                Include Warning Findings
-                            </label>
-                        </div>
-                        <div class="d-flex margin-bottom-sm">
-                            <Toggle
-                                :defaultChecked="notifications.include_info"
-                                fieldName="include_info"
-                                @change="handleToggle($event)"
-                            />
-                            <label
-                                class="font-color-light font-base-sb margin-left-sm"
-                            >
-                                Include Informational Findings
-                            </label>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -174,8 +150,6 @@ export default {
                 early_warning: false,
                 new_findings_certificates: false,
                 new_findings_domains: false,
-                include_warning: false,
-                include_info: false
             }
         }
     },
