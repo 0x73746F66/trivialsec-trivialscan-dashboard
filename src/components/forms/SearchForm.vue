@@ -391,6 +391,7 @@ export default {
             this.searchResults.reports = []
 
             if (this.searchInput.length > 0) {
+                this.searchInput = this.searchInput.toLowerCase()
                 if (this.searchInput.includes('://')) {
                     this.searchInput = this.searchInput.split('://')[1]
                 }

@@ -1,16 +1,16 @@
-data "terraform_remote_state" "prod_dashboard_compliance_graphs" {
+data "terraform_remote_state" "prod_full_report_trigger" {
   backend = "s3"
   config = {
     bucket      = "stateful-trivialsec"
-    key         = "terraform/trivialscan-dashboard-compliance-graphs"
+    key         = "terraform/trivialscan-full-report-trigger"
     region      = "ap-southeast-2"
   }
 }
-data "terraform_remote_state" "dev_dashboard_compliance_graphs" {
+data "terraform_remote_state" "dev_full_report_trigger" {
   backend = "s3"
   config = {
     bucket      = "stateful-trivialsec"
-    key         = "terraform/dev/trivialscan-dashboard-compliance-graphs"
+    key         = "terraform/dev/trivialscan-full-report-trigger"
     region      = "ap-southeast-2"
   }
 }

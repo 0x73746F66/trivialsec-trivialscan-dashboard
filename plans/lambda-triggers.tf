@@ -4,7 +4,7 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
   bucket = aws_s3_bucket.trivialscan_store_bucket[0].id
 
   lambda_function {
-    lambda_function_arn = data.terraform_remote_state.prod_dashboard_compliance_graphs.outputs.dashboard_compliance_graphs_arn
+    lambda_function_arn = data.terraform_remote_state.prod_full_report_trigger.outputs.full_report_trigger_arn
     events              = [
       "s3:ObjectCreated:*",
       "s3:ObjectRemoved:*",
@@ -14,7 +14,7 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
   }
 
   lambda_function {
-    lambda_function_arn = data.terraform_remote_state.dev_dashboard_compliance_graphs.outputs.dashboard_compliance_graphs_arn
+    lambda_function_arn = data.terraform_remote_state.dev_full_report_trigger.outputs.full_report_trigger_arn
     events              = [
       "s3:ObjectCreated:*",
       "s3:ObjectRemoved:*",
