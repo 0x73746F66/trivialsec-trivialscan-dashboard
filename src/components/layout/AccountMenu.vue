@@ -32,7 +32,7 @@
             :to="{ name: 'webhooks' }"
             class="router-link-item font-color-light text-decoration-none"
         >
-            <IconIntegrationLight color="f0f0f0" class="router-link-icon" />
+            <Webhook color="f0f0f0" class="router-link-icon" />
             <span class="router-link-name">Webhooks</span>
         </RouterLink>
         <RouterLink
@@ -50,7 +50,7 @@ import IconAccount from '@/components/icons/IconAccount.vue'
 import IconSession from '@/components/icons/IconSession.vue'
 import IconMembers from '@/components/icons/IconMembers.vue'
 import IconNotificationLight from '@/components/icons/IconNotificationLight.vue'
-import IconIntegrationLight from '@/components/icons/IconIntegrationLight.vue'
+import Webhook from '@/components/icons/Webhook.vue'
 import IconConfigure from '@/components/icons/IconConfigure.vue'
 </script>
 
@@ -61,7 +61,7 @@ export default {
         IconSession,
         IconMembers,
         IconNotificationLight,
-        IconIntegrationLight,
+        Webhook,
         IconConfigure
     }
 }
