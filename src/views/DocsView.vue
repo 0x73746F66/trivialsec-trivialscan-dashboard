@@ -1,14 +1,15 @@
 <template>
+    <PagePlaceholder />
 </template>
 
 <script setup>
+import PagePlaceholder from '@/components/PagePlaceholder.vue'
 </script>
 
 <script>
 export default {
-  components: {},
-};
+    components: {
+        PagePlaceholder
+    }
+}
 </script>
-
-<style scoped lang="scss">
-</style>

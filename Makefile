@@ -5,17 +5,32 @@ bold := '\033[1m'
 clear := '\033[0m'
 
 -include .env
-export $(shell sed 's/=.*//' .env)
+export $(shell sed 's/=.*//' .env 2>/dev/null)
 ifndef CI_BUILD_REF
 CI_BUILD_REF=local
 endif
+
 ifeq ($(CI_BUILD_REF), local)
 -include .env.local
-export $(shell sed 's/=.*//' .env.local)
+export $(shell sed 's/=.*//' .env.local 2>/dev/null)
+endif
+
+ifeq ($(NODE_ENV), development)
 -include .env.development
-export $(shell sed 's/=.*//' .env.development)
+export $(shell sed 's/=.*//' .env.development 2>/dev/null)
+ifeq ($(CI_BUILD_REF), local)
 -include .env.development.local
-export $(shell sed 's/=.*//' .env.development.local)
+export $(shell sed 's/=.*//' .env.development.local 2>/dev/null)
+endif
+endif
+
+ifeq ($(NODE_ENV), production)
+-include .env.production
+export $(shell sed 's/=.*//' .env.production 2>/dev/null)
+ifeq ($(CI_BUILD_REF), local)
+-include .env.production.local
+export $(shell sed 's/=.*//' .env.production.local 2>/dev/null)
+endif
 endif
 
 ifndef RUNNER_NAME
@@ -53,14 +68,15 @@ tfinstall:
 	terraform -chdir=plans -install-autocomplete || true
 
 env:
-	@echo -e $(bold)$(primary)VITE_API_URL$(clear) = $(VITE_API_URL)
+	@echo -e $(bold)$(primary)VITE_API_URL$(clear) = $(shell terraform -chdir=plans output -raw api_function_url)
 	@echo -e $(bold)$(primary)CI_BUILD_REF$(clear) = $(CI_BUILD_REF)
 	@echo -e $(bold)$(primary)APP_ENV$(clear) = $(APP_ENV)
 
-init: env ## Runs tf init tf
+init: ## Runs tf init tf
+	@echo -e $(bold)$(primary)APP_ENV$(clear) = $(APP_ENV)
 	terraform -chdir=plans init -backend-config=${APP_ENV}-backend.conf -reconfigure -upgrade=true
 
-refresh:  ## Runs tf refresh
+refresh: ## Runs tf refresh
 	terraform -chdir=plans refresh
 
 plan:  ## Runs tf validate and tf plan
@@ -81,11 +97,28 @@ test-local:  ## Prettier test outputs
 	pre-commit run --all-files
 	semgrep -q --strict --timeout=0 --config=p/terraform
 
-run-local: env refresh  ## npm run dev
-	VITE_API_URL=$(shell terraform -chdir=plans output -raw api_function_url) npm run dev
+run-local: refresh env  ## npm run dev
+	VITE_API_URL=$(shell terraform -chdir=plans output -raw api_function_url) npx vite --host
+
+run-local-tls: env  ## npm run dev
+	npx vite --port 5173 --host jager.tail55052.ts.net --https
+#  --tls-cert /home/chris/trivialsec/trivialscan-lambda/.development/jager.crt --tls-key /home/chris/trivialsec/trivialscan-lambda/.development/jager.key
+
+clean-build: env init refresh  ## npm run build
+	rm -rf dist
+	npm update --save
+	VITE_API_URL=$(shell terraform -chdir=plans output -raw api_function_url) npx vite build --force
 
 ci-build: env init refresh  ## npm run build
-	VITE_API_URL=$(shell terraform -chdir=plans output -raw api_function_url) npm run build
+	VITE_API_URL=$(shell terraform -chdir=plans output -raw api_function_url) npx vite build
+
+preview: env init refresh  ## npm run build
+	VITE_API_URL=$(shell terraform -chdir=plans output -raw api_function_url) npx vite preview --host
+
+clear-cf:  ## AWS CloudFront cache invalidation
+	aws cloudfront create-invalidation \
+		--distribution-id $(shell terraform -chdir=plans output -raw cloudfront_trivialscan_dashboard) \
+		--paths "/favicon.png" "/index.html" "/robots.txt" "/.well-known/*" "/manifest.json" "/assets/*.js" "/assets/*.ttf" "/assets/*.map" "/assets/*.svg" "/assets/*.png" "/assets/*.css"
 
 lint:  ## npm run lint
 	npm run lint
@@ -102,7 +135,7 @@ local-runner: ## local setup for a gitlab runner
 		-e RUNNER_TOKEN=${RUNNER_TOKEN} \
 		$(RUNNER_NAME)/runner:${CI_BUILD_REF}
 	@docker exec -ti $(RUNNER_NAME) gitlab-runner register --non-interactive \
-		--tag-list 'dashboard' \
+		--tag-list 'jager' \
 		--name $(RUNNER_NAME) \
 		--request-concurrency 10 \
 		--url https://gitlab.com/ \

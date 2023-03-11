@@ -7,18 +7,18 @@
     <div class="basic-feature h-100 w-100 text-center">
       <div class="padding-lg">
         <component :is="feature.icon" color="1ABB9C"></component>
-        <h3 class="font-base-sb font-color-light margin-bottom-sm margin-top-lg">
+        <h3
+          class="font-base-sb font-color-light margin-bottom-sm margin-top-lg"
+        >
           {{ feature.header }}
         </h3>
-        <span class="font-xs font-color-light">{{
-          feature.description
-        }}</span>
+        <span class="font-xs font-color-light">{{ feature.description }}</span>
       </div>
       <RouterLink
         :to="feature.href"
         class="text-decoration-none font-sm font-color-dark basic-feature-read-more-link w-100 padding-sm"
         :class="{ hidden: !showLink }"
-        >
+      >
         Read More
         <IconArrowPrimary
           color="2b2525"
@@ -29,7 +29,7 @@
   </div>
 </template>
 <script setup>
-import IconArrowPrimary from "../icons/IconArrowPrimary.vue";
+import IconArrowPrimary from "@/components/icons/IconArrowPrimary.vue";
 </script>
 
 <script>
@@ -73,8 +73,8 @@ export default {
       color: color("dark") !important;
     }
     &.hidden {
-      @media (min-width: $breakpoint-lg) {
-        padding: 0 padding(sm);
+      @media (min-width: breakpoints("lg")) {
+        padding: 0 spacers(sm);
         height: 0;
         overflow: hidden;
       }

@@ -1,237 +1,437 @@
 <template>
-  <div
-    class="nav"
-    :class="{
-      'nav-animate-hidden': isNavbarHidden,
-      'nav-logged-in': logged_in,
-    }"
-  >
-    <div class="container">
-      <div class="row">
+    <header>
         <div
-          class="col-12 d-flex flex-lg-row flex-column justify-content-between"
+            class="nav"
+            :class="{
+                'nav-logged-in': isLoggedIn
+            }"
         >
-          <div class="d-flex justify-content-between">
-            <RouterLink to="/" class="text-decoration-none d-flex align-items-center">
-              <div class="d-flex align-items-center">
-                <IconTrivialSecurity
-                  alt="Trivial Security"
-                  class="margin-right-lg"
-                  width="50"
-                  height=""
+            <div class="container">
+                <div class="row">
+                    <div
+                        class="col-12 d-flex flex-lg-row flex-column justify-content-between"
+                    >
+                        <div class="d-flex justify-content-between">
+                            <RouterLink
+                                to="/"
+                                class="text-decoration-none d-flex align-items-center"
+                            >
+                                <div class="d-flex align-items-center">
+                                    <IconTrivialSecurity
+                                        alt="Trivial Security"
+                                        class="margin-right-lg"
+                                        width="50"
+                                        height=""
+                                    />
+                                    <span
+                                        class="d-none d-lg-block font-xxl-b font-color-primary nowrap"
+                                    >
+                                        Trivial Security<CustomPill
+                                            v-if="is_dev"
+                                            class="margin-left-xs"
+                                            label="Testing"
+                                            type="secondary"
+                                            size="sm"
+                                            classes="pill-testing"
+                                        />
+                                    </span>
+                                </div>
+                            </RouterLink>
+
+                            <button
+                                class="navbar-toggler navbar-dark d-lg-none"
+                                type="button"
+                                @click="toggleNavbar"
+                            >
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                        </div>
+
+                        <div
+                            class="d-lg-flex d-none flex-column flex-lg-row align-items-center nav-content"
+                        >
+                            <RouterLink
+                                v-if="isLoggedIn"
+                                to="/reports"
+                                class="router-link font-base font-color-light text-decoration-none margin-right-md"
+                                >Reports</RouterLink
+                            >
+                            <RouterLink
+                                v-if="isLoggedIn"
+                                to="/logout"
+                                class="router-link font-base font-color-light text-decoration-none margin-right-md"
+                                >Logout</RouterLink
+                            >
+                            <RouterLink
+                                v-if="!isLoggedIn"
+                                to="/pricing"
+                                class="router-link font-base font-color-light text-decoration-none margin-right-md"
+                                >Pricing</RouterLink
+                            >
+                            <RouterLink
+                                v-if="isLoggedIn"
+                                to="/profile"
+                                class="router-link d-flex font-color-light text-decoration-none margin-right-md d-flex nav-profile-router"
+                            >
+                                <div
+                                    class="d-flex flex-column align-items-end nav-profile-router-info nowrap"
+                                >
+                                    <span class="font-base">{{
+                                        accountDisplayName
+                                    }}</span>
+                                    <span class="font-sm">{{
+                                        member.email
+                                    }}</span>
+                                </div>
+                                <img
+                                    :src="avatarUrl"
+                                    :alt="`${accountDisplayName} Profile Picture`"
+                                    class="font-xs nav-profile"
+                                />
+                            </RouterLink>
+                            <div
+                                class="padding-sm w-100 p-lg-0"
+                                v-if="!isLoggedIn"
+                            >
+                                <div
+                                    class="login-register-section d-flex flex-lg-row flex-column align-items-center justify-content-start"
+                                >
+                                    <button
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#loginModal"
+                                        class="btn-fill-primary-full font-xs font-color-light border-0 margin-right-md"
+                                    >
+                                        Login
+                                    </button>
+                                    <div class="nav-sep"></div>
+                                    <button
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#registerLogin"
+                                        class="btn-fill-primary-full font-xs font-color-light border-0"
+                                    >
+                                        Register
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div
+            class="d-flex d-lg-none flex-column flex-lg-row align-items-center w-100 nav-transition nav-content"
+            :class="{ 'nav-hidden': isNavbarHidden }"
+        >
+            <RouterLink
+                v-if="isLoggedIn"
+                :to="{ name: 'reports' }"
+                class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                @click="toggleNavbar"
+                >Reports</RouterLink
+            >
+            <RouterLink
+                v-if="isLoggedIn"
+                :to="{ name: 'hosts' }"
+                class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                @click="toggleNavbar"
+                >Hosts</RouterLink
+            >
+            <RouterLink
+                v-if="isLoggedIn"
+                :to="{ name: 'profile' }"
+                class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                @click="toggleNavbar"
+                >Profile</RouterLink
+            >
+            <RouterLink
+                v-if="isLoggedIn"
+                :to="{ name: 'security' }"
+                class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                @click="toggleNavbar"
+                >Security</RouterLink
+            >
+            <RouterLink
+                v-if="isLoggedIn"
+                :to="{ name: 'members' }"
+                class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                @click="toggleNavbar"
+                >Profile</RouterLink
+            >
+            <RouterLink
+                v-if="isLoggedIn"
+                :to="{ name: 'notifications' }"
+                class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                @click="toggleNavbar"
+                >Notifications</RouterLink
+            >
+            <RouterLink
+                v-if="isLoggedIn"
+                :to="{ name: 'webhooks' }"
+                class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                @click="toggleNavbar"
+                >Webhooks</RouterLink
+            >
+            <RouterLink
+                v-if="isLoggedIn"
+                :to="{ name: 'host-config' }"
+                class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                @click="toggleNavbar"
+                >Configure</RouterLink
+            >
+            <RouterLink
+                v-if="isLoggedIn"
+                :to="{ name: 'logout' }"
+                class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                @click="toggleNavbar"
+                >Logout</RouterLink
+            >
+            <RouterLink
+                v-if="!isLoggedIn"
+                :to="{ name: 'pricing' }"
+                class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
+                @click="toggleNavbar"
+                >Pricing</RouterLink
+            >
+            <RouterLink
+                v-if="isLoggedIn"
+                :to="{ name: 'profile' }"
+                class="router-link d-flex margin-top-xs margin-bottom-xs align-items-end font-color-light text-decoration-none margin-right-md d-flex"
+                @click="toggleNavbar"
+            >
+                <div class="d-flex flex-column margin-right-sm align-items-end">
+                    <span class="font-base">{{ accountDisplayName }}</span>
+                    <span class="font-sm">{{ member.email }}</span>
+                </div>
+                <img
+                    :src="avatarUrl"
+                    :alt="`${accountDisplayName} Profile Picture`"
+                    class="font-xs nav-profile"
                 />
-                <span class="d-none d-lg-block font-xxl-b font-color-primary"
-                  >Trivial Security</span
-                >
-              </div>
             </RouterLink>
-
-            <button
-              class="navbar-toggler navbar-dark d-lg-none"
-              type="button"
-              @click="toggleNavbar"
-            >
-              <span class="navbar-toggler-icon"></span>
-            </button>
-          </div>
-
-          <div
-            class="d-lg-flex d-none flex-column flex-lg-row align-items-center nav-content"
-          >
-            <RouterLink
-                v-if="logged_in"
-                to="/dashboard"
-                class="router-link font-base font-color-light text-decoration-none margin-right-md"
-                >Dashboard</RouterLink
-            >
-            <RouterLink
-              v-if="logged_in"
-              to="/logout"
-              class="router-link font-base font-color-light text-decoration-none margin-right-md"
-              >Logout</RouterLink
-            >
-            <RouterLink
-              v-if="logged_in"
-              to="/profile"
-              class="router-link d-flex font-color-light text-decoration-none margin-right-md d-flex nav-profile-router"
-            >
-              <div class="d-flex flex-column align-items-end nav-profile-router-info">
-                <span class="font-base">{{ account_name }}</span>
-                <span class="font-sm">{{ member_email }}</span>
-              </div>
-              <img
-                :src="`https://www.gravatar.com/avatar/${email_md5}`"
-                :alt="`${account_name} Profile Picture`"
-                class="font-xs nav-profile"
-              />
-            </RouterLink>
-              <div class="padding-sm w-100 p-lg-0" v-if="!logged_in">
-                <LoginOrRegister loginModalId="headerLogin" registerModalId="headerRegister" />
-              </div>
-          </div>
+            <div v-if="!isLoggedIn">
+                <div class="padding-sm p-lg-0">
+                    <div
+                        class="login-register-section d-flex flex-lg-row align-items-center justify-content-start"
+                    >
+                        <button
+                            type="button"
+                            data-bs-toggle="modal"
+                            data-bs-target="#loginModal"
+                            class="btn-fill-primary-full font-xs font-color-light border-0"
+                        >
+                            Login
+                        </button>
+                        <span
+                            class="font-xs-sb font-color-light margin-right-md margin-left-md margin-top-sm margin-bottom-sm my-lg-0"
+                        ></span>
+                        <button
+                            type="button"
+                            data-bs-toggle="modal"
+                            data-bs-target="#registerLogin"
+                            class="btn-fill-primary-full font-xs font-color-light border-0"
+                        >
+                            Register
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
-  <div
-      class="d-flex d-lg-none flex-column flex-lg-row align-items-center w-100 nav-transition nav-content"
-      :class="{ 'nav-hidden': navbarHidden }"
-    >
-      <RouterLink
-          v-if="logged_in"
-          to="/dashboard"
-          class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
-          >Dashboard</RouterLink
-      >
-      <RouterLink
-        v-if="logged_in"
-        to="/logout"
-        class="router-link font-base margin-top-xs margin-bottom-xs font-color-light text-decoration-none margin-right-md"
-        >Logout</RouterLink
-      >
-      <RouterLink
-        v-if="logged_in"
-        to="/profile"
-        class="router-link d-flex margin-top-xs margin-bottom-xs align-items-end font-color-light text-decoration-none margin-right-md d-flex"
-      >
-        <div class="d-flex flex-column margin-right-sm align-items-end">
-          <span class="font-base">{{ account_name }}</span>
-          <span class="font-sm">{{ member_email }}</span>
-        </div>
-        <img
-          :src="`https://www.gravatar.com/avatar/${email_md5}`"
-          :alt="`${account_name} Profile Picture`"
-          class="font-xs nav-profile"
-        />
-      </RouterLink>
-      <div v-if="!logged_in">
-        <div class="padding-sm p-lg-0">
-          <LoginOrRegister loginModalId="headerResponsiveLogin" registerModalId="headerResponsiveRegister" />
-        </div>
-      </div>
-    </div>
+    </header>
+    <ValidationMessage
+        v-if="isLoggedIn && accountMfa === 'enroll' && member.mfa !== true"
+        class="container justify-content-start"
+        message="Warning: You have not enrolled a second factor for authentication (2FA)"
+        type="warning"
+    />
 </template>
-<script>
-import IconTrivialSecurity from "@/components/icons/IconTrivialSecurity.vue";
-import LoginOrRegister from "@/components/general/LoginOrRegister.vue";
 
+<script setup>
+import ValidationMessage from '@/components/general/ValidationMessage.vue'
+import IconTrivialSecurity from '@/components/icons/IconTrivialSecurity.vue'
+import CustomPill from '@/components/general/CustomPill.vue'
+</script>
+
+<script>
 export default {
-  components: { IconTrivialSecurity, LoginOrRegister },
-  props: {
-    isNavbarHidden: Boolean,
-  },
-  data() {
-    return {
-      navbarHidden: true,
-      logged_in: false,
-      account_name: null,
-      member_email: null,
-    };
-  },
-  created() {
-    this.account_name = localStorage.getItem("/account/display");
-    this.member_email = localStorage.getItem("/member/email");
-    this.email_md5 = localStorage.getItem("/member/email_md5");
-    this.logged_in = !!localStorage.getItem("/session/key");
-  },
-  methods: {
-    toggleNavbar() {
-      this.navbarHidden = !this.navbarHidden;
+    components: {
+        ValidationMessage,
+        IconTrivialSecurity,
+        CustomPill
     },
-  },
-};
+    data() {
+        return {
+            accountName: window.localStorage.getItem('/account/name'),
+            accountDisplayName: window.localStorage.getItem('/account/display'),
+            accountMfa: window.localStorage.getItem('/account/mfa'),
+            member: {
+                mfa: window.localStorage.getItem('/member/mfa') === 'true',
+                email: window.localStorage.getItem('/member/email'),
+                email_md5: window.localStorage.getItem('/member/email_md5')
+            },
+            isLoggedIn: false,
+            isNavbarHidden: true,
+            is_dev: import.meta.env.DEV
+        }
+    },
+    computed: {
+        avatarUrl() {
+            return `https://www.gravatar.com/avatar/${this.member.email_md5}?d=wavatar`
+        }
+    },
+    created() {
+        this.$watch(
+            () => this.$route.params,
+            () => {
+                this.isLoggedIn = !!window.localStorage.getItem('/session/key')
+                this.accountName = window.localStorage.getItem('/account/name')
+                this.accountDisplayName =
+                    window.localStorage.getItem('/account/display')
+                this.accountMfa = window.localStorage.getItem('/account/mfa')
+                this.member.mfa = window.localStorage.getItem('/member/mfa') === 'true'
+                this.member.email = window.localStorage.getItem('/member/email')
+                this.member.email_md5 =
+                    window.localStorage.getItem('/member/email_md5')
+            },
+            { immediate: true }
+        )
+    },
+    methods: {
+        toggleNavbar() {
+            this.isNavbarHidden = !this.isNavbarHidden
+        }
+    }
+}
 </script>
 <style lang="scss">
 header {
-  &:after {
-    content: "";
-    display: block;
-    width: 100%;
-    height: calc(56px + (spacers("sm") * 2));
-    @media (max-width: $breakpoint-lg) {
-      height: 65px;
-    }
-  }
-}
-
-.nav {
-  @extend .bg-dark-40;
-  @extend .padding-md;
-  width: 100%;
-  z-index: 100;
-  background: color("dark-40");
-  backdrop-filter: blur(8px);
-  position: fixed;
-  transition: 0.2s linear;
-  animation: showNavbar 0.5s forwards;
-  height: calc(56px + (spacers("sm") * 2));
-  @media (max-width: $breakpoint-lg) {
-    height: 65px;
-  }
-  &-profile {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    &-router {
-      background: color("dark-60");
-      padding: spacers("xxs");
-      border-radius: radius("lg");
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      
-      &-info {
-        overflow: hidden;
-        max-width: 0;
-        width: auto;
-        transition: 0.2s linear;
-      }
-      &:hover {
-        .nav-profile-router-info {
-          max-width: 500px;
-          overflow: visible;
-          @extend .margin-right-xs;
-          @extend .margin-left-sm;
+    &:after {
+        content: '';
+        display: block;
+        width: 100%;
+        height: calc(56px + (spacers('sm') * 2));
+        @media (max-width: breakpoints('lg')) {
+            height: 65px;
         }
-      }
     }
-  }
-
-
-  &-transition {
+}
+.pill-testing {
+    display: inline-flex;
+    min-width: fit-content;
+    vertical-align: super;
+}
+</style>
+<style scoped lang="scss">
+.nav {
+    background: color('dark-40');
+    padding: spacers('md');
+    width: 100%;
+    max-width: 100vw;
+    z-index: 100;
+    backdrop-filter: blur(8px);
     position: fixed;
-    top: 65px;
-    transition: 0.5s linear;
-
-    @media (max-width: $breakpoint-lg) {
-      max-height: 600px;
+    transition: 0.2s linear;
+    animation: showNavbar 0.5s forwards;
+    height: calc(56px + (spacers('sm') * 2));
+    @media (max-width: breakpoints('lg')) {
+        height: 65px;
     }
-  }
+    &-profile {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        &-router {
+            background: color('dark-60');
+            padding: spacers('xxs');
+            border-radius: radius('lg');
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-  &-hidden {
-    @media (max-width: $breakpoint-lg) {
-      max-height: 0px;
-      overflow: hidden;
+            &-info {
+                overflow: hidden;
+                max-width: 0;
+                width: auto;
+                transition: 0.2s linear;
+            }
+            &:hover {
+                .nav-profile-router-info {
+                    max-width: 500px;
+                    overflow: visible;
+                    margin-right: spacers('xs');
+                    margin-left: spacers('sm');
+                }
+            }
+        }
     }
-  }
 
-  &-content {
-    @media (max-width: $breakpoint-lg) {
-      background: color("dark-40");
-      backdrop-filter: blur(8px);
-      z-index: 100;
+    &-sep {
+        border-left: solid 2px color('primary');
+        height: 30px;
+        margin-right: 20px;
     }
-  }
 
-  .router-link {
-    @media (max-width: $breakpoint-lg) {
-      margin-bottom: spacers("xs");
+    &-transition {
+        position: fixed;
+        top: 65px;
+        transition: 0.5s linear;
+
+        @media (max-width: breakpoints('lg')) {
+            max-height: 600px;
+        }
     }
-  }
 
-  .router-link-active {
-    @extend .font-color-primary;
-    @extend .font-base-b;
-  }
+    &-hidden {
+        @media (max-width: breakpoints('lg')) {
+            max-height: 0px;
+            overflow: hidden;
+        }
+    }
+
+    &-content {
+        @media (max-width: breakpoints('lg')) {
+            background: color('dark-80');
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            height: 100vh;
+        }
+    }
+
+    .router-link {
+        @media (max-width: breakpoints('lg')) {
+            margin-bottom: spacers('xs');
+        }
+    }
+
+    .router-link-active {
+        color: color('primary');
+        font-size: sizes('base');
+        font-weight: 800;
+        font-family: Montserrat-bold, sans-serif;
+    }
+}
+.login-register {
+    &-section {
+        position: relative;
+    }
+
+    &-sep {
+        background: color('dark');
+        padding: spacers('sm');
+
+        @media (min-width: breakpoints('lg')) {
+            &:before {
+                content: '';
+                z-index: -1;
+                background: color('light');
+                top: 25px;
+                left: 50%;
+                bottom: 25px;
+                width: 1px;
+                position: absolute;
+            }
+        }
+    }
 }
 </style>

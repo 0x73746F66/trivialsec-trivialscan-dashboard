@@ -1,199 +1,334 @@
 variables:
-  NODE_ENV: development
-  BUILD_ENV: ci
-  APP_ENV: Prod
-  TF_VAR_app_env: Prod
-  TF_VAR_app_name: trivialscan-dashboard
-  TF_LOG: WARN
-  SOURCE_FILES: dist/
+    BUILD_ENV: ci
+    TF_VAR_app_name: trivialscan-dashboard
+    TF_LOG: WARN
+    SOURCE_FILES: dist/
+    NODE_ENV: development
+    APP_ENV: Dev
+    TF_VAR_app_env: Dev
 
 stages:
-  - test
-  - pre-deploy
-  - deploy
-  - post-deploy
+    - build
+    - pre-deploy
+    - deploy
+    - post-deploy
 
-vite build:
-  retry: 2
-  tags:
-    - dashboard
-  stage: test
-  script:
-    - npm i
-    - make -B ci-build
-  only:
-    refs:
-      - merge_request
-      - main
-  artifacts:
-    name: dist
-    paths:
-      - node_modules/
-      - $SOURCE_FILES
+#################
+# Production
+#################
 
-terraform validate:
-  stage: test
-  tags:
-    - dashboard
-  script:
-    - |+
-      TOOLS="terraform_checkov terraform_validate"
-      for i in $TOOLS
-      do
-        pre-commit run $i --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
-      done
-  only:
-    refs:
-      - merge_request
-      - main
+vite build (prod):
+    variables:
+        NODE_ENV: production
+        APP_ENV: Prod
+        TF_VAR_app_env: Prod
+    tags:
+        - jager
+    stage: build
+    script:
+        - npm i
+        - make -B ci-build
+    only:
+        refs:
+            - main
+    artifacts:
+        name: dist
+        paths:
+            - node_modules/
+            - $SOURCE_FILES
+
+terraform validate (prod):
+    variables:
+        NODE_ENV: production
+        APP_ENV: Prod
+        TF_VAR_app_env: Prod
+    stage: build
+    tags:
+        - jager
+    script:
+        - |+
+            TOOLS="terraform_checkov terraform_validate"
+            for i in $TOOLS
+            do
+              pre-commit run $i --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
+            done
+    only:
+        refs:
+            - main
+    dependencies:
+        - vite build (prod)
+
+terraform plan (prod):
+    variables:
+        NODE_ENV: production
+        APP_ENV: Prod
+        TF_VAR_app_env: Prod
+    tags:
+        - jager
+    stage: pre-deploy
+    script:
+        - make init plan
+    only:
+        refs:
+            - main
+    artifacts:
+        name: tfplan
+        paths:
+            - plans/.tfplan
+            - plans/.terraform.lock.hcl
+            - plans/.terraform
+        reports:
+            terraform: tfplan.json
+    dependencies:
+        - vite build (prod)
+
+terraform apply (prod):
+    variables:
+        NODE_ENV: production
+        APP_ENV: Prod
+        TF_VAR_app_env: Prod
+    tags:
+        - jager
+    stage: deploy
+    script:
+        - make apply
+    only:
+        refs:
+            - main
+    environment:
+        name: aws
+        url: https://sso.jumpcloud.com/saml2/aws1
+        on_stop: terraform destroy (prod)
+    dependencies:
+        - vite build (prod)
+        - terraform plan (prod)
+
+terraform destroy (prod):
+    variables:
+        APP_ENV: Prod
+        TF_VAR_app_env: Prod
+        GIT_STRATEGY: none
+    stage: post-deploy
+    tags:
+        - jager
+    script:
+        - make destroy
+    when: manual
+    environment:
+        name: aws
+        action: stop
+    artifacts:
+        name: tfdestroy
+        paths:
+            - plans/.tfdestroy
+        reports:
+            terraform: plans/tfdestroy.json
+    dependencies:
+        - terraform apply (prod)
+
+clear cdn cache (prod):
+    variables:
+        NODE_ENV: production
+        APP_ENV: Prod
+        TF_VAR_app_env: Prod
+    stage: post-deploy
+    tags:
+        - jager
+    script:
+        - make clear-cf
+    when: manual
+    dependencies:
+        - terraform apply (prod)
+
+#################
+# Non-Production
+#################
+
+vite build (dev):
+    tags:
+        - jager
+    stage: build
+    script:
+        - npm i
+        - make -B ci-build
+    rules:
+        - changes:
+              - src/**/*
+        - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "devel"'
+    artifacts:
+        name: dist
+        paths:
+            - node_modules/
+            - $SOURCE_FILES
+
+terraform validate (dev):
+    stage: build
+    tags:
+        - jager
+    script:
+        - |+
+            TOOLS="terraform_checkov terraform_validate"
+            for i in $TOOLS
+            do
+              pre-commit run $i --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
+            done
+    only:
+        refs:
+            - merge_request
+    dependencies:
+        - vite build (dev)
+
+terraform plan (dev):
+    variables:
+        APP_ENV: Dev
+        TF_VAR_app_env: Dev
+    tags:
+        - jager
+    stage: pre-deploy
+    script:
+        - make init plan
+    rules:
+        - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "devel"'
+    artifacts:
+        name: tfplan
+        paths:
+            - plans/.tfplan
+            - plans/.terraform.lock.hcl
+            - plans/.terraform
+        reports:
+            terraform: tfplan.json
+    dependencies:
+        - vite build (dev)
+
+terraform apply (dev):
+    variables:
+        APP_ENV: Dev
+        TF_VAR_app_env: Dev
+    tags:
+        - jager
+    stage: deploy
+    script:
+        - make apply
+    rules:
+        - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "devel"'
+    environment:
+        name: aws
+        url: https://sso.jumpcloud.com/saml2/aws1
+        on_stop: terraform destroy (dev)
+    dependencies:
+        - vite build (dev)
+        - terraform plan (dev)
+
+terraform destroy (dev):
+    stage: post-deploy
+    tags:
+        - jager
+    script:
+        - make destroy
+    when: manual
+    environment:
+        name: aws
+        action: stop
+    artifacts:
+        name: tfdestroy
+        paths:
+            - plans/.tfdestroy
+        reports:
+            terraform: plans/tfdestroy.json
+    dependencies:
+        - terraform apply (dev)
+
+clear cdn cache (dev):
+    stage: post-deploy
+    tags:
+        - jager
+    script:
+        - make clear-cf
+    when: manual
+    dependencies:
+        - terraform apply (dev)
+
+######################
+# pre-commit tasks
+######################
 
 sca npm:
-  stage: test
-  tags:
-    - dashboard
-  allow_failure: true
-  script:
-    -  pre-commit run license-check-npm --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
-  dependencies:
-    - vite build
-  rules:
-    - changes:
-        - package.json
+    stage: build
+    tags:
+        - jager
+    allow_failure: true
+    script:
+        - pre-commit run license-check-npm --local-branch
+          ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
+    dependencies:
+        - vite build (prod)
+    rules:
+        - changes:
+              - package.json
 
 secrets scanning:
-  stage: test
-  tags:
-    - dashboard
-  script:
-    - |+
-      TOOLS="detect-private-key detect-secrets"
-      for i in $TOOLS
-      do
-        pre-commit run $i --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
-      done
-  only:
-    refs:
-      - merge_request
+    stage: build
+    tags:
+        - jager
+    script:
+        - |+
+            TOOLS="detect-private-key detect-secrets"
+            for i in $TOOLS
+            do
+              pre-commit run $i --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
+            done
+    only:
+        refs:
+            - merge_request
+            - main
 
 repo checks:
-  stage: test
-  tags:
-    - dashboard
-  script:
-    - echo $CI_COMMIT_MESSAGE > commit-msg.txt
-    - pre-commit run conventional-pre-commit --hook-stage commit-msg --commit-msg-filename commit-msg.txt --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
-    - |+
-      TOOLS="no-commit-to-branch mixed-line-ending check-merge-conflict"
-      for i in $TOOLS
-      do
-        pre-commit run $i --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
-      done
-  allow_failure: true
-  only:
-    refs:
-      - merge_request
+    stage: build
+    tags:
+        - jager
+    script:
+        - echo $CI_COMMIT_MESSAGE > commit-msg.txt
+        - pre-commit run conventional-pre-commit --hook-stage commit-msg
+          --commit-msg-filename commit-msg.txt --local-branch
+          ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
+        - |+
+            TOOLS="no-commit-to-branch mixed-line-ending check-merge-conflict"
+            for i in $TOOLS
+            do
+              pre-commit run $i --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
+            done
+    only:
+        refs:
+            - merge_request
 
 whitespace:
-  stage: test
-  tags:
-    - dashboard
-  allow_failure: true
-  script:
-    - |+
-      TOOLS="remove-tabs trailing-whitespace"
-      for i in $TOOLS
-      do
-        pre-commit run $i --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
-      done
-  only:
-    refs:
-      - merge_request
+    stage: build
+    tags:
+        - jager
+    allow_failure: true
+    script:
+        - |+
+            TOOLS="remove-tabs trailing-whitespace"
+            for i in $TOOLS
+            do
+              pre-commit run $i --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
+            done
+    rules:
+        - changes:
+              - src/**/*
 
 yaml json py linting:
-  stage: test
-  tags:
-    - dashboard
-  allow_failure: true
-  script:
-    - |+
-      TOOLS="prettier typos pretty-format-json check-json check-yaml"
-      for i in $TOOLS
-      do
-        pre-commit run $i --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
-      done
-  only:
-    refs:
-      - merge_request
-
-tf:plan:
-  retry: 2
-  tags:
-    - dashboard
-  stage: pre-deploy
-  script:
-    - make init plan
-  only:
-    refs:
-      - merge_request
-      - main
-  dependencies:
-    - vite build
-  artifacts:
-    name: tfplan
-    paths:
-      - plans/.tfplan
-      - plans/.terraform.lock.hcl
-      - plans/.terraform
-    reports:
-      terraform: tfplan.json
-
-tf:apply:
-  retry: 2
-  tags:
-    - dashboard
-  stage: deploy
-  script:
-    - make apply
-  only:
-    refs:
-      - main
-  environment:
-    name: aws
-    url: https://sso.jumpcloud.com/saml2/aws1
-    on_stop: tf:destroy
-  dependencies:
-    - vite build
-    - tf:plan
-
-tf:destroy:
-  retry: 2
-  stage: post-deploy
-  variables:
-    GIT_STRATEGY: none
-  tags:
-    - dashboard
-  script:
-    - make destroy
-  when: manual
-  environment:
-    name: aws
-    action: stop
-  artifacts:
-    name: tfdestroy
-    paths:
-      - plans/.tfdestroy
-    reports:
-      terraform: plans/tfdestroy.json
-
-clear cdn cache:
-  stage: post-deploy
-  tags:
-    - dashboard
-  script:
-    - CF_DISTRIBUTION_ID=$(terraform -chdir=plans output -raw cloudfront_trivialscan_dashboard)
-    - echo CF_DISTRIBUTION_ID=${CF_DISTRIBUTION_ID}
-    - |
-      aws cloudfront create-invalidation \
-      --distribution-id ${CF_DISTRIBUTION_ID} \
-      --paths "/index.html" "/assets/*.js" "/assets/*.css"
-  when: manual
+    stage: build
+    tags:
+        - jager
+    allow_failure: true
+    script:
+        - |+
+            TOOLS="prettier typos check-json check-yaml"
+            for i in $TOOLS
+            do
+              pre-commit run $i --local-branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
+            done
+    rules:
+        - changes:
+              - src/**/*
