@@ -1,0 +1,58 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "launch": {
+        "configurations": [
+            {
+                "port": 9222,
+                "url": "http://localhost:5173/dashboard",
+                "type": "chrome",
+                "name": "Attach to Chrome localhost:5173",
+                "request": "attach",
+                "webRoot": "${workspaceFolder}/src"
+            }
+        ],
+        "version": "0.3.0"
+    },
+    "settings": {
+        "editor.quickSuggestionsDelay": 200,
+        "editor.inlineSuggest.enabled": true,
+        "files.exclude": {
+            "**/node_modules": true,
+            "**/.git": true
+        },
+        "files.watcherExclude": {
+            "**/node_modules/*/**": true,
+            "**/.git/*/**": true
+        },
+        "explorer.confirmDragAndDrop": false,
+        "git.enableSmartCommit": true,
+        "git.autofetch": true,
+        "git.confirmSync": false,
+        "files.autoSave": "afterDelay",
+        "explorer.confirmDelete": false,
+        "editor.largeFileOptimizations": false,
+        "sonarlint.output.showAnalyzerLogs": true,
+        "sonarlint.disableTelemetry": true,
+        "cSpell.words": [
+            "DNSSEC",
+            "OCSP",
+            "swiper",
+            "trivialscan",
+            "trivialsec"
+        ]
+    },
+    "extensions": {
+        "recommendations": [
+            "usernamehw.errorlens",
+            "hashicorp.terraform",
+            "Vue.volar",
+            "SonarSource.sonarlint-vscode",
+            "eamodio.gitlens",
+            "streetsidesoftware.code-spell-checker"
+        ]
+    }
+}

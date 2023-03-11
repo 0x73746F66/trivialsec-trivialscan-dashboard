@@ -1,5 +1,5 @@
 <template>
-  <button>
+  <button :disabled="disabled" :required="required">
     {{ text }}
   </button>
 </template>
@@ -8,8 +8,14 @@
 export default {
   props: {
     text: String,
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    required: {
+      type: Boolean,
+      default: false
+    }
   },
 };
 </script>
-
-<style lang=""></style>

@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 PRIMARY='\033[1;36m'
-GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 echo -e "${PRIMARY}
@@ -29,4 +28,5 @@ export TF_VAR_app_env=${APP_ENV}
 export TF_VAR_app_name=${APP_NAME}
 git fetch
 git status
-echo -e "${PRIMARY}$(make --version)${NC}\n$(make help)"
+make
+make env

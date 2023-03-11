@@ -22,7 +22,7 @@ locals {
       ProjectName = "trivialscan-dashboard"
       ProjectLeadEmail = "chris@trivialsec.com"
       CostCenter = var.app_env != "Prod" ? "randd" : "opex"
-      SecurityTags = "credentials customer-data public-data"
+      SecurityTags = "public-data"
       AutomationTool = "Terraform"
   }
 }
