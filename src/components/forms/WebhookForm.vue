@@ -309,7 +309,7 @@ export default {
                 const response = await Api.delete(
                     `/webhook?endpoint=${encodeURIComponent(this.endpoint)}`
                 )
-                if (response.status != 202) {
+                if (response.status !== 202) {
                     this.$emit(
                         'update:message',
                         `${response.status} ${response.statusText}: Something went wrong. webhook couldn't be deleted.`

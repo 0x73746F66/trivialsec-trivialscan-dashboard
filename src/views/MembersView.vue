@@ -316,7 +316,7 @@ export default {
             try {
                 const memberEmail = event.target.elements['MemberEmail'].value
                 const response = await Api.delete(`/member/${memberEmail}`)
-                if (response.status != 202) {
+                if (response.status !== 202) {
                     this.memberDeleteMessage =
                         "Something went wrong. Member couldn't be deleted."
                     this.memberDeleteMessageType = 'error'

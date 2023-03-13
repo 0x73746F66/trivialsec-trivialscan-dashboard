@@ -859,7 +859,7 @@ export default {
             this.loading = true
             try {
                 const response = await Api.delete(`/account`)
-                if (response.status != 202) {
+                if (response.status !== 202) {
                     this.errorMessage =
                         "Something went wrong. session couldn't be deleted."
                     this.errorMessageType = 'error'

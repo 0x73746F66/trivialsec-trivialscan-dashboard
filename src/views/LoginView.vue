@@ -182,7 +182,7 @@ export default {
             try {
                 const response = await Api.post('/webauthn/login', credential)
                 this.loading = false
-                if (response.status != 200) {
+                if (response.status !== 200) {
                     this.message = `${response.status} ${response.statusText}: Something went wrong during FIDO login.`
                     this.messageType = `error`
                     return

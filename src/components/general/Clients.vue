@@ -263,7 +263,7 @@ export default {
             try {
                 const clientName = event.target.elements['ClientName'].value
                 const response = await Api.delete(`/client/${clientName}`)
-                if (response.status != 202) {
+                if (response.status !== 202) {
                     this.$emit(
                         'update:errorMessage',
                         "Something went wrong. Client couldn't be deleted"

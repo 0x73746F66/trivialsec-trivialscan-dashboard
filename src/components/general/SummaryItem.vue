@@ -213,7 +213,7 @@ export default {
             this.$emit('update:loading', true)
             try {
                 const response = await Api.delete(`/report/${reportId}`)
-                if (response.status != 202) {
+                if (response.status !== 202) {
                     this.delMessages[refId] =
                         "Something went wrong. Report couldn't be deleted."
                     this.delMessageTypes[refId] = 'error'

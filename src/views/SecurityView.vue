@@ -593,7 +593,7 @@ export default {
                         this.fidoMessageType = `error`
                     }
                 )
-                if (response.status != 201) {
+                if (response.status !== 201) {
                     this.fidoMessage = `${response.status} ${response.statusText}: Something went wrong. The FIDO device was not registered.`
                     this.fidoMessageType = `error`
                     return
@@ -652,7 +652,7 @@ export default {
                     credential
                 )
                 this.loading = false
-                if (response.status != 202) {
+                if (response.status !== 202) {
                     this.fidoMessage = `${response.status} ${response.statusText}: Something went wrong. The FIDO device was not enrolled.`
                     this.fidoMessageType = `error`
                     return
@@ -690,7 +690,7 @@ export default {
                     `/webauthn/delete/${recordId}`
                 )
                 this.loading = false
-                if (response.status != 202) {
+                if (response.status !== 202) {
                     this.fidoMessage = `${response.status} ${response.statusText}: Something went wrong. The FIDO device was not removed.`
                     this.fidoMessageType = `error`
                     return
@@ -755,7 +755,7 @@ export default {
             try {
                 const sessionToken = event.target.elements['SessionToken'].value
                 const response = await Api.delete(`/revoke/${sessionToken}`)
-                if (response.status != 202) {
+                if (response.status !== 202) {
                     this.sessionsMessage =
                         "Something went wrong. session couldn't be deleted."
                     this.sessionsMessageType = 'error'
