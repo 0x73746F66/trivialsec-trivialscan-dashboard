@@ -493,10 +493,27 @@ export default {
                     const response = await Api.get(
                         `/scanner/monitor/${hostname}`
                     )
+                    this.loading = false
+                    if (response.status === 304) {
+                        this.errorMessageScanHost = `Monitoring host.`
+                        this.errorMessageTypeScanHost = 'success'
+                        return
+                    }
+                    if (response.status === 402) {
+                        this.errorMessageScanHost = `Quota has been exhausted, no more monitoring is possible. Upgrade the account or stop monitoring another host`
+                        this.errorMessageTypeScanHost = 'warning'
+                        e.target.checked = false
+                        return
+                    }
+                    if (response.status === 406) {
+                        this.errorMessageScanHost = `Invalid Hostname`
+                        this.errorMessageTypeScanHost = 'error'
+                        e.target.checked = false
+                        return
+                    }
                     if (response.status !== 200) {
                         this.errorMessageScanHost = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
                         this.errorMessageTypeScanHost = 'error'
-                        this.loading = false
                         e.target.checked = false
                         return
                     }
@@ -511,10 +528,21 @@ export default {
                     const response = await Api.get(
                         `/scanner/deactivate/${hostname}`
                     )
+                    this.loading = false
+                    if (response.status === 304) {
+                        this.errorMessageScanHost = `No longer monitoring host.`
+                        this.errorMessageTypeScanHost = 'success'
+                        return
+                    }
+                    if (response.status === 406) {
+                        this.errorMessageScanHost = `Invalid Hostname`
+                        this.errorMessageTypeScanHost = 'error'
+                        e.target.checked = false
+                        return
+                    }
                     if (response.status !== 200) {
                         this.errorMessageScanHost = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
                         this.errorMessageTypeScanHost = 'error'
-                        this.loading = false
                         e.target.checked = false
                         return
                     }
@@ -533,8 +561,8 @@ export default {
                         : `${error.name} ${error.message}. Couldn't complete this action.`
                 this.errorMessageTypeScanHost = 'error'
                 e.target.checked = false
+                this.loading = false
             }
-            this.loading = false
         },
         swiperNext() {
             this.$refs.certificateSwiper

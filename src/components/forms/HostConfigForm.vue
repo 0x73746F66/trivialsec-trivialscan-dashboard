@@ -124,13 +124,23 @@ export default {
                     hostname: this.hostname,
                     http_paths
                 })
-                if (response.status != 202) {
+                this.$emit('update:loading', false)
+                if (response.status === 406) {
+                    this.$emit('update:message', `Invalid Hostname`)
+                    this.$emit('update:messageType', `error`)
+                    return
+                }
+                if (response.status === 204) {
+                    this.$emit('update:message', `No change`)
+                    this.$emit('update:messageType', `success`)
+                    return
+                }
+                if (response.status !== 202) {
                     this.$emit(
                         'update:message',
                         `${response.status} ${response.statusText}: Something went wrong. HTTP paths configuration couldn't be updated.`
                     )
                     this.$emit('update:messageType', `error`)
-                    this.$emit('update:loading', false)
                     return
                 }
                 this.$emit(
@@ -158,13 +168,23 @@ export default {
                     hostname: this.hostname,
                     ports
                 })
-                if (response.status != 202) {
+                this.$emit('update:loading', false)
+                if (response.status === 406) {
+                    this.$emit('update:message', `Invalid Hostname`)
+                    this.$emit('update:messageType', `error`)
+                    return
+                }
+                if (response.status === 204) {
+                    this.$emit('update:message', `No change`)
+                    this.$emit('update:messageType', `success`)
+                    return
+                }
+                if (response.status !== 202) {
                     this.$emit(
                         'update:message',
                         `${response.status} ${response.statusText}: Something went wrong. ports configuration couldn't be updated.`
                     )
                     this.$emit('update:messageType', `error`)
-                    this.$emit('update:loading', false)
                     return
                 }
                 this.$emit(
@@ -190,13 +210,23 @@ export default {
                 const response = await Api.delete(
                     `/scanner/config/${this.hostname}`
                 )
-                if (response.status != 202) {
+                this.$emit('update:loading', false)
+                if (response.status === 406) {
+                    this.$emit('update:message', `Invalid Hostname`)
+                    this.$emit('update:messageType', `error`)
+                    return
+                }
+                if (response.status === 204) {
+                    this.$emit('update:message', `No change`)
+                    this.$emit('update:messageType', `success`)
+                    return
+                }
+                if (response.status !== 202) {
                     this.$emit(
                         'update:message',
                         `${response.status} ${response.statusText}: Something went wrong. configuration couldn't be deleted.`
                     )
                     this.$emit('update:messageType', `error`)
-                    this.$emit('update:loading', false)
                     return
                 }
                 this.$emit(
@@ -223,13 +253,33 @@ export default {
                     const response = await Api.get(
                         `/scanner/monitor/${this.hostname}`
                     )
+                    this.$emit('update:loading', false)
+                    if (response.status === 204) {
+                        this.$emit('update:message', `No change`)
+                        this.$emit('update:messageType', `success`)
+                        return
+                    }
+                    if (response.status === 402) {
+                        this.$emit(
+                            'update:message',
+                            `Quota has been exhausted, no more monitoring is possible. Upgrade the account or stop monitoring another host`
+                        )
+                        this.$emit('update:messageType', `warning`)
+                        e.target.checked = false
+                        return
+                    }
+                    if (response.status === 406) {
+                        this.$emit('update:message', `Invalid Hostname`)
+                        this.$emit('update:messageType', `error`)
+                        e.target.checked = false
+                        return
+                    }
                     if (response.status !== 200) {
                         this.$emit(
                             'update:message',
                             `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
                         )
                         this.$emit('update:messageType', 'error')
-                        this.$emit('update:loading', false)
                         e.target.checked = false
                         return
                     }
@@ -240,14 +290,20 @@ export default {
                     const response = await Api.get(
                         `/scanner/deactivate/${this.hostname}`
                     )
+                    this.$emit('update:loading', false)
+                    if (response.status === 406) {
+                        this.$emit('update:message', `Invalid Hostname`)
+                        this.$emit('update:messageType', `error`)
+                        e.target.checked = true
+                        return
+                    }
                     if (response.status !== 200) {
                         this.$emit(
                             'update:message',
                             `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
                         )
                         this.$emit('update:messageType', `error`)
-                        this.$emit('update:loading', false)
-                        e.target.checked = false
+                        e.target.checked = true
                         return
                     }
                     this.$emit(
