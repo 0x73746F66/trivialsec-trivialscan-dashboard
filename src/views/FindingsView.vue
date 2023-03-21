@@ -43,20 +43,22 @@
                     </div>
                     <div class="container">
                         <div class="row">
-                            <div class="col-12 margin-top-sm">
+                            <div class="col-12">
                                 <template
                                     v-for="(finding, index) in issues"
                                     :key="index"
                                 >
-                                    <div
-                                        class="font-base d-flex flex-column justify-content-between font-color-primary w-100 align-items-start margin-top-xxs"
+                                    <Dropdown
+                                        class="margin-bottom-xs"
+                                        :id="`headingFinding${index}`"
+                                        :target="`collapseFinding${index}`"
+                                        parent="accordion"
+                                        :defaultShow="false"
+                                        :defaultCollapsed="true"
+                                        buttonClasses="font-lg text-left bg-dark-20 padding-xs report-dropdown border-radius-sm font-color-light w-100 d-flex justify-content-left"
+                                        contentClasses="bg-dark-20 border-radius-sm padding-sm font-color-light font-base"
                                     >
-                                        <div
-                                            class="d-flex w-100 bg-dark-20 padding-sm font-color-light font-base border-radius-sm"
-                                        >
-                                            <ThreatIcon
-                                                :severity="finding.severity"
-                                            />
+                                        <template v-slot:header class="w-100">
                                             <div class="d-flex flex-column">
                                                 <div
                                                     class="d-flex align-items-center"
@@ -109,8 +111,21 @@
                                                     >
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                        </template>
+                                        <template v-slot:content>
+                                            <div class="row padding-right-sm">
+                                                <div class="col-12 col-lg-6 padding-top-sm">
+                                                    Baz
+                                                </div>
+                                                <div
+                                                    class="col-12 col-lg-6 d-flex flex-column bg-dark-40 border-radius-sm padding-sm"
+                                                >
+                                                    Foo
+                                                </div>
+                                            </div>
+
+                                        </template>
+                                    </Dropdown>
                                 </template>
                             </div>
                         </div>
@@ -127,6 +142,7 @@ import DashboardMenu from '@/components/layout/DashboardMenu.vue'
 import ValidationMessage from '@/components/general/ValidationMessage.vue'
 import LoadingComponent from '@/components/general/LoadingComponent.vue'
 import ThreatIcon from '@/components/icons/ThreatIcon.vue'
+import Dropdown from '@/components/general/Dropdown.vue'
 import moment from 'moment'
 </script>
 
@@ -137,7 +153,8 @@ export default {
         DashboardMenu,
         ValidationMessage,
         LoadingComponent,
-        ThreatIcon
+        ThreatIcon,
+        Dropdown
     },
     data() {
         return {
