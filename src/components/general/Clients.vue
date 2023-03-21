@@ -263,13 +263,21 @@ export default {
             try {
                 const clientName = event.target.elements['ClientName'].value
                 const response = await Api.delete(`/client/${clientName}`)
+                this.$emit('update:loading', false)
+                if (response.status === 400) {
+                    this.$emit(
+                        'update:errorMessage',
+                        "Client name does not exists for this account"
+                    )
+                    this.$emit('update:errorMessageType', 'error')
+                    return
+                }
                 if (response.status !== 202) {
                     this.$emit(
                         'update:errorMessage',
                         "Something went wrong. Client couldn't be deleted"
                     )
                     this.$emit('update:errorMessageType', 'error')
-                    this.$emit('update:loading', false)
                     return
                 }
                 this.$emit('update:errorMessage', 'This client was deleted')
@@ -295,8 +303,13 @@ export default {
             try {
                 this.loading = true
                 const response = await Api.get(`/clients`, { timeout: 30000 })
+                this.loading = false
                 if (response.status === 204) {
-                    this.loading = false
+                    this.$emit(
+                        'update:errorMessage',
+                        `No Clients registered for this account`
+                    )
+                    this.$emit('update:errorMessageType', 'success')
                     return
                 } else if (response.status !== 200) {
                     this.$emit(
@@ -304,7 +317,6 @@ export default {
                         `${response.status} ${response.statusText}`
                     )
                     this.$emit('update:errorMessageType', 'error')
-                    this.loading = false
                     return
                 }
                 const data = await response.json()
@@ -330,13 +342,21 @@ export default {
             try {
                 if ($event.target.checked === true) {
                     const response = await Api.get(activate_url)
+                    this.$emit('update:loading', false)
+                    if (response.status === 204) {
+                        this.$emit(
+                            'update:errorMessage',
+                            "Client name does not exists for this account"
+                        )
+                        this.$emit('update:errorMessageType', 'error')
+                        return
+                    }
                     if (response.status !== 200) {
                         this.$emit(
                             'update:errorMessage',
                             `${response.status} ${response.statusText}`
                         )
                         this.$emit('update:errorMessageType', 'error')
-                        this.$emit('update:loading', false)
                         return
                     }
                     this.$emit(
@@ -352,13 +372,21 @@ export default {
                     }
                 } else {
                     const response = await Api.get(deactivate_url)
+                    this.$emit('update:loading', false)
+                    if (response.status === 204) {
+                        this.$emit(
+                            'update:errorMessage',
+                            "Client name does not exists for this account"
+                        )
+                        this.$emit('update:errorMessageType', 'error')
+                        return
+                    }
                     if (response.status !== 200) {
                         this.$emit(
                             'update:errorMessage',
                             `${response.status} ${response.statusText}`
                         )
                         this.$emit('update:errorMessageType', 'error')
-                        this.$emit('update:loading', false)
                         return
                     }
                     this.$emit(

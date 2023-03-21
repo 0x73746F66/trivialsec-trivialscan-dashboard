@@ -357,19 +357,26 @@ export default {
                     member_activity: this.memberActivity
                 }
                 const response = await Api.post(`/webhook/enable`, webhook)
-                if (response.status !== 206 && response.status !== 201) {
+                this.$emit('update:loading', false)
+                if (response.status === 206) {
+                    this.$emit('update:message', `Updated webhook ${this.endpoint}.`)
+                }
+                else if (response.status === 201) {
+                    this.$emit('update:message', `Created webhook ${this.endpoint}.`)
+                }
+                else if (response.status === 424) {
+                    this.$emit('update:message', `We couldn't send the email containing the secret token for signed webhooks, we recommend you delete this webhook and try again soon.`)
+                    this.$emit('update:messageType', 'error')
+                    this.$emit('updateWebhook', webhook)
+                    return
+                } else {
                     this.$emit(
                         'update:message',
                         `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
                     )
                     this.$emit('update:messageType', 'error')
-                    this.$emit('update:loading', false)
                     return
                 }
-                this.$emit(
-                    'update:message',
-                    `Updated webhook ${this.endpoint}.`
-                )
                 this.$emit('update:messageType', `success`)
                 this.$emit('updateWebhook', webhook)
             } catch (error) {

@@ -9,7 +9,7 @@
         </div>
         <div
             class="report margin-bottom-xl font-color-light"
-            v-if="Object.keys(report).length > 0"
+            v-if="report?.targets.length > 0"
         >
             <ReportDetail v-bind="report" />
             <div class="container">
@@ -105,7 +105,15 @@ export default {
                     return
                 }
                 const data = await response.json()
-                data.evaluations = data.evaluations.sort((a, b) => {
+                data.evaluations = data.evaluations.map((item) => {
+                    item.severity = item.result_level
+                    if (item.result_level === 'fail') {
+                        item.severity = 'high'
+                    } else if (item.result_level === 'warn') {
+                        item.severity = 'medium'
+                    }
+                    return item
+                }).sort((a, b) => {
                     const aRule = `${a.group_id
                         .toString()
                         .padStart(3, '0')}.${a.rule_id

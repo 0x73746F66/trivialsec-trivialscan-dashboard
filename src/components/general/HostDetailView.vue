@@ -367,10 +367,27 @@ export default {
                     const response = await Api.get(
                         `/scanner/monitor/${hostname}`
                     )
+                    this.loading = false
+                    if (response.status === 204) {
+                        this.errorMessageScanHost = `No changes`
+                        this.errorMessageTypeScanHost = 'success'
+                        return
+                    }
+                    if (response.status === 402) {
+                        this.errorMessageScanHost = `Quota has been exhausted, to continue using on-demand scanning you can upgrade the subscription now`
+                        this.errorMessageTypeScanHost = 'warning'
+                        e.target.checked = false
+                        return
+                    }
+                    if (response.status === 406) {
+                        this.errorMessageScanHost = `The input is invalid, retry using a fully qualified domain name`
+                        this.errorMessageTypeScanHost = 'warning'
+                        e.target.checked = false
+                        return
+                    }
                     if (response.status !== 200) {
                         this.errorMessage = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
                         this.errorMessageType = 'error'
-                        this.loading = false
                         e.target.checked = false
                         return
                     }
@@ -381,11 +398,28 @@ export default {
                     const response = await Api.get(
                         `/scanner/deactivate/${hostname}`
                     )
+                    this.loading = false
+                    if (response.status === 204) {
+                        this.errorMessageScanHost = `No changes`
+                        this.errorMessageTypeScanHost = 'success'
+                        return
+                    }
+                    if (response.status === 402) {
+                        this.errorMessageScanHost = `Quota has been exhausted, to continue using on-demand scanning you can upgrade the subscription now`
+                        this.errorMessageTypeScanHost = 'warning'
+                        e.target.checked = true
+                        return
+                    }
+                    if (response.status === 406) {
+                        this.errorMessageScanHost = `The input is invalid, retry using a fully qualified domain name`
+                        this.errorMessageTypeScanHost = 'warning'
+                        e.target.checked = true
+                        return
+                    }
                     if (response.status !== 200) {
                         this.errorMessage = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
                         this.errorMessageType = 'error'
-                        this.loading = false
-                        e.target.checked = false
+                        e.target.checked = true
                         return
                     }
                     this.errorMessage = `No longer monitoring host.`

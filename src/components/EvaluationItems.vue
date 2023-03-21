@@ -148,7 +148,7 @@
             </div>
             <template
                 v-for="(evaluation, evalIndex) in group.evaluations"
-                :key="`${evalIndex}`"
+                :key="evalIndex"
             >
                 <input type="hidden" :value="evaluation.result_level" />
                 <Dropdown
@@ -166,7 +166,7 @@
                             class="font-base d-flex flex-column justify-content-between font-color-primary w-100 align-items-start"
                         >
                             <div class="d-flex w-100">
-                                <ThreatIcon />
+                                <ThreatIcon :severity="evaluation.severity" />
                                 <div class="d-flex flex-column">
                                     <div class="d-flex align-items-center">
                                         <span

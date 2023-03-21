@@ -217,10 +217,14 @@ export default {
                 const response = await Api.get(
                     `/findings/certificate?limit=${this.limit}`
                 )
+                this.loading = false
+                if (response.status === 204) {
+                    this.errorMessage = `No scan data is present for this account`
+                    this.errorMessageType = 'error'
+                }
                 if (response.status !== 200) {
                     this.errorMessage = `${response.status} ${response.statusText}`
                     this.errorMessageType = 'error'
-                    this.loading = false
                     return
                 }
                 const data = await response.json()

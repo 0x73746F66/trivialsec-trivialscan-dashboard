@@ -54,10 +54,15 @@ export default {
             this.loading = true
             try {
                 const response = await Api.get('/dashboard/compliance')
+                this.loading = false
+                if (response.status === 204) {
+                    this.errorMessage = `No scanner data available to produce the graphs`
+                    this.errorMessageType = 'warning'
+                    return
+                }
                 if (response.status !== 200) {
                     this.errorMessage = `${response.status} ${response.statusText}`
                     this.errorMessageType = 'error'
-                    this.loading = false
                     return
                 }
                 const data = await response.json()
