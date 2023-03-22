@@ -497,4 +497,9 @@ export default {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped>
+.cert-icon {
+    height: 25px;
+    width: 25px;
+}
+</style>
