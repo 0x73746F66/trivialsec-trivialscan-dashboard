@@ -1,5 +1,9 @@
 <template>
     <main>
+        <LoadingComponent
+            class="loading"
+            :class="{ inactive: !loading }"
+        />
         <div
             class="container font-color-light padding-top-lg padding-bottom-xl"
         >
@@ -20,27 +24,15 @@
                         state</span
                     >
                 </div>
+                <ValidationMessage
+                    v-if="errorMessage.length > 0"
+                    class="justify-content-start"
+                    :message="errorMessage"
+                    :type="errorMessageType"
+                />
                 <div
                     class="d-flex flex-row align-items-center justify-content-center"
                 >
-                    <LoadingComponent
-                        class="loading"
-                        :class="{ inactive: !loading }"
-                    />
-                    <div
-                        v-if="errorMessage.length > 0"
-                        class="d-flex flex-column w-100"
-                    >
-                        <ValidationMessage
-                            class="justify-content-start"
-                            :message="errorMessage"
-                            :type="errorMessageType"
-                        />
-                        <span
-                            class="font-xl font-color-light-80 text-center w-100 bg-dark-40 border-radius-sm d-block"
-                            >No data to display</span
-                        >
-                    </div>
                     <div class="container">
                         <div class="row">
                             <div class="col-12">
@@ -233,10 +225,10 @@ export default {
                 const response = await Api.get(
                     `/findings/latest?limit=${this.limit}`
                 )
+                this.loading = false
                 if (response.status !== 200) {
                     this.errorMessage = `${response.status} ${response.statusText}`
                     this.errorMessageType = 'error'
-                    this.loading = false
                     return
                 }
                 const data = await response.json()
@@ -273,11 +265,38 @@ export default {
             this.loading = false
         },
         async changeStatus(event, hostname, finding_id) {
+            const status = event.target.value
+            this.loading = true
+            try {
+                const response = await Api.post(`/finding/status`, {
+                    hostname, finding_id, status
+                })
+                this.loading = false
+                if (response.status === 204) {
+                    this.errorMessage = `Status not changed`
+                    this.errorMessageType = 'warning'
+                    return
+                }
+                if (response.status !== 202) {
+                    this.errorMessage = `${response.status} ${response.statusText}`
+                    this.errorMessageType = 'error'
+                    return
+                }
+                this.errorMessage = `Status updated`
+                this.errorMessageType = 'success'
+            } catch (error) {
+                this.errorMessage =
+                    error.name === 'AbortError'
+                        ? 'Request timed out, please try refreshing the page.'
+                        : `${error.name} ${error.message}`
+                this.errorMessageType = 'error'
+            }
+            this.loading = false
             for (const finding of this.issues) {
                 if (finding_id === finding.finding_id) {
                     for (const occurrence of finding.occurrences) {
                         if (hostname === occurrence.hostname) {
-                            occurrence.status = event.target.value
+                            occurrence.status = status
                         }
                     }
                 }
