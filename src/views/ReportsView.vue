@@ -16,7 +16,8 @@
                     <div class="d-flex flex-column">
                         <h2 class="font-xl-sb">Report Summaries</h2>
                         <span class="font-sm font-color-primary"
-                            >Trivial Scanner uploaded reports</span
+                            >Trivial Scanner report uploads or Managed
+                            Monitoring results are shown here.</span
                         >
                     </div>
                     <div
@@ -40,9 +41,13 @@
                     :message="errorMessage"
                     :type="errorMessageType"
                 />
-                <div class="d-flex flex-row align-items-center justify-content-center">
+                <div
+                    class="d-flex flex-row align-items-center justify-content-center"
+                >
                     <div>
-                        <button class="swiper-button swiper-button-prev"></button>
+                        <button
+                            class="swiper-button swiper-button-prev"
+                        ></button>
                     </div>
                     <Swiper
                         class="w-100"
@@ -57,8 +62,14 @@
                         :scrollbar="{ draggable: true }"
                         :breakpoints="{}"
                     >
-                        <SwiperSlide v-for="(items, index) in slicedSummaries" :key="index">
-                            <template v-for="(summary, summaryIndex) in items" :key="summaryIndex">
+                        <SwiperSlide
+                            v-for="(items, index) in slicedSummaries"
+                            :key="index"
+                        >
+                            <template
+                                v-for="(summary, summaryIndex) in items"
+                                :key="summaryIndex"
+                            >
                                 <SummaryItem
                                     v-if="summary?.targets.length > 0"
                                     :report="summary"
@@ -69,7 +80,9 @@
                         </SwiperSlide>
                     </Swiper>
                     <div>
-                        <button class="swiper-button swiper-button-next"></button>
+                        <button
+                            class="swiper-button swiper-button-next"
+                        ></button>
                     </div>
                 </div>
             </div>
@@ -127,7 +140,9 @@ export default {
     },
     computed: {
         slicedSummaries() {
-            const copy = [...this.summaries.filter((obj) => obj?.targets.length > 0)]
+            const copy = [
+                ...this.summaries.filter((obj) => obj?.targets.length > 0)
+            ]
             const arrays = []
             while (copy.length > 0) {
                 arrays.push(copy.splice(0, 5))
@@ -156,10 +171,15 @@ export default {
             this.loading = true
             try {
                 const response = await Api.get(`/reports`)
+                this.loading = false
+                if (response.status === 204) {
+                    this.errorMessage = `No scan data is present for this account. Try searching above, and starting an On-demand scan now.`
+                    this.errorMessageType = 'warning'
+                    return
+                }
                 if (response.status !== 200) {
                     this.errorMessage = `${response.status} ${response.statusText}`
                     this.errorMessageType = 'error'
-                    this.loading = false
                     return
                 }
                 const data = await response.json()
