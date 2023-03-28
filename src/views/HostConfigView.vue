@@ -56,8 +56,8 @@
                                         id="Hostname"
                                         label="Hostname"
                                         :required="true"
-                                        v-model="inputHostname"
-                                        @keydown.enter="handleInput"
+                                        :textDefault="inputHostname"
+                                        @change="handleInput($event)"
                                     />
                                     <Button
                                         type="submit"
@@ -222,9 +222,25 @@ export default {
         this.fetchConfig()
     },
     methods: {
+        stringToHostname(inputStr) {
+            if (inputStr.length > 0) {
+                if (inputStr.includes('@')) {
+                    inputStr = inputStr.split('@')[1]
+                }
+                if (inputStr.includes('://')) {
+                    inputStr = inputStr.split('://')[1]
+                }
+                if (inputStr.includes('/')) {
+                    inputStr = inputStr.split('/')[0]
+                }
+            }
+            return inputStr
+        },
         async addConfig(event) {
             this.loading = true
-            const hostname = event.target.elements['Hostname'].value
+            const hostname = !!this.inputHostname
+                ? this.inputHostname
+                : this.stringToHostname(event.target.elements['Hostname'].value)
             const response = await Api.get(`/scanner/deactivate/${hostname}`)
             if (response.status !== 200) {
                 this.message = `${response.status} ${response.statusText}: Sorry, we couldn't complete this action.`
@@ -302,23 +318,17 @@ export default {
             this.loading = false
         },
         async handleDeleteConfig(hostname) {
-            for (const [index, config] of this.configs.entries()) {
+            const copyConfigs = this.configs
+            for (const [index, config] of copyConfigs.entries()) {
                 if (config.hostname === hostname) {
-                    setTimeout(() => this.configs.splice(index, 1), 5000)
+                    copyConfigs.splice(index, 1)
                     break
                 }
             }
+            this.configs = copyConfigs
         },
-        async handleInput() {
-            this.inputHostname = ''
-            if (this.inputHostname.length > 0) {
-                if (this.inputHostname.includes('://')) {
-                    this.inputHostname = this.inputHostname.split('://')[1]
-                }
-                if (this.inputHostname.includes('/')) {
-                    this.inputHostname = this.inputHostname.split('/')[0]
-                }
-            }
+        async handleInput(event) {
+            this.inputHostname = this.stringToHostname(event.target.value)
         }
     }
 }
