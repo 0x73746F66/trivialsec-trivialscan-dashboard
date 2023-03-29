@@ -93,11 +93,7 @@ export default {
                 return
             }
             const data = await response.json()
-            if (
-                this.webauthnSupported &&
-                data.member.mfa &&
-                data.fido_options
-            ) {
+            if (this.webauthnSupported && data.fido_options) {
                 this.loadingMessage = 'Confirm 2FA to complete login'
                 return this.promptFido(data.fido_options, data.member.email)
             }
@@ -114,9 +110,13 @@ export default {
                             : 'reports'
                 })
                 return
+            } else if (data.fido_options) {
+                this.message =
+                    'Magic Link error, your account requires multi-factor authentication but the browser does not support that feature. Please try again using another browser with support, or try updating this browser and restarting your device.'
+            } else {
+                this.message =
+                    'Magic Link error, no session could be established. Please try again shortly.'
             }
-            this.message =
-                'Magic Link error, no session could be established. Please try again.'
             this.messageType = 'error'
         },
         saveSessionData(account, session, member) {

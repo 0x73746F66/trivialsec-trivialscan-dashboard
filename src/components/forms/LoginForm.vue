@@ -71,11 +71,14 @@ export default {
                 this.messageType = 'error'
                 this.loading = false
             })
-            if (response.status === 202) {
+            this.loading = false
+            if (response.status === 412) {
+                this.message =
+                    'Please check your e-mail is valid and try again.'
+                this.messageType = 'warning'
+            } else if (response.status === 202) {
                 this.message = 'Please check your e-mail to complete login.'
                 this.messageType = 'success'
-                this.loading = false
-                setTimeout(() => this.$router.push('/'), 3000)
             } else if (this.webauthnSupported && response.status === 200) {
                 const fido_options = await response.json()
                 this.message = 'Confirm 2FA to complete login'
@@ -83,7 +86,6 @@ export default {
             } else {
                 this.message = `${response.status}: ${response.statusText}. Something went wrong, please try again later.`
                 this.messageType = 'error'
-                this.loading = false
             }
         },
         saveSessionData(account, session, member) {
@@ -144,13 +146,10 @@ export default {
                     userHandle
                 }
             }
-            this.message = "Verifying Credentials"
+            this.message = 'Verifying Credentials'
             this.loading = true
             try {
-                const response = await Api.post(
-                    '/webauthn/login',
-                    credential
-                )
+                const response = await Api.post('/webauthn/login', credential)
                 this.loading = false
                 if (response.status === 424) {
                     this.message = `Please use a web browser when authenticating as a user session, alternatively try using an API access token.`
@@ -174,17 +173,19 @@ export default {
                         data.session,
                         data.member
                     )
-                    this.message = "Verified!"
-                    this.messageType = "success"
+                    this.message = 'Verified!'
+                    this.messageType = 'success'
                     window.initPusher()
                     data.session.access_token = null
                     localStorage.setItem(`/me`, JSON.stringify(data))
                     setTimeout(() => {
-                        const modal = Modal.getInstance(document.getElementById('loginModal'))
+                        const modal = Modal.getInstance(
+                            document.getElementById('loginModal')
+                        )
                         if (modal?._isShown) {
                             modal.hide()
                         }
-                        this.$router.push({name: 'reports'})
+                        this.$router.push({ name: 'reports' })
                     }, 3000)
 
                     return
