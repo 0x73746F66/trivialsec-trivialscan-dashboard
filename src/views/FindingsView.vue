@@ -1,9 +1,6 @@
 <template>
     <main>
-        <LoadingComponent
-            class="loading"
-            :class="{ inactive: !loading }"
-        />
+        <LoadingComponent class="loading" :class="{ inactive: !loading }" />
         <div
             class="container font-color-light padding-top-lg padding-bottom-xl"
         >
@@ -52,13 +49,21 @@
                                     >
                                         <template v-slot:header class="w-100">
                                             <div class="d-flex">
-                                                <ThreatIcon :severity="finding.severity" />
+                                                <ThreatIcon
+                                                    :severity="finding.severity"
+                                                />
                                                 <div class="d-flex flex-column">
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="margin-right-xxs font-sm-b font-color-secondary">
+                                                    <div
+                                                        class="d-flex align-items-center"
+                                                    >
+                                                        <span
+                                                            class="margin-right-xxs font-sm-b font-color-secondary"
+                                                        >
                                                             {{
                                                                 finding.group_id
-                                                            }}.{{ finding.rule_id }}
+                                                            }}.{{
+                                                                finding.rule_id
+                                                            }}
                                                         </span>
                                                         <span
                                                             class="font-color-lighter font-sm-sb"
@@ -66,7 +71,9 @@
                                                             {{ finding.name }}
                                                         </span>
                                                     </div>
-                                                    <div class="d-flex align-items-center">
+                                                    <div
+                                                        class="d-flex align-items-center"
+                                                    >
                                                         <span
                                                             class="margin-right-xxs font-sm-sb"
                                                             >Discovered</span
@@ -80,10 +87,14 @@
                                                                 finding.observed_at
                                                             "
                                                         >
-                                                            {{ finding.observed }}
+                                                            {{
+                                                                finding.observed
+                                                            }}
                                                         </time>
                                                     </div>
-                                                    <div class="d-flex align-items-center">
+                                                    <div
+                                                        class="d-flex align-items-center"
+                                                    >
                                                         <span
                                                             class="margin-right-xxs font-sm-sb"
                                                             >Occurrences</span
@@ -91,7 +102,8 @@
                                                         <span
                                                             class="font-color-secondary font-sm-b"
                                                             >{{
-                                                                finding.occurrences
+                                                                finding
+                                                                    .occurrences
                                                                     .length
                                                             }}</span
                                                         >
@@ -101,11 +113,21 @@
                                         </template>
                                         <template v-slot:content>
                                             <div class="row padding-right-sm">
-                                                <div class="col-12 col-lg-6 padding-top-sm">
-                                                    <div v-html="finding.description"></div>
+                                                <div
+                                                    class="col-12 col-lg-6 padding-top-sm"
+                                                >
+                                                    <div
+                                                        v-html="
+                                                            finding.description
+                                                        "
+                                                    ></div>
                                                     <div v-if="finding.cvss2">
-                                                        <span class="font-base-sb margin-right-xxs">CVSSv2:</span>
-                                                        <a class="font-color-secondary"
+                                                        <span
+                                                            class="font-base-sb margin-right-xxs"
+                                                            >CVSSv2:</span
+                                                        >
+                                                        <a
+                                                            class="font-color-secondary"
                                                             target="_blank"
                                                             :href="`https://nvd.nist.gov/vuln-metrics/cvss/v2-calculator?vector=(${finding.cvss2})`"
                                                         >
@@ -113,8 +135,12 @@
                                                         </a>
                                                     </div>
                                                     <div v-if="finding.cvss2">
-                                                        <span class="font-base-sb margin-right-xxs">CVSSv3:</span>
-                                                        <a v-if="finding.cvss3"
+                                                        <span
+                                                            class="font-base-sb margin-right-xxs"
+                                                            >CVSSv3:</span
+                                                        >
+                                                        <a
+                                                            v-if="finding.cvss3"
                                                             class="font-color-secondary"
                                                             target="_blank"
                                                             :href="`https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?version=3.1&vector=${finding.cvss3}`"
@@ -124,47 +150,187 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-12 col-lg-6">
-                                                    <div v-for="(occurrence, oIndex) in finding.occurrences"
+                                                    <div
+                                                        v-for="(
+                                                            occurrence, oIndex
+                                                        ) in finding.occurrences"
                                                         :key="oIndex"
                                                         class="d-flex flex-column bg-dark-40 border-radius-sm padding-sm margin-bottom-xs"
                                                     >
                                                         <RouterLink
-                                                            :to="{name: 'hostname', params: {hostname: occurrence.hostname}}"
+                                                            :to="{
+                                                                name: 'hostname',
+                                                                params: {
+                                                                    hostname:
+                                                                        occurrence.hostname
+                                                                }
+                                                            }"
                                                             class="text-decoration-none"
                                                         >
                                                             <IconTarget
                                                                 class="link-icon margin-right-xxs"
                                                                 color="e2c878"
                                                             />
-                                                            <span class="font-color-secondary">
-                                                                {{ occurrence.hostname }}:{{ occurrence.port }}
+                                                            <span
+                                                                class="font-color-secondary"
+                                                            >
+                                                                {{
+                                                                    occurrence.hostname
+                                                                }}:{{
+                                                                    occurrence.port
+                                                                }}
                                                             </span>
                                                         </RouterLink>
-                                                        <div class="margin-top-xs">
-                                                            <span class="font-base-sb margin-right-xxs">Status:</span>
-                                                            <span class="font-base">
-                                                                <select id="status" class="font-sm" @change="changeStatus($event, occurrence.hostname, finding.finding_id)">
-                                                                    <option :selected="occurrence.status === 'triaged'" value="triaged">Triaged</option>
-                                                                    <option :selected="occurrence.status === 'discovered'" value="discovered">Discovered</option>
-                                                                    <option :selected="occurrence.status === 'wont_fix'" value="wont_fix">Closed</option>
-                                                                    <option :selected="occurrence.status === 'deferred'" value="deferred">Deferred</option>
-                                                                    <option :selected="occurrence.status === 'remediated'" value="remediated">Remediated</option>
-                                                                    <option :selected="occurrence.status === 'regression'" value="regression">Regression</option>
+                                                        <RouterLink
+                                                            :to="{
+                                                                name: 'certificate',
+                                                                params: {
+                                                                    sha1_fingerprint:
+                                                                        occurrence.certificate_sha1
+                                                                }
+                                                            }"
+                                                            class="text-decoration-none"
+                                                            v-if="
+                                                                occurrence.certificate_sha1
+                                                            "
+                                                        >
+                                                            <IconCertificate
+                                                                class="link-icon margin-right-xxs"
+                                                                color="e2c878"
+                                                            />
+                                                            <span
+                                                                class="font-color-secondary"
+                                                            >
+                                                                {{
+                                                                    occurrence.certificate_subject
+                                                                }}
+                                                            </span>
+                                                        </RouterLink>
+                                                        <div
+                                                            class="margin-top-xs"
+                                                        >
+                                                            <span
+                                                                class="font-base-sb margin-right-xxs"
+                                                                >Status:</span
+                                                            >
+                                                            <span
+                                                                class="font-base"
+                                                            >
+                                                                <select
+                                                                    id="status"
+                                                                    class="font-sm"
+                                                                    @change="
+                                                                        changeStatus(
+                                                                            $event,
+                                                                            occurrence.hostname,
+                                                                            finding.finding_id
+                                                                        )
+                                                                    "
+                                                                >
+                                                                    <option
+                                                                        :selected="
+                                                                            occurrence.status ===
+                                                                            'triaged'
+                                                                        "
+                                                                        value="triaged"
+                                                                    >
+                                                                        Triaged
+                                                                    </option>
+                                                                    <option
+                                                                        :selected="
+                                                                            occurrence.status ===
+                                                                            'discovered'
+                                                                        "
+                                                                        value="discovered"
+                                                                    >
+                                                                        Discovered
+                                                                    </option>
+                                                                    <option
+                                                                        :selected="
+                                                                            occurrence.status ===
+                                                                            'wont_fix'
+                                                                        "
+                                                                        value="wont_fix"
+                                                                    >
+                                                                        Closed
+                                                                    </option>
+                                                                    <option
+                                                                        :selected="
+                                                                            occurrence.status ===
+                                                                            'deferred'
+                                                                        "
+                                                                        value="deferred"
+                                                                    >
+                                                                        Deferred
+                                                                    </option>
+                                                                    <option
+                                                                        :selected="
+                                                                            occurrence.status ===
+                                                                            'remediated'
+                                                                        "
+                                                                        value="remediated"
+                                                                    >
+                                                                        Remediated
+                                                                    </option>
+                                                                    <option
+                                                                        :selected="
+                                                                            occurrence.status ===
+                                                                            'regression'
+                                                                        "
+                                                                        value="regression"
+                                                                    >
+                                                                        Regression
+                                                                    </option>
                                                                 </select>
                                                             </span>
                                                         </div>
-                                                        <div class="margin-top-xs" v-if="occurrence.status === 'deferred'">
-                                                            <span class="font-base-sb margin-right-xxs">Deferred to:</span>
-                                                            <span class="font-base">
-                                                                <input type="date" :value="occurrence.deferred_to" placeholder="Date to reassess the finding" />
+                                                        <div
+                                                            class="margin-top-xs"
+                                                            v-if="
+                                                                occurrence.status ===
+                                                                'deferred'
+                                                            "
+                                                        >
+                                                            <span
+                                                                class="font-base-sb margin-right-xxs"
+                                                                >Deferred
+                                                                to:</span
+                                                            >
+                                                            <span
+                                                                class="font-base"
+                                                            >
+                                                                <input
+                                                                    type="date"
+                                                                    :value="
+                                                                        occurrence.deferred_to
+                                                                    "
+                                                                    placeholder="Date to reassess the finding"
+                                                                />
                                                             </span>
                                                         </div>
-                                                        <div v-for="(report_id, rIndex) in occurrence.report_ids" :key="rIndex" class="margin-top-xs">
+                                                        <div
+                                                            v-for="(
+                                                                report_id,
+                                                                rIndex
+                                                            ) in occurrence.report_ids"
+                                                            :key="rIndex"
+                                                            class="margin-top-xs"
+                                                        >
                                                             <RouterLink
-                                                                :to="{name: 'detail', params: {report_id}}"
+                                                                :to="{
+                                                                    name: 'detail',
+                                                                    params: {
+                                                                        report_id
+                                                                    }
+                                                                }"
                                                                 class="text-decoration-none font-base-sb font-color-primary"
                                                             >
-                                                                Report {{ rIndex+1 }} <IconArrowPrimary color="1abb9c" class=""/>
+                                                                Report
+                                                                {{ rIndex + 1 }}
+                                                                <IconArrowPrimary
+                                                                    color="1abb9c"
+                                                                    class=""
+                                                                />
                                                             </RouterLink>
                                                         </div>
                                                     </div>
@@ -187,6 +353,7 @@ import SearchForm from '@/components/forms/SearchForm.vue'
 import DashboardMenu from '@/components/layout/DashboardMenu.vue'
 import ValidationMessage from '@/components/general/ValidationMessage.vue'
 import LoadingComponent from '@/components/general/LoadingComponent.vue'
+import IconCertificate from '@/components/icons/IconCertificate.vue'
 import IconTarget from '@/components/icons/IconTarget.vue'
 import IconArrowPrimary from '@/components/icons/IconArrowPrimary.vue'
 import ThreatIcon from '@/components/icons/ThreatIcon.vue'
@@ -201,6 +368,7 @@ export default {
         DashboardMenu,
         ValidationMessage,
         LoadingComponent,
+        IconCertificate,
         ThreatIcon,
         IconArrowPrimary,
         IconTarget,
@@ -269,7 +437,9 @@ export default {
             this.loading = true
             try {
                 const response = await Api.post(`/finding/status`, {
-                    hostname, finding_id, status
+                    hostname,
+                    finding_id,
+                    status
                 })
                 this.loading = false
                 if (response.status === 204) {
