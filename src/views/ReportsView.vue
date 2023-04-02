@@ -158,14 +158,14 @@ export default {
             return reportId.replace(/[\W_]+/g, '').slice(0, 11)
         },
         handleDeleteReport(reportId) {
-            for (const [index, summary] of this.summaries.entries()) {
-                if (summary.report_id === reportId) {
-                    setTimeout(() => {
+            setTimeout(() => {
+                for (const [index, summary] of this.summaries.entries()) {
+                    if (summary.report_id === reportId) {
                         this.summaries.splice(index, 1)
-                    }, 5000)
-                    break
+                        break
+                    }
                 }
-            }
+            }, 5000)
         },
         async fetchSummaries() {
             this.loading = true
