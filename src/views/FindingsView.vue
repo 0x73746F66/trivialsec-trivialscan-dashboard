@@ -218,11 +218,12 @@
                                                             >
                                                                 <select
                                                                     id="status"
+                                                                    name="FindingStatus"
                                                                     class="font-sm"
                                                                     @change="
                                                                         changeStatus(
                                                                             $event,
-                                                                            occurrence.hostname,
+                                                                            occurrence.occurrence_id,
                                                                             finding.finding_id
                                                                         )
                                                                     "
@@ -292,7 +293,8 @@
                                                             "
                                                         >
                                                             <span
-                                                                class="font-base-sb margin-right-xxs"
+                                                                title="Date to reassess the finding"
+                                                                class="font-base-sb margin-right-xxs hover-help"
                                                                 >Deferred
                                                                 to:</span
                                                             >
@@ -301,10 +303,18 @@
                                                             >
                                                                 <input
                                                                     type="date"
+                                                                    name="DeferredTo"
                                                                     :value="
                                                                         occurrence.deferred_to
                                                                     "
                                                                     placeholder="Date to reassess the finding"
+                                                                    @change="
+                                                                        changeDeferredTo(
+                                                                            $event,
+                                                                            occurrence.occurrence_id,
+                                                                            finding.finding_id
+                                                                        )
+                                                                    "
                                                                 />
                                                             </span>
                                                         </div>
@@ -417,7 +427,6 @@ export default {
                     ) {
                         item.severity = 'high'
                     } else {
-                        console.log(item)
                         item.severity = 'medium'
                     }
                     item.observed = moment.utc(item.observed_at).fromNow()
@@ -432,58 +441,95 @@ export default {
             }
             this.loading = false
         },
-        async changeStatus(event, hostname, finding_id) {
+        async changeStatus(event, occurrence_id, finding_id) {
             const status = event.target.value
             this.loading = true
             try {
                 const response = await Api.post(`/finding/status`, {
-                    hostname,
                     finding_id,
+                    occurrence_id,
                     status
                 })
                 this.loading = false
                 if (response.status === 204) {
                     this.errorMessage = `Status not changed`
                     this.errorMessageType = 'warning'
-                    return
-                }
-                if (response.status !== 202) {
+                } else if (response.status !== 202) {
                     this.errorMessage = `${response.status} ${response.statusText}`
                     this.errorMessageType = 'error'
                     return
+                } else {
+                    this.errorMessage = `Status updated`
+                    this.errorMessageType = 'success'
                 }
-                this.errorMessage = `Status updated`
-                this.errorMessageType = 'success'
             } catch (error) {
                 this.errorMessage =
                     error.name === 'AbortError'
                         ? 'Request timed out, please try refreshing the page.'
                         : `${error.name} ${error.message}`
                 this.errorMessageType = 'error'
+                this.loading = false
+                return
             }
-            this.loading = false
             for (const finding of this.issues) {
-                if (finding_id === finding.finding_id) {
-                    for (const occurrence of finding.occurrences) {
-                        if (hostname === occurrence.hostname) {
-                            occurrence.status = status
+                for (const occurrence of finding.occurrences) {
+                    if (occurrence_id === occurrence.occurrence_id) {
+                        occurrence.status = status
+                        if (status === 'deferred') {
+                            finding.severity = 'info'
+                            if (!occurrence.deferred_to) {
+                                occurrence.deferred_to = moment()
+                                    .add(7, 'days')
+                                    .format('YYYY-MM-DD')
+                            }
+                        }
+                        if (
+                            !['discovered', 'regression', 'deferred'].includes(
+                                status
+                            )
+                        ) {
+                            finding.severity = 'medium'
                         }
                     }
                 }
             }
-        }
-    },
-    computed: {
-        results() {
-            return {
-                pass: this.issues.filter((item) => item.result_level === 'pass')
-                    .length,
-                fail: this.issues.filter((item) => item.result_level === 'fail')
-                    .length,
-                warn: this.issues.filter((item) => item.result_level === 'warn')
-                    .length,
-                info: this.issues.filter((item) => item.result_level === 'info')
-                    .length
+        },
+        async changeDeferredTo(event, occurrence_id, finding_id) {
+            const deferred_to = event.target.value
+            this.loading = true
+            try {
+                const response = await Api.post(`/finding/deferred`, {
+                    finding_id,
+                    occurrence_id,
+                    deferred_to
+                })
+                this.loading = false
+                if (response.status === 204) {
+                    this.errorMessage = `Deferred date not changed`
+                    this.errorMessageType = 'warning'
+                } else if (response.status !== 202) {
+                    this.errorMessage = `${response.status} ${response.statusText}`
+                    this.errorMessageType = 'error'
+                    return
+                } else {
+                    this.errorMessage = `Deferred date updated`
+                    this.errorMessageType = 'success'
+                }
+            } catch (error) {
+                this.errorMessage =
+                    error.name === 'AbortError'
+                        ? 'Request timed out, please try refreshing the page.'
+                        : `${error.name} ${error.message}`
+                this.errorMessageType = 'error'
+                this.loading = false
+                return
+            }
+            for (const finding of this.issues) {
+                for (const occurrence of finding.occurrences) {
+                    if (occurrence_id === occurrence.occurrence_id) {
+                        occurrence.deferred_to = deferred_to
+                    }
+                }
             }
         }
     }
