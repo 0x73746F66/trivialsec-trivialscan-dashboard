@@ -1,5 +1,5 @@
 output "trivialscan_archive_bucket" {
-  value = aws_s3_bucket.trivialscan_archive_bucket[*].id
+  value = one(aws_s3_bucket.trivialscan_archive_bucket[*].id)
 }
 
 output "cloudfront_trivialscan_dashboard" {
@@ -11,7 +11,7 @@ output "trivialscan_dashboard_bucket" {
 }
 
 output "trivialscan_store_bucket" {
-  value = aws_s3_bucket.trivialscan_store_bucket[*].id
+  value = one(aws_s3_bucket.trivialscan_store_bucket[*].id)
 }
 
 output "api_function_url" {
