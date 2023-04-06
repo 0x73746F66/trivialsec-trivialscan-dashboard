@@ -172,7 +172,7 @@
                                                                 color="e2c878"
                                                             />
                                                             <span
-                                                                class="font-color-secondary"
+                                                                class="font-color-secondary font-sm"
                                                             >
                                                                 {{
                                                                     occurrence.hostname
@@ -199,7 +199,7 @@
                                                                 color="e2c878"
                                                             />
                                                             <span
-                                                                class="font-color-secondary"
+                                                                class="font-color-secondary font-sm"
                                                             >
                                                                 {{
                                                                     occurrence.certificate_subject
@@ -207,10 +207,10 @@
                                                             </span>
                                                         </RouterLink>
                                                         <div
-                                                            class="margin-top-xs"
+                                                            class="margin-top-xxs"
                                                         >
                                                             <span
-                                                                class="font-base-sb margin-right-xxs"
+                                                                class="font-sm-sb margin-right-xxs"
                                                                 >Status:</span
                                                             >
                                                             <span
@@ -219,7 +219,7 @@
                                                                 <select
                                                                     id="status"
                                                                     name="FindingStatus"
-                                                                    class="font-sm"
+                                                                    class="select font-sm"
                                                                     @change="
                                                                         changeStatus(
                                                                             $event,
@@ -286,7 +286,6 @@
                                                             </span>
                                                         </div>
                                                         <div
-                                                            class="margin-top-xs"
                                                             v-if="
                                                                 occurrence.status ===
                                                                 'deferred'
@@ -324,7 +323,6 @@
                                                                 rIndex
                                                             ) in occurrence.report_ids"
                                                             :key="rIndex"
-                                                            class="margin-top-xs"
                                                         >
                                                             <RouterLink
                                                                 :to="{
@@ -333,7 +331,7 @@
                                                                         report_id
                                                                     }
                                                                 }"
-                                                                class="text-decoration-none font-base-sb font-color-primary"
+                                                                class="text-decoration-none font-sm-sb font-color-primary"
                                                             >
                                                                 Report
                                                                 {{ rIndex + 1 }}
@@ -535,9 +533,18 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style scoped lang="scss">
 .link-icon {
     height: 20px;
     width: 20px;
+}
+.select {
+    border-radius: radius('lg');
+    border: none;
+    background: color('primary-80');
+    color: color('dark');
+    padding: 0 spacers('xxs');
+    width: max-content;
+    max-width: 115px;
 }
 </style>
