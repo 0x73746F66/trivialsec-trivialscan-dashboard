@@ -22,12 +22,13 @@
                             Check out our open source projects on Gitlab
                         </a>
                         <div class="d-flex flex-column margin-top-xs font-sm">
-                            <RouterLink
+                            <a
+                                href="https://docs.trivialsec.com"
                                 v-if="!$store.getItem('/session/key')"
-                                :to="{ name: 'docs' }"
                                 class="margin-bottom-xs font-color-light-60 text-decoration-none"
-                                >Documentation</RouterLink
                             >
+                                Documentation
+                            </a>
                             <a
                                 v-if="!$store.getItem('/session/key')"
                                 class="margin-bottom-xs font-color-light-60 text-decoration-none"
@@ -125,11 +126,12 @@
                                 Need Support?
                             </span>
                         </a>
-                        <RouterLink
-                            :to="{ name: 'docs' }"
+                        <a
+                            href="https://docs.trivialsec.com"
                             class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none"
-                            >Documentation</RouterLink
                         >
+                            Documentation
+                        </a>
                         <a
                             class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none"
                             :href="docsUrl"

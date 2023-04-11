@@ -22,11 +22,10 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to) => {
-    const publicPages = ['/', '/pricing', '/docs', '/about']
+    const publicPages = ['/', '/pricing', '/about']
     const publicPrefixes = [
         '/accept',
         '/login',
-        '/docs',
         '/feature',
         '/use-cases',
         '/article',
