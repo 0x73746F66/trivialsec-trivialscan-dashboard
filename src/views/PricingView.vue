@@ -13,22 +13,29 @@
                 <div class="d-flex w-100">
                     <div class="col-2"></div>
                     <div class="col-8 text-center font-color-light font-sm">
-                        All new accounts start in our Community Edition (CE) tier,
-                        CE provides all customers access to Trivial Security at no cost.
-                        This will suit the needs for most small businesses or open source
-                        projects.
+                        All new accounts start in our Community Edition (CE)
+                        tier, CE provides all customers access to Trivial
+                        Security at no cost. This will suit the needs for most
+                        small businesses or open source projects.
                     </div>
                     <div class="col-2"></div>
                 </div>
                 <div class="d-flex w-100">
                     <div class="col-2"></div>
-                    <div class="col-8 text-center margin-bottom-md font-color-light font-sm">
-                        As part of the CE tier you will have access to continuous monitoring
-                        of three hosts, and perform one on-demand scan per host for each of
-                        the hosts being monitored.
-                        <RouterLink class="font-color-primary" :to="{name: 'early-warning-service'}">Early Warning Service (EWS)</RouterLink> is available for all tiers. EWS leverages
-                        the results of scans for corelation across vast sources of threat
-                        data. 
+                    <div
+                        class="col-8 text-center margin-bottom-md font-color-light font-sm"
+                    >
+                        As part of the CE tier you will have access to
+                        continuous monitoring of three hosts, and perform one
+                        on-demand scan per host for each of the hosts being
+                        monitored.
+                        <RouterLink
+                            class="font-color-primary"
+                            :to="{ name: 'feature-early-warning' }"
+                            >Early Warning Service (EWS)</RouterLink
+                        >
+                        is available for all tiers. EWS leverages the results of
+                        scans for corelation across vast sources of threat data.
                     </div>
                     <div class="col-2"></div>
                 </div>

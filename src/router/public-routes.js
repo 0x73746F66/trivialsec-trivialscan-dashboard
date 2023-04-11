@@ -99,7 +99,7 @@ const routes = [
     },
     {
         path: '/feature/early-warning',
-        name: 'early-warning-service',
+        name: 'feature-early-warning',
         component: () => import('@/views/seo/EarlyWarning.vue')
     },
     {
