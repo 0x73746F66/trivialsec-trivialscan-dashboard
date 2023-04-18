@@ -1,109 +1,133 @@
-@use "sass:map";
+@use 'sass:map';
 
 $colors: (
-  "primary": rgba(26, 187, 156, 1),
-  "primary-20": rgba(26, 187, 156, 0.2),
-  "primary-40": rgba(26, 187, 156, 0.4),
-  "primary-60": rgba(26, 187, 156, 0.6),
-  "primary-80": rgba(26, 187, 156, 0.8),
-  "secondary": rgb(226, 200, 120),
-  "secondary-20": rgba(226, 200, 120, 0.2),
-  "secondary-40": rgba(226, 200, 120, 0.4),
-  "secondary-60": rgba(226, 200, 120, 0.6),
-  "secondary-80": rgba(226, 200, 120, 0.8),
-  "tertiary": rgb(234, 106, 131),
-  "tertiary-20": rgba(234, 106, 131, 0.2),
-  "tertiary-40": rgba(234, 106, 131, 0.4),
-  "tertiary-60": rgba(234, 106, 131, 0.6),
-  "tertiary-80": rgba(234, 106, 131, 0.8),
-  "warning": rgba(241, 202, 103, 1),
-  "danger": rgba(244, 94, 94, 1),
-  "dark": rgba(43, 37, 37, 1),
-  "dark-20": rgba(0, 0, 0, 0.2),
-  "dark-40": rgba(0, 0, 0, 0.4),
-  "dark-60": rgba(0, 0, 0, 0.6),
-  "light": rgba(240, 240, 240, 1),
-  "light-20": rgba(240, 240, 240, 0.2),
-  "light-40": rgba(240, 240, 240, 0.4),
-  "light-60": rgba(240, 240, 240, 0.6),
-  "lighter": rgb(255, 255, 255),
-  "lighter-20": rgba(255, 255, 255, 0.2),
-  "lighter-40": rgba(255, 255, 255, 0.4),
-  "lighter-60": rgba(255, 255, 255, 0.6),
+    'primary': rgba(26, 187, 156, 1),
+    'primary-20': rgba(26, 187, 156, 0.2),
+    'primary-40': rgba(26, 187, 156, 0.4),
+    'primary-60': rgba(26, 187, 156, 0.6),
+    'primary-80': rgba(26, 187, 156, 0.8),
+    'secondary': rgb(226, 200, 120),
+    'secondary-20': rgba(226, 200, 120, 0.2),
+    'secondary-40': rgba(226, 200, 120, 0.4),
+    'secondary-60': rgba(226, 200, 120, 0.6),
+    'secondary-80': rgba(226, 200, 120, 0.8),
+    'tertiary': rgb(234, 106, 131),
+    'tertiary-20': rgba(234, 106, 131, 0.2),
+    'tertiary-40': rgba(234, 106, 131, 0.4),
+    'tertiary-60': rgba(234, 106, 131, 0.6),
+    'tertiary-80': rgba(234, 106, 131, 0.8),
+    'warning': rgba(241, 202, 103, 1),
+    'danger': rgba(244, 94, 94, 1),
+    'dark': rgba(43, 37, 37, 1),
+    'dark-20': rgba(0, 0, 0, 0.2),
+    'dark-40': rgba(0, 0, 0, 0.4),
+    'dark-60': rgba(0, 0, 0, 0.6),
+    'light': rgba(240, 240, 240, 1),
+    'light-20': rgba(240, 240, 240, 0.2),
+    'light-40': rgba(240, 240, 240, 0.4),
+    'light-60': rgba(240, 240, 240, 0.6),
+    'lighter': rgb(255, 255, 255),
+    'lighter-20': rgba(255, 255, 255, 0.2),
+    'lighter-40': rgba(255, 255, 255, 0.4),
+    'lighter-60': rgba(255, 255, 255, 0.6)
 );
 
 // Override bootstrap theme
 $theme-colors: () !default;
 
 $theme-colors: map-merge(
-  (
-    "primary": map.get($colors, primary),
-    "secondary": map.get($colors, secondary),
-    "success": map.get($colors, success),
-    "info": map.get($colors, light),
-    "warning": map.get($colors, warning),
-    "danger": map.get($colors, danger),
-    "light": map.get($colors, light),
-    "dark": map.get($colors, dark),
-  ),
-  $theme-colors
+    (
+        'primary': map.get($colors, primary),
+        'secondary': map.get($colors, secondary),
+        'success': map.get($colors, success),
+        'info': map.get($colors, light),
+        'warning': map.get($colors, warning),
+        'danger': map.get($colors, danger),
+        'light': map.get($colors, light),
+        'dark': map.get($colors, dark)
+    ),
+    $theme-colors
 );
 
 $spacers: (
-  "xxs": 5px,
-  "xs": 10px,
-  "sm": 15px,
-  "md": 20px,
-  "lg": 25px,
-  "xl": 50px,
-  "xxl": 100px,
+    'xxs': 5px,
+    'xs': 10px,
+    'sm': 15px,
+    'md': 20px,
+    'lg': 25px,
+    'xl': 50px,
+    'xxl': 100px
 );
 
 $radius: (
-  "sm": 10px,
-  "md": 20px,
-  "lg": 40px,
-  "xl": 50px,
+    'sm': 10px,
+    'md': 20px,
+    'lg': 40px,
+    'xl': 50px
 );
 
 $font-sizes: (
-  "xxs": 10px,
-  "xs": 12px,
-  "sm": 13.5px,
-  "base": 16px,
-  "lg": 18.5px,
-  "xl": 20px,
-  "xxl": 24px,
-  "xxxl": 29.5px,
-  "header": 36px,
-  "header-lg": 60px,
-  "header-xl": 96px,
+    'xxs': 10px,
+    'xs': 12px,
+    'sm': 13.5px,
+    'base': 16px,
+    'lg': 18.5px,
+    'xl': 20px,
+    'xxl': 24px,
+    'xxxl': 29.5px,
+    'header': 36px,
+    'header-lg': 60px,
+    'header-xl': 96px
 );
 
 $breakpoint-sizes: (
-  "sm": 576px,
-  "md": 768px,
-  "lg": 992px,
-  "xl": 1200px,
-  "xxl": 1400px,
+    'sm': 576px,
+    'md': 768px,
+    'lg': 992px,
+    'xl': 1200px,
+    'xxl': 1400px
+);
+
+$vh-sizes: (
+    'sm': 20vh,
+    'md': 33vh,
+    'lg': 50vh,
+    'xl': 66vh,
+    'xxl': 80vh
+);
+
+$vw-sizes: (
+    'sm': 20vw,
+    'md': 33vw,
+    'lg': 50vw,
+    'xl': 66vw,
+    'xxl': 80vw
 );
 
 @function color($color) {
-  @return map.get($colors, $color);
+    @return map.get($colors, $color);
 }
 
 @function radius($ray) {
-  @return map.get($radius, $ray);
+    @return map.get($radius, $ray);
 }
 
 @function spacers($space) {
-  @return map.get($spacers, $space);
+    @return map.get($spacers, $space);
 }
 
 @function sizes($font-size) {
-  @return map.get($font-sizes, $font-size);
+    @return map.get($font-sizes, $font-size);
 }
 
 @function breakpoints($breakpoint) {
-  @return map.get($breakpoint-sizes, $breakpoint);
+    @return map.get($breakpoint-sizes, $breakpoint);
+}
+
+@function vheights($vh) {
+    @return map.get($vh-sizes, $vh);
+}
+
+@function vwidths($vw) {
+    @return map.get($vw-sizes, $vw);
 }

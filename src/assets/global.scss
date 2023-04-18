@@ -144,6 +144,26 @@
     }
 }
 
+@each $name, $vh-size in $vh-sizes {
+    .min-vh-#{$name} {
+        min-height: $vh-size;
+    }
+}
+@each $name, $vw-size in $vw-sizes {
+    .min-vw-#{$name} {
+        min-width: $vw-size;
+    }
+}
+@each $name, $vh-size in $vh-sizes {
+    .max-vh-#{$name} {
+        max-height: $vh-size;
+    }
+}
+@each $name, $vw-size in $vw-sizes {
+    .max-vw-#{$name} {
+        max-width: $vw-size;
+    }
+}
 // Global Rules
 body {
     background-color: color('dark') !important;

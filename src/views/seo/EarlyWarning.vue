@@ -15,45 +15,14 @@
             </div>
 
             <div
-                class="col-lg-3 col-12 justify-content-center align-items-center d-flex flex-column feature-parra font-sm font-color-light"
+                class="col-lg-6 col-12 justify-content-center align-items-center d-flex flex-column feature-parra font-sm font-color-light"
             >
-                <p>
+                <p class="margin-bottom-xl">
                     Cyber security researchers will often uncover malicious
                     activity on the internet or discover weaknesses in
                     organisations security controls, and release this
                     information in information feeds.
                 </p>
-                <p>
-                    Early Warning does not conduct any active scanning of your
-                    networks directly, however some of the feed providers may
-                    use scanners to derived data we received, for example from
-                    commercial feeds like Shodan.io.
-                </p>
-                <p>
-                    The service uses a variety of information feeds from
-                    verified trusted public, commercial, and closed sources.
-                    These include several privileged feeds which Trivial
-                    Security are not permitted to disclose directly, but we may
-                    use the privileged data to derive this alert system for our
-                    customers.
-                </p>
-            </div>
-            <div
-                class="col-lg-9 d-flex justify-content-center col-12 margin-bottom-xl feature-image-container"
-                @click="imagePopOut($event)"
-                data-bs-toggle="modal"
-                :data-bs-target="`#${imagePopOutId}`"
-            >
-                <img
-                    class="img-fluid feature-image"
-                    src="../../assets/media/dashboard.png"
-                    alt="Description of image"
-                />
-            </div>
-
-            <div
-                class="col-lg-3 col-12 justify-content-center align-items-center d-flex flex-column feature-parra font-sm font-color-light"
-            >
                 <p>
                     Organisations will receive the following high level types of
                     alerts:
@@ -81,19 +50,55 @@
                         or you have an exposed database.
                     </li>
                 </ul>
+                <p class="margin-top-xl">
+                    The service uses a variety of information feeds from
+                    verified trusted public, commercial, and closed sources.
+                    These include several privileged feeds which Trivial
+                    Security are not permitted to disclose directly, but we may
+                    use the privileged data to derive this alert system for our
+                    customers.
+                </p>
             </div>
             <div
-                class="col-lg-9 d-flex justify-content-center col-12 margin-bottom-xl feature-image-container"
+                class="col-lg-6 d-flex justify-content-center col-12 margin-bottom-xxl feature-image-container"
                 @click="imagePopOut($event)"
                 data-bs-toggle="modal"
                 :data-bs-target="`#${imagePopOutId}`"
             >
                 <img
-                    class="img-fluid feature-image"
-                    src="../../assets/media/dashboard.png"
-                    alt="Description of image"
+                    class="img-fluid feature-image-email"
+                    src="../../assets/media/early-warning-email.png"
+                    alt="early warning alert email sample"
                 />
             </div>
+
+            <div class="col-2 hide-md d-flex flex-column"></div>
+            <div
+                class="col-lg-8 col-12 justify-content-center align-items-center d-flex flex-column feature-parra font-sm font-color-light"
+            >
+                <p>
+                    Early Warning does not conduct any active scanning of your
+                    networks directly, however some of the feed providers may
+                    use scanners to derived data we received, for example from
+                    commercial feeds like Cisco Talos:
+                </p>
+            </div>
+            <div class="col-2 hide-md d-flex flex-column"></div>
+
+            <div class="col-2 hide-md d-flex flex-column"></div>
+            <div
+                class="col-lg-8 col-12 d-flex justify-content-center margin-bottom-xxl feature-image-container"
+                @click="imagePopOut($event)"
+                data-bs-toggle="modal"
+                :data-bs-target="`#${imagePopOutId}`"
+            >
+                <img
+                    class="img-fluid feature-image-view"
+                    src="../../assets/media/early-warning-view.png"
+                    alt="early warning alert email sample"
+                />
+            </div>
+            <div class="col-2 hide-md d-flex flex-column"></div>
 
             <div class="col-12 padding-top-sm margin-bottom-lg">
                 <h3 class="font-color-light font-xl-sb">
@@ -293,9 +298,8 @@ export default {
     },
     methods: {
         imagePopOut(event) {
-            const img = event.target.querySelector('img')
-            this.imagePopOutUrl = img.src
-            this.imagePopOutDesc = img.alt
+            this.imagePopOutUrl = event.target.src
+            this.imagePopOutDesc = event.target.alt
         }
     }
 }
@@ -306,7 +310,14 @@ export default {
     width: auto;
     height: 85vh;
 }
-
+.feature-image {
+    &-container {
+        box-shadow: rgb(0 0 0) 0px 20px 30px -10px;
+    }
+    // &-email {
+    //     height: 50%;
+    // }
+}
 .sendgrid-embed {
     padding: 0;
     margin: 0;

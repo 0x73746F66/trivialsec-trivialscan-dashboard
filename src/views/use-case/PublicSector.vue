@@ -191,7 +191,9 @@ export default {
     width: auto;
     height: 85vh;
 }
-
+.feature-image-container {
+    box-shadow: rgb(0 0 0) 0px 20px 30px -10px;
+}
 .sendgrid-embed {
     padding: 0;
     margin: 0;

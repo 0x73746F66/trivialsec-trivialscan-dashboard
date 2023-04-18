@@ -21,7 +21,7 @@
                 />
                 <div
                     v-if="alerts.length > 0"
-                    class="d-flex flex-row flex-wrap w-100"
+                    class="d-flex flex-row flex-wrap w-100 min-vh-lg"
                 >
                     <div class="d-flex justify-content-between w-100">
                         <div>
