@@ -72,7 +72,7 @@ export default {
                 } else if (this.webauthnSupported && response.status === 200) {
                     const fido_options = await response.json()
                     this.message = 'Confirm 2FA to complete login'
-                    return this.promptFido(fido_options, member_email)
+                    return this.promptFido(fido_options, email)
                 }
                 this.message = `${response.status}: ${response.statusText}. Something went wrong, please try again later.`
                 this.messageType = 'error'
