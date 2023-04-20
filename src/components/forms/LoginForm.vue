@@ -56,39 +56,36 @@ export default {
             this.loading = true
             this.message = `Checking Credential`
             this.messageType = 'warning'
-            const member_email = this.emailField
-            const payload = JSON.stringify({
-                email: member_email
-            })
-            const response = await fetch(`${apiUrl}/magic-link`, {
-                method: 'POST',
-                body: payload,
-                headers: {
-                    'Content-Type': 'application/json;charset=UTF-8'
-                }
-            }).catch((errors) => {
-                this.message = `An error has occurred, please try again. ${errors}`
-                this.messageType = 'error'
+            const email = this.emailField
+            try {
+                const response = await Api.post(`/magic-link`, { email })
                 this.loading = false
-            })
-            this.loading = false
-            if (response.status === 412) {
-                this.message =
-                    'Please check your e-mail is valid and try again.'
-                this.messageType = 'warning'
-            } else if (response.status === 202) {
-                this.message = 'Please check your e-mail to complete login.'
-                this.messageType = 'success'
-            } else if (this.webauthnSupported && response.status === 200) {
-                const fido_options = await response.json()
-                this.message = 'Confirm 2FA to complete login'
-                return this.promptFido(fido_options, member_email)
-            } else {
+                if (response.status === 412) {
+                    this.message =
+                        'Please check your e-mail is valid and try again.'
+                    this.messageType = 'warning'
+                    return
+                } else if (response.status === 202) {
+                    this.message = 'Please check your e-mail to complete login.'
+                    this.messageType = 'success'
+                    return
+                } else if (this.webauthnSupported && response.status === 200) {
+                    const fido_options = await response.json()
+                    this.message = 'Confirm 2FA to complete login'
+                    return this.promptFido(fido_options, member_email)
+                }
                 this.message = `${response.status}: ${response.statusText}. Something went wrong, please try again later.`
+                this.messageType = 'error'
+            } catch (error) {
+                this.loading = false
+                this.message =
+                    error.name === 'AbortError'
+                        ? 'Request timed out, please try refreshing the page.'
+                        : `${error.name} ${error.message}. An error has occurred, please try again.`
                 this.messageType = 'error'
             }
         },
-        saveSessionData(account, session, member) {
+        saveSessionData(account, member) {
             localStorage.setItem(
                 '/account/name',
                 account.name || localStorage.getItem('/account/name')
@@ -112,10 +109,6 @@ export default {
             localStorage.setItem(
                 '/member/mfa',
                 member.mfa || localStorage.getItem('/member/mfa')
-            )
-            localStorage.setItem(
-                '/session/key',
-                session.access_token || localStorage.getItem('/session/key')
             )
         },
         async promptFido(options, member_email) {
@@ -167,16 +160,15 @@ export default {
                     return
                 }
                 const data = await response.json()
-                if (!!data.session.access_token) {
-                    this.saveSessionData(
-                        data.account,
-                        data.session,
-                        data.member
+                if (!!data.bearer_token) {
+                    localStorage.setItem(
+                        '/session/bearer_token',
+                        data.bearer_token
                     )
+                    this.saveSessionData(data.account, data.member)
                     this.message = 'Verified!'
                     this.messageType = 'success'
                     window.initPusher()
-                    data.session.access_token = null
                     localStorage.setItem(`/me`, JSON.stringify(data))
                     setTimeout(() => {
                         const modal = Modal.getInstance(
@@ -187,7 +179,6 @@ export default {
                         }
                         this.$router.push({ name: 'reports' })
                     }, 3000)
-
                     return
                 }
             } catch (error) {

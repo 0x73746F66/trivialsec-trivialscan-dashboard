@@ -1,13 +1,12 @@
-if (window.location.hostname == 'trivialsec.com')
+if (window.location.hostname == 'trivialsec.com') {
     window.location.href = `https://www.trivialsec.com${window.location.pathname}`
+}
 import { createApp } from 'vue'
 import { VueClipboard } from '@soerenmartius/vue3-clipboard'
 import { Toast } from 'bootstrap'
 import Pusher from 'pusher-js'
 import App from './App.vue'
 import router from './router'
-import moment from 'moment'
-import CryptoJS from 'crypto-js'
 
 const app = createApp(App)
 app.config.globalProperties.$store = window.localStorage
@@ -22,13 +21,6 @@ app.use(router)
 app.use(VueClipboard)
 router.isReady().then(() => app.mount('#app'))
 
-const clearState = () => {
-    localStorage.setItem('/account/name', '')
-    localStorage.setItem('/account/display', '')
-    localStorage.setItem('/member/email', '')
-    localStorage.setItem('/member/email_md5', '')
-    localStorage.setItem('/session/key', '')
-}
 String.prototype.toCamelCase = function () {
     return (this.slice(0, 1).toLowerCase() + this.slice(1))
         .replace(/([-_ ]){1,}/g, ' ')
@@ -44,22 +36,11 @@ window.Api = {
         const urlPath = `${
             apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl
         }${uriPath}`
-        const ts = moment().utc().unix()
-        const url = new URL(urlPath)
-        const canonical_string = `GET\n${url.hostname}\n${url.port || 443}\n${
-            url.pathname
-        }\n${ts}`
-        const hash = CryptoJS.algo.HMAC.create(
-            CryptoJS.algo.SHA512,
-            localStorage.getItem('/session/key')
-        )
-        hash.update(canonical_string)
-        const mac = hash.finalize()
-        const Authorization = `HMAC id="${localStorage.getItem(
-            '/member/email'
-        )}", mac="${mac}", ts="${ts}"`
         const controller = new AbortController()
         const id = setTimeout(() => controller.abort(), timeout)
+        const Authorization = localStorage.getItem('/session/bearer_token')
+            ? `Bearer ${localStorage.getItem('/session/bearer_token')}`
+            : ''
         options.headers = Object.assign(options.headers || {}, {
             Authorization
         })
@@ -69,7 +50,7 @@ window.Api = {
         })
         clearTimeout(id)
         if (response.status === 401) {
-            clearState()
+            localStorage.clear()
             setTimeout(() => {
                 window.user_notify(
                     `Inactive Session`,
@@ -86,25 +67,15 @@ window.Api = {
             apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl
         }${uriPath}`
         const body = JSON.stringify(data)
-        const ts = moment().utc().unix()
-        const url = new URL(urlPath)
-        const canonical_string = `POST\n${url.hostname}\n${url.port || 443}\n${
-            url.pathname
-        }\n${ts}${data ? '\n' + window.btoa(body) : ''}`
-        const hash = CryptoJS.algo.HMAC.create(
-            CryptoJS.algo.SHA512,
-            localStorage.getItem('/session/key')
-        )
-        hash.update(canonical_string)
-        const mac = hash.finalize()
-        const Authorization = `HMAC id="${localStorage.getItem(
-            '/member/email'
-        )}", mac="${mac}", ts="${ts}"`
         const controller = new AbortController()
         const id = setTimeout(() => controller.abort(), timeout)
+        const Authorization = localStorage.getItem('/session/bearer_token')
+            ? `Bearer ${localStorage.getItem('/session/bearer_token')}`
+            : ''
         options.headers = Object.assign(options.headers || {}, {
+            Authorization,
             'Content-Type': 'application/json;charset=UTF-8',
-            Authorization
+            Accept: 'application/json'
         })
         if (!options.cache) {
             options.cache = 'no-cache'
@@ -117,7 +88,7 @@ window.Api = {
         })
         clearTimeout(id)
         if (response.status === 401) {
-            clearState()
+            localStorage.clear()
             setTimeout(() => {
                 window.user_notify(
                     `Inactive Session`,
@@ -133,25 +104,15 @@ window.Api = {
         const urlPath = `${
             apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl
         }${uriPath}`
-        const ts = moment().utc().unix()
-        const url = new URL(urlPath)
-        const canonical_string = `DELETE\n${url.hostname}\n${
-            url.port || 443
-        }\n${url.pathname}\n${ts}`
-        const hash = CryptoJS.algo.HMAC.create(
-            CryptoJS.algo.SHA512,
-            localStorage.getItem('/session/key')
-        )
-        hash.update(canonical_string)
-        const mac = hash.finalize()
-        const Authorization = `HMAC id="${localStorage.getItem(
-            '/member/email'
-        )}", mac="${mac}", ts="${ts}"`
         const controller = new AbortController()
         const id = setTimeout(() => controller.abort(), timeout)
+        const Authorization = localStorage.getItem('/session/bearer_token')
+            ? `Bearer ${localStorage.getItem('/session/bearer_token')}`
+            : ''
         options.headers = Object.assign(options.headers || {}, {
+            Authorization,
             'Content-Type': 'application/json;charset=UTF-8',
-            Authorization
+            Accept: 'application/json'
         })
         if (!options.cache) {
             options.cache = 'no-cache'
@@ -163,7 +124,7 @@ window.Api = {
         })
         clearTimeout(id)
         if (response.status === 401) {
-            clearState()
+            localStorage.clear()
             setTimeout(() => {
                 window.user_notify(
                     `Inactive Session`,
@@ -176,7 +137,7 @@ window.Api = {
     }
 }
 window.user_notify = (title, body, options = {}) => {
-    function MakeId(length) {
+    const MakeId = (length) => {
         let result = ''
         const characters =
             'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -188,9 +149,9 @@ window.user_notify = (title, body, options = {}) => {
         }
         return result
     }
-    function ToastTemplate(eleId, header, content, autohide = true) {
+    const ToastTemplate = (eleId, header, content, autoHide = true) => {
         return `<div id="${eleId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="${
-            autohide ? 'true' : 'false'
+            autoHide ? 'true' : 'false'
         }">
         <div class="toast-header">
             <strong class="me-auto">${header}</strong>
@@ -237,19 +198,17 @@ window.user_notify = (title, body, options = {}) => {
                 if (options.onclick instanceof Function) {
                     notification.onclick = options.onclick
                 }
-            } else {
-                if (toastContainer) {
-                    setTimeout(() => {
-                        const toastId = MakeId(5)
-                        toastContainer.insertAdjacentHTML(
-                            'beforeend',
-                            ToastTemplate(toastId, title, body, delay > 0)
-                        )
-                        const toastEl = document.getElementById(toastId)
-                        const toast = new Toast(toastEl, { delay })
-                        toast.show()
-                    }, 1000)
-                }
+            } else if (toastContainer) {
+                setTimeout(() => {
+                    const toastId = MakeId(5)
+                    toastContainer.insertAdjacentHTML(
+                        'beforeend',
+                        ToastTemplate(toastId, title, body, delay > 0)
+                    )
+                    const toastEl = document.getElementById(toastId)
+                    const toast = new Toast(toastEl, { delay })
+                    toast.show()
+                }, 1000)
             }
         })
     } else if (Notification.permission === 'denied') {

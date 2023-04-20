@@ -24,20 +24,20 @@
                         <div class="d-flex flex-column margin-top-xs font-sm">
                             <a
                                 href="https://docs.trivialsec.com"
-                                v-if="!$store.getItem('/session/key')"
+                                v-if="!$store.getItem('/session/bearer_token')"
                                 class="margin-bottom-xs font-color-light-60 text-decoration-none"
                             >
                                 Documentation
                             </a>
                             <a
-                                v-if="!$store.getItem('/session/key')"
+                                v-if="!$store.getItem('/session/bearer_token')"
                                 class="margin-bottom-xs font-color-light-60 text-decoration-none"
                                 :href="docsUrl"
                                 target="_blank"
                                 >API Reference</a
                             >
                             <a
-                                v-if="!$store.getItem('/session/key')"
+                                v-if="!$store.getItem('/session/bearer_token')"
                                 class="margin-bottom-xs font-color-light-60 text-decoration-none"
                                 href="https://discord.gg/BgqUw8Tu6a"
                                 target="_blank"
@@ -54,7 +54,7 @@
                                 >Environmental Sustainability</RouterLink
                             >
                             <RouterLink
-                                v-if="!!$store.getItem('/session/key')"
+                                v-if="!!$store.getItem('/session/bearer_token')"
                                 :to="{ name: 'about' }"
                                 class="margin-bottom-xs font-color-light-60 text-decoration-none"
                                 >About Us</RouterLink
@@ -113,7 +113,7 @@
                     </div>
                 </div>
                 <div
-                    v-if="!!$store.getItem('/session/key')"
+                    v-if="!!$store.getItem('/session/bearer_token')"
                     class="col-6 col-lg-3 d-flex flex-lg-row flex-column justify-content-end"
                 >
                     <div class="d-flex flex-column">
@@ -139,7 +139,7 @@
                             >API Reference</a
                         >
                         <RouterLink
-                            v-if="!!$store.getItem('/session/key')"
+                            v-if="!!$store.getItem('/session/bearer_token')"
                             :to="{ name: 'support' }"
                             class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none"
                             >Support Request</RouterLink
@@ -153,7 +153,7 @@
                     </div>
                 </div>
                 <div
-                    v-if="!$store.getItem('/session/key')"
+                    v-if="!$store.getItem('/session/bearer_token')"
                     class="col-6 col-lg-3 d-flex flex-lg-row flex-column justify-content-end"
                 >
                     <div class="d-flex flex-column">

@@ -13,11 +13,7 @@ const routes = [
         path: '/logout',
         name: 'logout',
         beforeEnter: (to, from, next) => {
-            localStorage.setItem('/account/name', '')
-            localStorage.setItem('/account/display', '')
-            localStorage.setItem('/member/email', '')
-            localStorage.setItem('/member/email_md5', '')
-            localStorage.setItem('/session/key', '')
+            localStorage.clear()
             window.location.href = '/'
         }
     },
@@ -75,7 +71,7 @@ const routes = [
                     3000
                 )
             }
-            if (localStorage.getItem('/session/key')) {
+            if (!!localStorage.getItem('/session/bearer_token')) {
                 next('/profile')
             } else {
                 next('/')

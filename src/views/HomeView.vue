@@ -277,7 +277,7 @@ export default {
     },
     created() {
         window.addEventListener('scroll', this.handleScroll)
-        this.logged_in = !!localStorage.getItem('/session/key')
+        this.logged_in = !!localStorage.getItem('/session/bearer_token')
     },
     unmounted() {
         window.removeEventListener('scroll', this.handleScroll)

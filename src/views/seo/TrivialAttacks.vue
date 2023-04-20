@@ -266,7 +266,7 @@ export default {
         }
     },
     created() {
-        this.logged_in = !!localStorage.getItem('/session/key')
+        this.logged_in = !!localStorage.getItem('/session/bearer_token')
     },
     methods: {
         imagePopOut(event) {

@@ -262,13 +262,13 @@ export default {
     },
     data() {
         return {
-            accountName: window.localStorage.getItem('/account/name'),
-            accountDisplayName: window.localStorage.getItem('/account/display'),
-            accountMfa: window.localStorage.getItem('/account/mfa'),
+            accountName: localStorage.getItem('/account/name'),
+            accountDisplayName: localStorage.getItem('/account/display'),
+            accountMfa: localStorage.getItem('/account/mfa'),
             member: {
-                mfa: window.localStorage.getItem('/member/mfa') === 'true',
-                email: window.localStorage.getItem('/member/email'),
-                email_md5: window.localStorage.getItem('/member/email_md5')
+                mfa: localStorage.getItem('/member/mfa') === 'true',
+                email: localStorage.getItem('/member/email'),
+                email_md5: localStorage.getItem('/member/email_md5')
             },
             isLoggedIn: false,
             isNavbarHidden: true,
@@ -284,15 +284,17 @@ export default {
         this.$watch(
             () => this.$route.params,
             () => {
-                this.isLoggedIn = !!window.localStorage.getItem('/session/key')
-                this.accountName = window.localStorage.getItem('/account/name')
+                this.isLoggedIn = !!localStorage.getItem(
+                    '/session/bearer_token'
+                )
+                this.accountName = localStorage.getItem('/account/name')
                 this.accountDisplayName =
-                    window.localStorage.getItem('/account/display')
-                this.accountMfa = window.localStorage.getItem('/account/mfa')
-                this.member.mfa = window.localStorage.getItem('/member/mfa') === 'true'
-                this.member.email = window.localStorage.getItem('/member/email')
+                    localStorage.getItem('/account/display')
+                this.accountMfa = localStorage.getItem('/account/mfa')
+                this.member.mfa = localStorage.getItem('/member/mfa') === 'true'
+                this.member.email = localStorage.getItem('/member/email')
                 this.member.email_md5 =
-                    window.localStorage.getItem('/member/email_md5')
+                    localStorage.getItem('/member/email_md5')
             },
             { immediate: true }
         )

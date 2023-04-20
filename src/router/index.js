@@ -35,7 +35,7 @@ router.beforeEach(async (to) => {
     const authRequired =
         !publicPages.includes(to.path) &&
         !publicPrefixes.map((i) => to.path.startsWith(i)).includes(true)
-    const logged_in = !!localStorage.getItem('/session/key')
+    const logged_in = !!localStorage.getItem('/session/bearer_token')
     if (authRequired && !logged_in) {
         return '/'
     }

@@ -69,57 +69,62 @@ export default {
                 return
             }
             this.magic_link = this.$route.params.magic_link
-            const response = await fetch(
-                `${apiUrl}/magic-link/${this.magic_link}`
-            ).catch((errors) => {
-                console.error(errors)
-                setTimeout(() => window.user_notify(`Errors`, errors), 3000)
-            })
-            this.loading = false
-            if (response.status !== 200) {
-                const errMessage =
-                    response.status === 204
-                        ? `This 1-time use magic link has already been used`
-                        : `An error occurred and has been logged`
-                setTimeout(
-                    () =>
-                        window.user_notify(
-                            `${response.status} ${response.statusText}`,
-                            errMessage
-                        ),
-                    3000
+            try {
+                const response = await Api.get(`/magic-link/${this.magic_link}`)
+                this.loading = false
+                if (response.status !== 200) {
+                    const errMessage =
+                        response.status === 204
+                            ? `This 1-time use magic link has already been used`
+                            : `An error occurred and has been logged`
+                    window.user_notify(
+                        `${response.status} ${response.statusText}`,
+                        errMessage
+                    )
+                    this.$router.push('/')
+                    return
+                }
+                const data = await response.json()
+                if (this.webauthnSupported && data.fido_options) {
+                    this.loadingMessage = 'Confirm 2FA to complete login'
+                    return this.promptFido(data.fido_options, data.member.email)
+                }
+                if (!!data.bearer_token) {
+                    localStorage.setItem(
+                        '/session/bearer_token',
+                        data.bearer_token
+                    )
+                    this.saveSessionData(data.account, data.member)
+                    window.initPusher()
+                    localStorage.setItem(`/me`, JSON.stringify(data))
+                    this.$router.push({
+                        name:
+                            data?.account?.mfa === 'enroll' &&
+                            data?.member?.mfa !== true
+                                ? 'security'
+                                : 'reports'
+                    })
+                    return
+                }
+                if (!!data.fido_options) {
+                    this.message =
+                        'Magic Link error, your account requires multi-factor authentication but the browser does not support that feature. Please try again using another browser with support, or try updating this browser and restarting your device.'
+                } else {
+                    this.message =
+                        'Magic Link error, no session could be established. Please try again shortly.'
+                }
+                this.messageType = 'error'
+            } catch (error) {
+                this.loading = false
+                window.user_notify(
+                    `Error`,
+                    error.name === 'AbortError'
+                        ? 'Request timed out, please try refreshing the page.'
+                        : `${error.name} ${error.message}. An error has occurred, please try again.`
                 )
-                this.$router.push('/')
-                return
             }
-            const data = await response.json()
-            if (this.webauthnSupported && data.fido_options) {
-                this.loadingMessage = 'Confirm 2FA to complete login'
-                return this.promptFido(data.fido_options, data.member.email)
-            }
-            if (!!data.session.access_token) {
-                this.saveSessionData(data.account, data.session, data.member)
-                window.initPusher()
-                data.session.access_token = null
-                localStorage.setItem(`/me`, JSON.stringify(data))
-                this.$router.push({
-                    name:
-                        data?.account?.mfa === 'enroll' &&
-                        data?.member?.mfa !== true
-                            ? 'security'
-                            : 'reports'
-                })
-                return
-            } else if (data.fido_options) {
-                this.message =
-                    'Magic Link error, your account requires multi-factor authentication but the browser does not support that feature. Please try again using another browser with support, or try updating this browser and restarting your device.'
-            } else {
-                this.message =
-                    'Magic Link error, no session could be established. Please try again shortly.'
-            }
-            this.messageType = 'error'
         },
-        saveSessionData(account, session, member) {
+        saveSessionData(account, member) {
             localStorage.setItem(
                 '/account/name',
                 account.name || localStorage.getItem('/account/name')
@@ -143,10 +148,6 @@ export default {
             localStorage.setItem(
                 '/member/mfa',
                 member.mfa || localStorage.getItem('/member/mfa')
-            )
-            localStorage.setItem(
-                '/session/key',
-                session.access_token || localStorage.getItem('/session/key')
             )
         },
         async promptFido(options, member_email) {
@@ -188,15 +189,14 @@ export default {
                     return
                 }
                 const data = await response.json()
-                if (!!data.session.access_token) {
-                    this.saveSessionData(
-                        data.account,
-                        data.session,
-                        data.member
+                if (!!data.bearer_token) {
+                    localStorage.setItem(
+                        '/session/bearer_token',
+                        data.bearer_token
                     )
+                    this.saveSessionData(data.account, data.member)
                     this.loadingMessage = 'Verified!'
                     window.initPusher()
-                    data.session.access_token = null
                     localStorage.setItem(`/me`, JSON.stringify(data))
                     this.$router.push({ name: 'profile' })
                     return
