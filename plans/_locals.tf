@@ -24,5 +24,6 @@ locals {
       CostCenter = var.app_env != "Prod" ? "randd" : "opex"
       SecurityTags = "public-data"
       AutomationTool = "Terraform"
+      LUMIGO_TAG       = var.app_env == "Prod" ? "Production" : "Development"
   }
 }
