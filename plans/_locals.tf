@@ -19,7 +19,7 @@ locals {
     "ttf"  = "application/octet-stream"
   }
   tags                  = {
-      ProjectName = "trivialscan-dashboard"
+      ProjectName = "trivialscan"
       ProjectLeadEmail = "chris@trivialsec.com"
       CostCenter = var.app_env != "Prod" ? "randd" : "opex"
       SecurityTags = "public-data"
