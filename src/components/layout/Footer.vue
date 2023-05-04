@@ -39,7 +39,7 @@
                             <a
                                 v-if="!$store.getItem('/session/bearer_token')"
                                 class="margin-bottom-xs font-color-light-60 text-decoration-none"
-                                href="https://discord.gg/BgqUw8Tu6a"
+                                href="https://discord.gg/AjRacqqNWX"
                                 target="_blank"
                                 >Chat with a real person</a
                             >
@@ -82,7 +82,7 @@
                         </a>
                         <a
                             class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none"
-                            href="https://discord.gg/BgqUw8Tu6a"
+                            href="https://discord.gg/AjRacqqNWX"
                             target="_blank"
                         >
                             <IconDiscord
@@ -119,7 +119,7 @@
                     <div class="d-flex flex-column">
                         <a
                             class="text-decoration-none margin-bottom-md"
-                            href="https://discord.gg/BgqUw8Tu6a"
+                            href="https://discord.gg/AjRacqqNWX"
                             target="_blank"
                         >
                             <span class="font-lg-sb font-color-light">
@@ -146,7 +146,7 @@
                         >
                         <a
                             class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none"
-                            href="https://discord.gg/BgqUw8Tu6a"
+                            href="https://discord.gg/AjRacqqNWX"
                             target="_blank"
                             >Chat with a real person</a
                         >
