@@ -225,23 +225,23 @@ export default {
         },
         early_warning_email: {
             type: Boolean,
-            default: false
+            default: true
         },
         early_warning_domain: {
             type: Boolean,
-            default: false
+            default: true
         },
         early_warning_ip: {
             type: Boolean,
-            default: false
+            default: true
         },
         new_findings_certificates: {
             type: Boolean,
-            default: false
+            default: true
         },
         new_findings_domains: {
             type: Boolean,
-            default: false
+            default: true
         },
         client_status: {
             type: Boolean,
@@ -359,13 +359,20 @@ export default {
                 const response = await Api.post(`/webhook/enable`, webhook)
                 this.$emit('update:loading', false)
                 if (response.status === 206) {
-                    this.$emit('update:message', `Updated webhook ${this.endpoint}.`)
-                }
-                else if (response.status === 201) {
-                    this.$emit('update:message', `Created webhook ${this.endpoint}.`)
-                }
-                else if (response.status === 424) {
-                    this.$emit('update:message', `We couldn't send the email containing the secret token for signed webhooks, we recommend you delete this webhook and try again soon.`)
+                    this.$emit(
+                        'update:message',
+                        `Updated webhook ${this.endpoint}.`
+                    )
+                } else if (response.status === 201) {
+                    this.$emit(
+                        'update:message',
+                        `Created webhook ${this.endpoint}.`
+                    )
+                } else if (response.status === 424) {
+                    this.$emit(
+                        'update:message',
+                        `We couldn't send the email containing the secret token for signed webhooks, we recommend you delete this webhook and try again soon.`
+                    )
                     this.$emit('update:messageType', 'error')
                     this.$emit('updateWebhook', webhook)
                     return
