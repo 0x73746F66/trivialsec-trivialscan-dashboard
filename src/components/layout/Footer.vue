@@ -43,15 +43,11 @@
                                 target="_blank"
                                 >Chat with a real person</a
                             >
-                            <RouterLink
-                                :to="{
-                                    name: 'articles',
-                                    params: {
-                                        slug: 'commitment-to-sustainable-practices'
-                                    }
-                                }"
+                            <a
+                                href="https://trivialsec.statuspage.io"
+                                target="_blank"
                                 class="margin-bottom-xs font-color-light-60 text-decoration-none"
-                                >Environmental Sustainability</RouterLink
+                                >Status Page</a
                             >
                             <RouterLink
                                 v-if="!!$store.getItem('/session/bearer_token')"
@@ -189,6 +185,16 @@
                             :to="{ name: 'use-case-public-sector' }"
                             class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none"
                             >Public Sector</RouterLink
+                        >
+                        <RouterLink
+                            :to="{
+                                name: 'articles',
+                                params: {
+                                    slug: 'commitment-to-sustainable-practices'
+                                }
+                            }"
+                            class="margin-bottom-xs font-sm font-color-light-60 text-decoration-none"
+                            >Environmental Sustainability</RouterLink
                         >
                     </div>
                 </div>
