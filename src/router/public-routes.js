@@ -1,8 +1,5 @@
 import HomeView from '@/views/HomeView.vue'
 
-let apiUrl = import.meta.env.VITE_API_URL.trim()
-apiUrl = `${apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl}`
-
 const routes = [
     {
         path: '/',
@@ -52,7 +49,7 @@ const routes = [
         name: 'accept_link',
         beforeEnter: async (to, from, next) => {
             const response = await fetch(
-                `${apiUrl}/accept/${to.params.token}`
+                `${Api.apiUrl}/accept/${to.params.token}`
             ).catch((errors) => {
                 console.error(errors)
                 setTimeout(() => window.user_notify(`Errors`, errors), 3000)

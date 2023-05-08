@@ -282,7 +282,6 @@ import moment from 'moment'
 </script>
 
 <script>
-let apiUrl = import.meta.env.VITE_API_URL.trim()
 export default {
     components: {
         AccountMenu,
@@ -313,7 +312,7 @@ export default {
             member_email: localStorage.getItem('/member/email'),
             webhooks: [],
             events: [],
-            apiUrl: `${apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl}`
+            apiUrl: Api.apiUrl
         }
     },
     created() {

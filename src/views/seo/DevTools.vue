@@ -215,7 +215,6 @@ import ReportAbuse from '@/views/seo/faq/report-abuse.md?raw'
 </script>
 
 <script>
-const apiUrl = import.meta.env.VITE_API_URL.trim()
 export default {
     components: {
         Dropdown,
@@ -224,9 +223,7 @@ export default {
     },
     data() {
         return {
-            docsUrl: `${
-                apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl
-            }/redoc`,
+            docsUrl: `${Api.apiUrl}/redoc`,
             imagePopOutId: 'imagePopOut',
             imagePopOutDesc: '',
             imagePopOutUrl: '',

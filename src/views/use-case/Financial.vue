@@ -137,7 +137,6 @@ import Modal from '@/components/general/Modal.vue'
 </script>
 
 <script>
-const apiUrl = import.meta.env.VITE_API_URL.trim()
 export default {
     components: {
         Modal,
@@ -145,9 +144,7 @@ export default {
     },
     data() {
         return {
-            docsUrl: `${
-                apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl
-            }/redoc`,
+            docsUrl: `${Api.apiUrl}/Apiredoc`,
             imagePopOutId: 'imagePopOut',
             imagePopOutDesc: '',
             imagePopOutUrl: '',

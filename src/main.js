@@ -29,13 +29,21 @@ String.prototype.toCamelCase = function () {
             return cur + acc[0].toUpperCase() + acc.substring(1)
         })
 }
-const apiUrl = import.meta.env.VITE_API_URL.trim()
+const getApiURL = async () => {
+    if (import.meta.env.VITE_LOCAL_API === `yes`) {
+        return import.meta.env.VITE_API_URL.trim()
+    }
+    const cname = import.meta.env.PROD ? `prod-api.trivialsec.com` : `dev-api.trivialsec.com`
+    const response = await fetch(`https://dns.google/resolve?name=${cname}`)
+    const json = await response.json()
+    const apiUrl = json.Answer.pop().data.replace(/\.$/, '')
+    return apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl
+}
 window.Api = {
+    apiUrl: await getApiURL(),
     get: async (uriPath, options = {}) => {
         const { timeout = 15000 } = options
-        const urlPath = `${
-            apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl
-        }${uriPath}`
+        const urlPath = `${Api.apiUrl}${uriPath}`
         const controller = new AbortController()
         const id = setTimeout(() => controller.abort(), timeout)
         const Authorization = localStorage.getItem('/session/bearer_token')
@@ -63,9 +71,7 @@ window.Api = {
     },
     post: async (uriPath, data, options = {}) => {
         const { timeout = 15000 } = options
-        const urlPath = `${
-            apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl
-        }${uriPath}`
+        const urlPath = `${Api.apiUrl}${uriPath}`
         const body = JSON.stringify(data)
         const controller = new AbortController()
         const id = setTimeout(() => controller.abort(), timeout)
@@ -101,9 +107,7 @@ window.Api = {
     },
     delete: async (uriPath, options = {}) => {
         const { timeout = 15000 } = options
-        const urlPath = `${
-            apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl
-        }${uriPath}`
+        const urlPath = `${Api.apiUrl}${uriPath}`
         const controller = new AbortController()
         const id = setTimeout(() => controller.abort(), timeout)
         const Authorization = localStorage.getItem('/session/bearer_token')

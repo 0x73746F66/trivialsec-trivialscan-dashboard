@@ -34,9 +34,6 @@ import Button from "@/components/general/Button.vue";
 import ValidationMessage from "@/components/general/ValidationMessage.vue";
 import LoadingComponent from "@/components/general/LoadingComponent.vue";
 
-let apiUrl = import.meta.env.VITE_API_URL.trim();
-apiUrl = `${apiUrl.endsWith("/") ? apiUrl.slice(0, -1) : apiUrl}`;
-
 export default {
   components: {
     TextInput,
@@ -68,7 +65,7 @@ export default {
         primary_email: this.email,
         name: "",
       });
-      const response = await fetch(`${apiUrl}/account/register`, {
+      const response = await fetch(`${Api.apiUrl}/account/register`, {
         method: "POST",
         body: payload,
         headers: {

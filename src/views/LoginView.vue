@@ -38,8 +38,6 @@ import { encode, decode } from '@qix/base64url-arraybuffer'
 </script>
 
 <script>
-let apiUrl = import.meta.env.VITE_API_URL.trim()
-apiUrl = `${apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl}`
 export default {
     components: {
         InlineLoading,

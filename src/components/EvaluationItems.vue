@@ -269,9 +269,6 @@
                                     class="margin-top-sm"
                                     v-if="evaluation?.recommendation"
                                 >
-                                    <div class="font-base-sb">
-                                        Recommendation
-                                    </div>
                                     <span
                                         class="font-xs pre-line"
                                         v-html="evaluation?.recommendation"

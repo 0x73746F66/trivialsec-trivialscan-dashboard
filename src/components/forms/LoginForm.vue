@@ -35,8 +35,7 @@ import { encode, decode } from '@qix/base64url-arraybuffer'
 import { Modal } from 'bootstrap'
 </script>
 <script>
-let apiUrl = import.meta.env.VITE_API_URL.trim()
-apiUrl = `${apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl}`
+
 export default {
     components: { EmailInput, Button, ValidationMessage, LoadingComponent },
     data() {
