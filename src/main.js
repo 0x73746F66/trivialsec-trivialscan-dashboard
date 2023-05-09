@@ -20,7 +20,6 @@ if (import.meta.env.DEV) {
 app.use(router)
 app.use(VueClipboard)
 router.isReady().then(() => app.mount('#app'))
-
 String.prototype.toCamelCase = function () {
     return (this.slice(0, 1).toLowerCase() + this.slice(1))
         .replace(/([-_ ]){1,}/g, ' ')
@@ -29,18 +28,24 @@ String.prototype.toCamelCase = function () {
             return cur + acc[0].toUpperCase() + acc.substring(1)
         })
 }
-const getApiURL = async () => {
+const getApiURL = () => {
     if (import.meta.env.VITE_LOCAL_API === `yes`) {
         return import.meta.env.VITE_API_URL.trim()
     }
-    const cname = import.meta.env.PROD ? `prod-api.trivialsec.com` : `dev-api.trivialsec.com`
-    const response = await fetch(`https://dns.google/resolve?name=${cname}`)
-    const json = await response.json()
-    const apiUrl = json.Answer.pop().data.replace(/\.$/, '')
+    const cname = import.meta.env.PROD
+        ? `prod-api.trivialsec.com`
+        : `dev-api.trivialsec.com`
+    const request = new XMLHttpRequest()
+    request.open('GET', `https://dns.google/resolve?name=${cname}`, false) // `false` makes the request synchronous
+    request.send(null)
+    const apiUrl = request.responseText.trim()
+    if (request.status !== 200) {
+        return import.meta.env.VITE_API_URL.trim()
+    }
     return apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl
 }
 window.Api = {
-    apiUrl: await getApiURL(),
+    apiUrl: getApiURL(),
     get: async (uriPath, options = {}) => {
         const { timeout = 15000 } = options
         const urlPath = `${Api.apiUrl}${uriPath}`

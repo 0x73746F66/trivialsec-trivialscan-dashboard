@@ -240,14 +240,14 @@
                         <div class="d-flex flex-row">
                             <button
                                 @click="scanHost(result.hostname)"
-                                class="search-result-item-btn search-result-item-btn-scan border-radius-lg margin-right-xxs"
+                                class="search-result-item-btn margin-right-xxs"
                             >
                                 Scan now
                             </button>
                             <RouterLink
                                 v-if="result.scanned"
                                 :to="`/hostname/${result.hostname}/`"
-                                class="search-result-item-link border-radius-lg margin-right-xxs"
+                                class="search-result-item-link margin-right-xxs"
                             >
                                 Details
                             </RouterLink>
@@ -382,6 +382,9 @@ export default {
             this.errorMessageType = ''
             this.errorMessageScanHost = ''
             this.errorMessageTypeScanHost = ''
+            this.searchResults.hosts = []
+            this.searchResults.findings = []
+            this.searchResults.reports = []
         },
         async submitSearch() {
             this.errorMessage = ''
@@ -547,9 +550,12 @@ export default {
             this.loading = false
         },
         closeSearchBtn() {
-            this.searchActive = false
-            localStorage.setItem('/component/search/visibility', 'false')
-            this.clearSearchInput()
+            if (!!this.searchInput) {
+                this.clearSearchInput()
+            } else {
+                localStorage.setItem('/component/search/visibility', 'false')
+                this.searchActive = false
+            }
         },
         expandIPAddress(e, target) {
             document
@@ -568,7 +574,7 @@ export default {
     }
 }
 </script>
-<style lang="scss">
+<style scoped lang="scss">
 $searchBarHeight: 50px;
 
 .search {
@@ -646,32 +652,46 @@ $searchBarHeight: 50px;
         width: 25px;
         height: 25px;
     }
-    &-link {
+    &-link,
+    &-btn {
         padding: 0 spacers('md');
-        border: none;
-        text-decoration: none;
-        background: color('primary');
+        border: 0;
+        border-radius: 8px;
         color: color('dark');
+        min-width: max-content;
+        line-height: 1.5em;
+        font-size: sizes('sm');
+        font-weight: 500;
+        transition: 0.5s;
+        background-size: 200% auto;
+        background-image: linear-gradient(
+            144deg,
+            color('primary') 0%,
+            color('secondary') 51%,
+            color('secondary') 100%
+        );
+        box-shadow: color('primary-20') 0 15px 30px -5px;
+        box-sizing: border-box;
+        user-select: none;
+        touch-action: manipulation;
+        white-space: nowrap;
+        &:active,
+        &:hover {
+            outline: 0;
+        }
+        &:hover {
+            background-position: right center;
+        }
+    }
+    &-link {
+        background: color('primary');
+        text-decoration: none;
         &:hover {
             color: color('dark');
         }
     }
-    &-btn {
-        min-width: max-content;
-        border: none;
-        color: color('dark');
-
-        &-archive {
-            background: color('secondary');
-        }
-        &-scan {
-            background: color('primary');
-        }
-        &-delete {
-            background: color('danger');
-        }
-    }
 }
+
 .button-container {
     position: relative;
     width: calc($searchBarHeight * 2 - 10px);
@@ -731,5 +751,41 @@ $searchBarHeight: 50px;
         height: calc(45px);
         overflow: hidden;
     }
+}
+
+.button-87 {
+    margin: 10px;
+    padding: 15px 30px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    border-radius: 10px;
+    display: block;
+    border: 0px;
+    font-weight: 700;
+    box-shadow: 0px 0px 14px -7px #f09819;
+    background-image: linear-gradient(
+        45deg,
+        #ff512f 0%,
+        #f09819 51%,
+        #ff512f 100%
+    );
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.button-87:hover {
+    background-position: right center;
+    /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+
+.button-87:active {
+    transform: scale(0.95);
 }
 </style>

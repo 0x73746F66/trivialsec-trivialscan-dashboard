@@ -13,7 +13,10 @@ export default defineConfig(({ command, mode }) => {
                 template: {
                     compilerOptions: {
                         isCustomElement: (tag) =>
-                            ['stripe-pricing-table'].includes(tag)
+                            [
+                                'stripe-pricing-table',
+                                'statuspage-widget'
+                            ].includes(tag)
                     }
                 }
             })

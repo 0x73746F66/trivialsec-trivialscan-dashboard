@@ -43,18 +43,19 @@
                                 target="_blank"
                                 >Chat with a real person</a
                             >
-                            <a
-                                href="https://trivialsec.statuspage.io"
-                                target="_blank"
-                                class="margin-bottom-xs font-color-light-60 text-decoration-none"
-                                >Status Page</a
-                            >
                             <RouterLink
                                 v-if="!!$store.getItem('/session/bearer_token')"
                                 :to="{ name: 'about' }"
                                 class="margin-bottom-xs font-color-light-60 text-decoration-none"
                                 >About Us</RouterLink
                             >
+                            <div class="margin-top-xxs">
+                                <statuspage-widget
+                                    src="https://trivialsec.statuspage.io"
+                                    title="Service Health &#128678;"
+                                    appearance="badge"
+                                ></statuspage-widget>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -238,11 +239,11 @@ import IconTwitter from '@/components/icons/IconTwitter.vue'
 </script>
 
 <script>
-
 export default {
     data() {
         return {
             docsUrl: `${Api.apiUrl}/redoc`
+            // statusInterval: null
         }
     },
     components: {
@@ -255,7 +256,8 @@ export default {
     }
 }
 </script>
-<style lang="scss">
+
+<style scoped lang="scss">
 .footer {
     background: rgb(26 22 22);
     padding: spacers('md');
