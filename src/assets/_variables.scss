@@ -1,12 +1,12 @@
 @use "sass:map";
 
 $colors: (
-  "primary": rgba(26, 187, 156, 1),
+  "primary": #1abb9c,
   "primary-20": rgba(26, 187, 156, 0.2),
   "primary-40": rgba(26, 187, 156, 0.4),
   "primary-60": rgba(26, 187, 156, 0.6),
   "primary-80": rgba(26, 187, 156, 0.8),
-  "secondary": rgb(226, 200, 120),
+  "secondary": #e2c878,
   "secondary-20": rgba(226, 200, 120, 0.2),
   "secondary-40": rgba(226, 200, 120, 0.4),
   "secondary-60": rgba(226, 200, 120, 0.6),
